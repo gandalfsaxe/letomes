@@ -25,7 +25,7 @@ Efter en del research og trial and error endte jeg med... Mendeley. Muligheden f
 Vil nok prøve at give den nye Readcube Papers app en chance når betaen kommer, men jeg tvivl på at der er ligeså god BiBTeX support som i Mendeley, så jeg spår den ikke mange chancer. Anyway så kom der låg på det.
 
 ### Text editors
-Jeg undersøgte om Scrivener eller Ulysses havde noget at byde på. Selvom de var interessante på hver deres måde (specielt Ulysses som jeg vil bruge til andre ting), vil jeg holde mig til Typora/pandoc/latex workflowet for specialet, evt. med DEVONthink selvom det muligvis er overkill.
+Jeg undersøgte om [Scrivener](https://www.literatureandlatte.com/scrivener/overview) eller [Ulysses](https://ulyssesapp.com) havde noget at byde på. Selvom de var interessante på hver deres måde (specielt Ulysses som jeg vil bruge til andre ting), vil jeg holde mig til [Typora](https://typora.io)/[pandoc](http://pandoc.org)/latex workflowet for specialet, evt. med [DEVONthink](http://www.devontechnologies.com/products/devonthink/devonthink-pro-office.html) for søgning og opdagelse af relationer imellem tekst dokumenter, selvom det muligvis er overkill.
 
 Dermed har jeg blot tilbage at sætte et markdown/makefile workflow op, så er jeg klar til at skrive. Kan altid finde en LaTeX template senere. Det gør jeg bare når det lige passer mig.
 
