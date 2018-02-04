@@ -1,4 +1,4 @@
-# January 29, 2018
+# January 29, 2018)
 
 ## Møde (Poul + HH)
 Meet and greet. Lidt snak om BSc projektet, om hvad målet er, og hvad evolution strategies grundlæggende er.
@@ -28,3 +28,21 @@ Vil nok prøve at give den nye Readcube Papers app en chance når betaen kommer,
 Jeg undersøgte om Scrivener eller Ulysses havde noget at byde på. Selvom de var interessante på hver deres måde (specielt Ulysses som jeg vil bruge til andre ting), vil jeg holde mig til Typora/pandoc/latex workflowet for specialet, evt. med DEVONthink selvom det muligvis er overkill.
 
 Dermed har jeg blot tilbage at sætte et markdown/makefile workflow op, så er jeg klar til at skrive. Kan altid finde en LaTeX template senere. Det gør jeg bare når det lige passer mig.
+
+# February 1, 2018
+
+### Git client: Tower
+Jeg har konkluderet at jeg godt kunne bruge en Git klient med lidt flere features, og er endt på [Tower](https://www.git-tower.com/). Så skulle have sat mig i den, men brugte en del tid på at læse deres [blog](https://www.git-tower.com/blog/home) i stedet. De har mange gode artikler og tips. Jeg vil dog ikke bruge mere arbejdstid på denne blog, men må sætte mig ordentligt ind i programmet ved lejlighed.
+
+### Hazel script til automatisering af .bib fil kopiering fra Mendeley
+Dernæst færdiggjorte jeg mit Mendeley workflow ved at sætte to [Hazel](https://www.noodlesoft.com) script op som:
+1. Automatisk flytter alle (PDF) filer fra min `Mendeley Watched Folder` ind i en backup folder efter de har været der i 1 minut (Mendeley importerer filer fra watched folder ind i library, men lader dem ligge, hvilke kan blive lidt rodet).
+2. Automatisk kopierer .bib filen tilhørende thesis projektet ind i thesis mappen, således at jeg altid har en up-to-date kopi af .bib filen i thesis Github repo, så alt er nicely self contained.
+
+Af mine værktøjsmæssige forberedelser mangler jeg nu:
+1. Sætte mig færdigt ind i Tower
+2. Sætte mit Typora/pandoc workflow fuldt op til indskrivningen. Så skriver jeg specialet i Markdown, og kan let konvertere til .tex, .pdf, .html, og endda .doc (*gys*), bl.a. Jeg brugte dette workflow i min LearningTech rapport sidste semester, og fandt det glimrende.
+
+Efter jeg har gjort dette, tager jeg parallelt fat på:
+1. Gennemlæsningen af BSc projekt + færdigskrivning af artikel over denne
+2. Grundig læsning af artikel [Evolution Strategies as a Scalable Alternative to Reinforcement Learning](https://arxiv.org/abs/1703.03864)

@@ -60,7 +60,7 @@ $$a x^2 + b x^2 + c = 0$${#eq:quadr} like this.
 # Chapter 3. Tables
 
 | First Header | Second Header |
-|:-------------|:--------------|
+| :----------- | :------------ |
 | Content Cell | Content Cell  |
 | Content Cell | Content Cell  |
 
@@ -69,7 +69,7 @@ $$a x^2 + b x^2 + c = 0$${#eq:quadr} like this.
 Table without caption:
 
 | First Header | Second Header |
-|:-------------|:--------------|
+| :----------- | :------------ |
 | Content Cell | Content Cell  |
 | Content Cell | Content Cell  |
 
@@ -101,7 +101,7 @@ main :: IO ()
 main = putStrLn "Hello World!"
 ```
 
-## Wrapping div
+## Wrapping div {#sec:wrapping-div}
 
 Wrapping code block without label in a div with id `lst:...` and class, starting with `listing`, and adding paragraph before code block, but inside div, will treat said paragraph as code block caption.
 
