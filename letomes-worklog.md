@@ -29,6 +29,7 @@ Jeg undersøgte om [Scrivener](https://www.literatureandlatte.com/scrivener/over
 
 Dermed har jeg blot tilbage at sætte et markdown/makefile workflow op, så er jeg klar til at skrive. Kan altid finde en LaTeX template senere. Det gør jeg bare når det lige passer mig.
 
+
 # February 1, 2018
 
 ### Git client: Tower
@@ -40,9 +41,17 @@ Dernæst færdiggjorte jeg mit Mendeley workflow ved at sætte to [Hazel](https:
 2. Automatisk kopierer .bib filen tilhørende thesis projektet ind i thesis mappen, således at jeg altid har en up-to-date kopi af .bib filen i thesis Github repo, så alt er nicely self contained.
 
 Af mine værktøjsmæssige forberedelser mangler jeg nu:
-1. Sætte mig færdigt ind i Tower
-2. Sætte mit Typora/pandoc workflow fuldt op til indskrivningen. Så skriver jeg specialet i Markdown, og kan let konvertere til .tex, .pdf, .html, og endda .doc (*gys*), bl.a. Jeg brugte dette workflow i min LearningTech rapport sidste semester, og fandt det glimrende.
+1. Sætte mig færdigt ind i Tower.
+2. Forsøge et [Alfred](https://www.alfredapp.com) workflow hvor jeg kan indsætte citeringer direkte fra Alfred.
+3. Forsøge et Alfred workflow hvor jeg kan køre terminal command direkte på den åbne mappe i Finder.
+4. Sætte mit Typora/pandoc workflow fuldt op til indskrivningen. Så skriver jeg specialet i Markdown, og kan let konvertere til .tex, .pdf, .html, og endda .doc (*gys*), bl.a. Jeg brugte dette workflow i min LearningTech rapport sidste semester, og fandt det glimrende.
 
 Efter jeg har gjort dette, tager jeg parallelt fat på:
 1. Gennemlæsningen af BSc projekt + færdigskrivning af artikel over denne
 2. Grundig læsning af artikel [Evolution Strategies as a Scalable Alternative to Reinforcement Learning](https://arxiv.org/abs/1703.03864)
+
+
+# February 4, 2018
+
+### Tower (git client)
+I dag var ren studie af Tower, hvor jeg gjorte mig bekendt med programmet, og har fulgt deres [video læringsmateriale](https://www.git-tower.com/learn/git/videos), som jeg er ca. halvt færdig med.
