@@ -32,7 +32,7 @@ Dermed har jeg blot tilbage at sætte et markdown/makefile workflow op, så er j
 
 # February 1, 2018
 
-### Git client: Tower
+### Git client besluttet: Tower
 Jeg har konkluderet at jeg godt kunne bruge en Git klient med lidt flere features, og er endt på [Tower](https://www.git-tower.com/). Så skulle have sat mig i den, men brugte en del tid på at læse deres [blog](https://www.git-tower.com/blog/home) i stedet. De har mange gode artikler og tips. Jeg vil dog ikke bruge mere arbejdstid på denne blog, men må sætte mig ordentligt ind i programmet ved lejlighed.
 
 ### Hazel script til automatisering af .bib fil kopiering fra Mendeley
@@ -53,5 +53,35 @@ Efter jeg har gjort dette, tager jeg parallelt fat på:
 
 # February 4, 2018
 
-### Tower (git client)
+### Tower (git client) familiarisering
 I dag var ren studie af Tower, hvor jeg gjorte mig bekendt med programmet, og har fulgt deres [video læringsmateriale](https://www.git-tower.com/learn/git/videos), som jeg er ca. halvt færdig med.
+
+
+# February 7, 2018
+
+### Tower / Git studier done
+Jeg lærte et par nyttige ting undervejs:
+#### Git LFS (Large File Storage)
+Hvis man har meget store binære filer i sit repo som ændrer sig en smule hele tiden, kan det give et meget stort repository size meget hurtigt fordi git lagerer en komplet kopi af alle versioner af de binære filer.
+Dette kan løses, i hvert fald delvist, med Git LFS. Det gar i korte træk ud på at man dropper kravet om at gemme alle versioner af en bestemt fil / mappe / file extension / filename pattern *lokalt* men kun have de filer liggende lokalt som skal bruges i den nuværende revision. Alle versioner af store filer markeret til LFS ligger stadig på remote server (i LFS Store) men lokalt ligger alle version af filerne kun som *pointere* til remote LFS Store, og kun filer som skal bruges i den nuværende checked out version, er downloaded lokalt. Dvs. det løser problemet lokalt, dog vil alle versioner af store filer stadig ligge på remote server. Good to know.
+Gode forklaringer:
+* https://www.git-tower.com/learn/git/ebook/en/command-line/advanced-topics/git-lfs#chapter_installing+git+lfs
+* https://www.atlassian.com/git/tutorials/git-lfs
+* https://www.youtube.com/watch?time_continue=16&v=9gaTargV5BY
+#### Git Submodules
+Ofte vil man gerne inkludere eksterne biblioteker og andre resourcer. Man kan selvfølgelig downloade disse og kopiere dem ind i ens eget projekt. Der er to problemer med dette:
+1. Man blander ekstern kode med ens egen unikke kode / projekt filer, men det er mere clean at holde disse ting adskildt, specielt hvis man skal dele koden udadtil med resten af verden senere.
+2. Hvis det eksterne bibliotek bliver opdateret (med fx. bugfixes eller nye features), er det ret bøvlet at opdateret dette biblioteks kode i ens eget repo; igen er vi nødt til at hente de rå filer, og overskrive de gamle filer.
+
+Submodules gør det muligt at have et "git repo indeni et git repo" således at det interne repo (kaldet et submodule), ikke bliver tracket af parent repo, men at de holdes som to separate git repos selvom det ene ligger indeni det andet. Det er dog stadig nemt at holde de interne submodule opdateret.
+En vigtig forskel fra normale git repos og submodule repos er at submodules altid peger på en bestemt commit, snarere end en bestemt branch. Dette er fordi at submodules ofte bruges til eksterne libraries som man ikke vil have ændrer sig så ofte, medmindre man manuelt gør det.
+
+God forklaring på:
+* https://www.git-tower.com/learn/git/ebook/en/desktop-gui/advanced-topics/submodules
+
+### .bib file citekeys (evt. via Alfred workflow)
+Jeg har søgt forgæves på nettet efter et Alfred workflow der kan lave autocompletion og insertion af BibTeX citekeys fra en .bib fil ind i et tekstfelt med formatering fx. [@Newton], som bruges i pandoc / pandoc-citeproc. Grunden til at jeg kunne bruge dette er at Typora (min primære markdown editor), desværre ikke understøtter autocompletion / suggestion af citekeys fra en .bib fil, som mange dedikerede LaTeX editorer og LaTeX pakker til populære text editors (fx. LaTEXTools til SublimeText), gør det. Det betyder at jeg 100% manuelt skal sidde og skrive alle citations uden ind nogen hjælp, hvilket er en smule træls, men noget jeg må leve med hvis det er, for jeg kan godt lide Typora/Markdown/pandoc workflowet fremfor det rene LaTeX workflow.
+
+Efter at have søgt Google, har jeg oprettet en [issue](https://github.com/andrewning/alfred-workflows-scientific/issues/9) på denne persons Github repo for et Alfred workflow, samt oprettet [dette](https://www.alfredforum.com/topic/11223-autocompletion-references-from-bib-file/) forum indlæg på alfredforum.com. Mere kan jeg ikke gøre foreløbigt.
+
+PS: Jeg arbejde ikke på thesis i mandags (February 5) da jeg havde brug for at arbejde på AI i stedet der.
