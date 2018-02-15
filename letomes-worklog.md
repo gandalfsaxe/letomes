@@ -1,3 +1,21 @@
+# February 15, 2018
+Jeg vil nu som noget nyt begynde at skrive tl;dr (Too Long; Didn't Read) opsummeringer øvert i hver worklog entry, så man kan få et hurtigt overblik, og ikke vil læse det hele i detaljer.
+
+tl;dr
+* Møde med HH, lidt snak om intuition omkring transfer orbits til Mars, samt lidt tilbageblik på BSc projekt.
+* Har brugt en god del af dagen på at undersøge Python IDEs fordi Python plots i eksterne vinduer er en forfærdelig oplevelse. Jeg er endt på PyCharm Pro pga. dens "Scientific View", som er helt genialt.
+
+## Møde (HH)
+HH og jeg snakkede lidt om forskellige intuition omkring hvilke transfer orbits der kunne være interessante at kigge på, og jeg kom i tanke om at jeg havde lavet noget Hohmann transfer mellem jordne og Mars analytisk på i Ae105 kurset på Caltech, som jeg vil genopfriske og præsentere ved næste møde eller næste igen.
+
+Jeg laver et udkast til en projektbeskrivelse og projektplan vel inden torsdag, og lægger op i repo (skal nok sende en email ud).
+
+###  Old code + Python IDE: PyCharm Pro
+Jeg beggyndte at kigge på den den gamle BSc kode, og blev igen mindet om hvor utrolig nedern det er med figurer på popper up bagved editoren osv. Jeg brugte SublimeText + Terminal dengang, men jeg besluttede mig for at prøve noget andet.
+
+* **Spyder:** Har brugt det lidt som hjælpelærer, og det har to store styrker: integrerede plots og variable explorer (og basic debugging tools). Men der er ret _wonky_ som applikation, og på mange måder ikke særlig lækkert at bruge.
+* **PyCharm:** Full-stack development IDE, som jeg før har snuset til, men synes var for stort / tungt at danse med (ligesom Eclipse). Jeg har dog til min store glæde fundet ud af at PyCharm Pro (som kan fås med educational license). Så kom der styr på en ting mere.
+
 # February 8, 2018
 
 ## Møde (Poul + HH + Ole)
