@@ -4,4 +4,4 @@ When navigating a spacecraft between various orbits, low energy transfer orbits 
 
 # Thesis plan
 
-https://https://my.mindnode.com/JyGhsgkywQz8SmzRoZKpjzc6KpiGcQPS8zvQgWVx/JyGhsgkywQz8SmzRoZKpjzc6KpiGcQPS8zvQgWVx
+https://my.mindnode.com/JyGhsgkywQz8SmzRoZKpjzc6KpiGcQPS8zvQgWVx
