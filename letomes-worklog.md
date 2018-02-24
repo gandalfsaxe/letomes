@@ -1,3 +1,6 @@
+# February 22, 2018
+Er begyndt grundig gennemlæsning af BSc rapport, og gennemgår de vigtigste udregninger i hånden igen.
+
 # February 15, 2018
 Jeg vil nu som noget nyt begynde at skrive tl;dr (Too Long; Didn't Read) opsummeringer øvert i hver worklog entry, så man kan få et hurtigt overblik, og ikke vil læse det hele i detaljer.
 
