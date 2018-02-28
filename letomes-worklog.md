@@ -1,3 +1,23 @@
+# February 28, 2018
+Har læst en del om blandede orbital mechanics emener i dag:
+* Interplanetary Transport Network (ITN)
+* Sphere of influence
+* Hill sphere
+* Roche lobe
+* Lagrange points
+* Halo orbits
+* Lissajous orbits
+* Genudledt nogle basic udtryk (escape velocity, geostationary orbit)
+
+# February 26, 2018
+tl;dr:
+* Videre med BSc gennemlæsning / paper.
+* Lærte programmet Sketch at kende, rettede en figur.
+
+Kom et stykke videre i gennemlæsning og gen-håndregning af BSc rapport, samt paper skrivning.
+
+Fandt en lille fejl i en figur, og prøvede at åbne den i Inkscape for at rette. Kunne ikke få Inkscape til at virke indenfor de første 30 min på min Mac. Brugte en del tid på at lære et andet vektortegningsprogram at kende, Sketch, som jeg har haft liggende på min Mac et stykke tid. Så nu er jeg i det mindste rustet til at lave flere fine vektor grafik figurer manuelt, hvis det bliver nødvendigt (afhængigt af omstændighederne vil jeg selvfølgelig også overveje TikZ).
+
 # February 22, 2018
 Er begyndt grundig gennemlæsning af BSc rapport, og gennemgår de vigtigste udregninger i hånden igen.
 
