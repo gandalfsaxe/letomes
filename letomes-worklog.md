@@ -1,3 +1,22 @@
+# March 8, 2018
+## Møde (Poul)
+Vi snakkede om mine spørgsmål fra poul-q.pdf som tidligere sendt ud på mail, samt øvrige spørgsmål. Jeg har fået anbefalet at tjekke følgende ud af en ven fra Caltech (Casey Handmer, som nu er "levitation engineer" hos Hyperloop One):
+- [ ] [PyKEP](https://esa.github.io/pykep/) - Et open source python bibliotek fra ESA til orbit simulering i solsystemet, implementeret i C++ med python interface og mange bells and whistles.
+- [ ] [Porkchop plots](https://en.wikipedia.org/wiki/Porkchop_plot)
+- [ ] [Lambert's problem / algorithm](https://en.wikipedia.org/wiki/Lambert%27s_problem)
+
+Casey's fulde besked:
+> I only just started work on this problem and its slow progress. 
+The short answer is PyKEP. 
+The long is that traditional porkchop plots are done with Lambert's algorithm, but they tend to break if there's too much plane involved. Damon Landau at JPL has been working this problem too.
+I'm currently traveling, but please update me next week on my gmail?
+
+Jeg lægger snart en poul-q.pdf opdateret med Pouls svar op.
+
+# March 1 + March 4 + March 5 + March 7 ,2018
+## BSc gennemlæsning
+Alle disse dage arbejdede jeg kun sparsomt og lidt ufokuseret, men på det samme: gennemlæsning af BSc projekt, overførsel af materiale til paper på ShareLaTeX med HH o Poul, og rettelse af småfejl / gen-forståelse af alt undervejs.
+
 # February 28, 2018
 Har læst en del om blandede orbital mechanics emener i dag:
 * Interplanetary Transport Network (ITN)
