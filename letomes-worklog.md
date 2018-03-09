@@ -1,3 +1,7 @@
+# March 9, 2018
+* Har sat et repostory op for gammelt BSc projekt + oprettet Asana workspace så vi alle kan samarbejde bedre, specielt nu hvor Oisin også er med.
+* Har rodet med noget LaTeX teknisk omkring farver som jeg brugte til Pouls svar i poul-q.pdf
+
 # March 8, 2018
 ## Møde (Poul)
 Vi snakkede om mine spørgsmål fra poul-q.pdf som tidligere sendt ud på mail, samt øvrige spørgsmål. Jeg har fået anbefalet at tjekke følgende ud af en ven fra Caltech (Casey Handmer, som nu er "levitation engineer" hos Hyperloop One):
