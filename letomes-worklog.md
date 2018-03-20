@@ -1,3 +1,11 @@
+# March 19, 2018
+## Møde (Poul+Oisin)
+Snakkede lidt om det hele og fik Oisin up to speed.
+
+## PyKEP og Docker
+Oissin og Gandalf sad resten af eftermiddagen og kæmpede med installation af [PyKEP](https://esa.github.io/pykep/) og Docker image.
+PyKEP virker som en mulighed ift. at bruge et eksisterende library, så vi vil gerne prøve det lidt af så vi kan tage stilling til om vi skal lave vores egen simulering eller ej. Det virker umiddelbart lovende.
+
 # March 9, 2018
 * Har sat et repostory op for gammelt BSc projekt + oprettet Asana workspace så vi alle kan samarbejde bedre, specielt nu hvor Oisin også er med.
 * Har rodet med noget LaTeX teknisk omkring farver som jeg brugte til Pouls svar i poul-q.pdf
