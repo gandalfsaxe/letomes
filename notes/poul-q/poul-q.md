@@ -2,7 +2,6 @@
 typora-copy-images-to: ./assets
 header-includes: \usepackage{xcolor}
 urlcolor: blue
-colorlinks: true
 ---
 
 # Spørgsmål om mekanik til Poul
