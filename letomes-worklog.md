@@ -2,7 +2,16 @@
 ## Projekt status
 Første fælles Thesis work session i 2 måneder. Oisin og Gandalf snakker om status for projektet, og opdaterer Asana.
 
-# Paper progress
+## PyKEP
+Ret kraftigt program. Outputter nogle pæne baner i et 3D plot og alt muligt! Har nogle predefinerede missiontyper (gravity assist + single deep space maneuver) som er helt kriminelt nemme at have med at gøre 
+
+(groft sagt: **goto([earth, mars, earth])**).
+
+Kan oven i købet finde dem med et utal af søgemetoder, bl.a. CMA-ES, der er tangentielt relateret til Salimans etal.. 
+
+Muligheder for at lave helt custom missionstyper, som Oisin vil kigge på i morgen. Open source.
+
+## Paper progress
 Paper printet ud og gennemlæst -> nye rettelser. Gandalf begyndt at fikse figurer.
 
 # March 19, 2018
