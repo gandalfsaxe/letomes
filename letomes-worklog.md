@@ -1,3 +1,10 @@
+# June 4, 2018
+## Projekt status
+Første fælles Thesis work session i 2 måneder. Oisin og Gandalf snakker om status for projektet, og opdaterer Asana.
+
+# Paper progress
+Paper printet ud og gennemlæst -> nye rettelser. Gandalf begyndt at fikse figurer.
+
 # March 19, 2018
 ## Møde (Poul+Oisin)
 Snakkede lidt om det hele og fik Oisin up to speed.
