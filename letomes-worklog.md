@@ -1,3 +1,7 @@
+# June 5, 2018
+## PyKEP
+Oisin has been looking at defining custom problems with Pagmo (solver for PyKEP), and at migrating to hpc@dtu. Docker is not available on hpc@dtu, so we'll have to set up a more custom environment. Little experiment notebook added to repo, requires PyKEP installed.
+
 # June 4, 2018
 ## Projekt status
 Første fælles Thesis work session i 2 måneder. Oisin og Gandalf snakker om status for projektet, og opdaterer Asana.
