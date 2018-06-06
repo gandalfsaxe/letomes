@@ -1,3 +1,9 @@
+# June 6, 2018
+## At få BSc koden til at køre igen
+Gandalf: Den gamle kode kører fint. Har i hvert fald kørt nogle gemte baner, og de kører fint og giver figurer. Prøver en søgning i morgen eller fredag. Numbapro var blevet discountinued, men er blevet FOSS med numba, så np. Kun få til skulle ændres for at det virkede.
+
+Har kigget lidt på noget teori, og ting til mødet i morgen, nu i Asana meeting noterne.
+
 # June 5, 2018
 ## PyKEP
 Oisin has been looking at defining custom problems with Pagmo (solver for PyKEP), and at migrating to hpc@dtu. Docker is not available on hpc@dtu, so we'll have to set up a more custom environment. Little experiment notebook added to repo, requires PyKEP installed.
