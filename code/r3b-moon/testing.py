@@ -228,15 +228,17 @@ print("# --- Done with FUNCTION CALLS")
 
 #################### PLOTS: POSITION ####################
 
-xlist1 = xlist[:n/2]
-ylist1 = ylist[:n/2]
-xlist2 = xlist[n/2:]
-ylist2 = ylist[n/2:]
+n2 = int(n/2)
 
-Xlist1 = xlist[:n/2]*np.cos(tlist[:n/2]) - ylist[:n/2]*np.sin(tlist[:n/2])
-Ylist1 = xlist[:n/2]*np.sin(tlist[:n/2]) + ylist[:n/2]*np.cos(tlist[:n/2])
-Xlist2 = xlist[n/2:]*np.cos(tlist[n/2:]) - ylist[n/2:]*np.sin(tlist[n/2:])
-Ylist2 = xlist[n/2:]*np.sin(tlist[n/2:]) + ylist[n/2:]*np.cos(tlist[n/2:])
+xlist1 = xlist[:n2]
+ylist1 = ylist[:n2]
+xlist2 = xlist[n2:]
+ylist2 = ylist[n2:]
+
+Xlist1 = xlist[:n2]*np.cos(tlist[:n2]) - ylist[:n2]*np.sin(tlist[:n2])
+Ylist1 = xlist[:n2]*np.sin(tlist[:n2]) + ylist[:n2]*np.cos(tlist[:n2])
+Xlist2 = xlist[n2:]*np.cos(tlist[n2:]) - ylist[n2:]*np.sin(tlist[n2:])
+Ylist2 = xlist[n2:]*np.sin(tlist[n2:]) + ylist[n2:]*np.cos(tlist[n2:])
 
 Xlist_earth = earth_pos_x*np.cos(tlist)
 Ylist_earth = -earth_pos_x*np.sin(tlist)

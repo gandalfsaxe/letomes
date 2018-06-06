@@ -13,7 +13,6 @@ import time
 from math import pi,sqrt
 import numpy as np
 from const import *
-from numbapro import *
 from search import search_mt, search, print_search_results
 from symplectic import symplectic
 

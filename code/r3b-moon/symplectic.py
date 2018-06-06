@@ -12,7 +12,8 @@ We assume **TODO FILL OUT HERE!
 
 from math import pi,sqrt
 import numpy as np
-from numbapro import *
+# from numbapro import *
+from numba import jit
 from const import *
 
 @jit
