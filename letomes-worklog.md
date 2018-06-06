@@ -1,6 +1,8 @@
 # June 5, 2018
 ## PyKEP
 Oisin has been looking at defining custom problems with Pagmo (solver for PyKEP), and at migrating to hpc@dtu. Docker is not available on hpc@dtu, so we'll have to set up a more custom environment. Little experiment notebook added to repo, requires PyKEP installed.
+## Paper LaTeX stuff
+Fiksede bare en masse problemer i LaTeX kildekoden for paperen i dag, og fik reduceret antallet af errors far ~50 til ~30. Undervejs opdagede jeg dog at vi har brug den forkerte template (my bad!), og det ser umiddelbart ud som om at den rigtige template fra European Journal of Physics er 1-column, ikke 2-column, hvilket formegentlig betyder at jeg ikke havde behøvet at fikse figurene. Oh well... vi får se når vi først har fået oprettet paperen som den rigtige article type og jeg får kigget på den endelige LaTeX template.
 
 # June 4, 2018
 ## Projekt status
