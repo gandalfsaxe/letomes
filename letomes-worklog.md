@@ -1,3 +1,8 @@
+# June 7, 2018
+## Not much...
+Gandalf: For mig ikke en særlig produktiv dag. Bøvlede med nogle Mac high-cpu process problemer, og kom ikke så meget videre.
+
+
 # June 6, 2018
 ## At få BSc koden til at køre igen
 Gandalf: Den gamle kode kører fint. Har i hvert fald kørt nogle gemte baner, og de kører fint og giver figurer. Prøver en søgning i morgen eller fredag. Numbapro var blevet discountinued, men er blevet FOSS med numba, så np. Kun få til skulle ændres for at det virkede.
