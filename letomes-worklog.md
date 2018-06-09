@@ -1,6 +1,11 @@
+# June 9, 2018
+## LaTeX stuff...
+Gandalf: Har bare læst op på LaTeX packages og videreudforsket Typora+pandoc>LaTeX worketflowet yderligere.
+
 # June 8, 2018
 ## EJP LaTeX requirments...
 Gandalf brugte dagen på at sætte sig ind i EJPs (European Journal of Physics) LaTeX requirements, så de bliver glade første gang vi submitter og forhåbenligt ikke behøver nogen formaterings-mæssige rettelser.
+
 
 # June 7, 2018
 ## Not much...
