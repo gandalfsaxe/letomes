@@ -1,3 +1,7 @@
+# June 8, 2018
+## EJP LaTeX requirments...
+Gandalf brugte dagen på at sætte sig ind i EJPs (European Journal of Physics) LaTeX requirements, så de bliver glade første gang vi submitter og forhåbenligt ikke behøver nogen formaterings-mæssige rettelser.
+
 # June 7, 2018
 ## Not much...
 Gandalf: For mig ikke en særlig produktiv dag. Bøvlede med nogle Mac high-cpu process problemer, og kom ikke så meget videre.
