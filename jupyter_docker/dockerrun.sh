@@ -1,0 +1,1 @@
+docker run -it --rm -p 8888:8888 -v $(pwd)/letomes:/home/joyvan/work jukep
