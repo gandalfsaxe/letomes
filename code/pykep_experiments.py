@@ -40,7 +40,7 @@ def goto_mars():
     print("Done!! Solutions found are: ", archi.get_champions_f())
     print(f"\nThe best solution with Dv = {min(sols)[0]}:\n")
     udp.pretty(archi.get_champions_x()[idx])
-    udp.plot(archi.get_champions_x()[idx])
+    udp.plot(archi.get_champions_x()[idx],savepath="plot.png")
 
 
 # In[ ]:
