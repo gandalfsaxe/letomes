@@ -1,3 +1,10 @@
+# June 12
+## pykep/pygmo
+Oisin: Reading docs for pykep and pygmo, forked pykep to make some changes to the plotting functionality. Figure that might be useful later as well. Posted some questions for next meeting. I really want to get to implementing our own ES-algorithm, though pygmo has a very nice CMA-ES that looks like it might do what we need outta the box.
+
+## hpc
+Oisin: Yesterday, I got HPC@DTU to run my initial experimentation-code, and it took us to mars nicely. Made a branch for HPC@DTU adventures, but i rebased that back onto master again today.
+
 # June 9, 2018
 ## LaTeX stuff...
 Gandalf: Har bare læst op på LaTeX packages og videreudforsket Typora+pandoc>LaTeX worketflowet yderligere.
