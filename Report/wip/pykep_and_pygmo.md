@@ -1,0 +1,11 @@
+# pykep and pygmo
+Pykep is an open-source engine for formulating and solving problems of space flight nature. It's developed by the European Space Agency, in cooperation with NASA's JPL and the space flight community at large. The library interfaces with data on ephemerides^[object trajectories computed to give position at a given time] for every recorded celestial body and major/minor asteroid. It uses pyGMO as its backend, which is a C++ library^[PaGMO: Parallel Global Multiobjective Optimizer. It is developed by the same people as pykep] for solving optimization problems, wrapped in python. Pykep essentially lets users define their optimization problem in a pedagogical way, redefines it in a format that pygmo can receive, and lets *it* do all the heavy lifting. Pykep then relays that information back to the user. 
+
+Pygmo implements a wide variety of algorithms, among which we find both the CMA-ES^[CMA-ES: Covariance Matrix Adaptation Evolution Strategy] and xNES^[xNES: Exponential Natural Evolution Strategy] methods, which are both very relevant for our problem.
+
+## implementation details
+Pygmo is all about performance through parallelization, and implements a neat metaphor. It creates an 'archipelago' of 'islands', with populations of 'individuals'. These individuals are defined by a 'chromosome' (decision vector), which is perturbed each cycle according to whichever algorithm is being run. The best performing individual after some number of cycles is crowned the 'champion', and 'migrates' to neighboring islands in the archipelago, where they then join their population and fight once more. This continues until the entire archipelago agrees on a champion (convergence). Since the islands are independent while they are fighting, the model makes any algorithm very parallelizable.
+
+## MGA-1DSM
+We use a pykep mission type called Multiple Gravity Assist with One Deep Space Maneuver (mga_1dsm), which allows one deep space maneuver per leg of the journey: [earth, venus, earth] would define a round trip with two legs: earth-venus and venus-earth, each leg allowing one maneuver. The mission defines a decision vector of the form: $[t0, T]+[u,v,V_{inf},eta_1, \alpha_1] + [\beta_2, \frac{rP}{rV},eta_2,\alpha_2]+ ... +[\beta_n,\frac{rP_n}{rV_n},eta_n,\alpha_n]$, where (TODO: Explanation of decision vector)
+
