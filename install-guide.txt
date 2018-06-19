@@ -1,0 +1,7 @@
+linuxsh #start linux shell
+module load python3/3.6.0 #get python3
+git clone https://github.com/gandalfsaxe/letomes # login and get our repo
+cd letomes
+pip3 install --user --trusted-host pypi.python.org requirements.txt
+cd code
+python3 pykep-experiments.py #if all goes well, this should run a path to mars (potentially with some errors at the end about not being able to find a display to plot to)
