@@ -5,9 +5,12 @@ Da jeg er 95% færdig med det jeg har brugt det meste tid på de seneste par uge
 ## Tsiolkovsky's rocket equation
 Har fulgt og selv genopskrevet to udledninger af denne vigtige ligning:
 $$
-\delta V = v_e \ln{\frac{V_f}{V_0}}
+\Delta v = v_e \ln{\frac{m_0}{m_f}}
 $$
-hvor $\delta v$ er ændring i fart af raket, $v_e$ er udstødningshastigheden i rakettens system, $V_f$ er farten efter udstødning, $V_0$ er farten før udstødning.
+hvor $\Delta v$ er ændring i fart af raket, $v_e$ er udstødningshastigheden i rakettens system, $m_f$ er rakettens masse efter udstødning, $m_0$ er rakettens masse før udstødning.
+
+[Wiki](https://en.wikipedia.org/wiki/Tsiolkovsky_rocket_equation)
+
 ## Specific impulse
 Et mål for hvor effektiv en raket er ift. massen/vægten af dets brændstof. Fra [wikipedia](https://en.wikipedia.org/wiki/Specific_impulse):
 > Specific impulse (usually abbreviated Isp) is a measure of how effectively a rocket uses propellant or jet engine uses fuel. By definition, it is the total impulse (or change in momentum) delivered per unit of propellant consumed and is dimensionally equivalent to the generated thrust divided by the propellant mass flow rate or weight flow rate.
