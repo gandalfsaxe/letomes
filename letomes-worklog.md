@@ -1,3 +1,23 @@
+
+# June 28
+##  Gandalf: opsummering af seneste uger (pandoc/LaTeXTypora)
+Da jeg er 95% færdig med det jeg har brugt det meste tid på de seneste par uger, venter jeg lige til jeg er helt færdig. Jeg har imidlertid lige skiftet fokus nu, dels fordi jeg lige skulle catche up med et paper inden et Ole møde, og dels fordi min computer skal til reperation i et par dage. Men jeg skriver snart en log af hvad der er sket.
+## Tsiolkovsky's rocket equation
+Har fulgt og selv genopskrevet to udledninger af denne vigtige ligning:
+$$
+\delta V = v_e \ln{\frac{V_f}{V_0}}
+$$
+hvor $\delta v$ er ændring i fart af raket, $v_e$ er udstødningshastigheden i rakettens system, $V_f$ er farten efter udstødning, $V_0$ er farten før udstødning.
+## Specific impulse
+Et mål for hvor effektiv en raket er ift. massen/vægten af dets brændstof. Fra [wikipedia](https://en.wikipedia.org/wiki/Specific_impulse):
+> Specific impulse (usually abbreviated Isp) is a measure of how effectively a rocket uses propellant or jet engine uses fuel. By definition, it is the total impulse (or change in momentum) delivered per unit of propellant consumed and is dimensionally equivalent to the generated thrust divided by the propellant mass flow rate or weight flow rate.
+
+Og denne grundlæggende relation:
+$$
+F_\text{thrust} = g_0 \cdot I_\text{sp} \cdot \dot m,
+$$
+Hvor F_{thrust} er fremdriftskraften, $g_0$ er tyngdeacceleration, $I_{sp}$ er den specifikke impuls og $\dot m$  er massetabsraten.
+
 # June 12
 ## pykep/pygmo
 Oisin: Reading docs for pykep and pygmo, forked pykep to make some changes to the plotting functionality. Figure that might be useful later as well. Posted some questions for next meeting. I really want to get to implementing our own ES-algorithm, though pygmo has a very nice CMA-ES that looks like it might do what we need outta the box.
