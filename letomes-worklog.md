@@ -1,3 +1,16 @@
+# June 29, 2018
+##  Møde (OW+GS+ODK)
+###  Paperen Izzo2018 (Machine learning and evolutionary techniques in interplanetary trajectory design)
+Vi snakkede om hvad det er de egentlig har gjort:
+1. Regne nogle optimale baner ud med control theory
+2. Generere et træningssæt ved at lave noget random walk rundt om de optimale baner, og gemme dataen om forskellen i delta-v osv.
+3. Bruge de generede træningssæt til at træne et ret standard feed-forward neuralt netværk til at lære de optimale kontinuerte input $u(t)$ .
+Vi skal holde fast i den oprindelige plan med at lave ES på interplanetary transfers, og også overveje at køre det hele med egen kode; behøver vi PyKEP til dette? Er der nogen grund til at vi ikka kan gemme relevante planeters bevægelse i en slags tabel, og så have en simpel simulator, og fokusere vores energi på at optimere inputs til denne simple simulator?
+
+### Egen simulator til Mars?
+1. Er der nogen grund til at conic patched comic sections osv.? Kan vi ikke bare løse systemet af Newton's 2. lov numerisk? Hvorfor have de her 3 legeme systemer som skal strikkes sammen?
+
+Vi nok vil bevæge os i retning af at lave vores egen simulator nu.
 
 # June 28
 ##  Gandalf: opsummering af seneste uger (pandoc/LaTeXTypora)
