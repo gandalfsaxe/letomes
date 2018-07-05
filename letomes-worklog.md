@@ -1,3 +1,10 @@
+# July 5th, 2018
+## Projekt Roadmap
+Oisin og jeg har lavet et detaljeret roadmap for resten af måneden i Asana, kan ses her:  https://app.asana.com/0/732675643618740/timeline
+
+## Gandalf: ES Openai blog + kode eksempler kørt igennem
+I dag kørte jeg [Karparhy's natural ES eksempel](https://github.com/karpathy/randomfun/blob/master/es.ipynb) igennem med 2D hillclimbing (og fandt også et par [småfejl](https://github.com/karpathy/randomfun/pull/3) i den. I morgen starter jeg på at kigge på at få det ind i R3B moon koden.
+
 # June 29, 2018
 ##  Møde (OW+GS+ODK)
 ###  Paperen Izzo2018 (Machine learning and evolutionary techniques in interplanetary trajectory design)
