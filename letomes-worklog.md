@@ -1,3 +1,9 @@
+#July 6th
+## Pagmo -- Oisin:
+Jeg har implementeret Karpathy/Salimans ES i pagmo, så den er trivielt paralleliserbar. Kører pænt på den lokale maskine. Kører også på HPC, men lidt skrabet. Jeg kunne virkelig godt tænke mig en måde at vise plots fra HPC runs på en måde der ikke involverer at gemme en lokal fil og hente den via scp (-_-)
+
+Næste trin er at smide noget jord-måne simulering ind i det problem vi løser (lige nu er det et toy problem space: et sortiment af gaussians). Det bliver velsagtens noget med at kopiere Gandalf's gamle kode ind i mit framework. Tentativ deadline for det er sat i slutningen af næste uge.
+
 # July 5th, 2018
 ## Projekt Roadmap
 Oisin og jeg har lavet et detaljeret roadmap for resten af måneden i Asana, kan ses her:  https://app.asana.com/0/732675643618740/timeline
