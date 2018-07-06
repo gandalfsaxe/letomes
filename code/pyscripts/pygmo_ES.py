@@ -10,7 +10,6 @@ from IPython import display
 import numpy as np
 plt.rcParams['image.cmap'] = 'gray'
 plt.rcParams['image.interpolation'] = 'nearest'
-get_ipython().run_line_magic('matplotlib', 'inline')
 import pygmo as pg
 from pygmo import algorithm
 import os
