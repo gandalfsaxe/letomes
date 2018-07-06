@@ -4,6 +4,9 @@ Jeg har implementeret Karpathy/Salimans ES i pagmo, så den er trivielt parallel
 
 Næste trin er at smide noget jord-måne simulering ind i det problem vi løser (lige nu er det et toy problem space: et sortiment af gaussians). Det bliver velsagtens noget med at kopiere Gandalf's gamle kode ind i mit framework. Tentativ deadline for det er sat i slutningen af næste uge.
 
+## Gandalf: Visual Studio Code indføring
+Grundet at værkstedsbesøget for min Macbook Pro trækker ud, har jeg hele ugen været nødsaget til halvt at bruge tiden på at sætte værktøjer op på windows maskinerne i biblioteket. Jeg troede jeg var færdig, men i dag gik det op for mig at jeg ikke har PyCharm til rådighed, og SublimeText kan ikke debugge ordentligt. Så jeg brugte dagen på at sætte mig grundigt ind i VSCode, som hermed er blevet min nye editor of choice.
+
 # July 5th, 2018
 ## Projekt Roadmap
 Oisin og jeg har lavet et detaljeret roadmap for resten af måneden i Asana, kan ses her:  https://app.asana.com/0/732675643618740/timeline
