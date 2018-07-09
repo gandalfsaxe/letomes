@@ -1,3 +1,8 @@
+---
+bibliography: ../Slingshooters.bib
+header-includes:
+- \usepackage{siunitx}
+---
 # Introduction
 
 This MSc Thesis is based on the BSc thesis "Low Energy Transfer Orbits - A Theoretical and Numerical Study" [@Saxe2015], where we aimed to find low energy transfer orbits (LETOs) to the moon. Part of the aim of the B.Sc. thesis was to show that finding LETOs was possible for a simplified restricted 3-body model (R3B) where it was possible to do everything manually, from the ground up; all the analytical mechanics could be worked out by hand and the equations of motion be nondimensionalized to a form that was practical to solve in a computer program. Likewise an acceptable numerical integration program could be implemented from the ground up in Python, with no use of external libraries. Another aim was to accelerate the simulations with GPUs such that good low delta-v LETOs could be found simply from brute force search.
