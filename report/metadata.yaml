@@ -1,0 +1,5 @@
+---
+bibliography: ../Slingshooters.bib
+header-includes:
+- usepackage{siunitx}
+---
