@@ -141,3 +141,4 @@ fabric.properties
 -------------------------------------------------------------------------------
 # More PyCharm ignores
 .idea/*
+code/r3b-moon/__pycache__/
