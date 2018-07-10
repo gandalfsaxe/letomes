@@ -19,27 +19,30 @@ except KeyError:
 
 runtime = time.time()
 
-# Precalculated initial Conditions
-#demo = 'earth_orbit'
-#demo = 'lunar_orbit'
-#demo = 'hohmann'
-#demo = '3_day_hohmann'
-#demo = '1_day_hohmann'
-#demo = 'reverse_hohmann'
-demo = 'low_energy_short'
-#demo = 'low_energy_long'
-#demo = 'earth_to_L1'
+FORMAT = "png"
+# FORMAT = "pdf"
 
-# or Search for trajectories
-#demo = 'search_hohmann'
-#demo = 'search_low_energy'
-#demo = 'search_low_energy_parts8'
-#demo = 'search_refine'
+### Precalculated initial Conditions
+# DEMO = 'earth_orbit'
+# DEMO = 'lunar_orbit'
+# DEMO = 'hohmann'
+# DEMO = '3_day_hohmann'
+# DEMO = '1_day_hohmann'
+# DEMO = 'reverse_hohmann'
+DEMO = 'low_energy_short'
+# DEMO = 'low_energy_long'
+# DEMO = 'earth_to_L1'
+
+### Or search for trajectories
+# DEMO = 'search_hohmann'
+# DEMO = 'search_low_energy'
+# DEMO = 'search_low_energy_parts8'
+# DEMO = 'search_refine'
 
 n = 1000000
 
 # Set coordinates
-if demo == 'earth_orbit':
+if DEMO == 'earth_orbit':
     duration = (2.0*pi*leo_orbit/leo_orbit_vel)/(unit_time*day)
     r = leo_orbit/unit_len
     v = 0.99732*leo_orbit_vel/unit_vel
@@ -55,7 +58,7 @@ if demo == 'earth_orbit':
     y0 = y
     px0 = vx-y0
     py0 = vy+x0
-elif demo == 'lunar_orbit':
+elif DEMO == 'lunar_orbit':
     duration = (2.0*pi*lunar_orbit/lunar_orbit_vel)/(unit_time*day)
     r = lunar_orbit/unit_len
     v = 0.99732*lunar_orbit_vel/unit_vel
@@ -71,8 +74,8 @@ elif demo == 'lunar_orbit':
     y0 = y
     px0 = vx-y0
     py0 = vy+x0
-elif demo == 'hohmann':
-    #demo = 'search_refine'
+elif DEMO == 'hohmann':
+    #DEMO = 'search_refine'
 # --------------------------------------------------------------------------
     duration = 5/unit_time
     pos      = -2.086814820119193
@@ -88,7 +91,7 @@ elif demo == 'hohmann':
 # dV(total)        = 3.911863 km/s
 # Flight-time      = 4.300078 days
 # --------------------------------------------------------------------------
-elif demo == 'reverse_hohmann':
+elif DEMO == 'reverse_hohmann':
 # --------------------------------------------------------------------------
     duration = 4/unit_time
     pos      = -2.282942228154665
@@ -104,7 +107,7 @@ elif demo == 'reverse_hohmann':
 # dV(total)        = 4.117971 km/s
 # Flight-time      = 3.875497 days
 # --------------------------------------------------------------------------
-elif demo == 'low_energy_long':
+elif DEMO == 'low_energy_long':
 # --------------------------------------------------------------------------
     duration = 195/unit_time
     pos      = 3.794182930145708
@@ -121,7 +124,7 @@ elif demo == 'low_energy_long':
 # Flight-time      = 194.275480 days
 # --------------------------------------------------------------------------
 # --------------------------------------------------------------------------
-    #demo = 'search_refine'
+    #DEMO = 'search_refine'
 #    duration = 195/unit_time
 #    pos      = 3.794182930145708
 #    ang      = 0.023901745288554
@@ -136,8 +139,8 @@ elif demo == 'low_energy_long':
 # dV(total)        = 3.794817 km/s
 # Flight-time      = 194.275480 days
 # --------------------------------------------------------------------------
-elif demo == 'low_energy_short':
-    #demo = 'search_refine'
+elif DEMO == 'low_energy_short':
+    #DEMO = 'search_refine'
 # --------------------------------------------------------------------------
     duration = 41/unit_time
     pos      = -0.138042744751570
@@ -153,8 +156,8 @@ elif demo == 'low_energy_short':
 # dV(total)        = 3.895822 km/s
 # Flight-time      = 40.617871 days
 # --------------------------------------------------------------------------
-elif demo == '3_day_hohmann':
-    #demo = 'search_refine'
+elif DEMO == '3_day_hohmann':
+    #DEMO = 'search_refine'
 # --------------------------------------------------------------------------
     duration = 3/unit_time
     pos      = -2.272183066647597
@@ -170,8 +173,8 @@ elif demo == '3_day_hohmann':
 # dV(total)        = 4.015346 km/s
 # Flight-time      = 2.999939 days
 # --------------------------------------------------------------------------
-elif demo == '1_day_hohmann':
-    #demo = 'search_refine'
+elif DEMO == '1_day_hohmann':
+    #DEMO = 'search_refine'
     duration = 1/unit_time
     pos      = -2.277654673852600
     ang      = 0.047996554429844
@@ -186,8 +189,8 @@ elif demo == '1_day_hohmann':
 # dV(total)        = 7.129455 km/s
 # Flight-time      = 0.997234 days
 # --------------------------------------------------------------------------
-elif demo == 'earth_to_L1':
-    demo = 'search_refine'
+elif DEMO == 'earth_to_L1':
+    DEMO = 'search_refine'
 # --------------------------------------------------------------------------
     duration = 191/unit_time
     pos      = 2.843432239707429
@@ -206,13 +209,13 @@ elif demo == 'earth_to_L1':
 
 #################### FUNCTION CALLS ####################
 
-if demo == 'search_hohmann':
+if DEMO == 'search_hohmann':
     tlist,xlist,ylist,pxlist,pylist,errlist,hlist = r3b.hohmann(threads,n)
-elif demo == 'search_low_energy':
+elif DEMO == 'search_low_energy':
     tlist,xlist,ylist,pxlist,pylist,errlist,hlist = r3b.low_energy(threads,n)
-elif demo == 'search_low_energy_parts8':
+elif DEMO == 'search_low_energy_parts8':
     tlist,xlist,ylist,pxlist,pylist,errlist,hlist = r3b.low_energy_parts8(threads,n)
-elif demo == 'search_refine':
+elif DEMO == 'search_refine':
     tlist,xlist,ylist,pxlist,pylist,errlist,hlist = r3b.refine(threads,n,duration,pos,ang,burn,x0,y0,px0,py0)
 else:
     tlist,xlist,ylist,pxlist,pylist,errlist,hlist = r3b.trajectory(n,duration,pos,ang,burn,x0,y0,px0,py0)
@@ -252,6 +255,7 @@ plt.plot(tlist*unit_time, errlist)
 plt.xlabel("time (days)")
 plt.ylabel("step error")
 plt.yscale('log')
+plt.savefig('r3b-moon/fig/{}-step_error_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
 # Step sizes
 plt.figure()
@@ -259,14 +263,16 @@ plt.plot(tlist*unit_time, hlist)
 plt.xlabel("time (days)")
 plt.ylabel("step size")
 plt.yscale('log')
+plt.savefig('r3b-moon/fig/{}-step_size_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
-# Total energy
+# Total energy error
 havg = np.sum(Hlist)/n
 hrelerr = (Hlist-havg)/havg
 plt.figure()
 plt.plot(tlist*unit_time, hrelerr)
 plt.xlabel("time (days)")
 plt.ylabel("Hamiltonian rel. err (arbitrary units)")
+plt.savefig('r3b-moon/fig/{}-energy_error_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
 # Zoom earth
 xlim = 0.02
@@ -289,6 +295,7 @@ plt.ylim(ymin,ymax)
 plt.gca().set_aspect('equal', adjustable='box')
 plt.xlabel("x-position (arbitrary units)")
 plt.ylabel("y-position (arbitrary units)")
+plt.savefig('r3b-moon/fig/{}-earth_exit_y(x).{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
 # Zoom moon
 xlim = 0.0055
@@ -311,6 +318,7 @@ plt.ylim(ymin,ymax)
 plt.gca().set_aspect('equal', adjustable='box')
 plt.xlabel("x-position (arbitrary units)")
 plt.ylabel("y-position (arbitrary units)")
+plt.savefig('r3b-moon/fig/{}-moon_entry_y(x).{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
 # View center of mass
 xlim = 1.3
@@ -331,6 +339,7 @@ plt.ylim(ymin,ymax)
 plt.gca().set_aspect('equal', adjustable='box')
 plt.xlabel("x-position (arbitrary units)")
 plt.ylabel("y-position (arbitrary units)")
+plt.savefig('r3b-moon/fig/{}-Y(X)_inertial.{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
 # Position plot (x,y)
 plt.figure()
@@ -354,8 +363,9 @@ plt.ylim(ymin,ymax)
 plt.gca().set_aspect('equal', adjustable='box')
 plt.xlabel("x-position (arbitrary units)")
 plt.ylabel("y-position (arbitrary units)")
-#plt.savefig('fig/r3b/r3b_y(x)_euler_symplectic.pdf',bbox_inches='tight')
-plt.show()
+plt.savefig('r3b-moon/fig/{}-y(x)_corotating.{}'.format(DEMO, FORMAT),bbox_inches='tight')
+# plt.savefig('r3b/r3b_y(x)_euler_symplectic.{}',DEMO, FORMAT='tight')
+# plt.show()
 plt.close()
 print("# --- Done with PLOTS")
 
@@ -365,8 +375,8 @@ print("# --- Done with PLOTS")
 # plt.plot(tlist, omegalist_e)
 # plt.xlabel("time (arbitrary units)")
 # plt.ylabel("velocity (arbitrary units)")
-# plt.savefig('fig/r3b/r3b_omega(t)_euler_explicit.pdf')
-# # plt.show()
+# plt.savefig('r3b/r3b_omega(t)_euler_explicit.{}')
+# # plt.DEMO, FORMATow()
 # plt.close()
 
 # #################### PHASE-SPACE TRAJECTORY PLOTS ####################
@@ -377,7 +387,7 @@ print("# --- Done with PLOTS")
 # plt.plot(thetalist_e[len(thetalist_e)/2:], omegalist_e[len(omegalist_e)/2:], 'b')
 # plt.xlabel("position (arbitrary units)")
 # plt.ylabel("velocity (arbitrary units)")
-# plt.savefig('fig/r3b/r3b_phase-space_euler_explicit.pdf',bbox_inches='tight')
+# plt.savefig('r3b/r3b_phase-space_euler_explicit.{}',DEMO, FORMAT='tight')
 # #plt.show()
 # plt.close()
 
@@ -387,7 +397,7 @@ print("# --- Done with PLOTS")
 # plt.plot(thetalist_i[len(thetalist_i)/2:], omegalist_i[len(omegalist_i)/2:], 'b')
 # plt.xlabel("position (arbitrary units)")
 # plt.ylabel("velocity (arbitrary units)")
-# plt.savefig('fig/r3b/r3b_phase-space_euler_implicit.pdf',bbox_inches='tight')
+# plt.savefig('r3b/r3b_phase-space_euler_implicit.{}',DEMO, FORMAT='tight')
 # #plt.show()
 # plt.close()
 
@@ -397,7 +407,7 @@ print("# --- Done with PLOTS")
 # plt.plot(thetalist[len(thetalist)/2:], omegalist[len(omegalist)/2:], 'b')
 # plt.xlabel("position (arbitrary units)")
 # plt.ylabel("velocity (arbitrary units)")
-# plt.savefig('fig/r3b/r3b_phase-space_euler_symplectic.pdf',bbox_inches='tight')
+# plt.savefig('r3b/r3b_phase-space_euler_symplectic.{}',DEMO, FORMAT='tight')
 # #plt.show()
 # plt.close()
 
