@@ -1,9 +1,15 @@
+
 # July 9, 2018
 ## MikTeX portable + pandoc bug time wasting
 Har ikke kunne compile mit afsnit fordi MikTeX er outdated, så har bare smadret rundt i at få en portable version til at virke. Endte med at lave en form for alias i powerscript profile + compile den seneste version af pandoc fordi der åbenbart er [en bug](https://github.com/jgm/pandoc/issues/4681) i seneste release mht. absolute path på `--pdf-engine` argument.  FML, i morgen stikker Oisin og jeg hovederne sammen og laver noget actually worthwhile.
 
+## report -- Oisin
+Jeg har skrevet halvanden sides penge om Salimans-NES og dets forskelle fra andre ES typer, samt lidt opdateret info om hvordan pagmo er integreret i vores løsning. Mht. ES, bør jeg nok tilføje lidt om ES vs helt andre algoritmer, og hvordan de opfører sig på forskellige problemtyper.
+
+Har ifm. ovenstående læst nærmere på Salimans ES paper, og føler at have dybnet min forståelse for det underliggende optimeringsproblem. Jeg har altid haft svært ved at forstå concepter kommunikeret udelukkende vha. formel logik, så jeg har fundet en metafor der gør mig glad. Den er skrevet i rapporten.
+
 # July 6th
-## Pagmo -- Oisin:
+## Pagmo -- Oisin
 Jeg har implementeret Karpathy/Salimans ES i pagmo, så den er trivielt paralleliserbar. Kører pænt på den lokale maskine. Kører også på HPC, men lidt skrabet. Jeg kunne virkelig godt tænke mig en måde at vise plots fra HPC runs på en måde der ikke involverer at gemme en lokal fil og hente den via scp (-_-)
 
 Næste trin er at smide noget jord-måne simulering ind i det problem vi løser (lige nu er det et toy problem space: et sortiment af gaussians). Det bliver velsagtens noget med at kopiere Gandalf's gamle kode ind i mit framework. Tentativ deadline for det er sat i slutningen af næste uge.
