@@ -25,7 +25,7 @@ def F(x,y):
     y2 = y*y
     denum1 = 1.0/((mux2+y2)*sqrt(mux2+y2))
     denum2 = 1.0/((mumx2+y2)*sqrt(mumx2+y2))
-    Fx = (mu-1.0)*mux*denum1+mu*mumx*denum2
+    Fx = (mu-1.0)*mux*denum1+mu*mumx*denum2 # TODO possible sign error on last term
     Fy = (mu-1.0)*y*denum1-mu*y*denum2
     return Fx,Fy
 
