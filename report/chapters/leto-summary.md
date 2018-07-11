@@ -17,7 +17,7 @@ This at least partly validated our simplified R3B sun-less model and numerical t
 
 **INSERT SV-ADAPTIVE STEPSIZE/ERROR HERE
 
-By brute force searching in many directions and velocity vectors in a $\SI{100}{\km}​$ parking orbit 
+By brute force searching in many directions and velocity vectors in a $\SI{100}{\km}$ parking orbit 
 
 ## Aim of this thesis
 
