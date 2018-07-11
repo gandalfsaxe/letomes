@@ -224,7 +224,7 @@ def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist)
                     status = 1 # Hit moon orbit
 
                     # Project impulse onto radius vector
-                    pr = (px*rx+py*ry)/r;
+                    pr = (px*rx+py*ry)/r
 
                     # Change impulse to capture orbit
                     px = px-pr*rx/r
