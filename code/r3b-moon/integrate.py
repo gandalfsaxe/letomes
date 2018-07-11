@@ -12,7 +12,7 @@ We assume **TODO FILL OUT HERE!
 
 import math
 import numpy as np
-from numbapro import *
+from numba import *
 
 # Table constants
 earth_moon_distance = 384400.0 # km
