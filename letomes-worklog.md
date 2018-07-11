@@ -5,6 +5,9 @@ Har brugt en del af dagen på at forstå symplectic funktionen i symplectic.py h
 ## Debugger helvede
 Vi rodede begge lidt med at få debuggeren til at køre i VSCode. Gandalf konkluderede at debuggeren i VSC tager 27 sekunder om at starte på bibliotekets computere. P-hands. Vil prøve at køre det ud af C: drevet (lokalt) i stedet for L: drevet (netværk) i morgen, men er ikke forhåbeningsfuld. 
 
+## Pandoc virker endelig på windows også
+Halleluja.
+
 # July 10, 2018
 ## Moon code overblik
 Gandalf og Oisin har pair programmeret i dag. Specifikt har vi kørt koden igennem lidt birds-eye view, hvorefter vi har fokuseret på "The business end", altså solverne og søgealgoritmen. Vi har i den process fundet en fortegnsfejl i implementeringen af Hamilton-ligningerne, der har introduceret en fejl på ca. en procent i BSc bevægelsesligningerne. Værd at sende et addendum ud til alle de stakkels videnskabsfolk der bruger de resultater som hjørnesten i deres egne projekter. Der er garanteret millioner af ERC penge på spil.
