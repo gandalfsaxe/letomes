@@ -1,3 +1,7 @@
+# July 12, 2018
+## Refactored symplectic ligning + Git LFS snask
+Startede med at omskrive symplectic ligning lidt, så vi ikke bliver bidt af det igen, som forberedlese til simplificering af den del af koden. Dagen blev lidt derailed af at vi begge havde git problemer. Vores indførelse af LFS til PDF filer for chapters gav nogle obskure problemer. Gandalf gjorde det forfra i command line og nu virker det tilsyneladende fint.
+
 # July 11, 2018 
 ## Pair-programming: forståa sympletic funktionen i bsc-koden
 Har brugt en del af dagen på at forstå symplectic funktionen i symplectic.py hvor det meste af logikken sker. Dette er relevant både ift. at implenetere ES i bsc-koden og den nye pagmo basererede kode.
