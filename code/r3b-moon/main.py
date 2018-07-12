@@ -35,8 +35,8 @@ def run_test():
     # DEMO = 'earth_to_L1'
 
     ### Or search for trajectories
-    # DEMO = 'search_hohmann'
-    DEMO = 'search_low_energy'
+    DEMO = 'search_hohmann'
+    # DEMO = 'search_low_energy'
     # DEMO = 'search_low_energy_parts8'
     # DEMO = 'search_refine'
 
