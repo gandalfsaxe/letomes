@@ -1,5 +1,11 @@
 -------------------------------------------------------------------------------
+code/r3b-moon/fig/
+code/r3b-moon/__pycache__/
+code/r3b-moon/fig/
 
+code/.ipynb_checkpoints/
+
+-------------------------------------------------------------------------------
 # Created by https://www.gitignore.io/api/macos
 
 ### macOS ###
@@ -31,43 +37,6 @@ Temporary Items
 
 
 # End of https://www.gitignore.io/api/macos
--------------------------------------------------------------------------------
-# Created by https://www.gitignore.io/api/sublimetext
-
-### SublimeText ###
-# cache files for sublime text
-*.tmlanguage.cache
-*.tmPreferences.cache
-*.stTheme.cache
-
-# workspace files are user-specific
-*.sublime-workspace
-
-# project files should be checked into the repository, unless a significant
-# proportion of contributors will probably not be using SublimeText
-# *.sublime-project
-
-# sftp configuration file
-sftp-config.json
-
-# Package control specific files
-Package Control.last-run
-Package Control.ca-list
-Package Control.ca-bundle
-Package Control.system-ca-bundle
-Package Control.cache/
-Package Control.ca-certs/
-Package Control.merged-ca-bundle
-Package Control.user-ca-bundle
-oscrypto-ca-bundle.crt
-bh_unicode_properties.cache
-
-# Sublime-github package stores a github token in this file
-# https://packagecontrol.io/packages/sublime-github
-GitHub.sublime-settings
-
-
-# End of https://www.gitignore.io/api/sublimetext
 -------------------------------------------------------------------------------
 # Created by https://www.gitignore.io/api/pycharm
 
@@ -139,10 +108,14 @@ fabric.properties
 
 # End of https://www.gitignore.io/api/pycharm
 -------------------------------------------------------------------------------
-# More PyCharm ignores
-.idea/*
-code/r3b-moon/__pycache__/
+# Created by https://www.gitignore.io/api/visualstudiocode
 
-code/r3b-moon/fig/
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
-code/.ipynb_checkpoints/
+
+# End of https://www.gitignore.io/api/visualstudiocode
