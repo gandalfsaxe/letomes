@@ -1,6 +1,7 @@
-#July 13
+# July 13
 ## Symplectic implementeret i pygmo (WIP) 
 Oisin: Jeg har implementeret simuleringsfunktionerne fra symplectic.py i pygmo problemet. Det kører ikke helt endnu, men jeg forventer at der er et eller andet oppe om ca. to arbejdsdage. Vi har diskuteret masser af nomenklatur, og prøvet at rydde op i diskrepansen mellem skreven matematik og variabelnavne i implementeringen. Den samtale er helt sikkert ikke slut før d. 31. August kl. 23:59 T__T
+Gandalf: Bare refactored / cleaned moon code + diskuteret konventioner + ligninger med Oisin.
 
 # July 12, 2018
 ## Refactored symplectic ligning + Git LFS snask
