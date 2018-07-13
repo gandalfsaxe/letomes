@@ -1,29 +1,47 @@
 from math import pi,sqrt,pow
+"""
+Unless otherwise noted, all units will be in:
+Mass:   kg
+Length: km
+Time:   days
+"""
 
-# Table constants
-earth_moon_distance = 384400.0 # km
-moon_orbit_duration = 27.322 # days
-earth_radius = 6367.4447 # km
-earth_mass = 5.9721986e24
-moon_mass = 7.34767309e22
-G = 6.67384e-11 # m^3 kg^-1 s^-2
-moon_radius = 1737.1 # km
-leo_orbit = 160.0+earth_radius # km
-lunar_orbit = 100.0+moon_radius # km
-orbit_range = 10.0 # km
-day = 24.0*3600.0 # s
+### USER DEFINED CONSTANTS ###
+EARTH_ALTITUDE = 160.0  # km
+LUNAR_ALTITUDE = 100.0  # km
 
-# Units
-unit_len = earth_moon_distance # km
-unit_time = moon_orbit_duration/(2.0*pi) # days
-unit_vel = unit_len/(unit_time*day) # km/s
 
-# Gravitational constants
-mu = moon_mass/(earth_mass+moon_mass) # 1
+### TABLE / PHYSICAL CONSTANTS ###
+earth_moon_distance = 384400.0  # km
+lunar_orbit_duration = 27.322  # days
 
-# Calculation constants
-leo_orbit_vel = sqrt(G*earth_mass/(leo_orbit*1000.0))/1000.0 # km/s
-lunar_orbit_vel = sqrt(G*moon_mass/(lunar_orbit*1000.0))/1000.0 # km/s
-moon_pos_x = 1-mu
-earth_pos_x = -mu
-L1_pos_x = (1-pow(mu/3.0,1.0/3.0))
+earth_radius = 6367.4447  # km
+earth_mass = 5.9721986e24  # kg
+
+lunar_radius = 1737.1  # km
+lunar_mass = 7.34767309e22  # kg
+
+G = 6.67384e-11  # m^3 kg^-1 s^-2
+day = 24.0*3600.0  # s
+
+# Dimensionless constants
+k = lunar_mass / (earth_mass + lunar_mass)  # 1
+
+
+### DERIVED BOUNDARY CONDITIONS ###
+leo_radius = earth_radius + EARTH_ALTITUDE  # km
+llo_radius = lunar_radius + LUNAR_ALTITUDE  # km
+
+leo_velocity = sqrt(G*earth_mass / (leo_radius*1000.0))/1000.0  # km/s
+llo_velocity = sqrt(G*lunar_mass / (llo_radius*1000.0))/1000.0  # km/s
+
+
+### NONDIMENSIONALIZATION ###
+# Characteristic units
+unit_length = earth_moon_distance  # km
+unit_time = lunar_orbit_duration/(2.0*pi)  # days
+unit_velocity = unit_length / (unit_time*day) # km/s
+
+### Nondimensionalized boundary conditions
+leo_radius_nondim = leo_radius / unit_length
+leo_radius_velocity_nondim = leo_velocity / unit_velocity
