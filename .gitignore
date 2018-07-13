@@ -144,3 +144,5 @@ fabric.properties
 code/r3b-moon/__pycache__/
 
 code/r3b-moon/fig/
+
+code/.ipynb_checkpoints/
