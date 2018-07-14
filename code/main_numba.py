@@ -12,8 +12,8 @@ from math import cos, pi, sin
 import matplotlib.pyplot as plt
 import numpy as np
 
-import reduced3body as r3b
-from const import *
+from r3b-moon import reduced3body as r3b
+from orbsim.constants import *
 
 
 def run_test():

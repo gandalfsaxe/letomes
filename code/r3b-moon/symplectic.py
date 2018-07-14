@@ -12,12 +12,12 @@ We assume **TODO FILL OUT HERE!
 
 from math import pi,sqrt
 import numpy as np
-# from numbapro import *
 from numba import jit
-from const import *
+from orbsim.constants import *
 
 @jit
 def F(x,y):
+    mu = k
     mux = mu+x
     mux2 = mux*mux
     mumx = 1-mux
@@ -94,8 +94,8 @@ def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,
     err = 1e-15
     status = 1
     target_dist = 1
-    target = 1; target_pos_x = moon_pos_x
-    #target = 2; target_pos_x = L1_pos_x
+    target = 1; target_pos_x = lunar_position_X
+    #target = 2; target_pos_x = L1_position_X
     target_pos_y = 0
     
     # Time reset
@@ -155,11 +155,11 @@ def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,
             # Check if we hit the target
             if status == 1:
                 if target == 1:
-                    r_low = (lunar_orbit-orbit_range)/unit_len
-                    r_high = (lunar_orbit+orbit_range)/unit_len
+                    r_low = (llo_radius - ORBITAL_RANGE) / unit_length
+                    r_high = (llo_radius + ORBITAL_RANGE) / unit_length
                 else:
                     r_low = 0
-                    r_high = orbit_range/unit_len
+                    r_high = ORBITAL_RANGE/unit_length
 
                 if r > r_low and r < r_high:
 
@@ -177,11 +177,11 @@ def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,
                     
                         # Now ajust velocity to lunar orbit velocity
                         vt = sqrt(vx*vx+vy*vy)
-                        px = (lunar_orbit_vel/unit_vel)*vx/vt-y
-                        py = (lunar_orbit_vel/unit_vel)*vy/vt+x
+                        px = (llo_velocity/unit_velocity)*vx/vt-y
+                        py = (llo_velocity/unit_velocity)*vy/vt+x
 
                         # Total velocity change
-                        dv = sqrt(vr*vr+(vt-lunar_orbit_vel/unit_vel)*(vt-lunar_orbit_vel/unit_vel))
+                        dv = sqrt(vr*vr+(vt-llo_velocity/unit_velocity)*(vt-llo_velocity/unit_velocity))
                     else:
                         dv = sqrt(vx*vx+vy*vy)
                     
@@ -195,8 +195,8 @@ def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,
                         return status
 
             # Check if we hit the earth
-            r = (x-earth_pos_x)*(x-earth_pos_x)+y*y
-            r_high = earth_radius/unit_len
+            r = (x-earth_position_X)*(x-earth_position_X)+y*y
+            r_high = earth_radius/unit_length
             if r < r_high*r_high:
                 return 100 # Hit earth surface
 

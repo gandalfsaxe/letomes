@@ -12,8 +12,9 @@ We assume **TODO FILL OUT HERE!
 import time
 from math import pi,sqrt
 import numpy as np
-from const import *
-from search import search_mt, search, print_search_results
+from orbsim.constants import * 
+
+from . search import search_mt, search, print_search_results
 from symplectic import symplectic
 
 # **BRUGER IKKE pos, ang, burn til noget, kun til print
@@ -75,7 +76,7 @@ def hohmann(threads,n):
     burns = 200
     pos = -3*pi/4
     ang = 0
-    burn = 3.11/unit_vel # Forward Hohmann
+    burn = 3.11/unit_velocity # Forward Hohmann
     #burn_low = -3.14/unit_vel # Reverse Hohmann
 
     # Super fast Hohmann trajectory < 1 days
@@ -90,7 +91,7 @@ def hohmann(threads,n):
 
     pos_range = pi/4
     ang_range = pi/8
-    burn_range = 0.1/unit_vel
+    burn_range = 0.1/unit_velocity
 
     # Start search
     searches = 0
@@ -136,7 +137,7 @@ def hohmann(threads,n):
 
     # Print best result
     print("################ Best ################")
-    print("# Best dV(total)   = %f km/s" % (best_total_dv*unit_vel))
+    print("# Best dV(total)   = %f km/s" % (best_total_dv*unit_velocity))
     print_search_results(best_stat,best_pos,best_ang,best_burn,best_x0,best_y0,best_px0,best_py0,best_dv,best_toa)
 
     # Initialize arrays
@@ -176,10 +177,10 @@ def low_energy(threads,n):
     burns = 200
     pos = -3*pi/4
     ang = 0
-    burn = 3.12/unit_vel
+    burn = 3.12/unit_velocity
     pos_range = pi
     ang_range = 0
-    burn_range = 0.01/unit_vel
+    burn_range = 0.01/unit_velocity
 
     # Start search
     searches = 0
@@ -234,7 +235,7 @@ def low_energy(threads,n):
     info = np.zeros(2)
 
     # Do trajectory
-    duration = toa+(2.0*pi*lunar_orbit/lunar_orbit_vel)/(unit_time*day)
+    duration = toa+(2.0*pi*llo_radius/llo_velocity)/(unit_time*day)
     status = symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,info)
     exit()
     return tlist,xlist,ylist,pxlist,pylist,errlist,hlist
@@ -265,10 +266,10 @@ def low_energy_parts8(threads,n):
         pos = i*pi/4
         ang = 0
         #burn = 3.12/unit_vel # moon
-        burn = 3.09/unit_vel # L1
+        burn = 3.09/unit_velocity # L1
         pos_range = 2*pi/16
         ang_range = pi/2
-        burn_range = 0.1/unit_vel
+        burn_range = 0.1/unit_velocity
     
         # Start search
         searches = 0
@@ -315,7 +316,7 @@ def low_energy_parts8(threads,n):
     # Print best result
     if best_total_dv < 1e9:
         print("################ Best ################")
-        print("# Best dV(total)   = %f km/s" % (best_total_dv*unit_vel))
+        print("# Best dV(total)   = %f km/s" % (best_total_dv*unit_velocity))
         print_search_results(best_stat,best_pos,best_ang,best_burn,best_x0,best_y0,best_px0,best_py0,best_dv,best_toa)
 
     # Initialize arrays
@@ -329,7 +330,7 @@ def low_energy_parts8(threads,n):
     info = np.zeros(2)
 
     # Do trajectory
-    #duration = toa+(2.0*pi*lunar_orbit/lunar_orbit_vel)/(unit_time*day)
+    #duration = toa+(2.0*pi*llo_radius/llo_velocity)/(unit_time*day)
     status = symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,info)
     #exit()
     return tlist,xlist,ylist,pxlist,pylist,errlist,hlist
@@ -365,7 +366,7 @@ def refine(threads,n,duration,pos,ang,burn,x0,y0,px0,py0):
     # Divide circular earth orbit into 8 parts
     pos_range = 2*pi/16*0.1
     ang_range = pi/100*0.1
-    burn_range = 0.1/unit_vel*0.1
+    burn_range = 0.1/unit_velocity*0.1
     
     # Start search
     searches = 0
@@ -411,7 +412,7 @@ def refine(threads,n,duration,pos,ang,burn,x0,y0,px0,py0):
 
     # Print best result
     print("################ Best ################")
-    print("# Best dV(total)   = %f km/s" % (best_total_dv*unit_vel))
+    print("# Best dV(total)   = %f km/s" % (best_total_dv*unit_velocity))
     print_search_results(best_stat,best_pos,best_ang,best_burn,best_x0,best_y0,best_px0,best_py0,best_dv,best_toa)
 
     # Initialize arrays
@@ -425,7 +426,7 @@ def refine(threads,n,duration,pos,ang,burn,x0,y0,px0,py0):
     info = np.zeros(2)
 
     # Do trajectory
-    duration = toa+(2.0*pi*lunar_orbit/lunar_orbit_vel)/(unit_time*day)
+    duration = toa+(2.0*pi*llo_radius/llo_velocity)/(unit_time*day)
     status = symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,info)
     #exit()
     return tlist,xlist,ylist,pxlist,pylist,errlist,hlist

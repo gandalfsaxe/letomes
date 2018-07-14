@@ -14,7 +14,7 @@ import time
 from math import ceil
 import numpy as np
 from multiprocessing import Pool
-from const import *
+from orbsim.constants import *
 from symplectic import symplectic
 
 def print_search_results(stat,pos,ang,burn,x0,y0,px0,py0,dv,toa):
@@ -77,18 +77,17 @@ def search(thread,threads,n,duration,positions,angles,burns):
         burn = burns[burn_i]
 
         # Calculate initial conditions
-        r = leo_orbit/unit_len
-        x0 = np.cos(pos)*r
-        y0 = np.sin(pos)*r
-        rx = -y0/r
-        ry = x0/r
-        vx = (leo_orbit_vel/unit_vel)*rx
-        vy = (leo_orbit_vel/unit_vel)*ry
+        x0 = np.cos(pos)*leo_orbit
+        y0 = np.sin(pos)*leo_orbit
+        vx_norm = -y0/leo_orbit
+        vy_norm = x0/leo_orbit
+        vx = (leo_orbit_vel/unit_vel)*vx_norm
+        vy = (leo_orbit_vel/unit_vel)*vy_norm
         x0 += earth_pos_x
-        bx = np.cos(ang)*rx-np.sin(ang)*ry
-        by = np.sin(ang)*rx+np.cos(ang)*ry
-        px0 = (burn/abs(burn))*vx+burn*bx-y0 # Sign of burn decides rotational direction of launch
-        py0 = (burn/abs(burn))*vy+burn*by+x0
+        bx = np.cos(ang)*vx_norm-np.sin(ang)*vy_norm
+        by = np.sin(ang)*vx_norm+np.cos(ang)*vy_norm
+        px0 = vx+burn*bx-y0 # Sign of burn decides rotational direction of launch
+        py0 = vy+burn*by+x0
 
         # Call symplectic integration
         # status > 0     : Closest distance to moon achieved 
