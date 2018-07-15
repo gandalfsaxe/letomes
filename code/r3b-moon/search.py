@@ -15,25 +15,25 @@ from math import ceil
 import numpy as np
 from multiprocessing import Pool
 from orbsim.constants import *
-from symplectic import symplectic
+from . symplectic import symplectic
 
 def print_search_results(stat,pos,ang,burn,x0,y0,px0,py0,dv,toa):
     print("# --------------------------------------------------------------------------")
     print("duration = %i/unit_time" % (max(1,int(ceil(toa*unit_time)))))
     print("pos      = %.15lf" % (pos))
     print("ang      = %.15lf" % (ang))
-    print("burn     = %.15lf/unit_vel" % (burn*unit_vel))
+    print("burn     = %.15lf/unit_velocity" % (burn*unit_velocity))
     print("x0       = %.15lf" % (x0))
     print("y0       = %.15lf" % (y0))
     print("px0      = %.15lf" % (px0))
     print("py0      = %.15lf" % (py0))
     print("# --------------------------------------------------------------------------")
-    print("# dV(earth-escape) = %f km/s" % (abs(burn)*unit_vel))
+    print("# dV(earth-escape) = %f km/s" % (abs(burn)*unit_velocity))
     if stat > 0 and stat < 100:
         print("# Min moon distance= %f" % (stat))
     elif stat < 0:
-        print("# dV(moon-capture) = %f km/s" % (dv*unit_vel))
-        print("# dV(total)        = %f km/s" % ((abs(burn)+dv)*unit_vel))
+        print("# dV(moon-capture) = %f km/s" % (dv*unit_velocity))
+        print("# dV(total)        = %f km/s" % ((abs(burn)+dv)*unit_velocity))
         print("# Flight-time      = %f days" % (toa*unit_time))
     else:
         print("# Crashed on earth!")
@@ -77,13 +77,13 @@ def search(thread,threads,n,duration,positions,angles,burns):
         burn = burns[burn_i]
 
         # Calculate initial conditions
-        x0 = np.cos(pos)*leo_orbit
-        y0 = np.sin(pos)*leo_orbit
-        vx_norm = -y0/leo_orbit
-        vy_norm = x0/leo_orbit
-        vx = (leo_orbit_vel/unit_vel)*vx_norm
-        vy = (leo_orbit_vel/unit_vel)*vy_norm
-        x0 += earth_pos_x
+        x0 = np.cos(pos)*leo_radius
+        y0 = np.sin(pos)*leo_radius
+        vx_norm = -y0/leo_radius
+        vy_norm = x0/leo_radius
+        vx = (leo_velocity/unit_velocity)*vx_norm
+        vy = (leo_velocity/unit_velocity)*vy_norm
+        x0 += earth_position_X
         bx = np.cos(ang)*vx_norm-np.sin(ang)*vy_norm
         by = np.sin(ang)*vx_norm+np.cos(ang)*vy_norm
         px0 = vx+burn*bx-y0 # Sign of burn decides rotational direction of launch
@@ -150,7 +150,7 @@ def search_mt(threads,n,duration,num_pos,num_ang,num_burn,pos_low,pos_high,ang_l
     trials = num_pos*num_ang*num_burn
     print(positions)
     print(angles)
-    print(burns*unit_vel)
+    print(burns*unit_velocity)
 
     # Set threads
     threads = min(threads,num_pos)

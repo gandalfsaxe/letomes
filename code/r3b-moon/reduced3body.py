@@ -15,7 +15,7 @@ import numpy as np
 from orbsim.constants import * 
 
 from . search import search_mt, search, print_search_results
-from symplectic import symplectic
+# from . symplectic import symplectic
 
 # **BRUGER IKKE pos, ang, burn til noget, kun til print
 def trajectory(n,duration,pos,ang,burn,x0,y0,px0,py0):
