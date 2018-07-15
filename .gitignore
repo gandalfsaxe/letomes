@@ -1,9 +1,8 @@
 -------------------------------------------------------------------------------
-code/r3b-moon/fig/
-code/r3b-moon/__pycache__/
-code/r3b-moon/fig/
+__pycache__/
+.ipynb_checkpoints/
 
-code/.ipynb_checkpoints/
+code/r3b-moon/fig/
 
 code/.vscode/.ropeproject/
 
