@@ -1,4 +1,8 @@
-# July 13
+# July 14, 2018
+## Python modules fixed + pandoc demos uploaded
+Har indført nogle `__init__.py` filer for at python koden de forskellige steder virker som moduler der kan importeres relativt til top-level. Derudover har jeg uploaded pandoc+academic, en samling a demos/eksempler på brugen af pandoc/markdown som erstatning til ren LaTeX.
+
+# July 13, 2018
 ## Symplectic implementeret i pygmo (WIP) 
 Oisin: Jeg har implementeret simuleringsfunktionerne fra symplectic.py i pygmo problemet. Det kører ikke helt endnu, men jeg forventer at der er et eller andet oppe om ca. to arbejdsdage. Vi har diskuteret masser af nomenklatur, og prøvet at rydde op i diskrepansen mellem skreven matematik og variabelnavne i implementeringen. Den samtale er helt sikkert ikke slut før d. 31. August kl. 23:59 T__T
 Gandalf: Bare refactored / cleaned moon code + diskuteret konventioner + ligninger med Oisin.
@@ -30,7 +34,7 @@ Jeg har skrevet halvanden sides penge om Salimans-NES og dets forskelle fra andr
 
 Har ifm. ovenstående læst nærmere på Salimans ES paper, og føler at have dybnet min forståelse for det underliggende optimeringsproblem. Jeg har altid haft svært ved at forstå concepter kommunikeret udelukkende vha. formel logik, så jeg har fundet en metafor der gør mig glad. Den er skrevet i rapporten.
 
-# July 6th
+# July 6, 2018
 ## Pagmo -- Oisin
 Jeg har implementeret Karpathy/Salimans ES i pagmo, så den er trivielt paralleliserbar. Kører pænt på den lokale maskine. Kører også på HPC, men lidt skrabet. Jeg kunne virkelig godt tænke mig en måde at vise plots fra HPC runs på en måde der ikke involverer at gemme en lokal fil og hente den via scp (-_-)
 
@@ -60,7 +64,7 @@ Vi skal holde fast i den oprindelige plan med at lave ES på interplanetary tran
 
 Vi nok vil bevæge os i retning af at lave vores egen simulator nu.
 
-# June 28
+# June 28, 2018
 ##  Gandalf: opsummering af seneste uger (pandoc/LaTeXTypora)
 Da jeg er 95% færdig med det jeg har brugt det meste tid på de seneste par uger, venter jeg lige til jeg er helt færdig. Jeg har imidlertid lige skiftet fokus nu, dels fordi jeg lige skulle catche up med et paper inden et Ole møde, og dels fordi min computer skal til reperation i et par dage. Men jeg skriver snart en log af hvad der er sket.
 ## Tsiolkovsky's rocket equation
@@ -82,7 +86,7 @@ F_\text{thrust} = g_0 \cdot I_\text{sp} \cdot \dot m,
 $$
 Hvor F_{thrust} er fremdriftskraften, $g_0$ er tyngdeacceleration, $I_{sp}$ er den specifikke impuls og $\dot m$  er massetabsraten.
 
-# June 12
+# June 12, 2018
 ## pykep/pygmo
 Oisin: Reading docs for pykep and pygmo, forked pykep to make some changes to the plotting functionality. Figure that might be useful later as well. Posted some questions for next meeting. I really want to get to implementing our own ES-algorithm, though pygmo has a very nice CMA-ES that looks like it might do what we need outta the box.
 
