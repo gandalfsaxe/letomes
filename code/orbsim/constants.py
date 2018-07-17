@@ -1,4 +1,4 @@
-from math import pi,sqrt,pow
+from math import pi, sqrt, pow
 """
 Unless otherwise noted, all units will be in:
 Mass:   kg
@@ -10,7 +10,10 @@ Time:   days
 EARTH_ALTITUDE = 160.0  # km
 LUNAR_ALTITUDE = 100.0  # km
 
-ORBITAL_RANGE = 10  # km
+ORBITAL_TOLERANCE = 10  # km
+h_default = 1e-6  # dimless time
+hmin = 1e-10  # dimless time
+tol = 1e-9 # dimless time
 
 
 ### TABLE / PHYSICAL CONSTANTS ###
@@ -29,7 +32,8 @@ day = 24.0*3600.0  # s
 # Dimensionless constants
 k = lunar_mass / (earth_mass + lunar_mass)  # dimless
 
-lunar_position_X = 1 - k  # Note that Y for both Earth and Moon is always zero in (X,Y) system 
+# Note that Y for both Earth and Moon is always zero in (X,Y) system
+lunar_position_X = 1 - k
 earth_position_X = -k
 L1_position_X = 1 - pow(k/3, 1/3)
 
@@ -46,8 +50,8 @@ llo_velocity = sqrt(G*lunar_mass / (llo_radius*1000.0))/1000.0  # km/s
 # Characteristic units
 unit_length = earth_moon_distance  # km
 unit_time = lunar_orbit_duration / (2.0*pi)  # days
-unit_velocity = unit_length / (unit_time*day) # km/s
+unit_velocity = unit_length / (unit_time*day)  # km/s
 
-### Nondimensionalized boundary conditions
+# Nondimensionalized boundary conditions
 leo_radius_nondim = leo_radius / unit_length  # dimless
 leo_radius_velocity_nondim = leo_velocity / unit_velocity  # dimless

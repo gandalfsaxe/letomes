@@ -10,14 +10,15 @@ We assume **TODO FILL OUT HERE!
 
 """
 
-from math import pi,sqrt
+from math import pi, sqrt
 import numpy as np
 # from numbapro import *
 from numba import jit
 from const import *
 
+
 @jit
-def F(x,y):
+def F(x, y):
     mux = mu+x
     mux2 = mux*mux
     mumx = 1-mux
@@ -25,13 +26,15 @@ def F(x,y):
     y2 = y*y
     denum1 = 1.0/((mux2+y2)*sqrt(mux2+y2))
     denum2 = 1.0/((mumx2+y2)*sqrt(mumx2+y2))
-    Fx = (mu-1.0)*mux*denum1+mu*mumx*denum2 # TODO possible sign error on last term
+    # TODO possible sign error on last term
+    Fx = (mu-1.0)*mux*denum1+mu*mumx*denum2
     Fy = (mu-1.0)*y*denum1-mu*y*denum2
-    return Fx,Fy
+    return Fx, Fy
+
 
 @jit
-def explicit_euler_step(h,x,y,px,py):
-    Fx,Fy = F(x,y)
+def explicit_euler_step(h, x, y, px, py):
+    Fx, Fy = F(x, y)
     vx = px+y
     vy = py-x
     vpx = Fx+py
@@ -40,25 +43,27 @@ def explicit_euler_step(h,x,y,px,py):
     y += vy*h
     px += vpx*h
     py += vpy*h
-    return x,y,px,py
+    return x, y, px, py
+
 
 @jit
-def symplectic_euler_step(h,x,y,px,py):
+def symplectic_euler_step(h, x, y, px, py):
     # Step 1
     vx = px+y
     x = (x+(vx+py*h)*h)/(1.0+h*h)
     vy = py-x
     y += vy*h
     # Step 2
-    Fx,Fy = F(x,y)
+    Fx, Fy = F(x, y)
     vpx = Fx+py
     vpy = Fy-px
     px += vpx*h
     py += vpy*h
-    return x,y,px,py
+    return x, y, px, py
+
 
 @jit
-def symplectic_verlet_step(h,x,y,px,py):
+def symplectic_verlet_step(h, x, y, px, py):
     hh = 0.5*h
     denum = 1.0/(1.0+hh*hh)
     # Step 1
@@ -67,7 +72,7 @@ def symplectic_verlet_step(h,x,y,px,py):
     vy = py-x
     y += vy*hh
     # Step 2
-    Fx,Fy = F(x,y)
+    Fx, Fy = F(x, y)
     vpx = Fx+py
     vpy = Fy-px
     px = (px+(2.0*vpx+(vpy+Fy)*hh)*hh)*denum
@@ -77,10 +82,12 @@ def symplectic_verlet_step(h,x,y,px,py):
     vy = py-x
     x += vx*hh
     y += vy*hh
-    return x,y,px,py
+    return x, y, px, py
 
-@jit #('void(int64, float64, float64, float64, float64, float64, float64, float64[:], float64[:], float64[:], float64[:])')
-def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,info):
+
+# ('void(int64, float64, float64, float64, float64, float64, float64, float64[:], float64[:], float64[:], float64[:])')
+@jit
+def symplectic(n, duration, x0, y0, px0, py0, xlist, ylist, pxlist, pylist, errlist, hlist, info):
 
     # Initialize initial conditions
     h = 1e-6
@@ -94,10 +101,11 @@ def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,
     err = 1e-15
     status = 1
     target_dist = 1
-    target = 1; target_pos_x = moon_pos_x
+    target = 1
+    target_pos_x = moon_pos_x
     #target = 2; target_pos_x = L1_pos_x
     target_pos_y = 0
-    
+
     # Time reset
     t = 0
     for i in range(n):
@@ -119,10 +127,10 @@ def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,
             if count > 10000000:
                 count = 0
                 hmin = 2*hmin
-            
+
             # Adaptive symplectic euler/midpoint
-            x1,y1,px1,py1 = symplectic_euler_step(h,x,y,px,py)
-            x2,y2,px2,py2 = symplectic_verlet_step(h,x,y,px,py)
+            x1, y1, px1, py1 = symplectic_euler_step(h, x, y, px, py)
+            x2, y2, px2, py2 = symplectic_verlet_step(h, x, y, px, py)
 
             # Relative local error of step
             err = sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1)/(x2*x2+y2*y2))
@@ -150,7 +158,7 @@ def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,
             rx = x-target_pos_x
             ry = y-target_pos_y
             r = sqrt(rx*rx+ry*ry)
-            target_dist = min(target_dist,r)
+            target_dist = min(target_dist, r)
 
             # Check if we hit the target
             if status == 1:
@@ -174,17 +182,18 @@ def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,
                         vr = (vx*rx+vy*ry)/r
                         vx = vx-vr*rx/r
                         vy = vy-vr*ry/r
-                    
+
                         # Now ajust velocity to lunar orbit velocity
                         vt = sqrt(vx*vx+vy*vy)
                         px = (lunar_orbit_vel/unit_vel)*vx/vt-y
                         py = (lunar_orbit_vel/unit_vel)*vy/vt+x
 
                         # Total velocity change
-                        dv = sqrt(vr*vr+(vt-lunar_orbit_vel/unit_vel)*(vt-lunar_orbit_vel/unit_vel))
+                        dv = sqrt(vr*vr+(vt-lunar_orbit_vel/unit_vel)
+                                  * (vt-lunar_orbit_vel/unit_vel))
                     else:
                         dv = sqrt(vx*vx+vy*vy)
-                    
+
                     # Store info
                     info[0] = dv
                     info[1] = t
@@ -198,7 +207,7 @@ def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,
             r = (x-earth_pos_x)*(x-earth_pos_x)+y*y
             r_high = earth_radius/unit_len
             if r < r_high*r_high:
-                return 100 # Hit earth surface
+                return 100  # Hit earth surface
 
     if status >= 0:
         status = target_dist
