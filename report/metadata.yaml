@@ -3,3 +3,21 @@ bibliography: ../Slingshooters.bib
 header-includes:
 - usepackage{siunitx}
 ---
+
+
+
+
+
+
+# SUGGESTIONS
+# ---
+# # csl: "modern-language-association.csl"
+# # csl: "apa.csl"
+# # csl: "chicago-author-date.csl"
+# papersize: a4
+# geometry: margin=3.5cm
+# indent: True
+
+# codeBlockCaptions: True
+
+# ---
