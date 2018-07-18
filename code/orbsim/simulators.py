@@ -1,4 +1,4 @@
-from .constants import k, h_default, hmin, tol
+from .constants import *
 from .derivations import *
 
 
@@ -48,6 +48,7 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=target.MOON):
     if target == target.MOON:
         target_position_x = lunar_position_X
         target_position_y = 0
+        target_orbital_radius = llo_radius
     else if target == target.MARS:
         target_position_x = 0
         target_position_y = 0

@@ -155,11 +155,11 @@ def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,
             # Check if we hit the target
             if status == 1:
                 if target == 1:
-                    r_low = (llo_radius - ORBITAL_RANGE) / unit_length
-                    r_high = (llo_radius + ORBITAL_RANGE) / unit_length
+                    r_low = (llo_radius - ORBITAL_TOLERANCE) / unit_length
+                    r_high = (llo_radius + ORBITAL_TOLERANCE) / unit_length
                 else:
                     r_low = 0
-                    r_high = ORBITAL_RANGE/unit_length
+                    r_high = ORBITAL_TOLERANCE/unit_length
 
                 if r > r_low and r < r_high:
 
