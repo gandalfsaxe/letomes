@@ -1,3 +1,6 @@
+# July 17
+## Added rewritten simulation files to the new orbsim package that we have fashioned. Removed them from ipynb. The notebooks should probably have a much more surface-level interaction with the sims and derivations and all that. We agreed to buld a planet class to hold all the stuff about how close we can fly to the planet and all that. It's not handled nicely right now.
+
 # July 14, 2018
 ## Python modules fixed + pandoc demos uploaded
 Har indført nogle `__init__.py` filer for at python koden de forskellige steder virker som moduler der kan importeres relativt til top-level. Derudover har jeg uploaded pandoc+academic, en samling a demos/eksempler på brugen af pandoc/markdown som erstatning til ren LaTeX.
