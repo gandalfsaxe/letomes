@@ -1,5 +1,6 @@
 from .constants import *
 from .derivations import *
+from .planets import *
 
 
 def euler_step(h, x, y, p_x, p_y):
@@ -42,17 +43,10 @@ def relative_error(vec1, vec2):
     return sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1)/(x2*x2+y2*y2))
 
 
-def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=target.MOON):
+def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=target(celestials.MOON)):
     h = h_default
     x, y, p_x, p_y = [x0, y0, p0_x, p0_y]
-    if target == target.MOON:
-        target_position_x = lunar_position_X
-        target_position_y = 0
-        target_orbital_radius = llo_radius
-    else if target == target.MARS:
-        target_position_x = 0
-        target_position_y = 0
-        pass
+
     for i in range(max_iter):
 
         x_euler, y_euler, p_euler_x, p_euler_y = euler_step(
@@ -67,7 +61,7 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=target.MOON):
             p_y = p_verlet_y
 
             t += h
-            h = max(hmin, h*max(0.1, 0.8*sqrt(tol/err))) 
+            h = max(hmin, h*max(0.1, 0.8*sqrt(tol/err)))
             # TODO: explain this with /HH's new comments. 0.8 is chosen empirically
             # old explanation below:
             """Accept the step only if the weighted error is no more than the
@@ -76,18 +70,14 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=target.MOON):
 
         else:
             h = max(hmin, h/2)
-        
-        """Are we there yet?"""
-        target_distance_x = x - target_position_x
-        target_distance_y = y - target_position_y
+
+        """Are we nearly there yet? (calculate distance)"""
+        target_distance_x = x - target.position_x
+        target_distance_y = y - target.position_y
         target_distance = sqrt(target_distance_x**2 + target_distance_y**2)
         smallest_distance = min(smallest_distance, target_distance)
 
-        
-    return result
+        """For real though, are we there yet? (did we actually hit?)"""
+        orbital_radius_lower_bound, orbital_radius_upper_bound = target.get_orbital_bounds()
 
-from enum import Enum
-class target(Enum):
-    EARTH = 0
-    MOON = 1
-    MARS = 2
+    return result

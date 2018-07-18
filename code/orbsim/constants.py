@@ -54,4 +54,4 @@ unit_velocity = unit_length / (unit_time*day)  # km/s
 
 # Nondimensionalized boundary conditions
 leo_radius_nondim = leo_radius / unit_length  # dimless
-leo_radius_velocity_nondim = leo_velocity / unit_velocity  # dimless
+leo_velocity_nondim = leo_velocity / unit_velocity  # dimless
