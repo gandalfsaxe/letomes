@@ -38,8 +38,8 @@ class target():
 
     def get_orbital_bounds(self):
         """returns [lower_bound, upper_bound] for successful celestial orbit"""
-        upper_bound = self.orbital_radius + ORBITAL_TOLERANCE
-        lower_bound = self.orbital_radius - ORBITAL_TOLERANCE
+        upper_bound = (self.orbital_radius + ORBITAL_TOLERANCE) / unit_length
+        lower_bound = (self.orbital_radius - ORBITAL_TOLERANCE) / unit_length
         return [lower_bound, upper_bound]
 
 
