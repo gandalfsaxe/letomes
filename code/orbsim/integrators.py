@@ -40,10 +40,10 @@ def verlet_step(h, x, y, p_x, p_y):
 def relative_error(vec1, vec2):
     x1, y1 = vec1
     x2, y2 = vec2
-    return sqrt(((x2 - x1)**2 + (y2 - y1)**2) / (x2**2 + y2**2))
+    return sqrt(((x2 - x1) ** 2 + (y2 - y1) ** 2) / (x2 ** 2 + y2 ** 2))
 
 
-def symplectic(x0, y0, p0_x, p0_y, max_iter=100000000, target=planet(celestials.MOON)):
+def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)):
     """
     runs symplectic adaptive euler-verlet algorithm
     All values are with nondimensionalized units
@@ -60,16 +60,10 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=100000000, target=planet(celestials.
     count = 0
     for i in range(max_iter):
 
-        count += 1
-        if count >= 1000:
-            count = 0
-            hmin2 = 2 * hmin
-
         x_euler, y_euler, p_euler_x, p_euler_y = euler_step(h, x, y, p_x, p_y)
         x_verlet, y_verlet, p_verlet_x, p_verlet_y = verlet_step(h, x, y, p_x, p_y)
         err = relative_error([x_euler, y_euler], [x_verlet, y_verlet])
         if err < tol or h <= hmin2:
-            print(f"ACCEPT STEP WITH [{h},{x_verlet},{y_verlet},{err}]")
             x = x_verlet
             y = y_verlet
             p_x = p_verlet_x
@@ -142,5 +136,8 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=100000000, target=planet(celestials.
         critical_distance, _ = earth.get_orbital_bounds()
         if earth_distance < critical_distance:
             raise Exception("we crashed into the earth!")
+    import io
 
+    with open("testsim.log", "w") as file:
+        file.writelines(str(path_storage))
     return Dv, path_storage
