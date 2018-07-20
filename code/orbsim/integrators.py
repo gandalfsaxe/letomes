@@ -136,8 +136,8 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
         critical_distance, _ = earth.get_orbital_bounds()
         if earth_distance < critical_distance:
             raise Exception("we crashed into the earth!")
-    import io
 
-    with open("testsim.log", "w") as file:
-        file.writelines(str(path_storage))
+    # import io
+    # with open("testsim.log", "w") as file:
+    # file.writelines(str(path_storage))
     return Dv, path_storage
