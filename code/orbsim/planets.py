@@ -1,8 +1,9 @@
-from .constants import *
 from enum import Enum
 
+from .constants import *
 
-class target():
+
+class planet:
     def __init__(self, celestial):
         self.celestial = celestial
         if celestial == celestials.MOON:
@@ -15,7 +16,7 @@ class target():
             self.altitude = LUNAR_ALTITUDE
             self.orbital_radius_nondim = None
             self.orbital_velocity_nondim = None
-        else if celestial == celestials.EARTH:
+        elif celestial == celestials.EARTH:
             self.orbital_radius = leo_radius
             self.orbital_velocity = leo_velocity
             self.position_x = earth_position_X
@@ -25,7 +26,7 @@ class target():
             self.altitude = EARTH_ALTITUDE
             self.orbital_radius_nondim = leo_radius_nondim
             self.orbital_velocity_nondim = leo_velocity_nondim
-        else if celestial == celestials.MARS:
+        elif celestial == celestials.MARS:
             self.orbital_radius = None
             self.orbital_velocity = None
             self.position_x = None
