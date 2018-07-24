@@ -1,4 +1,14 @@
 {
+  // Ignore pandoc-citeproc citations
+  "cSpell.languageSettings": [
+    {
+      "languageId": "markdown",
+      "ignoreRegExpList": ["\\[@.+\\]/g"]
+    }
+  ],
+
+  "cSpell.dictionaries": ["en", "latex", "html"],
+
     "cSpell.words": [
         "GPUs",
         "Hohmann",
@@ -18,4 +28,8 @@
         "pykep",
         "symplectic"
     ]
+}   "pykep",
+    "siunitx",
+    "symplectic"
+  ]
 }
