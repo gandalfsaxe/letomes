@@ -1,15 +1,18 @@
 {
-    "editor.rulers": [88],
+  "editor.rulers": [88],
 
-    "[python]": {
-        "editor.formatOnSave": true,
-        "editor.codeActionsOnSave": {
-          "source.organizeImports": true
-      }
-      },
-      "python.formatting.provider": "black",
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
+  "python.formatting.provider": "black",
 
-    "cSpell.words": [
-        "celestials"
-    ]
+  "[markdown]": {
+    "editor.detectIndentation": true,
+    "editor.tabSize": 2
+  },
+
+  "cSpell.words": ["celestials"]
 }
