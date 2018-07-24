@@ -17,13 +17,12 @@ This at least partly validated our simplified R3B sun-less model and numerical t
 
 **INSERT SV-ADAPTIVE STEPSIZE/ERROR HERE
 
-By brute force searching in many directions and velocity vectors in a $\SI{100}{\km}$ parking orbit 
+By brute force searching in many directions and velocity vectors in a $\SI{100}{\km}$ parking orbit
 
 ## Aim of this thesis
 
 The aim of this MSc thesis is to take in work of [@Saxe2015] further in several ways:
 
-- We will now search the for LETOs using evolutionary techniques instead of random. Incidentally a paper [Izzo2018] was publised on this exact topic after we started work on this thesis, so it appears to be an idea ripe for exploration.
+- We will now search the for LETOs using evolutionary techniques instead of random. Incidentally a paper [@Izzo2018] was published on this exact topic after we started work on this thesis, so it appears to be an idea ripe for exploration.
 - We will now attempt LETOs to Mars in addition to the Moon.
 - We will now work with a more realistic model instead of the R3B model. Now that we're doing interplanetary transfers, we will work with patched conic approximations on the analytical side and external libraries on the software side.
-
