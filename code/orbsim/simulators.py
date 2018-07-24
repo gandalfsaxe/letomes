@@ -6,6 +6,7 @@ from .integrators import symplectic
 
 def launch_sim(psi):
     """
+    return: [Dv, [x, y, px, py, h]]
     launch (not really a launch since we start from LEO) a 
     single rocket with a given set of hyperparameters, return the resulting path
     """
