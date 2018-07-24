@@ -14,15 +14,15 @@ def launch_sim(psi):
 
     """define init params"""
     # position (where on earth do we start our burn)
-    x0 = np.cos(pos_ang) * leo_radius
-    y0 = np.sin(pos_ang) * leo_radius
+    x0 = np.cos(pos_ang) * leo_radius_nondim
+    y0 = np.sin(pos_ang) * leo_radius_nondim
     x0 += earth_position_X
 
     # how fast are we going when we start?
     vhat_x = -np.sin(pos_ang)
     vhat_y = np.cos(pos_ang)
-    v_x = (leo_velocity / unit_velocity) * vhat_x
-    v_y = (leo_velocity / unit_velocity) * vhat_y
+    v_x = (leo_velocity_nondim) * vhat_x
+    v_y = (leo_velocity_nondim) * vhat_y
 
     # burn vector: At what angle do we launch outward, and how hard do we push?
     burnDv_x = np.cos(burn_ang) * vhat_x - np.sin(burn_ang) * vhat_y
