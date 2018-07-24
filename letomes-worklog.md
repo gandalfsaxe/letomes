@@ -1,3 +1,7 @@
+# July 24
+## Oisin
+Added plotting functionality to orbsim. As a followup to last entry, i did create a planet class, and in general have been tinkering a lot with the simulator. We are VERY close to having the simulator working, and recreating the old orbits. Once that's done, we recreate it for the MARS case, and bob's your uncle: We're done. I'm positively salivating at the prospect.
+
 # July 17
 ## Added rewritten simulation files to the new orbsim package that we have fashioned. Removed them from ipynb. The notebooks should probably have a much more surface-level interaction with the sims and derivations and all that. We agreed to buld a planet class to hold all the stuff about how close we can fly to the planet and all that. It's not handled nicely right now.
 
