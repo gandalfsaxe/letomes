@@ -28,8 +28,4 @@
         "pykep",
         "symplectic"
     ]
-}   "pykep",
-    "siunitx",
-    "symplectic"
-  ]
 }
