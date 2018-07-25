@@ -9,7 +9,7 @@ class planet:
         if celestial == celestials.MOON:
             self.orbital_radius = llo_radius
             self.orbital_velocity = llo_velocity
-            self.position_x = lunar_position_X
+            self.position_x = lunar_position_x
             self.position_y = 0
             self.celestial_radius = lunar_radius
             self.celestial_mass = lunar_mass
@@ -19,7 +19,7 @@ class planet:
         elif celestial == celestials.EARTH:
             self.orbital_radius = leo_radius
             self.orbital_velocity = leo_velocity
-            self.position_x = earth_position_X
+            self.position_x = earth_position_x
             self.position_y = 0
             self.celestial_radius = earth_radius
             self.celestial_mass = earth_mass

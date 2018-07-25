@@ -16,8 +16,8 @@ def orbitplot(completed_path):
 
     ax.plot(xs, ys, range(len(hs)), color="black", linewidth=2)
 
-    ax.scatter([earth_position_X], [0], color="blue")
-    ax.scatter([lunar_position_X], [0], color="grey")
+    ax.scatter([earth_position_x], [0], color="blue")
+    ax.scatter([lunar_position_x], [0], color="grey")
 
     ax.scatter(xs[-0], ys[0], color="green")
     ax.scatter(xs[-1], ys[-1], len(hs), color="red")

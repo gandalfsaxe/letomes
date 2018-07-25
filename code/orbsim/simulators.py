@@ -16,7 +16,7 @@ def launch_sim(psi):
     # position (where on earth do we start our burn)
     x0 = np.cos(pos_ang) * leo_radius_nondim
     y0 = np.sin(pos_ang) * leo_radius_nondim
-    x0 += earth_position_X
+    x0 += earth_position_x
 
     # how fast are we going when we start?
     vhat_x = -np.sin(pos_ang)

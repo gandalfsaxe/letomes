@@ -64,7 +64,7 @@ def run_test():
         pos = 0
         ang = 0
         burn = 0
-        x0 = earth_pos_x+x
+        x0 = earth_position_x+x
         y0 = y
         px0 = vx-y0
         py0 = vy+x0
@@ -80,7 +80,7 @@ def run_test():
         pos = 0
         ang = 0
         burn = 0
-        x0 = moon_position_X+x
+        x0 = lunar_position_x+x
         y0 = y
         px0 = vx-y0
         py0 = vy+x0
@@ -229,7 +229,7 @@ def run_test():
         tlist,xlist,ylist,pxlist,pylist,errlist,hlist = r3b.refine(threads,n,duration,pos,ang,burn,x0,y0,px0,py0)
     else:
         tlist,xlist,ylist,pxlist,pylist,errlist,hlist = r3b.trajectory(n,duration,pos,ang,burn,x0,y0,px0,py0)
-    Hlist = pxlist**2/2 + pylist**2/2 + ylist*pxlist - xlist*pylist - (1-mu)/np.sqrt(np.power(mu+xlist,2)+np.power(ylist,2)) - mu/np.sqrt(np.power(1-mu-xlist,2)+np.power(ylist,2))
+    Hlist = pxlist**2/2 + pylist**2/2 + ylist*pxlist - xlist*pylist - (1-k)/np.sqrt(np.power(k+xlist,2)+np.power(ylist,2)) - k/np.sqrt(np.power(1-k-xlist,2)+np.power(ylist,2))
     print("# Final position: %f %f" %(xlist[n-1],ylist[n-1]))
     print("# Final impulse: %f %f" % (pxlist[n-1],pylist[n-1]))
     print("# Final H: %f" % (Hlist[n-1]))
@@ -253,11 +253,11 @@ def run_test():
     Xlist2 = xlist[n2:]*np.cos(tlist[n2:]) - ylist[n2:]*np.sin(tlist[n2:])
     Ylist2 = xlist[n2:]*np.sin(tlist[n2:]) + ylist[n2:]*np.cos(tlist[n2:])
 
-    Xlist_earth = earth_pos_x*np.cos(tlist)
-    Ylist_earth = -earth_pos_x*np.sin(tlist)
+    Xlist_earth = earth_position_x*np.cos(tlist)
+    Ylist_earth = -earth_position_x*np.sin(tlist)
 
-    Xlist_moon = moon_position_X*np.cos(tlist)
-    Ylist_moon = moon_position_X*np.sin(tlist)
+    Xlist_moon = lunar_position_x*np.cos(tlist)
+    Ylist_moon = lunar_position_x*np.sin(tlist)
 
     # Rel. err
     plt.figure()
@@ -287,14 +287,14 @@ def run_test():
     # Zoom earth
     xlim = 0.02
     ylim = 0.02
-    xmin = earth_pos_x-xlim
-    xmax = earth_pos_x+xlim
+    xmin = earth_position_x-xlim
+    xmax = earth_position_x+xlim
     ymin = -ylim
     ymax = ylim
     plt.figure()
-    earth=plt.Circle((earth_pos_x,0),earth_radius/unit_length,color='blue')
-    earthorbit1=plt.Circle((earth_pos_x,0),(leo_radius-ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
-    earthorbit2=plt.Circle((earth_pos_x,0),(leo_radius+ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
+    earth=plt.Circle((earth_position_x,0),earth_radius/unit_length,color='blue')
+    earthorbit1=plt.Circle((earth_position_x,0),(leo_radius-ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
+    earthorbit2=plt.Circle((earth_position_x,0),(leo_radius+ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
     plt.gcf().gca().add_artist(earth)
     plt.gcf().gca().add_artist(earthorbit1)
     plt.gcf().gca().add_artist(earthorbit2)
@@ -310,14 +310,14 @@ def run_test():
     # Zoom moon
     xlim = 0.0055
     ylim = 0.0055
-    xmin = moon_position_X-xlim
-    xmax = moon_position_X+xlim
+    xmin = lunar_position_x-xlim
+    xmax = lunar_position_x+xlim
     ymin = -ylim
     ymax = ylim
     plt.figure()
-    moon=plt.Circle((moon_position_X,0),lunar_radius/unit_length,color='grey')
-    moonorbit1=plt.Circle((moon_position_X,0),(llo_radius-ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
-    moonorbit2=plt.Circle((moon_position_X,0),(llo_radius+ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
+    moon=plt.Circle((lunar_position_x,0),lunar_radius/unit_length,color='grey')
+    moonorbit1=plt.Circle((lunar_position_x,0),(llo_radius-ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
+    moonorbit2=plt.Circle((lunar_position_x,0),(llo_radius+ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
     plt.gcf().gca().add_artist(moon)
     plt.gcf().gca().add_artist(moonorbit1)
     plt.gcf().gca().add_artist(moonorbit2)
@@ -355,12 +355,12 @@ def run_test():
     plt.figure()
     plt.plot(xlist1,ylist1,'r-')
     plt.plot(xlist2,ylist2,'k-')
-    earth=plt.Circle((earth_pos_x,0),earth_radius/unit_length,color='blue')
-    earthorbit1=plt.Circle((earth_pos_x,0),(leo_radius-ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
-    earthorbit2=plt.Circle((earth_pos_x,0),(leo_radius+ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
-    moon=plt.Circle((moon_position_X,0),lunar_radius/unit_length,color='grey')
-    moonorbit1=plt.Circle((moon_position_X,0),(llo_radius-ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
-    moonorbit2=plt.Circle((moon_position_X,0),(llo_radius+ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
+    earth=plt.Circle((earth_position_x,0),earth_radius/unit_length,color='blue')
+    earthorbit1=plt.Circle((earth_position_x,0),(leo_radius-ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
+    earthorbit2=plt.Circle((earth_position_x,0),(leo_radius+ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
+    moon=plt.Circle((lunar_position_x,0),lunar_radius/unit_length,color='grey')
+    moonorbit1=plt.Circle((lunar_position_x,0),(llo_radius-ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
+    moonorbit2=plt.Circle((lunar_position_x,0),(llo_radius+ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
     plt.gcf().gca().add_artist(earth)
     plt.gcf().gca().add_artist(earthorbit1)
     plt.gcf().gca().add_artist(earthorbit2)

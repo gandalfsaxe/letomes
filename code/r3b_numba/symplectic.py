@@ -94,7 +94,7 @@ def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,
     err = 1e-15
     status = 1
     target_dist = 1
-    target = 1; target_pos_x = lunar_position_X
+    target = 1; target_pos_x = lunar_position_x
     #target = 2; target_pos_x = L1_position_X
     target_pos_y = 0
     
@@ -195,7 +195,7 @@ def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,
                         return status
 
             # Check if we hit the earth
-            r = (x-earth_position_X)*(x-earth_position_X)+y*y
+            r = (x-earth_position_x)*(x-earth_position_x)+y*y
             r_high = earth_radius/unit_length
             if r < r_high*r_high:
                 return 100 # Hit earth surface

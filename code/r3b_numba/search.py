@@ -83,7 +83,7 @@ def search(thread,threads,n,duration,positions,angles,burns):
         vy_norm = x0/leo_radius
         vx = (leo_velocity/unit_velocity)*vx_norm
         vy = (leo_velocity/unit_velocity)*vy_norm
-        x0 += earth_position_X
+        x0 += earth_position_x
         bx = np.cos(ang)*vx_norm-np.sin(ang)*vy_norm
         by = np.sin(ang)*vx_norm+np.cos(ang)*vy_norm
         px0 = vx+burn*bx-y0 # Sign of burn decides rotational direction of launch
