@@ -1,8 +1,7 @@
 import numpy as np
-
+from numba import jit
 from .constants import *
 from .integrators import symplectic
-
 
 def launch_sim(psi, max_iter=1000000):
     """

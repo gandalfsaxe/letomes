@@ -1,7 +1,7 @@
 from .analyticals import *
 from .constants import *
 from .planets import *
-
+# from numba import jit
 
 def euler_step(h, x, y, p_x, p_y):
     """takes a single time step of the symplectic euler algorithm"""
@@ -14,7 +14,6 @@ def euler_step(h, x, y, p_x, p_y):
     p_x += Pdot_x * h
     p_y += Pdot_y * h
     return x, y, p_x, p_y
-
 
 def verlet_step(h, x, y, p_x, p_y):
     """takes a half step, then another half step in the symplectic Verlet algorithm"""
@@ -36,20 +35,19 @@ def verlet_step(h, x, y, p_x, p_y):
     y += v_y * half_h
     return x, y, p_x, p_y
 
-
 def relative_error(vec1, vec2):
     x1, y1 = vec1
     x2, y2 = vec2
     return sqrt(((x2 - x1) ** 2 + (y2 - y1) ** 2) / (x2 ** 2 + y2 ** 2))
 
-
+@jit
 def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)):
     """
     runs symplectic adaptive euler-verlet algorithm
     All values are with nondimensionalized units
     """
     h = h_default
-    hmin2 = hmin
+    hmin = h_min
     t = 0  # total elapsed time
     x, y, p_x, p_y = [x0, y0, p0_x, p0_y]
 
@@ -58,19 +56,22 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
     smallest_distance = 1e6
     Dv = 0
     count = 0
+    checkpoint = max_iter/10
     for i in range(max_iter):
+        # if i%checkpoint==0:
+            # print(i)
 
         x_euler, y_euler, p_euler_x, p_euler_y = euler_step(h, x, y, p_x, p_y)
         x_verlet, y_verlet, p_verlet_x, p_verlet_y = verlet_step(h, x, y, p_x, p_y)
         err = relative_error([x_euler, y_euler], [x_verlet, y_verlet])
-        if err < tol or h <= hmin2:
+        if err < tol or h <= hmin:
             x = x_verlet
             y = y_verlet
             p_x = p_verlet_x
             p_y = p_verlet_y
 
             t += h
-            h = max(hmin2, h * max(0.1, 0.8 * sqrt(tol / err)))
+            h = max(hmin, h * max(0.1, 0.8 * sqrt(tol / err)))
             # TODO: explain this with /HH's new comments. 0.8 is chosen empirically
             # old explanation below:
             """Accept the step only if the weighted error is no more than the
@@ -78,8 +79,8 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
             the next step and use 0.8 of this value to avoid failures."""
 
         else:
-            print(f"deny step {h},{err}")
-            h = max(hmin2, h / 2)
+            #print(f"deny step {h},{err}")
+            h = max(hmin, h / 2)
             continue
 
         """Are we nearly there yet? (calculate distance)"""

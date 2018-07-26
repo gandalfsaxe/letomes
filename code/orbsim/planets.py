@@ -1,5 +1,5 @@
 from enum import Enum
-
+from numba import jit
 from .constants import *
 
 
