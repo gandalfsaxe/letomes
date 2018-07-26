@@ -134,9 +134,9 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
 
         # not necessarily a crash, but we don't want paths that take us to such risky territories
         critical_distance, _ = earth.get_orbital_bounds()
-        if earth_distance < critical_distance / 4:
-            return Dv, path_storage
+        if earth_distance < critical_distance:
             print("we crashed into the earth!")
+            return Dv, path_storage
             raise Exception("we crashed into the earth!")
 
     # import io

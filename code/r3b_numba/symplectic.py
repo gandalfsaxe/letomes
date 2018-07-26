@@ -95,7 +95,7 @@ def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,
     status = 1
     target_dist = 1
     target = 1; target_pos_x = lunar_position_x
-    #target = 2; target_pos_x = L1_position_X
+    #target = 2; target_pos_x = L1_position_x
     target_pos_y = 0
     
     # Time reset

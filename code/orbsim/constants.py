@@ -36,7 +36,7 @@ k = lunar_mass / (earth_mass + lunar_mass)  # dimless
 # Note that Y for both Earth and Moon is always zero in (X,Y) system
 lunar_position_x = 1 - k
 earth_position_x = -k
-L1_position_X = 1 - pow(k / 3, 1 / 3)
+L1_position_x = 1 - pow(k / 3, 1 / 3)
 
 
 ### DERIVED BOUNDARY CONDITIONS ###

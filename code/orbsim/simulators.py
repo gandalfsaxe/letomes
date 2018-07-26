@@ -4,7 +4,7 @@ from .constants import *
 from .integrators import symplectic
 
 
-def launch_sim(psi):
+def launch_sim(psi, max_iter=1000000):
     """
     return: [Dv, [x, y, px, py, h]]
     launch (not really a launch since we start from LEO) a 
@@ -33,6 +33,6 @@ def launch_sim(psi):
     p0_y = v_y + burnDv * burnDv_x + x0
 
     """SIMULATE"""
-    result = symplectic(x0, y0, p0_x, p0_y, max_iter=100000)
+    result = symplectic(x0, y0, p0_x, p0_y, max_iter=max_iter)
 
     return result
