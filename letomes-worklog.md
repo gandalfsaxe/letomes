@@ -1,23 +1,3 @@
-# July 24
-## Oisin
-Added plotting functionality to orbsim. As a followup to last entry, i did create a planet class, and in general have been tinkering a lot with the simulator. We are VERY close to having the simulator working, and recreating the old orbits. Once that's done, we recreate it for the MARS case, and bob's your uncle: We're done. I'm positively salivating at the prospect.
-
-# July 17
-## Added rewritten simulation files to the new orbsim package that we have fashioned. Removed them from ipynb. The notebooks should probably have a much more surface-level interaction with the sims and derivations and all that. We agreed to buld a planet class to hold all the stuff about how close we can fly to the planet and all that. It's not handled nicely right now.
-
-# July 14, 2018
-## Python modules fixed + pandoc demos uploaded
-Har indført nogle `__init__.py` filer for at python koden de forskellige steder virker som moduler der kan importeres relativt til top-level. Derudover har jeg uploaded pandoc+academic, en samling a demos/eksempler på brugen af pandoc/markdown som erstatning til ren LaTeX.
-
-# July 13, 2018
-## Symplectic implementeret i pygmo (WIP) 
-Oisin: Jeg har implementeret simuleringsfunktionerne fra symplectic.py i pygmo problemet. Det kører ikke helt endnu, men jeg forventer at der er et eller andet oppe om ca. to arbejdsdage. Vi har diskuteret masser af nomenklatur, og prøvet at rydde op i diskrepansen mellem skreven matematik og variabelnavne i implementeringen. Den samtale er helt sikkert ikke slut før d. 31. August kl. 23:59 T__T
-Gandalf: Bare refactored / cleaned moon code + diskuteret konventioner + ligninger med Oisin.
-
-# July 12, 2018
-## Refactored symplectic ligning + Git LFS snask
-Startede med at omskrive symplectic ligning lidt, så vi ikke bliver bidt af det igen, som forberedlese til simplificering af den del af koden. Dagen blev lidt derailed af at vi begge havde git problemer. Vores indførelse af LFS til PDF filer for chapters gav nogle obskure problemer. Gandalf gjorde det forfra i command line og nu virker det tilsyneladende fint.
-
 # July 11, 2018 
 ## Pair-programming: forståa sympletic funktionen i bsc-koden
 Har brugt en del af dagen på at forstå symplectic funktionen i symplectic.py hvor det meste af logikken sker. Dette er relevant både ift. at implenetere ES i bsc-koden og den nye pagmo basererede kode.
@@ -41,7 +21,7 @@ Jeg har skrevet halvanden sides penge om Salimans-NES og dets forskelle fra andr
 
 Har ifm. ovenstående læst nærmere på Salimans ES paper, og føler at have dybnet min forståelse for det underliggende optimeringsproblem. Jeg har altid haft svært ved at forstå concepter kommunikeret udelukkende vha. formel logik, så jeg har fundet en metafor der gør mig glad. Den er skrevet i rapporten.
 
-# July 6, 2018
+# July 6th
 ## Pagmo -- Oisin
 Jeg har implementeret Karpathy/Salimans ES i pagmo, så den er trivielt paralleliserbar. Kører pænt på den lokale maskine. Kører også på HPC, men lidt skrabet. Jeg kunne virkelig godt tænke mig en måde at vise plots fra HPC runs på en måde der ikke involverer at gemme en lokal fil og hente den via scp (-_-)
 
@@ -71,7 +51,7 @@ Vi skal holde fast i den oprindelige plan med at lave ES på interplanetary tran
 
 Vi nok vil bevæge os i retning af at lave vores egen simulator nu.
 
-# June 28, 2018
+# June 28
 ##  Gandalf: opsummering af seneste uger (pandoc/LaTeXTypora)
 Da jeg er 95% færdig med det jeg har brugt det meste tid på de seneste par uger, venter jeg lige til jeg er helt færdig. Jeg har imidlertid lige skiftet fokus nu, dels fordi jeg lige skulle catche up med et paper inden et Ole møde, og dels fordi min computer skal til reperation i et par dage. Men jeg skriver snart en log af hvad der er sket.
 ## Tsiolkovsky's rocket equation
@@ -93,7 +73,7 @@ F_\text{thrust} = g_0 \cdot I_\text{sp} \cdot \dot m,
 $$
 Hvor F_{thrust} er fremdriftskraften, $g_0$ er tyngdeacceleration, $I_{sp}$ er den specifikke impuls og $\dot m$  er massetabsraten.
 
-# June 12, 2018
+# June 12
 ## pykep/pygmo
 Oisin: Reading docs for pykep and pygmo, forked pykep to make some changes to the plotting functionality. Figure that might be useful later as well. Posted some questions for next meeting. I really want to get to implementing our own ES-algorithm, though pygmo has a very nice CMA-ES that looks like it might do what we need outta the box.
 
