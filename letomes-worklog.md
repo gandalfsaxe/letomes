@@ -1,3 +1,23 @@
+# July 24
+## Oisin
+Added plotting functionality to orbsim. As a followup to last entry, i did create a planet class, and in general have been tinkering a lot with the simulator. We are VERY close to having the simulator working, and recreating the old orbits. Once that's done, we recreate it for the MARS case, and bob's your uncle: We're done. I'm positively salivating at the prospect.
+
+# July 17
+## Added rewritten simulation files to the new orbsim package that we have fashioned. Removed them from ipynb. The notebooks should probably have a much more surface-level interaction with the sims and derivations and all that. We agreed to buld a planet class to hold all the stuff about how close we can fly to the planet and all that. It's not handled nicely right now.
+
+# July 14, 2018
+## Python modules fixed + pandoc demos uploaded
+Har indført nogle `__init__.py` filer for at python koden de forskellige steder virker som moduler der kan importeres relativt til top-level. Derudover har jeg uploaded pandoc+academic, en samling a demos/eksempler på brugen af pandoc/markdown som erstatning til ren LaTeX.
+
+# July 13, 2018
+## Symplectic implementeret i pygmo (WIP) 
+Oisin: Jeg har implementeret simuleringsfunktionerne fra symplectic.py i pygmo problemet. Det kører ikke helt endnu, men jeg forventer at der er et eller andet oppe om ca. to arbejdsdage. Vi har diskuteret masser af nomenklatur, og prøvet at rydde op i diskrepansen mellem skreven matematik og variabelnavne i implementeringen. Den samtale er helt sikkert ikke slut før d. 31. August kl. 23:59 T__T
+Gandalf: Bare refactored / cleaned moon code + diskuteret konventioner + ligninger med Oisin.
+
+# July 12, 2018
+## Refactored symplectic ligning + Git LFS snask
+Startede med at omskrive symplectic ligning lidt, så vi ikke bliver bidt af det igen, som forberedlese til simplificering af den del af koden. Dagen blev lidt derailed af at vi begge havde git problemer. Vores indførelse af LFS til PDF filer for chapters gav nogle obskure problemer. Gandalf gjorde det forfra i command line og nu virker det tilsyneladende fint.
+
 # July 11, 2018 
 ## Pair-programming: forståa sympletic funktionen i bsc-koden
 Har brugt en del af dagen på at forstå symplectic funktionen i symplectic.py hvor det meste af logikken sker. Dette er relevant både ift. at implenetere ES i bsc-koden og den nye pagmo basererede kode.
