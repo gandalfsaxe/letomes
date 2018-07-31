@@ -13,7 +13,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import reduced3body as r3b
-from const import *
+
+# from const import *
+from constants import *
 
 
 def run_test():
@@ -34,7 +36,7 @@ def run_test():
 
     ### Precalculated initial Conditions
     # DEMO = 'earth_orbit'
-    # DEMO = 'lunar_orbit'
+    # DEMO = 'llo_radius'
     # DEMO = 'hohmann'
     # DEMO = '3_day_hohmann'
     # DEMO = '1_day_hohmann'
@@ -53,9 +55,9 @@ def run_test():
 
     # Set coordinates
     if DEMO == 'earth_orbit':
-        duration = (2.0*pi*leo_orbit/leo_orbit_vel)/(unit_time*day)
-        r = leo_orbit/unit_len
-        v = 0.99732*leo_orbit_vel/unit_vel
+        duration = (2.0*pi*leo_radius/leo_velocity)/(unit_time*day)
+        r = leo_radius/unit_length
+        v = 0.99732*leo_velocity/unit_velocity
         theta = 0
         x = r*cos(theta)
         y = r*sin(theta)
@@ -64,14 +66,14 @@ def run_test():
         pos = 0
         ang = 0
         burn = 0
-        x0 = earth_pos_x+x
+        x0 = earth_position_x+x
         y0 = y
         px0 = vx-y0
         py0 = vy+x0
-    elif DEMO == 'lunar_orbit':
-        duration = (2.0*pi*lunar_orbit/lunar_orbit_vel)/(unit_time*day)
-        r = lunar_orbit/unit_len
-        v = 0.99732*lunar_orbit_vel/unit_vel
+    elif DEMO == 'llo_radius':
+        duration = (2.0*pi*llo_radius/llo_velocity)/(unit_time*day)
+        r = llo_radius/unit_length
+        v = 0.99732*llo_velocity/unit_velocity
         theta = 0
         x = r*cos(theta)
         y = r*sin(theta)
@@ -80,7 +82,7 @@ def run_test():
         pos = 0
         ang = 0
         burn = 0
-        x0 = moon_pos_x+x
+        x0 = lunar_position_x+x
         y0 = y
         px0 = vx-y0
         py0 = vy+x0
@@ -90,7 +92,7 @@ def run_test():
         duration = 5/unit_time
         pos      = -2.086814820119193
         ang      = -0.000122173047640
-        burn     = 3.111181716545691/unit_vel
+        burn     = 3.111181716545691/unit_velocity
         x0       = -0.020532317163607
         y0       = -0.014769797663479
         px0      = 9.302400979050308
@@ -106,7 +108,7 @@ def run_test():
         duration = 4/unit_time
         pos      = -2.282942228154665
         ang      = 0.000000000000000
-        burn     = -3.149483130653266/unit_vel
+        burn     = -3.149483130653266/unit_velocity
         x0       = -0.023249912090507
         y0       = -0.012853859046429
         px0      = -8.098481905534163
@@ -122,7 +124,7 @@ def run_test():
         duration = 195/unit_time
         pos      = 3.794182930145708
         ang      = 0.023901745288554
-        burn     = 3.090702702702703/unit_vel
+        burn     = 3.090702702702703/unit_velocity
         x0       = -0.025645129237870
         y0       = -0.010311570301966
         px0      = 6.539303578815582
@@ -138,7 +140,7 @@ def run_test():
     #    duration = 195/unit_time
     #    pos      = 3.794182930145708
     #    ang      = 0.023901745288554
-    #    burn     = 3.090702702702703/unit_vel
+    #    burn     = 3.090702702702703/unit_velocity
     #    x0       = -0.025645129237870
     #    y0       = -0.010311570301966
     #    px0      = 6.539303578815583
@@ -155,7 +157,7 @@ def run_test():
         duration = 41/unit_time
         pos      = -0.138042744751570
         ang      = -0.144259374836607
-        burn     = 3.127288444444444/unit_vel
+        burn     = 3.127288444444444/unit_velocity
         x0       = 0.004665728429046
         y0       = -0.002336647636098
         px0      = 1.904735175752430
@@ -172,7 +174,7 @@ def run_test():
         duration = 3/unit_time
         pos      = -2.272183066647597
         ang      = -0.075821466029764
-        burn     = 3.135519748743719/unit_vel
+        burn     = 3.135519748743719/unit_velocity
         x0       = -0.023110975767437
         y0       = -0.012972499765730
         px0      = 8.032228991913522
@@ -188,7 +190,7 @@ def run_test():
         duration = 1/unit_time
         pos      = -2.277654673852600
         ang      = 0.047996554429844
-        burn     = 3.810000000000000/unit_vel
+        burn     = 3.810000000000000/unit_velocity
         x0       = -0.023181791813268
         y0       = -0.012912351430812
         px0      = 8.764829132987316
@@ -205,7 +207,7 @@ def run_test():
         duration = 191/unit_time
         pos      = 2.843432239707429
         ang      = 0.000000000000000
-        burn     = 3.091851851851852/unit_vel
+        burn     = 3.091851851851852/unit_velocity
         x0       = -0.028385246222264
         y0       = 0.004988337832881
         px0      = -3.136296304910217
@@ -229,7 +231,7 @@ def run_test():
         tlist,xlist,ylist,pxlist,pylist,errlist,hlist = r3b.refine(threads,n,duration,pos,ang,burn,x0,y0,px0,py0)
     else:
         tlist,xlist,ylist,pxlist,pylist,errlist,hlist = r3b.trajectory(n,duration,pos,ang,burn,x0,y0,px0,py0)
-    Hlist = pxlist**2/2 + pylist**2/2 + ylist*pxlist - xlist*pylist - (1-mu)/np.sqrt(np.power(mu+xlist,2)+np.power(ylist,2)) - mu/np.sqrt(np.power(1-mu-xlist,2)+np.power(ylist,2))
+    Hlist = pxlist**2/2 + pylist**2/2 + ylist*pxlist - xlist*pylist - (1-k)/np.sqrt(np.power(k+xlist,2)+np.power(ylist,2)) - k/np.sqrt(np.power(1-k-xlist,2)+np.power(ylist,2))
     print("# Final position: %f %f" %(xlist[n-1],ylist[n-1]))
     print("# Final impulse: %f %f" % (pxlist[n-1],pylist[n-1]))
     print("# Final H: %f" % (Hlist[n-1]))
@@ -253,11 +255,11 @@ def run_test():
     Xlist2 = xlist[n2:]*np.cos(tlist[n2:]) - ylist[n2:]*np.sin(tlist[n2:])
     Ylist2 = xlist[n2:]*np.sin(tlist[n2:]) + ylist[n2:]*np.cos(tlist[n2:])
 
-    Xlist_earth = earth_pos_x*np.cos(tlist)
-    Ylist_earth = -earth_pos_x*np.sin(tlist)
+    Xlist_earth = earth_position_x*np.cos(tlist)
+    Ylist_earth = -earth_position_x*np.sin(tlist)
 
-    Xlist_moon = moon_pos_x*np.cos(tlist)
-    Ylist_moon = moon_pos_x*np.sin(tlist)
+    Xlist_moon = lunar_position_x*np.cos(tlist)
+    Ylist_moon = lunar_position_x*np.sin(tlist)
 
     # Rel. err
     plt.figure()
@@ -265,7 +267,7 @@ def run_test():
     plt.xlabel("time (days)")
     plt.ylabel("step error")
     plt.yscale('log')
-    plt.savefig('r3b-moon/fig/{}-step_error_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig('fig/{}-step_error_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
     # Step sizes
     plt.figure()
@@ -273,7 +275,7 @@ def run_test():
     plt.xlabel("time (days)")
     plt.ylabel("step size")
     plt.yscale('log')
-    plt.savefig('r3b-moon/fig/{}-step_size_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig('fig/{}-step_size_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
     # Total energy error
     havg = np.sum(Hlist)/n
@@ -282,19 +284,19 @@ def run_test():
     plt.plot(tlist*unit_time, hrelerr)
     plt.xlabel("time (days)")
     plt.ylabel("Hamiltonian rel. err (arbitrary units)")
-    plt.savefig('r3b-moon/fig/{}-energy_error_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig('fig/{}-energy_error_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
     # Zoom earth
     xlim = 0.02
     ylim = 0.02
-    xmin = earth_pos_x-xlim
-    xmax = earth_pos_x+xlim
+    xmin = earth_position_x-xlim
+    xmax = earth_position_x+xlim
     ymin = -ylim
     ymax = ylim
     plt.figure()
-    earth=plt.Circle((earth_pos_x,0),earth_radius/unit_len,color='blue')
-    earthorbit1=plt.Circle((earth_pos_x,0),(leo_orbit-orbit_range)/unit_len,color='g',fill=False)
-    earthorbit2=plt.Circle((earth_pos_x,0),(leo_orbit+orbit_range)/unit_len,color='g',fill=False)
+    earth=plt.Circle((earth_position_x,0),earth_radius/unit_length,color='blue')
+    earthorbit1=plt.Circle((earth_position_x,0),(leo_radius-ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
+    earthorbit2=plt.Circle((earth_position_x,0),(leo_radius+ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
     plt.gcf().gca().add_artist(earth)
     plt.gcf().gca().add_artist(earthorbit1)
     plt.gcf().gca().add_artist(earthorbit2)
@@ -305,19 +307,19 @@ def run_test():
     plt.gca().set_aspect('equal', adjustable='box')
     plt.xlabel("x-position (arbitrary units)")
     plt.ylabel("y-position (arbitrary units)")
-    plt.savefig('r3b-moon/fig/{}-earth_exit_y(x).{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig('fig/{}-earth_exit_y(x).{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
     # Zoom moon
     xlim = 0.0055
     ylim = 0.0055
-    xmin = moon_pos_x-xlim
-    xmax = moon_pos_x+xlim
+    xmin = lunar_position_x-xlim
+    xmax = lunar_position_x+xlim
     ymin = -ylim
     ymax = ylim
     plt.figure()
-    moon=plt.Circle((moon_pos_x,0),moon_radius/unit_len,color='grey')
-    moonorbit1=plt.Circle((moon_pos_x,0),(lunar_orbit-orbit_range)/unit_len,color='g',fill=False)
-    moonorbit2=plt.Circle((moon_pos_x,0),(lunar_orbit+orbit_range)/unit_len,color='g',fill=False)
+    moon=plt.Circle((lunar_position_x,0),lunar_radius/unit_length,color='grey')
+    moonorbit1=plt.Circle((lunar_position_x,0),(llo_radius-ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
+    moonorbit2=plt.Circle((lunar_position_x,0),(llo_radius+ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
     plt.gcf().gca().add_artist(moon)
     plt.gcf().gca().add_artist(moonorbit1)
     plt.gcf().gca().add_artist(moonorbit2)
@@ -328,7 +330,7 @@ def run_test():
     plt.gca().set_aspect('equal', adjustable='box')
     plt.xlabel("x-position (arbitrary units)")
     plt.ylabel("y-position (arbitrary units)")
-    plt.savefig('r3b-moon/fig/{}-moon_entry_y(x).{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig('fig/{}-moon_entry_y(x).{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
     # View center of mass
     xlim = 1.3
@@ -349,31 +351,31 @@ def run_test():
     plt.gca().set_aspect('equal', adjustable='box')
     plt.xlabel("x-position (arbitrary units)")
     plt.ylabel("y-position (arbitrary units)")
-    plt.savefig('r3b-moon/fig/{}-Y(X)_inertial.{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig('fig/{}-Y(X)_inertial.{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
     # Position plot (x,y)
     plt.figure()
     plt.plot(xlist1,ylist1,'r-')
     plt.plot(xlist2,ylist2,'k-')
-    earth=plt.Circle((earth_pos_x,0),earth_radius/unit_len,color='blue')
-    earthorbit1=plt.Circle((earth_pos_x,0),(leo_orbit-orbit_range)/unit_len,color='g',fill=False)
-    earthorbit2=plt.Circle((earth_pos_x,0),(leo_orbit+orbit_range)/unit_len,color='g',fill=False)
-    moon=plt.Circle((moon_pos_x,0),moon_radius/unit_len,color='grey')
-    moonorbit1=plt.Circle((moon_pos_x,0),(lunar_orbit-orbit_range)/unit_len,color='g',fill=False)
-    moonorbit2=plt.Circle((moon_pos_x,0),(lunar_orbit+orbit_range)/unit_len,color='g',fill=False)
+    earth=plt.Circle((earth_position_x,0),earth_radius/unit_length,color='blue')
+    earthorbit1=plt.Circle((earth_position_x,0),(leo_radius-ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
+    earthorbit2=plt.Circle((earth_position_x,0),(leo_radius+ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
+    moon=plt.Circle((lunar_position_x,0),lunar_radius/unit_length,color='grey')
+    moonorbit1=plt.Circle((lunar_position_x,0),(llo_radius-ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
+    moonorbit2=plt.Circle((lunar_position_x,0),(llo_radius+ORBITAL_TOLERANCE)/unit_length,color='g',fill=False)
     plt.gcf().gca().add_artist(earth)
     plt.gcf().gca().add_artist(earthorbit1)
     plt.gcf().gca().add_artist(earthorbit2)
     plt.gcf().gca().add_artist(moon)
     plt.gcf().gca().add_artist(moonorbit1)
     plt.gcf().gca().add_artist(moonorbit2)
-    plt.plot(L1_pos_x,0,'gx')
+    plt.plot(L1_position_x,0,'gx')
     plt.xlim(xmin,xmax)
     plt.ylim(ymin,ymax)
     plt.gca().set_aspect('equal', adjustable='box')
     plt.xlabel("x-position (arbitrary units)")
     plt.ylabel("y-position (arbitrary units)")
-    plt.savefig('r3b-moon/fig/{}-y(x)_corotating.{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig('fig/{}-y(x)_corotating.{}'.format(DEMO, FORMAT),bbox_inches='tight')
     # plt.savefig('r3b/r3b_y(x)_euler_symplectic.{}',DEMO, FORMAT='tight')
     # plt.show()
     plt.close()
