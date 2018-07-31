@@ -15,10 +15,10 @@ from math import ceil
 import numpy as np
 from multiprocessing import Pool
 
-from symplectic import symplectic
+from code_old.symplectic import symplectic
 
 # from const import *
-from constants import *
+from orbsim.constants import *
 
 def print_search_results(stat,pos,ang,burn,x0,y0,px0,py0,dv,toa):
     print("# --------------------------------------------------------------------------")

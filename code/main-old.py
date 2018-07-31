@@ -12,16 +12,16 @@ from math import cos, pi, sin
 import matplotlib.pyplot as plt
 import numpy as np
 
-import reduced3body as r3b
+from code_old import reduced3body as r3b
 
 # from const import *
-from constants import *
+from orbsim.constants import *
 
 
 def run_test():
 
     old_stdout = sys.stdout
-    log_file = open("r3b-refactor.log","w")
+    log_file = open("r3b-refactor-old.log","w")
     sys.stdout = log_file
 
     try:  
@@ -267,7 +267,7 @@ def run_test():
     plt.xlabel("time (days)")
     plt.ylabel("step error")
     plt.yscale('log')
-    plt.savefig('fig/{}-step_error_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig('code_old/fig/{}-step_error_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
     # Step sizes
     plt.figure()
@@ -275,7 +275,7 @@ def run_test():
     plt.xlabel("time (days)")
     plt.ylabel("step size")
     plt.yscale('log')
-    plt.savefig('fig/{}-step_size_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig('code_old/fig/{}-step_size_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
     # Total energy error
     havg = np.sum(Hlist)/n
@@ -284,7 +284,7 @@ def run_test():
     plt.plot(tlist*unit_time, hrelerr)
     plt.xlabel("time (days)")
     plt.ylabel("Hamiltonian rel. err (arbitrary units)")
-    plt.savefig('fig/{}-energy_error_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig('code_old/fig/{}-energy_error_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
     # Zoom earth
     xlim = 0.02
@@ -307,7 +307,7 @@ def run_test():
     plt.gca().set_aspect('equal', adjustable='box')
     plt.xlabel("x-position (arbitrary units)")
     plt.ylabel("y-position (arbitrary units)")
-    plt.savefig('fig/{}-earth_exit_y(x).{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig('code_old/fig/{}-earth_exit_y(x).{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
     # Zoom moon
     xlim = 0.0055
@@ -330,7 +330,7 @@ def run_test():
     plt.gca().set_aspect('equal', adjustable='box')
     plt.xlabel("x-position (arbitrary units)")
     plt.ylabel("y-position (arbitrary units)")
-    plt.savefig('fig/{}-moon_entry_y(x).{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig('code_old/fig/{}-moon_entry_y(x).{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
     # View center of mass
     xlim = 1.3
@@ -351,7 +351,7 @@ def run_test():
     plt.gca().set_aspect('equal', adjustable='box')
     plt.xlabel("x-position (arbitrary units)")
     plt.ylabel("y-position (arbitrary units)")
-    plt.savefig('fig/{}-Y(X)_inertial.{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig('code_old/fig/{}-Y(X)_inertial.{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
     # Position plot (x,y)
     plt.figure()
@@ -375,7 +375,7 @@ def run_test():
     plt.gca().set_aspect('equal', adjustable='box')
     plt.xlabel("x-position (arbitrary units)")
     plt.ylabel("y-position (arbitrary units)")
-    plt.savefig('fig/{}-y(x)_corotating.{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig('code_old/fig/{}-y(x)_corotating.{}'.format(DEMO, FORMAT),bbox_inches='tight')
     # plt.savefig('r3b/r3b_y(x)_euler_symplectic.{}',DEMO, FORMAT='tight')
     # plt.show()
     plt.close()

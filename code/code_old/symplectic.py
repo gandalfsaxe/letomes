@@ -16,7 +16,7 @@ import numpy as np
 from numba import jit
 
 # from const import *
-from constants import *
+from orbsim.constants import *
 
 @jit
 def F(x,y):

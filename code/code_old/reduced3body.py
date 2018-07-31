@@ -13,11 +13,11 @@ import time
 from math import pi,sqrt
 import numpy as np
 
-from search import search_mt, search, print_search_results
-from symplectic import symplectic
+from code_old.search import search_mt, search, print_search_results
+from code_old.symplectic import symplectic
 
 # from const import *
-from constants import *
+from orbsim.constants import *
 
 # **BRUGER IKKE pos, ang, burn til noget, kun til print
 def trajectory(n,duration,pos,ang,burn,x0,y0,px0,py0):
