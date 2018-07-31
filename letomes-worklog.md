@@ -1,3 +1,10 @@
+# July 31
+## Gandalf: Finally reconciled most of old/new code
+Only need no merge a few more changes, then there's no more "old code" after the refactoring fiasko. Many days spend on annoying little things like line ending characters, file permissions etc., and futile attemps on getting the new code to work, even though it wans't tested throughout refactoring process. But now we're on the right track and almost there.
+
+## Oisin: Extracting ephemeris data for clockwork solar system model.
+Tried to extract ephemeris data for clockwork solar system model. As yet not successful. Wrote to Dario Izzo for help. Plan is to just create the skeleton for the position-polling function tomorrow, instead of banging my head against impenetrable Fortran interfaces.
+
 # July 24
 ## Oisin
 Added plotting functionality to orbsim. As a followup to last entry, i did create a planet class, and in general have been tinkering a lot with the simulator. We are VERY close to having the simulator working, and recreating the old orbits. Once that's done, we recreate it for the MARS case, and bob's your uncle: We're done. I'm positively salivating at the prospect.
