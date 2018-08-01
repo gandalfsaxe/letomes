@@ -13,7 +13,7 @@ from math import cos, pi, sin
 import matplotlib.pyplot as plt
 import numpy as np
 
-from code_old import reduced3body as r3b
+from r3b_numba import reduced3body as r3b
 from orbsim.constants import *
 
 FIG_DIR = "r3b_numba/fig"

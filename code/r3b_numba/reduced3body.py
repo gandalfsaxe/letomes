@@ -12,12 +12,10 @@ We assume **TODO FILL OUT HERE!
 import time
 from math import pi,sqrt
 import numpy as np
-
-from r3b_numba.search import search_mt, search, print_search_results
-from r3b_numba.symplectic import symplectic
-
-# from const import *
 from orbsim.constants import *
+
+from .search import search_mt, search, print_search_results
+from .symplectic import symplectic
 
 # **BRUGER IKKE pos, ang, burn til noget, kun til print
 def trajectory(n,duration,pos,ang,burn,x0,y0,px0,py0):
