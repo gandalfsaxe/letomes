@@ -15,7 +15,7 @@ from math import ceil
 import numpy as np
 from multiprocessing import Pool
 from orbsim.constants import *
-from r3b_numba.symplectic import symplectic
+from .symplectic import symplectic
 
 def print_search_results(stat,pos,ang,burn,x0,y0,px0,py0,dv,toa):
     print("# --------------------------------------------------------------------------")
