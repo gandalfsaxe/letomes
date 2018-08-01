@@ -14,7 +14,7 @@ from math import pi,sqrt
 import numpy as np
 
 from code_old.search import search_mt, search, print_search_results
-from code_old.symplectic import symplectic
+from r3b_numba.symplectic import symplectic
 
 # from const import *
 from orbsim.constants import *
