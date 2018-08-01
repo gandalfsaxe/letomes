@@ -17,7 +17,14 @@ from multiprocessing import Pool
 
 import numpy as np
 
-from orbsim.constants import *
+from orbsim.constants import (
+    day,
+    earth_position_x,
+    leo_radius_nondim,
+    leo_velocity,
+    unit_time,
+    unit_velocity,
+)
 
 from .symplectic import symplectic
 
@@ -57,12 +64,12 @@ def search(thread, threads, n, duration, positions, angles, burns):
     # print("Start thread=%i" % (thread))
 
     # Initialize arrays
-    xlist = np.zeros(n)
-    ylist = np.zeros(n)
-    pxlist = np.zeros(n)
-    pylist = np.zeros(n)
-    errlist = np.zeros(n)
-    hlist = np.zeros(n)
+    x_list = np.zeros(n)
+    y_list = np.zeros(n)
+    px_list = np.zeros(n)
+    py_list = np.zeros(n)
+    err_list = np.zeros(n)
+    h_list = np.zeros(n)
     info = np.zeros(2)
 
     # Search for orbits
@@ -114,12 +121,12 @@ def search(thread, threads, n, duration, positions, angles, burns):
             y0,
             px0,
             py0,
-            xlist,
-            ylist,
-            pxlist,
-            pylist,
-            errlist,
-            hlist,
+            x_list,
+            y_list,
+            px_list,
+            py_list,
+            err_list,
+            h_list,
             info,
         )
         if status == 100:
@@ -290,4 +297,3 @@ def search_mt(
         )
     else:
         return best_status, 0, 0, 0, 0, 0, 0, 0, 0, 0
-

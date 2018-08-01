@@ -13,7 +13,23 @@ from math import cos, pi, sin
 import matplotlib.pyplot as plt
 import numpy as np
 
-from orbsim.constants import *
+from orbsim.constants import (
+    ORBITAL_TOLERANCE,
+    L1_position_x,
+    day,
+    earth_position_x,
+    earth_radius,
+    k,
+    leo_radius,
+    leo_velocity,
+    llo_radius,
+    llo_velocity,
+    lunar_position_x,
+    lunar_radius,
+    unit_length,
+    unit_time,
+    unit_velocity,
+)
 from r3b_numba import reduced3body as r3b
 
 FIG_DIR = "r3b_numba/fig/"
@@ -227,32 +243,36 @@ def run_test():
     #################### FUNCTION CALLS ####################
 
     if DEMO == "search_hohmann":
-        tlist, xlist, ylist, pxlist, pylist, errlist, hlist = r3b.hohmann(threads, n)
+        t_list, x_list, y_list, px_list, py_list, err_list, h_list = r3b.hohmann(
+            threads, n
+        )
     elif DEMO == "search_low_energy":
-        tlist, xlist, ylist, pxlist, pylist, errlist, hlist = r3b.low_energy(threads, n)
+        t_list, x_list, y_list, px_list, py_list, err_list, h_list = r3b.low_energy(
+            threads, n
+        )
     elif DEMO == "search_low_energy_parts8":
-        tlist, xlist, ylist, pxlist, pylist, errlist, hlist = r3b.low_energy_parts8(
+        t_list, x_list, y_list, px_list, py_list, err_list, h_list = r3b.low_energy_parts8(
             threads, n
         )
     elif DEMO == "search_refine":
-        tlist, xlist, ylist, pxlist, pylist, errlist, hlist = r3b.refine(
+        t_list, x_list, y_list, px_list, py_list, err_list, h_list = r3b.refine(
             threads, n, duration, pos, ang, burn, x0, y0, px0, py0
         )
     else:
-        tlist, xlist, ylist, pxlist, pylist, errlist, hlist = r3b.trajectory(
+        t_list, x_list, y_list, px_list, py_list, err_list, h_list = r3b.trajectory(
             n, duration, pos, ang, burn, x0, y0, px0, py0
         )
-    Hlist = (
-        pxlist ** 2 / 2
-        + pylist ** 2 / 2
-        + ylist * pxlist
-        - xlist * pylist
-        - (1 - k) / np.sqrt(np.power(k + xlist, 2) + np.power(ylist, 2))
-        - k / np.sqrt(np.power(1 - k - xlist, 2) + np.power(ylist, 2))
+    H_list = (
+        px_list ** 2 / 2
+        + py_list ** 2 / 2
+        + y_list * px_list
+        - x_list * py_list
+        - (1 - k) / np.sqrt(np.power(k + x_list, 2) + np.power(y_list, 2))
+        - k / np.sqrt(np.power(1 - k - x_list, 2) + np.power(y_list, 2))
     )
-    print("# Final position: %f %f" % (xlist[n - 1], ylist[n - 1]))
-    print("# Final impulse: %f %f" % (pxlist[n - 1], pylist[n - 1]))
-    print("# Final H: %f" % (Hlist[n - 1]))
+    print("# Final position: %f %f" % (x_list[n - 1], y_list[n - 1]))
+    print("# Final impulse: %f %f" % (px_list[n - 1], py_list[n - 1]))
+    print("# Final H: %f" % (H_list[n - 1]))
     runtime = time.time() - runtime
     print("# Total runtime = %3.2fs" % (runtime))
     print(
@@ -265,25 +285,25 @@ def run_test():
 
     n2 = int(n / 2)
 
-    xlist1 = xlist[:n2]
-    ylist1 = ylist[:n2]
-    xlist2 = xlist[n2:]
-    ylist2 = ylist[n2:]
+    x_list1 = x_list[:n2]
+    y_list1 = y_list[:n2]
+    x_list2 = x_list[n2:]
+    y_list2 = y_list[n2:]
 
-    Xlist1 = xlist[:n2] * np.cos(tlist[:n2]) - ylist[:n2] * np.sin(tlist[:n2])
-    Ylist1 = xlist[:n2] * np.sin(tlist[:n2]) + ylist[:n2] * np.cos(tlist[:n2])
-    Xlist2 = xlist[n2:] * np.cos(tlist[n2:]) - ylist[n2:] * np.sin(tlist[n2:])
-    Ylist2 = xlist[n2:] * np.sin(tlist[n2:]) + ylist[n2:] * np.cos(tlist[n2:])
+    X_list1 = x_list[:n2] * np.cos(t_list[:n2]) - y_list[:n2] * np.sin(t_list[:n2])
+    Y_list1 = x_list[:n2] * np.sin(t_list[:n2]) + y_list[:n2] * np.cos(t_list[:n2])
+    X_list2 = x_list[n2:] * np.cos(t_list[n2:]) - y_list[n2:] * np.sin(t_list[n2:])
+    Y_list2 = x_list[n2:] * np.sin(t_list[n2:]) + y_list[n2:] * np.cos(t_list[n2:])
 
-    Xlist_earth = earth_position_x * np.cos(tlist)
-    Ylist_earth = -earth_position_x * np.sin(tlist)
+    X_list_earth = earth_position_x * np.cos(t_list)
+    Y_list_earth = -earth_position_x * np.sin(t_list)
 
-    Xlist_moon = lunar_position_x * np.cos(tlist)
-    Ylist_moon = lunar_position_x * np.sin(tlist)
+    X_list_moon = lunar_position_x * np.cos(t_list)
+    Y_list_moon = lunar_position_x * np.sin(t_list)
 
     # Rel. err
     plt.figure()
-    plt.plot(tlist * unit_time, errlist)
+    plt.plot(t_list * unit_time, err_list)
     plt.xlabel("time (days)")
     plt.ylabel("step error")
     plt.yscale("log")
@@ -293,7 +313,7 @@ def run_test():
 
     # Step sizes
     plt.figure()
-    plt.plot(tlist * unit_time, hlist)
+    plt.plot(t_list * unit_time, h_list)
     plt.xlabel("time (days)")
     plt.ylabel("step size")
     plt.yscale("log")
@@ -302,15 +322,14 @@ def run_test():
     )
 
     # Total energy error
-    havg = np.sum(Hlist) / n
-    hrelerr = (Hlist - havg) / havg
+    H_avg = np.sum(H_list) / n
+    H_rel_err = (H_list - H_avg) / H_avg
     plt.figure()
-    plt.plot(tlist * unit_time, hrelerr)
+    plt.plot(t_list * unit_time, H_rel_err)
     plt.xlabel("time (days)")
     plt.ylabel("Hamiltonian rel. err (arbitrary units)")
     plt.savefig(
-        FIG_DIR + "{}-energy_error_vs_time.{}".format(DEMO, FORMAT),
-        bbox_inches="tight",
+        FIG_DIR + "{}-energy_error_vs_time.{}".format(DEMO, FORMAT), bbox_inches="tight"
     )
 
     # Zoom earth
@@ -337,8 +356,8 @@ def run_test():
     plt.gcf().gca().add_artist(earth)
     plt.gcf().gca().add_artist(earthorbit1)
     plt.gcf().gca().add_artist(earthorbit2)
-    plt.plot(xlist1, ylist1, "r-")
-    plt.plot(xlist2, ylist2, "k-")
+    plt.plot(x_list1, y_list1, "r-")
+    plt.plot(x_list2, y_list2, "k-")
     plt.xlim(xmin, xmax)
     plt.ylim(ymin, ymax)
     plt.gca().set_aspect("equal", adjustable="box")
@@ -372,8 +391,8 @@ def run_test():
     plt.gcf().gca().add_artist(moon)
     plt.gcf().gca().add_artist(moonorbit1)
     plt.gcf().gca().add_artist(moonorbit2)
-    plt.plot(xlist1, ylist1, "r-")
-    plt.plot(xlist2, ylist2, "k-")
+    plt.plot(x_list1, y_list1, "r-")
+    plt.plot(x_list2, y_list2, "k-")
     plt.xlim(xmin, xmax)
     plt.ylim(ymin, ymax)
     plt.gca().set_aspect("equal", adjustable="box")
@@ -393,10 +412,10 @@ def run_test():
 
     # Position plot (X,Y)
     plt.figure()
-    plt.plot(Xlist1, Ylist1, "r")
-    plt.plot(Xlist2, Ylist2, "k")
-    plt.plot(Xlist_earth, Ylist_earth, "blue")
-    plt.plot(Xlist_moon, Ylist_moon, "grey")
+    plt.plot(X_list1, Y_list1, "r")
+    plt.plot(X_list2, Y_list2, "k")
+    plt.plot(X_list_earth, Y_list_earth, "blue")
+    plt.plot(X_list_moon, Y_list_moon, "grey")
     plt.xlim(xmin, xmax)
     plt.ylim(ymin, ymax)
     plt.gca().set_aspect("equal", adjustable="box")
@@ -408,8 +427,8 @@ def run_test():
 
     # Position plot (x,y)
     plt.figure()
-    plt.plot(xlist1, ylist1, "r-")
-    plt.plot(xlist2, ylist2, "k-")
+    plt.plot(x_list1, y_list1, "r-")
+    plt.plot(x_list2, y_list2, "k-")
     earth = plt.Circle((earth_position_x, 0), earth_radius / unit_length, color="blue")
     earthorbit1 = plt.Circle(
         (earth_position_x, 0),
@@ -459,7 +478,7 @@ def run_test():
     # # #################### PLOTS: VELOCITY ####################
 
     # plt.figure()
-    # plt.plot(tlist, omegalist_e)
+    # plt.plot(t_list, omegalist_e)
     # plt.xlabel("time (arbitrary units)")
     # plt.ylabel("velocity (arbitrary units)")
     # plt.savefig('r3b/r3b_omega(t)_euler_explicit.{}')
@@ -498,7 +517,7 @@ def run_test():
     # #plt.show()
     # plt.close()
 
-    # print("--- Done with PHASE-SPACE TRAJETORY PLOTS")
+    # print("--- Done with PHASE-SPACE TRAJECTORY PLOTS")
 
     sys.stdout = old_stdout
     log_file.close()

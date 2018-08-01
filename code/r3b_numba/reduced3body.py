@@ -1,7 +1,7 @@
 """
 Reduced 3-Body Problem Solver Module
 ====================================
-A collection of various numerical solvers for the reduced 3-body problem consisting of two larger masses (Earth, Moon) and one smaller moving in their gravitaional field (a satellite). The solution assumes Earth-Moon center of mass as origin and a cartesian x-y coordinate system rotating with the lines connecting the Earth and Moon (non-interial frame accounted for in the equations of motion).
+A collection of various numerical solvers for the reduced 3-body problem consisting of two larger masses (Earth, Moon) and one smaller moving in their gravitational field (a satellite). The solution assumes Earth-Moon center of mass as origin and a cartesian x-y coordinate system rotating with the lines connecting the Earth and Moon (non-inertial frame accounted for in the equations of motion).
 
 Functions:
 
@@ -14,13 +14,22 @@ from math import pi, sqrt
 
 import numpy as np
 
-from orbsim.constants import *
+from orbsim.constants import (
+    day,
+    llo_radius,
+    llo_velocity,
+    unit_length,
+    unit_time,
+    unit_velocity,
+)
 
 from .search import print_search_results, search, search_mt
 from .symplectic import symplectic
 
+# from orbsim.constants import *
 
-# **BRUGER IKKE pos, ang, burn til noget, kun til print
+
+# ** pos, ang, burn are not used for anything beside printing
 def trajectory(n, duration, pos, ang, burn, x0, y0, px0, py0):
     """Integrate trajectory for the reduced 3-body problem.
 
@@ -39,13 +48,13 @@ def trajectory(n, duration, pos, ang, burn, x0, y0, px0, py0):
     print("# Running trajectory.")
 
     # Initialize arrays
-    tlist = np.linspace(0, duration, n)
-    xlist = np.zeros(n)
-    ylist = np.zeros(n)
-    pxlist = np.zeros(n)
-    pylist = np.zeros(n)
-    errlist = np.zeros(n)
-    hlist = np.zeros(n)
+    t_list = np.linspace(0, duration, n)
+    x_list = np.zeros(n)
+    y_list = np.zeros(n)
+    px_list = np.zeros(n)
+    py_list = np.zeros(n)
+    err_list = np.zeros(n)
+    h_list = np.zeros(n)
     info = np.zeros(2)
 
     # Find orbits
@@ -57,12 +66,12 @@ def trajectory(n, duration, pos, ang, burn, x0, y0, px0, py0):
         y0,
         px0,
         py0,
-        xlist,
-        ylist,
-        pxlist,
-        pylist,
-        errlist,
-        hlist,
+        x_list,
+        y_list,
+        px_list,
+        py_list,
+        err_list,
+        h_list,
         info,
     )
     runtime = time.time() - runtime
@@ -70,7 +79,7 @@ def trajectory(n, duration, pos, ang, burn, x0, y0, px0, py0):
     # Display result
     print_search_results(status, pos, ang, burn, x0, y0, px0, py0, info[0], info[1])
     print("# Runtime = %3.2fs" % (runtime))
-    return tlist, xlist, ylist, pxlist, pylist, errlist, hlist
+    return t_list, x_list, y_list, px_list, py_list, err_list, h_list
 
 
 def hohmann(threads, n):
@@ -183,13 +192,13 @@ def hohmann(threads, n):
     )
 
     # Initialize arrays
-    tlist = np.linspace(0, duration, n)
-    xlist = np.zeros(n)
-    ylist = np.zeros(n)
-    pxlist = np.zeros(n)
-    pylist = np.zeros(n)
-    errlist = np.zeros(n)
-    hlist = np.zeros(n)
+    t_list = np.linspace(0, duration, n)
+    x_list = np.zeros(n)
+    y_list = np.zeros(n)
+    px_list = np.zeros(n)
+    py_list = np.zeros(n)
+    err_list = np.zeros(n)
+    h_list = np.zeros(n)
     info = np.zeros(2)
 
     # Do trajectory
@@ -201,16 +210,16 @@ def hohmann(threads, n):
         y0,
         px0,
         py0,
-        xlist,
-        ylist,
-        pxlist,
-        pylist,
-        errlist,
-        hlist,
+        x_list,
+        y_list,
+        px_list,
+        py_list,
+        err_list,
+        h_list,
         info,
     )
 
-    return tlist, xlist, ylist, pxlist, pylist, errlist, hlist
+    return t_list, x_list, y_list, px_list, py_list, err_list, h_list
 
 
 def low_energy(threads, n):
@@ -295,13 +304,13 @@ def low_energy(threads, n):
         print("# Search runtime   = %3.2fs" % (runtime))
 
     # Initialize arrays
-    tlist = np.linspace(0, duration, n)
-    xlist = np.zeros(n)
-    ylist = np.zeros(n)
-    pxlist = np.zeros(n)
-    pylist = np.zeros(n)
-    errlist = np.zeros(n)
-    hlist = np.zeros(n)
+    t_list = np.linspace(0, duration, n)
+    x_list = np.zeros(n)
+    y_list = np.zeros(n)
+    px_list = np.zeros(n)
+    py_list = np.zeros(n)
+    err_list = np.zeros(n)
+    h_list = np.zeros(n)
     info = np.zeros(2)
 
     # Do trajectory
@@ -313,16 +322,16 @@ def low_energy(threads, n):
         y0,
         px0,
         py0,
-        xlist,
-        ylist,
-        pxlist,
-        pylist,
-        errlist,
-        hlist,
+        x_list,
+        y_list,
+        px_list,
+        py_list,
+        err_list,
+        h_list,
         info,
     )
     exit()
-    return tlist, xlist, ylist, pxlist, pylist, errlist, hlist
+    return t_list, x_list, y_list, px_list, py_list, err_list, h_list
 
 
 def low_energy_parts8(threads, n):
@@ -429,13 +438,13 @@ def low_energy_parts8(threads, n):
         )
 
     # Initialize arrays
-    tlist = np.linspace(0, duration, n)
-    xlist = np.zeros(n)
-    ylist = np.zeros(n)
-    pxlist = np.zeros(n)
-    pylist = np.zeros(n)
-    errlist = np.zeros(n)
-    hlist = np.zeros(n)
+    t_list = np.linspace(0, duration, n)
+    x_list = np.zeros(n)
+    y_list = np.zeros(n)
+    px_list = np.zeros(n)
+    py_list = np.zeros(n)
+    err_list = np.zeros(n)
+    h_list = np.zeros(n)
     info = np.zeros(2)
 
     # Do trajectory
@@ -447,16 +456,16 @@ def low_energy_parts8(threads, n):
         y0,
         px0,
         py0,
-        xlist,
-        ylist,
-        pxlist,
-        pylist,
-        errlist,
-        hlist,
+        x_list,
+        y_list,
+        px_list,
+        py_list,
+        err_list,
+        h_list,
         info,
     )
     # exit()
-    return tlist, xlist, ylist, pxlist, pylist, errlist, hlist
+    return t_list, x_list, y_list, px_list, py_list, err_list, h_list
 
 
 def refine(threads, n, duration, pos, ang, burn, x0, y0, px0, py0):
@@ -563,13 +572,13 @@ def refine(threads, n, duration, pos, ang, burn, x0, y0, px0, py0):
     )
 
     # Initialize arrays
-    tlist = np.linspace(0, duration, n)
-    xlist = np.zeros(n)
-    ylist = np.zeros(n)
-    pxlist = np.zeros(n)
-    pylist = np.zeros(n)
-    errlist = np.zeros(n)
-    hlist = np.zeros(n)
+    t_list = np.linspace(0, duration, n)
+    x_list = np.zeros(n)
+    y_list = np.zeros(n)
+    px_list = np.zeros(n)
+    py_list = np.zeros(n)
+    err_list = np.zeros(n)
+    h_list = np.zeros(n)
     info = np.zeros(2)
 
     # Do trajectory
@@ -581,14 +590,13 @@ def refine(threads, n, duration, pos, ang, burn, x0, y0, px0, py0):
         y0,
         px0,
         py0,
-        xlist,
-        ylist,
-        pxlist,
-        pylist,
-        errlist,
-        hlist,
+        x_list,
+        y_list,
+        px_list,
+        py_list,
+        err_list,
+        h_list,
         info,
     )
     # exit()
-    return tlist, xlist, ylist, pxlist, pylist, errlist, hlist
-
+    return t_list, x_list, y_list, px_list, py_list, err_list, h_list
