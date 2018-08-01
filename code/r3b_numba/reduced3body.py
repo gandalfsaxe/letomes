@@ -10,15 +10,18 @@ We assume **TODO FILL OUT HERE!
 """
 
 import time
-from math import pi,sqrt
+from math import pi, sqrt
+
 import numpy as np
+
 from orbsim.constants import *
 
-from .search import search_mt, search, print_search_results
+from .search import print_search_results, search, search_mt
 from .symplectic import symplectic
 
+
 # **BRUGER IKKE pos, ang, burn til noget, kun til print
-def trajectory(n,duration,pos,ang,burn,x0,y0,px0,py0):
+def trajectory(n, duration, pos, ang, burn, x0, y0, px0, py0):
     """Integrate trajectory for the reduced 3-body problem.
 
     Args:
@@ -36,7 +39,7 @@ def trajectory(n,duration,pos,ang,burn,x0,y0,px0,py0):
     print("# Running trajectory.")
 
     # Initialize arrays
-    tlist = np.linspace(0,duration,n)
+    tlist = np.linspace(0, duration, n)
     xlist = np.zeros(n)
     ylist = np.zeros(n)
     pxlist = np.zeros(n)
@@ -47,15 +50,30 @@ def trajectory(n,duration,pos,ang,burn,x0,y0,px0,py0):
 
     # Find orbits
     runtime = time.time()
-    status = symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,info)
-    runtime = time.time()-runtime
+    status = symplectic(
+        n,
+        duration,
+        x0,
+        y0,
+        px0,
+        py0,
+        xlist,
+        ylist,
+        pxlist,
+        pylist,
+        errlist,
+        hlist,
+        info,
+    )
+    runtime = time.time() - runtime
 
     # Display result
-    print_search_results(status,pos,ang,burn,x0,y0,px0,py0,info[0],info[1])
+    print_search_results(status, pos, ang, burn, x0, y0, px0, py0, info[0], info[1])
     print("# Runtime = %3.2fs" % (runtime))
-    return tlist,xlist,ylist,pxlist,pylist,errlist,hlist
+    return tlist, xlist, ylist, pxlist, pylist, errlist, hlist
 
-def hohmann(threads,n):
+
+def hohmann(threads, n):
     """Finding Hohmann trajectory for the reduced 3-body problem.
 
     Args:
@@ -69,29 +87,29 @@ def hohmann(threads,n):
     print("# Running Hohmann.")
 
     # Hohmann trajectory < 6 days
-    duration = 6/unit_time
+    duration = 6 / unit_time
     best_total_dv = 1e9
     positions = 100
     angles = 1
     burns = 200
-    pos = -3*pi/4
+    pos = -3 * pi / 4
     ang = 0
-    burn = 3.11/unit_velocity # Forward Hohmann
-    #burn_low = -3.14/unit_velocity # Reverse Hohmann
+    burn = 3.11 / unit_velocity  # Forward Hohmann
+    # burn_low = -3.14/unit_velocity # Reverse Hohmann
 
     # Super fast Hohmann trajectory < 1 days
-    #duration = 3/unit_time
-    #best_total_dv = 1e9
-    #positions = 10
-    #angles = 10
-    #burns = 200
-    #pos = -3*pi/4
-    #ang = 0
-    #burn = 3.7/unit_velocity # Forward Hohmann
+    # duration = 3/unit_time
+    # best_total_dv = 1e9
+    # positions = 10
+    # angles = 10
+    # burns = 200
+    # pos = -3*pi/4
+    # ang = 0
+    # burn = 3.7/unit_velocity # Forward Hohmann
 
-    pos_range = pi/4
-    ang_range = pi/8
-    burn_range = 0.1/unit_velocity
+    pos_range = pi / 4
+    ang_range = pi / 8
+    burn_range = 0.1 / unit_velocity
 
     # Start search
     searches = 0
@@ -103,16 +121,29 @@ def hohmann(threads,n):
         print("# pos              = %f" % (pos))
         print("# ang              = %f" % (ang))
         print("# burn             = %f" % (burn))
-        pos_low = pos-pos_range
-        pos_high = pos+pos_range
-        ang_low = ang-ang_range
-        ang_high = ang+ang_range
-        burn_low = burn-burn_range
-        burn_high = burn+burn_range
-        stat,pos,ang,burn,x0,y0,px0,py0,dv,toa = search_mt(threads,1,duration,positions,angles,burns,pos_low,pos_high,ang_low,ang_high,burn_low,burn_high)
+        pos_low = pos - pos_range
+        pos_high = pos + pos_range
+        ang_low = ang - ang_range
+        ang_high = ang + ang_range
+        burn_low = burn - burn_range
+        burn_high = burn + burn_range
+        stat, pos, ang, burn, x0, y0, px0, py0, dv, toa = search_mt(
+            threads,
+            1,
+            duration,
+            positions,
+            angles,
+            burns,
+            pos_low,
+            pos_high,
+            ang_low,
+            ang_high,
+            burn_low,
+            burn_high,
+        )
 
         if stat < 0:
-            total_dv = abs(burn)+dv
+            total_dv = abs(burn) + dv
             if best_total_dv > total_dv:
                 best_total_dv = total_dv
                 best_stat = stat
@@ -132,16 +163,27 @@ def hohmann(threads,n):
         ang_range *= 0.1
         burn_range *= 0.1
 
-        runtime = time.time()-runtime
+        runtime = time.time() - runtime
         print("# Search runtime   = %3.2fs" % (runtime))
 
     # Print best result
     print("################ Best ################")
-    print("# Best dV(total)   = %f km/s" % (best_total_dv*unit_velocity))
-    print_search_results(best_stat,best_pos,best_ang,best_burn,best_x0,best_y0,best_px0,best_py0,best_dv,best_toa)
+    print("# Best dV(total)   = %f km/s" % (best_total_dv * unit_velocity))
+    print_search_results(
+        best_stat,
+        best_pos,
+        best_ang,
+        best_burn,
+        best_x0,
+        best_y0,
+        best_px0,
+        best_py0,
+        best_dv,
+        best_toa,
+    )
 
     # Initialize arrays
-    tlist = np.linspace(0,duration,n)
+    tlist = np.linspace(0, duration, n)
     xlist = np.zeros(n)
     ylist = np.zeros(n)
     pxlist = np.zeros(n)
@@ -151,12 +193,27 @@ def hohmann(threads,n):
     info = np.zeros(2)
 
     # Do trajectory
-    duration = 10/unit_time
-    status = symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,info)
+    duration = 10 / unit_time
+    status = symplectic(
+        n,
+        duration,
+        x0,
+        y0,
+        px0,
+        py0,
+        xlist,
+        ylist,
+        pxlist,
+        pylist,
+        errlist,
+        hlist,
+        info,
+    )
 
-    return tlist,xlist,ylist,pxlist,pylist,errlist,hlist
+    return tlist, xlist, ylist, pxlist, pylist, errlist, hlist
 
-def low_energy(threads,n):
+
+def low_energy(threads, n):
     """Finding low energy transfer trajectory for the reduced 3-body problem.
 
     Args:
@@ -170,17 +227,17 @@ def low_energy(threads,n):
     print("# Running low_energy.")
 
     # Low-energy trajectory < 200 days
-    duration = 200/unit_time
+    duration = 200 / unit_time
     best_total_dv = 1e9
     positions = 100
     angles = 1
     burns = 200
-    pos = -3*pi/4
+    pos = -3 * pi / 4
     ang = 0
-    burn = 3.12/unit_velocity
+    burn = 3.12 / unit_velocity
     pos_range = pi
     ang_range = 0
-    burn_range = 0.01/unit_velocity
+    burn_range = 0.01 / unit_velocity
 
     # Start search
     searches = 0
@@ -192,16 +249,29 @@ def low_energy(threads,n):
         print("# pos              = %f" % (pos))
         print("# ang              = %f" % (ang))
         print("# burn             = %f" % (burn))
-        pos_low = pos-pos_range
-        pos_high = pos+pos_range
-        ang_low = ang-ang_range
-        ang_high = ang+ang_range
-        burn_low = burn-burn_range
-        burn_high = burn+burn_range
-        stat,pos,ang,burn,x0,y0,px0,py0,dv,toa = search_mt(threads,1,duration,positions,angles,burns,pos_low,pos_high,ang_low,ang_high,burn_low,burn_high)
+        pos_low = pos - pos_range
+        pos_high = pos + pos_range
+        ang_low = ang - ang_range
+        ang_high = ang + ang_range
+        burn_low = burn - burn_range
+        burn_high = burn + burn_range
+        stat, pos, ang, burn, x0, y0, px0, py0, dv, toa = search_mt(
+            threads,
+            1,
+            duration,
+            positions,
+            angles,
+            burns,
+            pos_low,
+            pos_high,
+            ang_low,
+            ang_high,
+            burn_low,
+            burn_high,
+        )
 
         if stat < 0:
-            total_dv = abs(burn)+dv
+            total_dv = abs(burn) + dv
             if best_total_dv > total_dv:
                 best_total_dv = total_dv
                 best_stat = stat
@@ -221,11 +291,11 @@ def low_energy(threads,n):
         ang_range *= 0.1
         burn_range *= 0.1
 
-        runtime = time.time()-runtime
+        runtime = time.time() - runtime
         print("# Search runtime   = %3.2fs" % (runtime))
 
     # Initialize arrays
-    tlist = np.linspace(0,duration,n)
+    tlist = np.linspace(0, duration, n)
     xlist = np.zeros(n)
     ylist = np.zeros(n)
     pxlist = np.zeros(n)
@@ -235,12 +305,27 @@ def low_energy(threads,n):
     info = np.zeros(2)
 
     # Do trajectory
-    duration = toa+(2.0*pi*llo_radius/llo_velocity)/(unit_time*day)
-    status = symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,info)
+    duration = toa + (2.0 * pi * llo_radius / llo_velocity) / (unit_time * day)
+    status = symplectic(
+        n,
+        duration,
+        x0,
+        y0,
+        px0,
+        py0,
+        xlist,
+        ylist,
+        pxlist,
+        pylist,
+        errlist,
+        hlist,
+        info,
+    )
     exit()
-    return tlist,xlist,ylist,pxlist,pylist,errlist,hlist
+    return tlist, xlist, ylist, pxlist, pylist, errlist, hlist
 
-def low_energy_parts8(threads,n):
+
+def low_energy_parts8(threads, n):
     """Finding low energy transfer trajectory for the reduced 3-body problem.
 
     Args:
@@ -254,7 +339,7 @@ def low_energy_parts8(threads,n):
     print("# Running low_energy_parts8.")
 
     # Low-energy-short trajectory < 47 days
-    duration = 200/unit_time
+    duration = 200 / unit_time
     best_total_dv = 1e9
     best_toa = 0
     positions = 55
@@ -262,15 +347,15 @@ def low_energy_parts8(threads,n):
     burns = 55
 
     # Divide circular earth orbit into 8 parts
-    for i in range(0,8):
-        pos = i*pi/4
+    for i in range(0, 8):
+        pos = i * pi / 4
         ang = 0
-        #burn = 3.12/unit_velocity # moon
-        burn = 3.09/unit_velocity # L1
-        pos_range = 2*pi/16
-        ang_range = pi/2
-        burn_range = 0.1/unit_velocity
-    
+        # burn = 3.12/unit_velocity # moon
+        burn = 3.09 / unit_velocity  # L1
+        pos_range = 2 * pi / 16
+        ang_range = pi / 2
+        burn_range = 0.1 / unit_velocity
+
         # Start search
         searches = 0
         max_searches = 3
@@ -281,16 +366,29 @@ def low_energy_parts8(threads,n):
             print("# pos              = %f" % (pos))
             print("# ang              = %f" % (ang))
             print("# burn             = %f" % (burn))
-            pos_low = pos-pos_range
-            pos_high = pos+pos_range
-            ang_low = ang-ang_range
-            ang_high = ang+ang_range
-            burn_low = burn-burn_range
-            burn_high = burn+burn_range
-            stat,pos,ang,burn,x0,y0,px0,py0,dv,toa = search_mt(threads,1,duration,positions,angles,burns,pos_low,pos_high,ang_low,ang_high,burn_low,burn_high)
+            pos_low = pos - pos_range
+            pos_high = pos + pos_range
+            ang_low = ang - ang_range
+            ang_high = ang + ang_range
+            burn_low = burn - burn_range
+            burn_high = burn + burn_range
+            stat, pos, ang, burn, x0, y0, px0, py0, dv, toa = search_mt(
+                threads,
+                1,
+                duration,
+                positions,
+                angles,
+                burns,
+                pos_low,
+                pos_high,
+                ang_low,
+                ang_high,
+                burn_low,
+                burn_high,
+            )
 
             if stat < 0:
-                total_dv = abs(burn)+dv
+                total_dv = abs(burn) + dv
                 if best_total_dv > total_dv:
                     best_total_dv = total_dv
                     best_stat = stat
@@ -310,17 +408,28 @@ def low_energy_parts8(threads,n):
             ang_range *= 0.1
             burn_range *= 0.1
 
-            runtime = time.time()-runtime
+            runtime = time.time() - runtime
             print("# Search runtime   = %3.2fs" % (runtime))
 
     # Print best result
     if best_total_dv < 1e9:
         print("################ Best ################")
-        print("# Best dV(total)   = %f km/s" % (best_total_dv*unit_velocity))
-        print_search_results(best_stat,best_pos,best_ang,best_burn,best_x0,best_y0,best_px0,best_py0,best_dv,best_toa)
+        print("# Best dV(total)   = %f km/s" % (best_total_dv * unit_velocity))
+        print_search_results(
+            best_stat,
+            best_pos,
+            best_ang,
+            best_burn,
+            best_x0,
+            best_y0,
+            best_px0,
+            best_py0,
+            best_dv,
+            best_toa,
+        )
 
     # Initialize arrays
-    tlist = np.linspace(0,duration,n)
+    tlist = np.linspace(0, duration, n)
     xlist = np.zeros(n)
     ylist = np.zeros(n)
     pxlist = np.zeros(n)
@@ -330,13 +439,27 @@ def low_energy_parts8(threads,n):
     info = np.zeros(2)
 
     # Do trajectory
-    #duration = toa+(2.0*pi*llo_radius/llo_velocity)/(unit_time*day)
-    status = symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,info)
-    #exit()
-    return tlist,xlist,ylist,pxlist,pylist,errlist,hlist
+    # duration = toa+(2.0*pi*llo_radius/llo_velocity)/(unit_time*day)
+    status = symplectic(
+        n,
+        duration,
+        x0,
+        y0,
+        px0,
+        py0,
+        xlist,
+        ylist,
+        pxlist,
+        pylist,
+        errlist,
+        hlist,
+        info,
+    )
+    # exit()
+    return tlist, xlist, ylist, pxlist, pylist, errlist, hlist
 
 
-def refine(threads,n,duration,pos,ang,burn,x0,y0,px0,py0):
+def refine(threads, n, duration, pos, ang, burn, x0, y0, px0, py0):
     """Integrate trajectory for the reduced 3-body problem.
 
     Args:
@@ -354,9 +477,9 @@ def refine(threads,n,duration,pos,ang,burn,x0,y0,px0,py0):
     print("# Running refine.")
 
     # Low-energy-long trajectory < 200 days
-    #duration = 200/unit_time
+    # duration = 200/unit_time
     # Low-energy-short trajectory < 47 days
-    #duration = 47/unit_time
+    # duration = 47/unit_time
     best_total_dv = 1e9
     best_toa = 0
     positions = 15
@@ -364,10 +487,10 @@ def refine(threads,n,duration,pos,ang,burn,x0,y0,px0,py0):
     burns = 15
 
     # Divide circular earth orbit into 8 parts
-    pos_range = 2*pi/16*0.1
-    ang_range = pi/100*0.1
-    burn_range = 0.1/unit_velocity*0.1
-    
+    pos_range = 2 * pi / 16 * 0.1
+    ang_range = pi / 100 * 0.1
+    burn_range = 0.1 / unit_velocity * 0.1
+
     # Start search
     searches = 0
     max_searches = 10
@@ -378,16 +501,29 @@ def refine(threads,n,duration,pos,ang,burn,x0,y0,px0,py0):
         print("# pos              = %f" % (pos))
         print("# ang              = %f" % (ang))
         print("# burn             = %f" % (burn))
-        pos_low = pos-pos_range
-        pos_high = pos+pos_range
-        ang_low = ang-ang_range
-        ang_high = ang+ang_range
-        burn_low = burn-burn_range
-        burn_high = burn+burn_range
-        stat,pos,ang,burn,x0,y0,px0,py0,dv,toa = search_mt(threads,1,duration,positions,angles,burns,pos_low,pos_high,ang_low,ang_high,burn_low,burn_high)
+        pos_low = pos - pos_range
+        pos_high = pos + pos_range
+        ang_low = ang - ang_range
+        ang_high = ang + ang_range
+        burn_low = burn - burn_range
+        burn_high = burn + burn_range
+        stat, pos, ang, burn, x0, y0, px0, py0, dv, toa = search_mt(
+            threads,
+            1,
+            duration,
+            positions,
+            angles,
+            burns,
+            pos_low,
+            pos_high,
+            ang_low,
+            ang_high,
+            burn_low,
+            burn_high,
+        )
 
         if stat < 0:
-            total_dv = abs(burn)+dv
+            total_dv = abs(burn) + dv
             if best_total_dv > total_dv:
                 best_total_dv = total_dv
                 best_stat = stat
@@ -402,21 +538,32 @@ def refine(threads,n,duration,pos,ang,burn,x0,y0,px0,py0):
                 best_toa = toa
             else:
                 break
-            
+
         pos_range *= 0.1
         ang_range *= 0.1
         burn_range *= 0.1
 
-        runtime = time.time()-runtime
+        runtime = time.time() - runtime
         print("# Search runtime   = %3.2fs" % (runtime))
 
     # Print best result
     print("################ Best ################")
-    print("# Best dV(total)   = %f km/s" % (best_total_dv*unit_velocity))
-    print_search_results(best_stat,best_pos,best_ang,best_burn,best_x0,best_y0,best_px0,best_py0,best_dv,best_toa)
+    print("# Best dV(total)   = %f km/s" % (best_total_dv * unit_velocity))
+    print_search_results(
+        best_stat,
+        best_pos,
+        best_ang,
+        best_burn,
+        best_x0,
+        best_y0,
+        best_px0,
+        best_py0,
+        best_dv,
+        best_toa,
+    )
 
     # Initialize arrays
-    tlist = np.linspace(0,duration,n)
+    tlist = np.linspace(0, duration, n)
     xlist = np.zeros(n)
     ylist = np.zeros(n)
     pxlist = np.zeros(n)
@@ -426,7 +573,22 @@ def refine(threads,n,duration,pos,ang,burn,x0,y0,px0,py0):
     info = np.zeros(2)
 
     # Do trajectory
-    duration = toa+(2.0*pi*llo_radius/llo_velocity)/(unit_time*day)
-    status = symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,info)
-    #exit()
-    return tlist,xlist,ylist,pxlist,pylist,errlist,hlist
+    duration = toa + (2.0 * pi * llo_radius / llo_velocity) / (unit_time * day)
+    status = symplectic(
+        n,
+        duration,
+        x0,
+        y0,
+        px0,
+        py0,
+        xlist,
+        ylist,
+        pxlist,
+        pylist,
+        errlist,
+        hlist,
+        info,
+    )
+    # exit()
+    return tlist, xlist, ylist, pxlist, pylist, errlist, hlist
+

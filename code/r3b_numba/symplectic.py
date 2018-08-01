@@ -10,77 +10,88 @@ We assume **TODO FILL OUT HERE!
 
 """
 
-from math import pi,sqrt
+from math import pi, sqrt
+
 import numpy as np
 from numba import jit
+
 from orbsim.constants import *
 
+
 @jit
-def F(x,y):
+def F(x, y):
     mu = k
-    mux = mu+x
-    mux2 = mux*mux
-    mumx = 1-mux
-    mumx2 = mumx*mumx
-    y2 = y*y
-    denum1 = 1.0/((mux2+y2)*sqrt(mux2+y2))
-    denum2 = 1.0/((mumx2+y2)*sqrt(mumx2+y2))
-    Fx = (mu-1.0)*mux*denum1+mu*mumx*denum2 # TODO possible sign error on last term
-    Fy = (mu-1.0)*y*denum1-mu*y*denum2
-    return Fx,Fy
+    mux = mu + x
+    mux2 = mux * mux
+    mumx = 1 - mux
+    mumx2 = mumx * mumx
+    y2 = y * y
+    denum1 = 1.0 / ((mux2 + y2) * sqrt(mux2 + y2))
+    denum2 = 1.0 / ((mumx2 + y2) * sqrt(mumx2 + y2))
+    Fx = (
+        mu - 1.0
+    ) * mux * denum1 + mu * mumx * denum2  # TODO possible sign error on last term
+    Fy = (mu - 1.0) * y * denum1 - mu * y * denum2
+    return Fx, Fy
+
 
 @jit
-def explicit_euler_step(h,x,y,px,py):
-    Fx,Fy = F(x,y)
-    vx = px+y
-    vy = py-x
-    vpx = Fx+py
-    vpy = Fy-px
-    x += vx*h
-    y += vy*h
-    px += vpx*h
-    py += vpy*h
-    return x,y,px,py
+def explicit_euler_step(h, x, y, px, py):
+    Fx, Fy = F(x, y)
+    vx = px + y
+    vy = py - x
+    vpx = Fx + py
+    vpy = Fy - px
+    x += vx * h
+    y += vy * h
+    px += vpx * h
+    py += vpy * h
+    return x, y, px, py
+
 
 @jit
-def symplectic_euler_step(h,x,y,px,py):
+def symplectic_euler_step(h, x, y, px, py):
     # Step 1
-    vx = px+y
-    x = (x+(vx+py*h)*h)/(1.0+h*h)
-    vy = py-x
-    y += vy*h
+    vx = px + y
+    x = (x + (vx + py * h) * h) / (1.0 + h * h)
+    vy = py - x
+    y += vy * h
     # Step 2
-    Fx,Fy = F(x,y)
-    vpx = Fx+py
-    vpy = Fy-px
-    px += vpx*h
-    py += vpy*h
-    return x,y,px,py
+    Fx, Fy = F(x, y)
+    vpx = Fx + py
+    vpy = Fy - px
+    px += vpx * h
+    py += vpy * h
+    return x, y, px, py
+
 
 @jit
-def symplectic_verlet_step(h,x,y,px,py):
-    hh = 0.5*h
-    denum = 1.0/(1.0+hh*hh)
+def symplectic_verlet_step(h, x, y, px, py):
+    hh = 0.5 * h
+    denum = 1.0 / (1.0 + hh * hh)
     # Step 1
-    vx = px+y
-    x = (x+(vx+py*hh)*hh)*denum
-    vy = py-x
-    y += vy*hh
+    vx = px + y
+    x = (x + (vx + py * hh) * hh) * denum
+    vy = py - x
+    y += vy * hh
     # Step 2
-    Fx,Fy = F(x,y)
-    vpx = Fx+py
-    vpy = Fy-px
-    px = (px+(2.0*vpx+(vpy+Fy)*hh)*hh)*denum
-    py += (vpy+Fy-px)*hh
+    Fx, Fy = F(x, y)
+    vpx = Fx + py
+    vpy = Fy - px
+    px = (px + (2.0 * vpx + (vpy + Fy) * hh) * hh) * denum
+    py += (vpy + Fy - px) * hh
     # Step 3
-    vx = px+y
-    vy = py-x
-    x += vx*hh
-    y += vy*hh
-    return x,y,px,py
+    vx = px + y
+    vy = py - x
+    x += vx * hh
+    y += vy * hh
+    return x, y, px, py
 
-@jit #('void(int64, float64, float64, float64, float64, float64, float64, float64[:], float64[:], float64[:], float64[:])')
-def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,info):
+
+@jit  # ('void(int64, float64, float64, float64, float64, float64, float64, float64[:], float64[:], float64[:], float64[:])')
+def symplectic(
+    n, duration, x0, y0, px0, py0, xlist, ylist, pxlist, pylist, errlist, hlist, info
+):
 
     # Initialize initial conditions
     h = 1e-6
@@ -94,10 +105,11 @@ def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,
     err = 1e-15
     status = 1
     target_dist = 1
-    target = 1; target_pos_x = lunar_position_x
-    #target = 2; target_pos_x = L1_position_x
+    target = 1
+    target_pos_x = lunar_position_x
+    # target = 2; target_pos_x = L1_position_x
     target_pos_y = 0
-    
+
     # Time reset
     t = 0
     for i in range(n):
@@ -111,21 +123,23 @@ def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,
         hlist[i] = h
 
         # Integrate time period
-        dt = duration*(i+1)/n
+        dt = duration * (i + 1) / n
         count = 0
         while t < dt:
             # Safety on iterations
             count += 1
             if count > 10000000:
                 count = 0
-                hmin = 2*hmin
-            
+                hmin = 2 * hmin
+
             # Adaptive symplectic euler/midpoint
-            x1,y1,px1,py1 = symplectic_euler_step(h,x,y,px,py)
-            x2,y2,px2,py2 = symplectic_verlet_step(h,x,y,px,py)
+            x1, y1, px1, py1 = symplectic_euler_step(h, x, y, px, py)
+            x2, y2, px2, py2 = symplectic_verlet_step(h, x, y, px, py)
 
             # Relative local error of step
-            err = sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1)/(x2*x2+y2*y2))
+            err = sqrt(
+                (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) / (x2 * x2 + y2 * y2)
+            )
 
             # Accept the step only if the weighted error is no more than the
             # tolerance tol.  Estimate an h that will yield an error of tol on
@@ -139,18 +153,18 @@ def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,
                 py = py2
 
                 # Forward time by step
-                t = t+h
-                h = max(hmin, h*max(0.1, 0.8*sqrt(tol/err)))
+                t = t + h
+                h = max(hmin, h * max(0.1, 0.8 * sqrt(tol / err)))
 
             else:
                 # No accept, reduce h to half
-                h = max(hmin, 0.5*h)
+                h = max(hmin, 0.5 * h)
 
             # How close are we to the moon?
-            rx = x-target_pos_x
-            ry = y-target_pos_y
-            r = sqrt(rx*rx+ry*ry)
-            target_dist = min(target_dist,r)
+            rx = x - target_pos_x
+            ry = y - target_pos_y
+            r = sqrt(rx * rx + ry * ry)
+            target_dist = min(target_dist, r)
 
             # Check if we hit the target
             if status == 1:
@@ -159,46 +173,50 @@ def symplectic(n,duration,x0,y0,px0,py0,xlist,ylist,pxlist,pylist,errlist,hlist,
                     r_high = (llo_radius + ORBITAL_TOLERANCE) / unit_length
                 else:
                     r_low = 0
-                    r_high = ORBITAL_TOLERANCE/unit_length
+                    r_high = ORBITAL_TOLERANCE / unit_length
 
                 if r > r_low and r < r_high:
 
                     # Current velocity
-                    vx = px+y
-                    vy = py-x
+                    vx = px + y
+                    vy = py - x
 
                     if target == 1:
 
                         # Project velocity onto radius vector and subtract
                         # so velocity vector is along orbit
-                        vr = (vx*rx+vy*ry)/r
-                        vx = vx-vr*rx/r
-                        vy = vy-vr*ry/r
-                    
+                        vr = (vx * rx + vy * ry) / r
+                        vx = vx - vr * rx / r
+                        vy = vy - vr * ry / r
+
                         # Now ajust velocity to lunar orbit velocity
-                        vt = sqrt(vx*vx+vy*vy)
-                        px = (llo_velocity/unit_velocity)*vx/vt-y
-                        py = (llo_velocity/unit_velocity)*vy/vt+x
+                        vt = sqrt(vx * vx + vy * vy)
+                        px = (llo_velocity / unit_velocity) * vx / vt - y
+                        py = (llo_velocity / unit_velocity) * vy / vt + x
 
                         # Total velocity change
-                        dv = sqrt(vr*vr+(vt-llo_velocity/unit_velocity)*(vt-llo_velocity/unit_velocity))
+                        dv = sqrt(
+                            vr * vr
+                            + (vt - llo_velocity / unit_velocity)
+                            * (vt - llo_velocity / unit_velocity)
+                        )
                     else:
-                        dv = sqrt(vx*vx+vy*vy)
-                    
+                        dv = sqrt(vx * vx + vy * vy)
+
                     # Store info
                     info[0] = dv
                     info[1] = t
 
                     # Finish?
-                    status = -10000+dv
+                    status = -10000 + dv
                     if n == 1:
                         return status
 
             # Check if we hit the earth
-            r = (x-earth_position_x)*(x-earth_position_x)+y*y
-            r_high = earth_radius/unit_length
-            if r < r_high*r_high:
-                return 100 # Hit earth surface
+            r = (x - earth_position_x) * (x - earth_position_x) + y * y
+            r_high = earth_radius / unit_length
+            if r < r_high * r_high:
+                return 100  # Hit earth surface
 
     if status >= 0:
         status = target_dist
