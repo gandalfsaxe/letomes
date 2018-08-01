@@ -1,7 +1,9 @@
 from .analyticals import *
 from .constants import *
 from .planets import *
+
 # from numba import jit
+
 
 def euler_step(h, x, y, p_x, p_y):
     """takes a single time step of the symplectic euler algorithm"""
@@ -14,6 +16,7 @@ def euler_step(h, x, y, p_x, p_y):
     p_x += Pdot_x * h
     p_y += Pdot_y * h
     return x, y, p_x, p_y
+
 
 def verlet_step(h, x, y, p_x, p_y):
     """takes a half step, then another half step in the symplectic Verlet algorithm"""
@@ -35,10 +38,12 @@ def verlet_step(h, x, y, p_x, p_y):
     y += v_y * half_h
     return x, y, p_x, p_y
 
+
 def relative_error(vec1, vec2):
     x1, y1 = vec1
     x2, y2 = vec2
     return sqrt(((x2 - x1) ** 2 + (y2 - y1) ** 2) / (x2 ** 2 + y2 ** 2))
+
 
 @jit
 def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)):
@@ -56,10 +61,10 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
     smallest_distance = 1e6
     Dv = 0
     count = 0
-    checkpoint = max_iter/10
+    checkpoint = max_iter / 10
     for i in range(max_iter):
         # if i%checkpoint==0:
-            # print(i)
+        # print(i)
 
         x_euler, y_euler, p_euler_x, p_euler_y = euler_step(h, x, y, p_x, p_y)
         x_verlet, y_verlet, p_verlet_x, p_verlet_y = verlet_step(h, x, y, p_x, p_y)
@@ -79,7 +84,7 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
             the next step and use 0.8 of this value to avoid failures."""
 
         else:
-            #print(f"deny step {h},{err}")
+            # print(f"deny step {h},{err}")
             h = max(hmin, h / 2)
             continue
 
@@ -141,6 +146,6 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
             raise Exception("we crashed into the earth!")
 
     # import io
-    # with open("testsim.log", "w") as file:
+    # with open("tests/testsim.log", "w") as file:
     # file.writelines(str(path_storage))
     return Dv, path_storage
