@@ -77,18 +77,17 @@ def search(thread,threads,n,duration,positions,angles,burns):
         burn = burns[burn_i]
 
         # Calculate initial conditions
-        r = leo_radius/unit_length
-        x0 = np.cos(pos)*r
-        y0 = np.sin(pos)*r
-        rx = -y0/r
-        ry = x0/r
-        vx = (leo_velocity/unit_velocity)*rx
-        vy = (leo_velocity/unit_velocity)*ry
+        x0 = np.cos(pos)*leo_radius_nondim
+        y0 = np.sin(pos)*leo_radius_nondim
+        vx_norm = -y0/leo_radius_nondim
+        vy_norm = x0/leo_radius_nondim
+        vx = (leo_velocity/unit_velocity)*vx_norm
+        vy = (leo_velocity/unit_velocity)*vy_norm
         x0 += earth_position_x
-        bx = np.cos(ang)*rx-np.sin(ang)*ry
-        by = np.sin(ang)*rx+np.cos(ang)*ry
-        px0 = (burn/abs(burn))*vx+burn*bx-y0 # Sign of burn decides rotational direction of launch
-        py0 = (burn/abs(burn))*vy+burn*by+x0
+        bx = np.cos(ang)*vx_norm-np.sin(ang)*vy_norm
+        by = np.sin(ang)*vx_norm+np.cos(ang)*vy_norm
+        px0 = vx+burn*bx-y0 # Sign of burn decides rotational direction of launch
+        py0 = vy+burn*by+x0
 
         # Call symplectic integration
         # status > 0     : Closest distance to moon achieved 
