@@ -27,7 +27,7 @@ pathlib.Path(FIG_DIR).mkdir(parents=True, exist_ok=True)
 def run_test():
 
     old_stdout = sys.stdout
-    log_file = open("r3b-refactor-old.log","w")
+    log_file = open("r3b-refactor.log","w")
     sys.stdout = log_file
 
     try:  
