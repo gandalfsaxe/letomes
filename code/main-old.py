@@ -17,6 +17,12 @@ from code_old import reduced3body as r3b
 # from const import *
 from orbsim.constants import *
 
+import pathlib
+
+FIG_DIR = 'r3b_numba/fig'
+
+pathlib.Path(FIG_DIR).mkdir(parents=True, exist_ok=True) 
+
 
 def run_test():
 
@@ -35,8 +41,8 @@ def run_test():
     # FORMAT = "pdf"
 
     ### Precalculated initial Conditions
-    # DEMO = 'earth_orbit'
-    # DEMO = 'llo_radius'
+    # DEMO = 'closed_earth_orbit'
+    # DEMO = 'closed_lunar_orbit'
     # DEMO = 'hohmann'
     # DEMO = '3_day_hohmann'
     # DEMO = '1_day_hohmann'
@@ -54,7 +60,7 @@ def run_test():
     n = 1000000
 
     # Set coordinates
-    if DEMO == 'earth_orbit':
+    if DEMO == 'closed_earth_orbit':
         duration = (2.0*pi*leo_radius/leo_velocity)/(unit_time*day)
         r = leo_radius/unit_length
         v = 0.99732*leo_velocity/unit_velocity
@@ -70,7 +76,7 @@ def run_test():
         y0 = y
         px0 = vx-y0
         py0 = vy+x0
-    elif DEMO == 'llo_radius':
+    elif DEMO == 'closed_lunar_orbit':
         duration = (2.0*pi*llo_radius/llo_velocity)/(unit_time*day)
         r = llo_radius/unit_length
         v = 0.99732*llo_velocity/unit_velocity
@@ -267,7 +273,7 @@ def run_test():
     plt.xlabel("time (days)")
     plt.ylabel("step error")
     plt.yscale('log')
-    plt.savefig('code_old/fig/{}-step_error_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig(FIG_DIR + '/{}-step_error_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
     # Step sizes
     plt.figure()
@@ -275,7 +281,7 @@ def run_test():
     plt.xlabel("time (days)")
     plt.ylabel("step size")
     plt.yscale('log')
-    plt.savefig('code_old/fig/{}-step_size_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig(FIG_DIR + '/{}-step_size_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
     # Total energy error
     havg = np.sum(Hlist)/n
@@ -284,7 +290,7 @@ def run_test():
     plt.plot(tlist*unit_time, hrelerr)
     plt.xlabel("time (days)")
     plt.ylabel("Hamiltonian rel. err (arbitrary units)")
-    plt.savefig('code_old/fig/{}-energy_error_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig(FIG_DIR + '/{}-energy_error_vs_time.{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
     # Zoom earth
     xlim = 0.02
@@ -307,7 +313,7 @@ def run_test():
     plt.gca().set_aspect('equal', adjustable='box')
     plt.xlabel("x-position (arbitrary units)")
     plt.ylabel("y-position (arbitrary units)")
-    plt.savefig('code_old/fig/{}-earth_exit_y(x).{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig(FIG_DIR + '/{}-earth_exit_y(x).{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
     # Zoom moon
     xlim = 0.0055
@@ -330,7 +336,7 @@ def run_test():
     plt.gca().set_aspect('equal', adjustable='box')
     plt.xlabel("x-position (arbitrary units)")
     plt.ylabel("y-position (arbitrary units)")
-    plt.savefig('code_old/fig/{}-moon_entry_y(x).{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig(FIG_DIR + '/{}-moon_entry_y(x).{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
     # View center of mass
     xlim = 1.3
@@ -351,7 +357,7 @@ def run_test():
     plt.gca().set_aspect('equal', adjustable='box')
     plt.xlabel("x-position (arbitrary units)")
     plt.ylabel("y-position (arbitrary units)")
-    plt.savefig('code_old/fig/{}-Y(X)_inertial.{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig(FIG_DIR + '/{}-Y(X)_inertial.{}'.format(DEMO, FORMAT),bbox_inches='tight')
 
     # Position plot (x,y)
     plt.figure()
@@ -375,7 +381,7 @@ def run_test():
     plt.gca().set_aspect('equal', adjustable='box')
     plt.xlabel("x-position (arbitrary units)")
     plt.ylabel("y-position (arbitrary units)")
-    plt.savefig('code_old/fig/{}-y(x)_corotating.{}'.format(DEMO, FORMAT),bbox_inches='tight')
+    plt.savefig(FIG_DIR + '/{}-y(x)_corotating.{}'.format(DEMO, FORMAT),bbox_inches='tight')
     # plt.savefig('r3b/r3b_y(x)_euler_symplectic.{}',DEMO, FORMAT='tight')
     # plt.show()
     plt.close()
