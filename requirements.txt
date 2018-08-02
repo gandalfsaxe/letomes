@@ -3,3 +3,4 @@ pygmo
 matplotlib
 numpy
 scipy
+pytest
