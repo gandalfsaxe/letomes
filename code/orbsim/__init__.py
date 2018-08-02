@@ -32,5 +32,5 @@ constants_dict = {
     "leo_velocity_nondim": leo_velocity_nondim,
 }
 
-with open("constants.json", "w") as file:
+with open("orbsim/constants.json", "w") as file:
     file.write(json.dumps(constants_dict, indent=2))
