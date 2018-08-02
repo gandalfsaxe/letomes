@@ -1,6 +1,5 @@
 from .constants import k
 
-
 """
 static functions that evaluate some expression formulated in the paper
 """
