@@ -14,5 +14,29 @@
     "editor.tabSize": 2
   },
 
-  "cSpell.words": ["celestials"]
+  "cSpell.words": [
+    "Pdot",
+    "celestials",
+    "corotating",
+    "hohmann",
+    "mkdir",
+    "nondim",
+    "nondimensionalization",
+    "numba",
+    "numpy",
+    "pyplot",
+    "pytest",
+    "symplectic",
+    "symplectically",
+    "verlet",
+    "xlabel",
+    "xlim",
+    "xmax",
+    "xmin",
+    "ylabel",
+    "ylim",
+    "ymax",
+    "ymin",
+    "yscale"
+  ]
 }
