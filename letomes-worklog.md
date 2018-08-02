@@ -1,5 +1,12 @@
 # Worklog
 
+## August 2
+###  Gandalf: Pytest på plads
+Pakke kan nu installeres med `pip install -e .` fra package root (dvs. `letomes/code`).
+Pytests kan nu køres fra root med kommando `pytest`.
+Mathematica spytter sine resultater ud i json fil, og importeres i pytest filer til sammenligning.
+Nu er Pdot funktionen blevet unit testet.
+
 ## July 31
 
 ### Gandalf: Finally reconciled most of old/new code
