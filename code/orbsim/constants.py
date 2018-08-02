@@ -14,7 +14,7 @@ LUNAR_ALTITUDE = 100.0  # km
 ORBITAL_TOLERANCE = 10  # km
 h_default = 1e-6  # dimless time
 h_min = 1e-10  # dimless time
-tol = 1e-8  # dimless time
+tol = 1e-6  # dimless time
 
 
 ### TABLE / PHYSICAL CONSTANTS ###
