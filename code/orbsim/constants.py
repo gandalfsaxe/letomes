@@ -1,10 +1,15 @@
 from math import pi, pow, sqrt
 
+# import json
+
 """
 Unless otherwise noted, all units will be in:
-Mass:   kg
-Length: km
-Time:   days
+- Mass:   kg
+- Length: km
+- Time:   days
+
+Variable name conventions:
+- non_dim: dimensionless (nondimensionalized)
 """
 
 ### USER DEFINED CONSTANTS ###
