@@ -23,7 +23,7 @@ def verlet_step(h, x, y, p_x, p_y):
     half_h = h / 2
     denominator = 1.0 / (1 + half_h ** 2)
 
-    v_x = p_x - x
+    v_x = p_x + y
     x = (x + half_h * (v_x + p_y * half_h)) * denominator
     v_y = p_y - x
     y += v_y * half_h

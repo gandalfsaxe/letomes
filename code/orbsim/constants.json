@@ -4,7 +4,7 @@
   "ORBITAL_TOLERANCE": 10,
   "h_default": 1e-06,
   "h_min": 1e-10,
-  "tol": 1e-06,
+  "tol": 1e-09,
   "earth_moon_distance": 384400.0,
   "lunar_orbit_duration": 27.322,
   "earth_radius": 6367.4447,
