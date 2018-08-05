@@ -1,7 +1,14 @@
 # Worklog
 
+## August 5
+
+### Gandalf: Equation of motions for R4B
+Lavede et udkast til bevægelsesligninger for R4B (Restricted 4 Body) system og sendt til Poul over mail (alle andre på cc). Måske er polære koordinater bedre.
+
 ## August 2
+
 ###  Gandalf: Pytest på plads
+
 Pakke kan nu installeres med `pip install -e .` fra package root (dvs. `letomes/code`).
 Pytests kan nu køres fra root med kommando `pytest`.
 Mathematica spytter sine resultater ud i json fil, og importeres i pytest filer til sammenligning.
