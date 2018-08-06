@@ -13,7 +13,7 @@ def euler_step(h, x, y, p_x, p_y):
     v_y = p_y - x
     y += v_y * h
 
-    Pdot_x, Pdot_y = Pdot(x, y, p_x, p_y)
+    Pdot_x, Pdot_y = [get_Pdot_x(x, y, p_x, p_y),get_Pdot_y(x, y, p_x, p_y)]
     p_x += Pdot_x * h
     p_y += Pdot_y * h
     return x, y, p_x, p_y
@@ -30,9 +30,10 @@ def verlet_step(h, x, y, p_x, p_y):
     v_y = p_y - x
     y += v_y * half_h
 
-    Pdot_x, Pdot_y = Pdot(x, y, p_x, p_y)
+    Pdot_x, Pdot_y = [get_Pdot_x(x, y, p_x, p_y), get_Pdot_y(x,y,p_x,p_y)]
     p_x = (p_x + (2.0 * Pdot_x + (Pdot_y * 2 + p_x) * half_h) * half_h) * denominator
-    p_y += (Pdot_y * 2) * half_h
+    Pdot_y2 = get_Pdot_y(x, y, p_x, p_y)
+    p_y += (Pdot_y * Pdot_y2) * half_h
 
     v_x = p_x + y
     v_y = p_y - x
@@ -62,7 +63,7 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
     path_storage = []
     path_storage.append([x, y, p_x, p_y, h])
     smallest_distance = 1e6
-    Dv = 0
+    Dv = 1e10
     count = 0
     orbital_radius_lower_bound, orbital_radius_upper_bound = target.get_orbital_bounds()
     print(orbital_radius_upper_bound)
