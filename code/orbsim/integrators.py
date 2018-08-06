@@ -97,10 +97,6 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
         target_distance_y = y - target.position_y
         target_distance = sqrt(target_distance_x ** 2 + target_distance_y ** 2)
         smallest_distance = min(smallest_distance, target_distance)
-        if target_distance <= 0.0048:
-            print("FUCK, NIGGA")
-            return
-        print(smallest_distance)
 
         """For real though, are we there yet? (did we actually hit?)"""
         if (
@@ -151,4 +147,5 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
     # import io
     # with open("tests/testsim.log", "w") as file:
     # file.writelines(str(path_storage))
+    print("smallest distance =", smallest_distance)
     return Dv, path_storage
