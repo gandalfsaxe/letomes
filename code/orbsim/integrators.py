@@ -4,6 +4,7 @@ from .planets import *
 import time
 from numba import jit
 
+
 @jit
 def euler_step(h, x, y, p_x, p_y):
     """takes a single time step of the symplectic euler algorithm"""
@@ -16,6 +17,7 @@ def euler_step(h, x, y, p_x, p_y):
     p_x += Pdot_x * h
     p_y += Pdot_y * h
     return x, y, p_x, p_y
+
 
 @jit
 def verlet_step(h, x, y, p_x, p_y):
@@ -38,11 +40,13 @@ def verlet_step(h, x, y, p_x, p_y):
     y += v_y * half_h
     return x, y, p_x, p_y
 
+
 @jit
 def relative_error(vec1, vec2):
     x1, y1 = vec1
     x2, y2 = vec2
     return sqrt(((x2 - x1) ** 2 + (y2 - y1) ** 2) / (x2 ** 2 + y2 ** 2))
+
 
 @jit
 def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)):
@@ -61,6 +65,7 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
     Dv = 0
     count = 0
     orbital_radius_lower_bound, orbital_radius_upper_bound = target.get_orbital_bounds()
+    print(orbital_radius_upper_bound)
     earth = planet(celestials.EARTH)
     for i in range(max_iter):
 
@@ -83,7 +88,7 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
             the next step and use 0.8 of this value to avoid failures."""
 
         else:
-            #print(f"deny step {h},{err}")
+            # print(f"deny step {h},{err}")
             h = max(hmin, h / 2)
             continue
 
@@ -92,13 +97,15 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
         target_distance_y = y - target.position_y
         target_distance = sqrt(target_distance_x ** 2 + target_distance_y ** 2)
         smallest_distance = min(smallest_distance, target_distance)
-
-
+        if target_distance <= 0.0048:
+            print("FUCK, NIGGA")
+            return
+        print(smallest_distance)
 
         """For real though, are we there yet? (did we actually hit?)"""
         if (
-            target_distance > orbital_radius_lower_bound
-            and target_distance < orbital_radius_upper_bound
+            smallest_distance >= orbital_radius_lower_bound
+            and smallest_distance <= orbital_radius_upper_bound
         ):
             """ we are in orbit range"""
             # current velocity vector
@@ -136,11 +143,10 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
         earth_distance = sqrt((x - earth.position_x) ** 2 + (y - earth.position_y) ** 2)
 
         # not necessarily a crash, but we don't want paths that take us to such risky territories
-        critical_distance, _ = earth.get_orbital_bounds()
+        critical_distance = earth.get_critical_bounds()
         if earth_distance < critical_distance:
             print("Anga crashed into the earth!")
             return Dv, path_storage
-
 
     # import io
     # with open("tests/testsim.log", "w") as file:

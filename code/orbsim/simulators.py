@@ -6,13 +6,12 @@ from pykep.planet import jpl_lp
 from pykep import epoch
 import time
 
-def launch_sim(psi, max_iter=1000000):
+def launch_sim(psi, max_iter=100000):
     """
     return: [Dv, [x, y, px, py, h]]
     launch (not really a launch since we start from LEO) a 
     single rocket with a given set of hyperparameters, return the resulting path
     """
-    starttime=time.time()
     pos_ang, burn_ang, burnDv = psi  # extract parameters from decision vector
 
     """define init params"""
@@ -36,11 +35,10 @@ def launch_sim(psi, max_iter=1000000):
     p0_y = v_y + burnDv * burnDv_x + x0
 
     """SIMULATE"""
-    launch_sim_time=time.time()-starttime
     starttime = time.time()
     result = symplectic(x0, y0, p0_x, p0_y, max_iter=max_iter)
     symplectic_time=time.time()-starttime
-    print(f"launch_sim: {launch_sim_time} \nsymplectic: {symplectic_time}")
+    print(f"\nsymplectic runtime: {symplectic_time}")
     return result
 
 class space:

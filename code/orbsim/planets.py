@@ -37,11 +37,16 @@ class planet:
             self.orbital_radius_nondim = None
             self.orbital_velocity_nondim = None
 
+    @jit
     def get_orbital_bounds(self):
         """returns [lower_bound, upper_bound] for successful celestial orbit"""
-        upper_bound = (self.orbital_radius + ORBITAL_TOLERANCE) / unit_length
         lower_bound = (self.orbital_radius - ORBITAL_TOLERANCE) / unit_length
+        upper_bound = (self.orbital_radius + ORBITAL_TOLERANCE) / unit_length
         return [lower_bound, upper_bound]
+
+    @jit
+    def get_critical_bounds(self):
+        return (self.celestial_radius / unit_length) ** 2
 
 
 class celestials(Enum):
