@@ -29,7 +29,7 @@ from orbsim.constants import (
 from .symplectic import symplectic
 
 
-def print_search_results(stat, pos, ang, burn, x0, y0, px0, py0, dv, toa):
+def print_search_results(stat, pos, ang, burn, x0, y0, p0_x, p0_y, dv, toa):
     print(
         "# --------------------------------------------------------------------------"
     )
@@ -39,8 +39,8 @@ def print_search_results(stat, pos, ang, burn, x0, y0, px0, py0, dv, toa):
     print("burn     = %.15lf/unit_velocity" % (burn * unit_velocity))
     print("x0       = %.15lf" % (x0))
     print("y0       = %.15lf" % (y0))
-    print("px0      = %.15lf" % (px0))
-    print("py0      = %.15lf" % (py0))
+    print("p0_x      = %.15lf" % (p0_x))
+    print("p0_y      = %.15lf" % (p0_y))
     print(
         "# --------------------------------------------------------------------------"
     )
@@ -64,11 +64,11 @@ def search(thread, threads, n, duration, positions, angles, burns):
     # print("Start thread=%i" % (thread))
 
     # Initialize arrays
-    x_list = np.zeros(n)
-    y_list = np.zeros(n)
-    px_list = np.zeros(n)
-    py_list = np.zeros(n)
-    err_list = np.zeros(n)
+    xs = np.zeros(n)
+    ys = np.zeros(n)
+    p_xs = np.zeros(n)
+    p_ys = np.zeros(n)
+    step_errors = np.zeros(n)
     h_list = np.zeros(n)
     info = np.zeros(2)
 
@@ -98,34 +98,36 @@ def search(thread, threads, n, duration, positions, angles, burns):
         # Calculate initial conditions
         x0 = np.cos(pos) * leo_radius_nondim
         y0 = np.sin(pos) * leo_radius_nondim
-        vx_norm = -y0 / leo_radius_nondim
-        vy_norm = x0 / leo_radius_nondim
-        vx = (leo_velocity / unit_velocity) * vx_norm
-        vy = (leo_velocity / unit_velocity) * vy_norm
+        v_norm_x = -y0 / leo_radius_nondim
+        v_y_norm = x0 / leo_radius_nondim
+        v_x = (leo_velocity / unit_velocity) * v_norm_x
+        v_y = (leo_velocity / unit_velocity) * v_y_norm
         x0 += earth_position_x
-        bx = np.cos(ang) * vx_norm - np.sin(ang) * vy_norm
-        by = np.sin(ang) * vx_norm + np.cos(ang) * vy_norm
-        px0 = vx + burn * bx - y0  # Sign of burn decides rotational direction of launch
-        py0 = vy + burn * by + x0
+        bx = np.cos(ang) * v_norm_x - np.sin(ang) * v_y_norm
+        by = np.sin(ang) * v_norm_x + np.cos(ang) * v_y_norm
+        p0_x = (
+            v_x + burn * bx - y0
+        )  # Sign of burn decides rotational direction of launch
+        p0_y = v_y + burn * by + x0
 
         # Call symplectic integration
         # status > 0     : Closest distance to moon achieved
         # status < 0     : Hit the moon using status=dV(moon)-10000 to get into orbit
         # status == 100  : Collided with earth
         # if thread == 1:
-        #    print(n,duration,x0,y0,px0,py0)
+        #    print(n,duration,x0,y0,p0_x,p0_y)
         status = symplectic(
             n,
             duration,
             x0,
             y0,
-            px0,
-            py0,
-            x_list,
-            y_list,
-            px_list,
-            py_list,
-            err_list,
+            p0_x,
+            p0_y,
+            xs,
+            ys,
+            p_xs,
+            p_ys,
+            step_errors,
             h_list,
             info,
         )
@@ -140,8 +142,8 @@ def search(thread, threads, n, duration, positions, angles, burns):
             best_burn = burn
             best_x0 = x0
             best_y0 = y0
-            best_px0 = px0
-            best_py0 = py0
+            best_p0_x = p0_x
+            best_p0_y = p0_y
             best_dv = info[0]
             best_toa = info[1]
 
@@ -164,8 +166,8 @@ def search(thread, threads, n, duration, positions, angles, burns):
         best_burn,
         best_x0,
         best_y0,
-        best_px0,
-        best_py0,
+        best_p0_x,
+        best_p0_y,
         best_dv,
         best_toa,
         hit_earth,
@@ -224,7 +226,7 @@ def search_mt(
     print("# Trials:           %6i (" % (trials), end="")
     if threads == 1:
         # Single thread
-        best_status, best_pos, best_ang, best_burn, best_x0, best_y0, best_px0, best_py0, best_dv, best_toa, hit_earth, hit_moon = search(
+        best_status, best_pos, best_ang, best_burn, best_x0, best_y0, best_p0_x, best_p0_y, best_dv, best_toa, hit_earth, hit_moon = search(
             0, num_pos, n, duration, positions, angles, burns
         )
     else:
@@ -251,8 +253,8 @@ def search_mt(
                 best_burn = result[i][3]
                 best_x0 = result[i][4]
                 best_y0 = result[i][5]
-                best_px0 = result[i][6]
-                best_py0 = result[i][7]
+                best_p0_x = result[i][6]
+                best_p0_y = result[i][7]
                 best_dv = result[i][8]
                 best_toa = result[i][9]
                 hit_earth += result[i][10]
@@ -278,8 +280,8 @@ def search_mt(
             best_burn,
             best_x0,
             best_y0,
-            best_px0,
-            best_py0,
+            best_p0_x,
+            best_p0_y,
             best_dv,
             best_toa,
         )
@@ -290,8 +292,8 @@ def search_mt(
             best_burn,
             best_x0,
             best_y0,
-            best_px0,
-            best_py0,
+            best_p0_x,
+            best_p0_y,
             best_dv,
             best_toa,
         )

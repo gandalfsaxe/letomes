@@ -1,52 +1,55 @@
 @jit
-def symplectic_euler_step1(h,x,y,px,py):
+def symplectic_euler_step1(h, x, y, p_x, p_y):
     # Step 1
-    Fx,Fy = F(x,y)
-    vpx = Fx+py
-    px = (px+(vpx+Fy*h)*h)/(1.0+h*h)
-    vpy = Fy-px
-    py += vpy*h
+    Fx, Fy = F(x, y)
+    pdot_x = Fx + p_y
+    p_x = (p_x + (pdot_x + Fy * h) * h) / (1.0 + h * h)
+    pdot_y = Fy - p_x
+    p_y += pdot_y * h
     # Step 2
-    vx = px+y
-    vy = py-x
-    x += vx*h
-    y += vy*h
-    return x,y,px,py
+    v_x = p_x + y
+    v_y = p_y - x
+    x += v_x * h
+    y += v_y * h
+    return x, y, p_x, p_y
+
 
 @jit
-def symplectic_euler_step2(h,x,y,px,py):
+def symplectic_euler_step2(h, x, y, p_x, p_y):
     # Step 1
-    Fx,Fy = F(x,y)
-    vpx = Fx+py
-    vpy = Fy-px
-    px += vpx*h
-    py += vpy*h
+    Fx, Fy = F(x, y)
+    pdot_x = Fx + p_y
+    pdot_y = Fy - p_x
+    p_x += pdot_x * h
+    p_y += pdot_y * h
     # Step 2
-    vx = px+y
-    x = (x+(vx+py*h)*h)/(1.0+h*h)
-    vy = py-x
-    y += vy*h
-    return x,y,px,py
+    v_x = p_x + y
+    x = (x + (v_x + p_y * h) * h) / (1.0 + h * h)
+    v_y = p_y - x
+    y += v_y * h
+    return x, y, p_x, p_y
+
 
 @jit
-def symplectic_verlet_step2(h,x,y,px,py):
-    hh = 0.5*h
-    denum = 1.0/(1.0+hh*hh)
+def symplectic_verlet_step2(h, x, y, p_x, p_y):
+    hh = 0.5 * h
+    denum = 1.0 / (1.0 + hh * hh)
     # Step 1
-    Fx,Fy = F(x,y)
-    vpx = Fx+py
-    px = (px+(vpx+Fy*hh)*hh)*denum
-    vpy = Fy-px
-    py += vpy*hh
+    Fx, Fy = F(x, y)
+    pdot_x = Fx + p_y
+    p_x = (p_x + (pdot_x + Fy * hh) * hh) * denum
+    pdot_y = Fy - p_x
+    p_y += pdot_y * hh
     # Step 2
-    vx = px+y
-    vy = py-x
-    x = (x+(2.0*vx+(vy+py)*hh)*hh)*denum
-    y += (vy+py-x)*hh
+    v_x = p_x + y
+    v_y = p_y - x
+    x = (x + (2.0 * v_x + (v_y + p_y) * hh) * hh) * denum
+    y += (v_y + p_y - x) * hh
     # Step 3
-    Fx,Fy = F(x,y)
-    vpx = Fx+py
-    vpy = Fy-px
-    px += vpx*hh
-    py += vpy*hh
-    return x,y,px,py
+    Fx, Fy = F(x, y)
+    pdot_x = Fx + p_y
+    pdot_y = Fy - p_x
+    p_x += pdot_x * hh
+    p_y += pdot_y * hh
+    return x, y, p_x, p_y
+

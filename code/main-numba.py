@@ -82,15 +82,15 @@ def run_test():
         theta = 0
         x = r * cos(theta)
         y = r * sin(theta)
-        vx = -v * y / r
-        vy = v * x / r
+        v_x = -v * y / r
+        v_y = v * x / r
         pos = 0
         ang = 0
         burn = 0
         x0 = earth_position_x + x
         y0 = y
-        px0 = vx - y0
-        py0 = vy + x0
+        p0_x = v_x - y0
+        p0_y = v_y + x0
     elif DEMO == "closed_lunar_orbit":
         duration = (2.0 * pi * llo_radius / llo_velocity) / (unit_time * day)
         r = llo_radius / unit_length
@@ -98,15 +98,15 @@ def run_test():
         theta = 0
         x = r * cos(theta)
         y = r * sin(theta)
-        vx = -v * y / r
-        vy = v * x / r
+        v_x = -v * y / r
+        v_y = v * x / r
         pos = 0
         ang = 0
         burn = 0
         x0 = lunar_position_x + x
         y0 = y
-        px0 = vx - y0
-        py0 = vy + x0
+        p0_x = v_x - y0
+        p0_y = v_y + x0
     elif DEMO == "hohmann":
         # DEMO = 'search_refine'
         # --------------------------------------------------------------------------
@@ -116,8 +116,8 @@ def run_test():
         burn = 3.111181716545691 / unit_velocity
         x0 = -0.020532317163607
         y0 = -0.014769797663479
-        px0 = 9.302400979050308
-        py0 = -5.289712560652044
+        p0_x = 9.302400979050308
+        p0_y = -5.289712560652044
     # --------------------------------------------------------------------------
     # dV(earth-escape) = 3.111182 km/s
     # dV(moon-capture) = 0.800682 km/s
@@ -132,8 +132,8 @@ def run_test():
         burn = -3.149483130653266 / unit_velocity
         x0 = -0.023249912090507
         y0 = -0.012853859046429
-        px0 = -8.098481905534163
-        py0 = 6.978997254692934
+        p0_x = -8.098481905534163
+        p0_y = 6.978997254692934
     # --------------------------------------------------------------------------
     # dV(earth-escape) = 3.149483 km/s
     # dV(moon-capture) = 0.968488 km/s
@@ -148,8 +148,8 @@ def run_test():
         burn = 3.090702702702703 / unit_velocity
         x0 = -0.025645129237870
         y0 = -0.010311570301966
-        px0 = 6.539303578815582
-        py0 = -8.449205705334165
+        p0_x = 6.539303578815582
+        p0_y = -8.449205705334165
     # --------------------------------------------------------------------------
     # dV(earth-escape) = 3.090703 km/s
     # dV(moon-capture) = 0.704114 km/s
@@ -164,8 +164,8 @@ def run_test():
     #    burn     = 3.090702702702703/unit_velocity
     #    x0       = -0.025645129237870
     #    y0       = -0.010311570301966
-    #    px0      = 6.539303578815583
-    #    py0      = -8.449205705334164
+    #    p0_x      = 6.539303578815583
+    #    p0_y      = -8.449205705334164
     # --------------------------------------------------------------------------
     # dV(earth-escape) = 3.090703 km/s
     # dV(moon-capture) = 0.704114 km/s
@@ -181,8 +181,8 @@ def run_test():
         burn = 3.127288444444444 / unit_velocity
         x0 = 0.004665728429046
         y0 = -0.002336647636098
-        px0 = 1.904735175752430
-        py0 = 10.504985512873279
+        p0_x = 1.904735175752430
+        p0_y = 10.504985512873279
     # --------------------------------------------------------------------------
     # dV(earth-escape) = 3.127288 km/s
     # dV(moon-capture) = 0.768534 km/s
@@ -198,8 +198,8 @@ def run_test():
         burn = 3.135519748743719 / unit_velocity
         x0 = -0.023110975767437
         y0 = -0.012972499765730
-        px0 = 8.032228991913522
-        py0 = -7.100537706154897
+        p0_x = 8.032228991913522
+        p0_y = -7.100537706154897
     # --------------------------------------------------------------------------
     # dV(earth-escape) = 3.135520 km/s
     # dV(moon-capture) = 0.879826 km/s
@@ -214,8 +214,8 @@ def run_test():
         burn = 3.810000000000000 / unit_velocity
         x0 = -0.023181791813268
         y0 = -0.012912351430812
-        px0 = 8.764829132987316
-        py0 = -7.263069305305378
+        p0_x = 8.764829132987316
+        p0_y = -7.263069305305378
     # --------------------------------------------------------------------------
     # dV(earth-escape) = 3.810000 km/s
     # dV(moon-capture) = 3.319455 km/s
@@ -231,8 +231,8 @@ def run_test():
         burn = 3.091851851851852 / unit_velocity
         x0 = -0.028385246222264
         y0 = 0.004988337832881
-        px0 = -3.136296304910217
-        py0 = -10.217405925499762
+        p0_x = -3.136296304910217
+        p0_y = -10.217405925499762
     # --------------------------------------------------------------------------
     # dV(earth-escape) = 3.091852 km/s
     # dV(at L1)        = 0.676226 km/s
@@ -243,35 +243,35 @@ def run_test():
     #################### FUNCTION CALLS ####################
 
     if DEMO == "search_hohmann":
-        t_list, x_list, y_list, px_list, py_list, err_list, h_list = r3b.hohmann(
+        ts, xs, ys, p_xs, p_ys, step_errors, h_list = r3b.hohmann(
             threads, n
         )
     elif DEMO == "search_low_energy":
-        t_list, x_list, y_list, px_list, py_list, err_list, h_list = r3b.low_energy(
+        ts, xs, ys, p_xs, p_ys, step_errors, h_list = r3b.low_energy(
             threads, n
         )
     elif DEMO == "search_low_energy_parts8":
-        t_list, x_list, y_list, px_list, py_list, err_list, h_list = r3b.low_energy_parts8(
+        ts, xs, ys, p_xs, p_ys, step_errors, h_list = r3b.low_energy_parts8(
             threads, n
         )
     elif DEMO == "search_refine":
-        t_list, x_list, y_list, px_list, py_list, err_list, h_list = r3b.refine(
-            threads, n, duration, pos, ang, burn, x0, y0, px0, py0
+        ts, xs, ys, p_xs, p_ys, step_errors, h_list = r3b.refine(
+            threads, n, duration, pos, ang, burn, x0, y0, p0_x, p0_y
         )
     else:
-        t_list, x_list, y_list, px_list, py_list, err_list, h_list = r3b.trajectory(
-            n, duration, pos, ang, burn, x0, y0, px0, py0
+        ts, xs, ys, p_xs, p_ys, step_errors, h_list = r3b.trajectory(
+            n, duration, pos, ang, burn, x0, y0, p0_x, p0_y
         )
     H_list = (
-        px_list ** 2 / 2
-        + py_list ** 2 / 2
-        + y_list * px_list
-        - x_list * py_list
-        - (1 - k) / np.sqrt(np.power(k + x_list, 2) + np.power(y_list, 2))
-        - k / np.sqrt(np.power(1 - k - x_list, 2) + np.power(y_list, 2))
+        p_xs ** 2 / 2
+        + p_ys ** 2 / 2
+        + ys * p_xs
+        - xs * p_ys
+        - (1 - k) / np.sqrt(np.power(k + xs, 2) + np.power(ys, 2))
+        - k / np.sqrt(np.power(1 - k - xs, 2) + np.power(ys, 2))
     )
-    print("# Final position: %f %f" % (x_list[n - 1], y_list[n - 1]))
-    print("# Final impulse: %f %f" % (px_list[n - 1], py_list[n - 1]))
+    print("# Final position: %f %f" % (xs[n - 1], ys[n - 1]))
+    print("# Final impulse: %f %f" % (p_xs[n - 1], p_ys[n - 1]))
     print("# Final H: %f" % (H_list[n - 1]))
     runtime = time.time() - runtime
     print("# Total runtime = %3.2fs" % (runtime))
@@ -285,25 +285,25 @@ def run_test():
 
     n2 = int(n / 2)
 
-    x_list1 = x_list[:n2]
-    y_list1 = y_list[:n2]
-    x_list2 = x_list[n2:]
-    y_list2 = y_list[n2:]
+    xs1 = xs[:n2]
+    ys1 = ys[:n2]
+    xs2 = xs[n2:]
+    ys2 = ys[n2:]
 
-    X_list1 = x_list[:n2] * np.cos(t_list[:n2]) - y_list[:n2] * np.sin(t_list[:n2])
-    Y_list1 = x_list[:n2] * np.sin(t_list[:n2]) + y_list[:n2] * np.cos(t_list[:n2])
-    X_list2 = x_list[n2:] * np.cos(t_list[n2:]) - y_list[n2:] * np.sin(t_list[n2:])
-    Y_list2 = x_list[n2:] * np.sin(t_list[n2:]) + y_list[n2:] * np.cos(t_list[n2:])
+    X_list1 = xs[:n2] * np.cos(ts[:n2]) - ys[:n2] * np.sin(ts[:n2])
+    Y_list1 = xs[:n2] * np.sin(ts[:n2]) + ys[:n2] * np.cos(ts[:n2])
+    X_list2 = xs[n2:] * np.cos(ts[n2:]) - ys[n2:] * np.sin(ts[n2:])
+    Y_list2 = xs[n2:] * np.sin(ts[n2:]) + ys[n2:] * np.cos(ts[n2:])
 
-    X_list_earth = earth_position_x * np.cos(t_list)
-    Y_list_earth = -earth_position_x * np.sin(t_list)
+    X_list_earth = earth_position_x * np.cos(ts)
+    Y_list_earth = -earth_position_x * np.sin(ts)
 
-    X_list_moon = lunar_position_x * np.cos(t_list)
-    Y_list_moon = lunar_position_x * np.sin(t_list)
+    X_list_moon = lunar_position_x * np.cos(ts)
+    Y_list_moon = lunar_position_x * np.sin(ts)
 
-    # Rel. err
+    # Rel. step_error 
     plt.figure()
-    plt.plot(t_list * unit_time, err_list)
+    plt.plot(ts * unit_time, step_errors)
     plt.xlabel("time (days)")
     plt.ylabel("step error")
     plt.yscale("log")
@@ -313,7 +313,7 @@ def run_test():
 
     # Step sizes
     plt.figure()
-    plt.plot(t_list * unit_time, h_list)
+    plt.plot(ts * unit_time, h_list)
     plt.xlabel("time (days)")
     plt.ylabel("step size")
     plt.yscale("log")
@@ -323,11 +323,11 @@ def run_test():
 
     # Total energy error
     H_avg = np.sum(H_list) / n
-    H_rel_err = (H_list - H_avg) / H_avg
+    H_relative_errors = (H_list - H_avg) / H_avg
     plt.figure()
-    plt.plot(t_list * unit_time, H_rel_err)
+    plt.plot(ts * unit_time, H_relative_errors)
     plt.xlabel("time (days)")
-    plt.ylabel("Hamiltonian rel. err (arbitrary units)")
+    plt.ylabel("Hamiltonian relative error (arbitrary units)")
     plt.savefig(
         FIG_DIR + "{}-energy_error_vs_time.{}".format(DEMO, FORMAT), bbox_inches="tight"
     )
@@ -356,8 +356,8 @@ def run_test():
     plt.gcf().gca().add_artist(earth)
     plt.gcf().gca().add_artist(earthorbit1)
     plt.gcf().gca().add_artist(earthorbit2)
-    plt.plot(x_list1, y_list1, "r-")
-    plt.plot(x_list2, y_list2, "k-")
+    plt.plot(xs1, ys1, "r-")
+    plt.plot(xs2, ys2, "k-")
     plt.xlim(xmin, xmax)
     plt.ylim(ymin, ymax)
     plt.gca().set_aspect("equal", adjustable="box")
@@ -391,8 +391,8 @@ def run_test():
     plt.gcf().gca().add_artist(moon)
     plt.gcf().gca().add_artist(moonorbit1)
     plt.gcf().gca().add_artist(moonorbit2)
-    plt.plot(x_list1, y_list1, "r-")
-    plt.plot(x_list2, y_list2, "k-")
+    plt.plot(xs1, ys1, "r-")
+    plt.plot(xs2, ys2, "k-")
     plt.xlim(xmin, xmax)
     plt.ylim(ymin, ymax)
     plt.gca().set_aspect("equal", adjustable="box")
@@ -427,8 +427,8 @@ def run_test():
 
     # Position plot (x,y)
     plt.figure()
-    plt.plot(x_list1, y_list1, "r-")
-    plt.plot(x_list2, y_list2, "k-")
+    plt.plot(xs1, ys1, "r-")
+    plt.plot(xs2, ys2, "k-")
     earth = plt.Circle((earth_position_x, 0), earth_radius / unit_length, color="blue")
     earthorbit1 = plt.Circle(
         (earth_position_x, 0),
@@ -478,7 +478,7 @@ def run_test():
     # # #################### PLOTS: VELOCITY ####################
 
     # plt.figure()
-    # plt.plot(t_list, omegalist_e)
+    # plt.plot(ts, omegalist_e)
     # plt.xlabel("time (arbitrary units)")
     # plt.ylabel("velocity (arbitrary units)")
     # plt.savefig('r3b/r3b_omega(t)_euler_explicit.{}')

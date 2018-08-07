@@ -30,7 +30,7 @@ from .symplectic import symplectic
 
 
 # ** pos, ang, burn are not used for anything beside printing
-def trajectory(n, duration, pos, ang, burn, x0, y0, px0, py0):
+def trajectory(n, duration, pos, ang, burn, x0, y0, p0_x, p0_y):
     """Integrate trajectory for the reduced 3-body problem.
 
     Args:
@@ -38,22 +38,22 @@ def trajectory(n, duration, pos, ang, burn, x0, y0, px0, py0):
         duration (float): Time duration of simulation.
         x0 (float): Initial x-coordinate
         y0 (float): Initial y-coordinate
-        px0 (float): Initial generalized x-momentum
-        py0 (float): Initial generalized y-momentum
+        p0_x (float): Initial generalized x-momentum
+        p0_y (float): Initial generalized y-momentum
 
     Returns:
-        Tuple of time-, x-, y-, px- and py lists.
+        Tuple of time-, x-, y-, p_x- and p_y lists.
     
     """
     print("# Running trajectory.")
 
     # Initialize arrays
-    t_list = np.linspace(0, duration, n)
-    x_list = np.zeros(n)
-    y_list = np.zeros(n)
-    px_list = np.zeros(n)
-    py_list = np.zeros(n)
-    err_list = np.zeros(n)
+    ts = np.linspace(0, duration, n)
+    xs = np.zeros(n)
+    ys = np.zeros(n)
+    p_xs = np.zeros(n)
+    p_ys = np.zeros(n)
+    step_errors = np.zeros(n)
     h_list = np.zeros(n)
     info = np.zeros(2)
 
@@ -64,22 +64,22 @@ def trajectory(n, duration, pos, ang, burn, x0, y0, px0, py0):
         duration,
         x0,
         y0,
-        px0,
-        py0,
-        x_list,
-        y_list,
-        px_list,
-        py_list,
-        err_list,
+        p0_x,
+        p0_y,
+        xs,
+        ys,
+        p_xs,
+        p_ys,
+        step_errors,
         h_list,
         info,
     )
     runtime = time.time() - runtime
 
     # Display result
-    print_search_results(status, pos, ang, burn, x0, y0, px0, py0, info[0], info[1])
+    print_search_results(status, pos, ang, burn, x0, y0, p0_x, p0_y, info[0], info[1])
     print("# Runtime = %3.2fs" % (runtime))
-    return t_list, x_list, y_list, px_list, py_list, err_list, h_list
+    return ts, xs, ys, p_xs, p_ys, step_errors, h_list
 
 
 def hohmann(threads, n):
@@ -89,7 +89,7 @@ def hohmann(threads, n):
         n (int): Positions stored.
 
     Returns:
-        Tuple of time-, x-, y-, px- and py lists.
+        Tuple of time-, x-, y-, p_x- and p_y lists.
     
     """
 
@@ -136,7 +136,7 @@ def hohmann(threads, n):
         ang_high = ang + ang_range
         burn_low = burn - burn_range
         burn_high = burn + burn_range
-        stat, pos, ang, burn, x0, y0, px0, py0, dv, toa = search_mt(
+        stat, pos, ang, burn, x0, y0, p0_x, p0_y, dv, toa = search_mt(
             threads,
             1,
             duration,
@@ -161,8 +161,8 @@ def hohmann(threads, n):
                 best_burn = burn
                 best_x0 = x0
                 best_y0 = y0
-                best_px0 = px0
-                best_py0 = py0
+                best_p0_x = p0_x
+                best_p0_y = p0_y
                 best_dv = dv
                 best_toa = toa
             else:
@@ -185,19 +185,19 @@ def hohmann(threads, n):
         best_burn,
         best_x0,
         best_y0,
-        best_px0,
-        best_py0,
+        best_p0_x,
+        best_p0_y,
         best_dv,
         best_toa,
     )
 
     # Initialize arrays
-    t_list = np.linspace(0, duration, n)
-    x_list = np.zeros(n)
-    y_list = np.zeros(n)
-    px_list = np.zeros(n)
-    py_list = np.zeros(n)
-    err_list = np.zeros(n)
+    ts = np.linspace(0, duration, n)
+    xs = np.zeros(n)
+    ys = np.zeros(n)
+    p_xs = np.zeros(n)
+    p_ys = np.zeros(n)
+    step_errors = np.zeros(n)
     h_list = np.zeros(n)
     info = np.zeros(2)
 
@@ -208,18 +208,18 @@ def hohmann(threads, n):
         duration,
         x0,
         y0,
-        px0,
-        py0,
-        x_list,
-        y_list,
-        px_list,
-        py_list,
-        err_list,
+        p0_x,
+        p0_y,
+        xs,
+        ys,
+        p_xs,
+        p_ys,
+        step_errors,
         h_list,
         info,
     )
 
-    return t_list, x_list, y_list, px_list, py_list, err_list, h_list
+    return ts, xs, ys, p_xs, p_ys, step_errors, h_list
 
 
 def low_energy(threads, n):
@@ -229,7 +229,7 @@ def low_energy(threads, n):
         n (int): Positions stored.
 
     Returns:
-        Tuple of time-, x-, y-, px- and py lists.
+        Tuple of time-, x-, y-, p_x- and p_y lists.
     
     """
 
@@ -264,7 +264,7 @@ def low_energy(threads, n):
         ang_high = ang + ang_range
         burn_low = burn - burn_range
         burn_high = burn + burn_range
-        stat, pos, ang, burn, x0, y0, px0, py0, dv, toa = search_mt(
+        stat, pos, ang, burn, x0, y0, p0_x, p0_y, dv, toa = search_mt(
             threads,
             1,
             duration,
@@ -289,8 +289,8 @@ def low_energy(threads, n):
                 best_burn = burn
                 best_x0 = x0
                 best_y0 = y0
-                best_px0 = px0
-                best_py0 = py0
+                best_p0_x = p0_x
+                best_p0_y = p0_y
                 best_dv = dv
                 best_toa = toa
             else:
@@ -304,12 +304,12 @@ def low_energy(threads, n):
         print("# Search runtime   = %3.2fs" % (runtime))
 
     # Initialize arrays
-    t_list = np.linspace(0, duration, n)
-    x_list = np.zeros(n)
-    y_list = np.zeros(n)
-    px_list = np.zeros(n)
-    py_list = np.zeros(n)
-    err_list = np.zeros(n)
+    ts = np.linspace(0, duration, n)
+    xs = np.zeros(n)
+    ys = np.zeros(n)
+    p_xs = np.zeros(n)
+    p_ys = np.zeros(n)
+    step_errors = np.zeros(n)
     h_list = np.zeros(n)
     info = np.zeros(2)
 
@@ -320,18 +320,18 @@ def low_energy(threads, n):
         duration,
         x0,
         y0,
-        px0,
-        py0,
-        x_list,
-        y_list,
-        px_list,
-        py_list,
-        err_list,
+        p0_x,
+        p0_y,
+        xs,
+        ys,
+        p_xs,
+        p_ys,
+        step_errors,
         h_list,
         info,
     )
     exit()
-    return t_list, x_list, y_list, px_list, py_list, err_list, h_list
+    return ts, xs, ys, p_xs, p_ys, step_errors, h_list
 
 
 def low_energy_parts8(threads, n):
@@ -341,7 +341,7 @@ def low_energy_parts8(threads, n):
         n (int): Positions stored.
 
     Returns:
-        Tuple of time-, x-, y-, px- and py lists.
+        Tuple of time-, x-, y-, p_x- and p_y lists.
     
     """
 
@@ -381,7 +381,7 @@ def low_energy_parts8(threads, n):
             ang_high = ang + ang_range
             burn_low = burn - burn_range
             burn_high = burn + burn_range
-            stat, pos, ang, burn, x0, y0, px0, py0, dv, toa = search_mt(
+            stat, pos, ang, burn, x0, y0, p0_x, p0_y, dv, toa = search_mt(
                 threads,
                 1,
                 duration,
@@ -406,8 +406,8 @@ def low_energy_parts8(threads, n):
                     best_burn = burn
                     best_x0 = x0
                     best_y0 = y0
-                    best_px0 = px0
-                    best_py0 = py0
+                    best_p0_x = p0_x
+                    best_p0_y = p0_y
                     best_dv = dv
                     best_toa = toa
                 else:
@@ -431,19 +431,19 @@ def low_energy_parts8(threads, n):
             best_burn,
             best_x0,
             best_y0,
-            best_px0,
-            best_py0,
+            best_p0_x,
+            best_p0_y,
             best_dv,
             best_toa,
         )
 
     # Initialize arrays
-    t_list = np.linspace(0, duration, n)
-    x_list = np.zeros(n)
-    y_list = np.zeros(n)
-    px_list = np.zeros(n)
-    py_list = np.zeros(n)
-    err_list = np.zeros(n)
+    ts = np.linspace(0, duration, n)
+    xs = np.zeros(n)
+    ys = np.zeros(n)
+    p_xs = np.zeros(n)
+    p_ys = np.zeros(n)
+    step_errors = np.zeros(n)
     h_list = np.zeros(n)
     info = np.zeros(2)
 
@@ -454,21 +454,21 @@ def low_energy_parts8(threads, n):
         duration,
         x0,
         y0,
-        px0,
-        py0,
-        x_list,
-        y_list,
-        px_list,
-        py_list,
-        err_list,
+        p0_x,
+        p0_y,
+        xs,
+        ys,
+        p_xs,
+        p_ys,
+        step_errors,
         h_list,
         info,
     )
     # exit()
-    return t_list, x_list, y_list, px_list, py_list, err_list, h_list
+    return ts, xs, ys, p_xs, p_ys, step_errors, h_list
 
 
-def refine(threads, n, duration, pos, ang, burn, x0, y0, px0, py0):
+def refine(threads, n, duration, pos, ang, burn, x0, y0, p0_x, p0_y):
     """Integrate trajectory for the reduced 3-body problem.
 
     Args:
@@ -476,11 +476,11 @@ def refine(threads, n, duration, pos, ang, burn, x0, y0, px0, py0):
         duration (float): Time duration of simulation.
         x0 (float): Initial x-coordinate
         y0 (float): Initial y-coordinate
-        px0 (float): Initial generalized x-momentum
-        py0 (float): Initial generalized y-momentum
+        p0_x (float): Initial generalized x-momentum
+        p0_y (float): Initial generalized y-momentum
 
     Returns:
-        Tuple of time-, x-, y-, px- and py lists.
+        Tuple of time-, x-, y-, p_x- and p_y lists.
     
     """
     print("# Running refine.")
@@ -516,7 +516,7 @@ def refine(threads, n, duration, pos, ang, burn, x0, y0, px0, py0):
         ang_high = ang + ang_range
         burn_low = burn - burn_range
         burn_high = burn + burn_range
-        stat, pos, ang, burn, x0, y0, px0, py0, dv, toa = search_mt(
+        stat, pos, ang, burn, x0, y0, p0_x, p0_y, dv, toa = search_mt(
             threads,
             1,
             duration,
@@ -541,8 +541,8 @@ def refine(threads, n, duration, pos, ang, burn, x0, y0, px0, py0):
                 best_burn = burn
                 best_x0 = x0
                 best_y0 = y0
-                best_px0 = px0
-                best_py0 = py0
+                best_p0_x = p0_x
+                best_p0_y = p0_y
                 best_dv = dv
                 best_toa = toa
             else:
@@ -565,19 +565,19 @@ def refine(threads, n, duration, pos, ang, burn, x0, y0, px0, py0):
         best_burn,
         best_x0,
         best_y0,
-        best_px0,
-        best_py0,
+        best_p0_x,
+        best_p0_y,
         best_dv,
         best_toa,
     )
 
     # Initialize arrays
-    t_list = np.linspace(0, duration, n)
-    x_list = np.zeros(n)
-    y_list = np.zeros(n)
-    px_list = np.zeros(n)
-    py_list = np.zeros(n)
-    err_list = np.zeros(n)
+    ts = np.linspace(0, duration, n)
+    xs = np.zeros(n)
+    ys = np.zeros(n)
+    p_xs = np.zeros(n)
+    p_ys = np.zeros(n)
+    step_errors = np.zeros(n)
     h_list = np.zeros(n)
     info = np.zeros(2)
 
@@ -588,15 +588,15 @@ def refine(threads, n, duration, pos, ang, burn, x0, y0, px0, py0):
         duration,
         x0,
         y0,
-        px0,
-        py0,
-        x_list,
-        y_list,
-        px_list,
-        py_list,
-        err_list,
+        p0_x,
+        p0_y,
+        xs,
+        ys,
+        p_xs,
+        p_ys,
+        step_errors,
         h_list,
         info,
     )
     # exit()
-    return t_list, x_list, y_list, px_list, py_list, err_list, h_list
+    return ts, xs, ys, p_xs, p_ys, step_errors, h_list
