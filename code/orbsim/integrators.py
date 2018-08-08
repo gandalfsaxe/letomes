@@ -13,7 +13,7 @@ def euler_step(h, x, y, p_x, p_y):
     v_y = p_y - x
     y += v_y * h
 
-    Pdot_x, Pdot_y = [get_Pdot_x(x, y, p_x, p_y),get_Pdot_y(x, y, p_x, p_y)]
+    Pdot_x, Pdot_y = [get_pdot_x(x, y, p_y), get_pdot_y(x, y, p_x)]
     p_x += Pdot_x * h
     p_y += Pdot_y * h
     return x, y, p_x, p_y
@@ -30,9 +30,9 @@ def verlet_step(h, x, y, p_x, p_y):
     v_y = p_y - x
     y += v_y * half_h
 
-    Pdot_x, Pdot_y = [get_Pdot_x(x, y, p_x, p_y), get_Pdot_y(x,y,p_x,p_y)]
+    Pdot_x, Pdot_y = [get_pdot_x(x, y, p_y), get_pdot_y(x, y, p_x)]
     p_x = (p_x + (2.0 * Pdot_x + (Pdot_y * 2 + p_x) * half_h) * half_h) * denominator
-    Pdot_y2 = get_Pdot_y(x, y, p_x, p_y)
+    Pdot_y2 = get_pdot_y(x, y, p_x)
     p_y += (Pdot_y * Pdot_y2) * half_h
 
     v_x = p_x + y

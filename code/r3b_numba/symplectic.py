@@ -15,6 +15,7 @@ from math import pi, sqrt
 import numpy as np
 from numba import jit
 
+from orbsim.analyticals import get_pdot_x, get_pdot_y, get_v_x, get_v_y
 from orbsim.constants import (
     ORBITAL_TOLERANCE,
     day,
@@ -37,38 +38,6 @@ def F(x, y):
     Fx = -((1 - k) * (x + k)) / denominator_1 + k * (1 - k - x) / denominator_2
     Fy = -(1 - k) * y / denominator_1 - k * y / denominator_2  # new
     return Fx, Fy
-
-@jit
-def pdot_denominators(x, y, k):
-    denominator_1 = ((x + k) ** 2 + y ** 2) * sqrt((x + k) ** 2 + y ** 2)
-    denominator_2 = ((1 - k - x) ** 2 + y ** 2) * sqrt((1 - k - x) ** 2 + y ** 2)
-    return denominator_1, denominator_2
-
-
-@jit
-def get_pdot_x(x, y, p_y):
-    denominator_1, denominator_2 = pdot_denominators(x, y, k)
-    pdot_x = p_y - ((1 - k) * (x + k)) / denominator_1 + k * (1 - k - x) / denominator_2
-    return pdot_x
-
-
-@jit
-def get_pdot_y(x, y, p_x):
-    denominator_1, denominator_2 = pdot_denominators(x, y, k)
-    pdot_y = -p_x - (1 - k) * y / denominator_1 - k * y / denominator_2
-    return pdot_y
-
-
-@jit
-def get_v_x(y, p_x):
-    v_x = p_x + y
-    return v_x
-
-
-@jit
-def get_v_y(x, p_y):
-    v_y = p_y - x
-    return v_y
 
 
 @jit
