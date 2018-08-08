@@ -38,20 +38,21 @@ def launch_sim(psi, max_iter=100000):
     p0_y = v_y + burnDv * burnDv_y + x0
 
     """SIMULATE"""
-    #print(f"running symplectic with [x0, y0, p0_x, p0_y]{[x0, y0, p0_x, p0_y]}")
+    # print(f"running symplectic with [x0, y0, p0_x, p0_y]{[x0, y0, p0_x, p0_y]}")
     starttime = time.time()
     successful, score, path = symplectic(x0, y0, p0_x, p0_y, max_iter=int(max_iter))
-    symplectic_time=time.time()-starttime
+    symplectic_time = time.time() - starttime
     if successful:
         return score, path
     else:
-        return (score*100)**2, path
+        return (score * 100) ** 2, path
+
 
 class space:
     def __init__(self):
-        self.mars = jpl_lp('mars')
-        self.earth = jpl_lp('earth')
+        self.mars = jpl_lp("mars")
+        self.earth = jpl_lp("earth")
+
 
 def net_gravitational_force(epoch, position):
     pass
-    
