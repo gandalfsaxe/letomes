@@ -32,6 +32,7 @@ from orbsim.constants import (
 )
 from r3b_numba import reduced3body as r3b
 
+
 def run_test():
 
     MODE = sys.argv[1]
@@ -39,11 +40,9 @@ def run_test():
     FORMAT = "png"
     # FORMAT = "pdf"
 
- 
     mode_dict = {
         # Keys: Possible input arguments (argv)
         # Values: Output folder name of associated log/figs of run
-        
         # Precalculated initial conditions for specific orbit types
         "leo": "demo_leo_closed",
         "llo": "demo_llo_closed",
@@ -54,10 +53,9 @@ def run_test():
         "ls": "demo_leto_short",
         "ll": "demo_leto_long",
         # "l1": "demo_L1",  # TODO: Takes a long time, probably doesn't work, look at later
-        
         # Search for trajectories
         "sh": "search_hohmann",
-        "sl": "search_leto", #FIXME: Figure out why no figs when search_hohmann have
+        "sl": "search_leto",  # FIXME: Figure out why no figs when search_hohmann have
         # "slp8": "search_low_energy_parts_8",  # TODO: Doesn't work - what does it do?
         # "sr": "search_refine"  # TODO: Doesn't work - what does it do?
     }
@@ -71,7 +69,6 @@ def run_test():
     old_stdout = sys.stdout
     log_file = open(OUTPUT_DIR + "log_" + MODE_NAME + ".log", "w")
     sys.stdout = log_file
-
 
     try:
         threads = int(os.environ["OMP_NUM_THREADS"])
@@ -251,17 +248,11 @@ def run_test():
     #################### FUNCTION CALLS ####################
 
     if MODE == "sh":  # Search for Hohmann:
-        ts, xs, ys, p_xs, p_ys, step_errors, h_list = r3b.hohmann(
-            threads, n
-        )
+        ts, xs, ys, p_xs, p_ys, step_errors, h_list = r3b.hohmann(threads, n)
     elif MODE == "sl":  # Search for LETO
-        ts, xs, ys, p_xs, p_ys, step_errors, h_list = r3b.low_energy(
-            threads, n
-        )
+        ts, xs, ys, p_xs, p_ys, step_errors, h_list = r3b.low_energy(threads, n)
     elif MODE == "sl_parts8":
-        ts, xs, ys, p_xs, p_ys, step_errors, h_list = r3b.low_energy_parts8(
-            threads, n
-        )
+        ts, xs, ys, p_xs, p_ys, step_errors, h_list = r3b.low_energy_parts8(threads, n)
     elif MODE == "search_refine":
         ts, xs, ys, p_xs, p_ys, step_errors, h_list = r3b.refine(
             threads, n, duration, pos, ang, burn, x0, y0, p0_x, p0_y
@@ -309,14 +300,15 @@ def run_test():
     X_list_moon = lunar_position_x * np.cos(ts)
     Y_list_moon = lunar_position_x * np.sin(ts)
 
-    # Rel. step_error 
+    # Rel. step_error
     plt.figure()
     plt.plot(ts * unit_time, step_errors)
     plt.xlabel("time (days)")
     plt.ylabel("step error")
     plt.yscale("log")
     plt.savefig(
-        OUTPUT_DIR + "{}-step_error_vs_time.{}".format(MODE_NAME, FORMAT), bbox_inches="tight"
+        OUTPUT_DIR + "{}-step_error_vs_time.{}".format(MODE_NAME, FORMAT),
+        bbox_inches="tight",
     )
 
     # Step sizes
@@ -326,7 +318,8 @@ def run_test():
     plt.ylabel("step size")
     plt.yscale("log")
     plt.savefig(
-        OUTPUT_DIR + "{}-step_size_vs_time.{}".format(MODE_NAME, FORMAT), bbox_inches="tight"
+        OUTPUT_DIR + "{}-step_size_vs_time.{}".format(MODE_NAME, FORMAT),
+        bbox_inches="tight",
     )
 
     # Total energy error
@@ -337,7 +330,8 @@ def run_test():
     plt.xlabel("time (days)")
     plt.ylabel("Hamiltonian relative error (arbitrary units)")
     plt.savefig(
-        OUTPUT_DIR + "{}-energy_error_vs_time.{}".format(MODE_NAME, FORMAT), bbox_inches="tight"
+        OUTPUT_DIR + "{}-energy_error_vs_time.{}".format(MODE_NAME, FORMAT),
+        bbox_inches="tight",
     )
 
     # Zoom earth
@@ -372,7 +366,8 @@ def run_test():
     plt.xlabel("x-position (arbitrary units)")
     plt.ylabel("y-position (arbitrary units)")
     plt.savefig(
-        OUTPUT_DIR + "{}-earth_exit_y(x).{}".format(MODE_NAME, FORMAT), bbox_inches="tight"
+        OUTPUT_DIR + "{}-earth_exit_y(x).{}".format(MODE_NAME, FORMAT),
+        bbox_inches="tight",
     )
 
     # Zoom moon
@@ -407,7 +402,8 @@ def run_test():
     plt.xlabel("x-position (arbitrary units)")
     plt.ylabel("y-position (arbitrary units)")
     plt.savefig(
-        OUTPUT_DIR + "{}-moon_entry_y(x).{}".format(MODE_NAME, FORMAT), bbox_inches="tight"
+        OUTPUT_DIR + "{}-moon_entry_y(x).{}".format(MODE_NAME, FORMAT),
+        bbox_inches="tight",
     )
 
     # View center of mass
@@ -430,7 +426,8 @@ def run_test():
     plt.xlabel("x-position (arbitrary units)")
     plt.ylabel("y-position (arbitrary units)")
     plt.savefig(
-        OUTPUT_DIR + "{}-Y(X)_inertial.{}".format(MODE_NAME, FORMAT), bbox_inches="tight"
+        OUTPUT_DIR + "{}-Y(X)_inertial.{}".format(MODE_NAME, FORMAT),
+        bbox_inches="tight",
     )
 
     # Position plot (x,y)
@@ -476,7 +473,8 @@ def run_test():
     plt.xlabel("x-position (arbitrary units)")
     plt.ylabel("y-position (arbitrary units)")
     plt.savefig(
-        OUTPUT_DIR + "{}-y(x)_corotating.{}".format(MODE_NAME, FORMAT), bbox_inches="tight"
+        OUTPUT_DIR + "{}-y(x)_corotating.{}".format(MODE_NAME, FORMAT),
+        bbox_inches="tight",
     )
     # plt.savefig('r3b/r3b_y(x)_euler_symplectic.{}',MODE_NAME, FORMAT='tight')
     # plt.show()
