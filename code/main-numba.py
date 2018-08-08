@@ -41,10 +41,6 @@ pathlib.Path(TESTS_DIR).mkdir(parents=True, exist_ok=True)
 
 def run_test():
 
-    old_stdout = sys.stdout
-    log_file = open(TESTS_DIR + "/hohmann-search-test.log", "w")
-    sys.stdout = log_file
-
     try:
         threads = int(os.environ["OMP_NUM_THREADS"])
     except KeyError:
@@ -71,6 +67,10 @@ def run_test():
     # DEMO = 'search_low_energy'
     # DEMO = 'search_low_energy_parts8'
     # DEMO = 'search_refine'
+
+    old_stdout = sys.stdout
+    log_file = open(TESTS_DIR + "log_" + DEMO + ".log", "w")
+    sys.stdout = log_file
 
     n = 1000000
 
