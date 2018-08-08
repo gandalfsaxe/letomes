@@ -10,7 +10,7 @@ __pycache__/
 code/.vscode/.ropeproject/
 
 # folders
-code/**/fig/
+
 
 # python package pip setup (run with `pip install -e .` in code root)
 orbsim.egg-info
