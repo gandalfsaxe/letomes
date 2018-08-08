@@ -39,8 +39,12 @@ def run_test():
     FORMAT = "png"
     # FORMAT = "pdf"
 
+ 
     mode_dict = {
-        # Precalculated initial Conditions
+        # Keys: Possible input arguments (argv)
+        # Values: Output folder name of associated log/figs of run
+        
+        # Precalculated initial conditions for specific orbit types
         "leo": "demo_leo_closed",
         "llo": "demo_llo_closed",
         "h": "demo_hohmann",
@@ -50,7 +54,8 @@ def run_test():
         "ls": "demo_leto_short",
         "ll": "demo_leto_long",
         # "l1": "demo_L1",  # TODO: Takes a long time, probably doesn't work, look at later
-        # Or search for trajectories
+        
+        # Search for trajectories
         "sh": "search_hohmann",
         "sl": "search_leto", #FIXME: Figure out why no figs when search_hohmann have
         "slp8": "search_low_energy_parts_8",  # TODO: Doesn't work - what does it do?
