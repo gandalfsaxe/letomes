@@ -15,7 +15,7 @@
   },
 
   "cSpell.words": [
-    "pdot",
+    "LETO",
     "celestials",
     "corotating",
     "hohmann",
@@ -24,6 +24,7 @@
     "nondimensionalization",
     "numba",
     "numpy",
+    "pdot",
     "pyplot",
     "pytest",
     "symplectic",
