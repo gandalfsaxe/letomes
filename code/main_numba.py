@@ -58,8 +58,8 @@ def run_test():
         # Search for trajectories
         "sh": "search_hohmann",
         "sl": "search_leto", #FIXME: Figure out why no figs when search_hohmann have
-        "slp8": "search_low_energy_parts_8",  # TODO: Doesn't work - what does it do?
-        "sr": "search_refine"  # TODO: Doesn't work - what does it do?
+        # "slp8": "search_low_energy_parts_8",  # TODO: Doesn't work - what does it do?
+        # "sr": "search_refine"  # TODO: Doesn't work - what does it do?
     }
     MODE_NAME = mode_dict[MODE]
 
