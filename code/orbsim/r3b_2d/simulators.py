@@ -1,10 +1,13 @@
+import time
+
 import numpy as np
 from numba import jit
-from .constants import *
-from .integrators import symplectic
-from pykep.planet import jpl_lp
 from pykep import epoch
-import time
+from pykep.planet import jpl_lp
+
+from . import earth_position_x, leo_radius_nondim, leo_velocity_nondim
+from .integrators import symplectic
+
 
 def launch_sim(psi, max_iter=100000):
     """

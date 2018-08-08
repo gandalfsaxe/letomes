@@ -2,7 +2,7 @@ from math import sqrt
 
 from numba import jit
 
-from .constants import k
+from . import k
 
 
 """

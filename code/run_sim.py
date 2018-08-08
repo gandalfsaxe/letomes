@@ -1,8 +1,8 @@
 import time
 
-from orbsim.constants import *
+from orbsim.r3b_2d import unit_velocity
 from orbsim.plotting import orbitplot2d, orbitplot_non_inertial
-from orbsim.simulators import launch_sim
+from orbsim.r3b_2d.simulators import launch_sim
 
 if __name__ == "__main__":
     # for x in range(10):

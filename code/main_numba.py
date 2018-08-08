@@ -13,19 +13,17 @@ from math import cos, pi, sin
 import matplotlib.pyplot as plt
 import numpy as np
 
-from orbsim.constants import (
+from orbsim import day, earth_radius, lunar_radius
+from orbsim.r3b_2d import (
     ORBITAL_TOLERANCE,
     L1_position_x,
-    day,
     earth_position_x,
-    earth_radius,
     k,
     leo_radius,
     leo_velocity,
     llo_radius,
     llo_velocity,
     lunar_position_x,
-    lunar_radius,
     unit_length,
     unit_time,
     unit_velocity,

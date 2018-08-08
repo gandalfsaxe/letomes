@@ -15,12 +15,10 @@ from math import pi, sqrt
 import numpy as np
 from numba import jit
 
-from orbsim.analyticals import get_pdot_x, get_pdot_y, get_v_x, get_v_y
-from orbsim.constants import (
+from orbsim import day, earth_radius
+from orbsim.r3b_2d import (
     ORBITAL_TOLERANCE,
-    day,
     earth_position_x,
-    earth_radius,
     k,
     llo_radius,
     llo_velocity,
@@ -28,6 +26,7 @@ from orbsim.constants import (
     unit_length,
     unit_velocity,
 )
+from orbsim.r3b_2d.analyticals import get_pdot_x, get_pdot_y, get_v_x, get_v_y
 
 
 ### TODO: DELETE SOON!!!

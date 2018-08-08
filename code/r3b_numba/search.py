@@ -17,8 +17,8 @@ from multiprocessing import Pool
 
 import numpy as np
 
-from orbsim.constants import (
-    day,
+from orbsim import day
+from orbsim.r3b_2d import (
     earth_position_x,
     leo_radius_nondim,
     leo_velocity,

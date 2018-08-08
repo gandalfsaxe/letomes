@@ -1,6 +1,23 @@
 from enum import Enum
+
 from numba import jit
-from .constants import *
+
+from . import earth_mass, earth_radius, lunar_mass, lunar_radius
+from .r3b_2d import (
+    EARTH_ALTITUDE,
+    LUNAR_ALTITUDE,
+    ORBITAL_TOLERANCE,
+    earth_position_x,
+    leo_radius,
+    leo_radius_nondim,
+    leo_velocity,
+    leo_velocity_nondim,
+    llo_radius,
+    llo_velocity,
+    lunar_position_x,
+    unit_length,
+    unit_velocity,
+)
 
 
 class planet:

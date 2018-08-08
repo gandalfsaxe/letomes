@@ -1,8 +1,12 @@
-from .analyticals import *
-from .constants import *
-from .planets import *
 import time
+from math import sqrt
+
 from numba import jit
+
+from .analyticals import get_pdot_x, get_pdot_y
+
+from . import h_default, h_min, tol
+from ..planets import planet, celestials
 
 
 @jit
@@ -66,7 +70,7 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
     Dv = None
     count = 0
     orbital_radius_lower_bound, orbital_radius_upper_bound = target.get_orbital_bounds()
-    #print(orbital_radius_upper_bound)
+    # print(orbital_radius_upper_bound)
     earth = planet(celestials.EARTH)
     for i in range(max_iter):
 
@@ -134,7 +138,7 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
             )
             path_storage.append([x, y, p_x, p_y, h])
             break
-            
+
         path_storage.append([x, y, p_x, p_y, h])
 
         """check if we somehow accidentally struck the earth (whoops)"""
@@ -144,7 +148,7 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
         # not necessarily a crash, but we don't want paths that take us to such risky territories
         critical_distance = earth.get_critical_bounds()
         if earth_distance < critical_distance:
-            #print("Anga crashed into the earth!")
+            # print("Anga crashed into the earth!")
             return True, Dv, path_storage
 
     # import io

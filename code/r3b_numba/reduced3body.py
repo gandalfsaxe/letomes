@@ -14,8 +14,8 @@ from math import pi, sqrt
 
 import numpy as np
 
-from orbsim.constants import (
-    day,
+from orbsim import day
+from orbsim.r3b_2d import (
     llo_radius,
     llo_velocity,
     unit_length,
@@ -60,19 +60,7 @@ def trajectory(n, duration, pos, ang, burn, x0, y0, p0_x, p0_y):
     # Find orbits
     runtime = time.time()
     status = symplectic(
-        n,
-        duration,
-        x0,
-        y0,
-        p0_x,
-        p0_y,
-        xs,
-        ys,
-        p_xs,
-        p_ys,
-        step_errors,
-        h_list,
-        info,
+        n, duration, x0, y0, p0_x, p0_y, xs, ys, p_xs, p_ys, step_errors, h_list, info
     )
     runtime = time.time() - runtime
 
@@ -204,19 +192,7 @@ def hohmann(threads, n):
     # Do trajectory
     duration = 10 / unit_time
     status = symplectic(
-        n,
-        duration,
-        x0,
-        y0,
-        p0_x,
-        p0_y,
-        xs,
-        ys,
-        p_xs,
-        p_ys,
-        step_errors,
-        h_list,
-        info,
+        n, duration, x0, y0, p0_x, p0_y, xs, ys, p_xs, p_ys, step_errors, h_list, info
     )
 
     return ts, xs, ys, p_xs, p_ys, step_errors, h_list
@@ -316,19 +292,7 @@ def low_energy(threads, n):
     # Do trajectory
     duration = toa + (2.0 * pi * llo_radius / llo_velocity) / (unit_time * day)
     status = symplectic(
-        n,
-        duration,
-        x0,
-        y0,
-        p0_x,
-        p0_y,
-        xs,
-        ys,
-        p_xs,
-        p_ys,
-        step_errors,
-        h_list,
-        info,
+        n, duration, x0, y0, p0_x, p0_y, xs, ys, p_xs, p_ys, step_errors, h_list, info
     )
     exit()
     return ts, xs, ys, p_xs, p_ys, step_errors, h_list
@@ -450,19 +414,7 @@ def low_energy_parts8(threads, n):
     # Do trajectory
     # duration = toa+(2.0*pi*llo_radius/llo_velocity)/(unit_time*day)
     status = symplectic(
-        n,
-        duration,
-        x0,
-        y0,
-        p0_x,
-        p0_y,
-        xs,
-        ys,
-        p_xs,
-        p_ys,
-        step_errors,
-        h_list,
-        info,
+        n, duration, x0, y0, p0_x, p0_y, xs, ys, p_xs, p_ys, step_errors, h_list, info
     )
     # exit()
     return ts, xs, ys, p_xs, p_ys, step_errors, h_list
@@ -584,19 +536,7 @@ def refine(threads, n, duration, pos, ang, burn, x0, y0, p0_x, p0_y):
     # Do trajectory
     duration = toa + (2.0 * pi * llo_radius / llo_velocity) / (unit_time * day)
     status = symplectic(
-        n,
-        duration,
-        x0,
-        y0,
-        p0_x,
-        p0_y,
-        xs,
-        ys,
-        p_xs,
-        p_ys,
-        step_errors,
-        h_list,
-        info,
+        n, duration, x0, y0, p0_x, p0_y, xs, ys, p_xs, p_ys, step_errors, h_list, info
     )
     # exit()
     return ts, xs, ys, p_xs, p_ys, step_errors, h_list

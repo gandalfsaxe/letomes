@@ -1,11 +1,11 @@
-from math import cos, sin
-from .planets import celestials
+from math import cos, pi, sin, sqrt
 
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 
-from orbsim.constants import *
+from .planets import celestials
+from .r3b_2d import L1_position_x, earth_position_x, k, lunar_position_x
 
 
 def orbitplot3d(completed_path, psi, title=None):
@@ -90,10 +90,10 @@ def orbitplot2d(completed_path, psi=None, title=None):
         plt.show()
     else:
         filename = f"./path_{title}.pdf"
-        plt.savefig(fname=filename)
+        plt.savefig(filename)
 
 
-def orbitplot_non_inertial(completed_path, psi = None, title=None):
+def orbitplot_non_inertial(completed_path, psi=None, title=None):
     """
     input: output of launch_sim, its launch parameters, and an optional title if the file is to be saved
     
@@ -129,7 +129,7 @@ def orbitplot_non_inertial(completed_path, psi = None, title=None):
         plt.show()
     else:
         filename = f"./path_{title}_non-inertial.pdf"
-        plt.savefig(fname=filename)
+        plt.savefig(filename)
 
 
 def orbital_circle(celestial):
@@ -151,4 +151,3 @@ def orbital_circle(celestial):
         return None
 
     return [circle_x, circle_y]
-
