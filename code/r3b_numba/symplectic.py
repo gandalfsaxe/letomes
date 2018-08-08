@@ -35,45 +35,34 @@ def F(x, y):
     denominator_1 = ((x + k) ** 2 + y ** 2) * sqrt((x + k) ** 2 + y ** 2)
     denominator_2 = ((1 - k - x) ** 2 + y ** 2) * sqrt((1 - k - x) ** 2 + y ** 2)
     Fx = -((1 - k) * (x + k)) / denominator_1 + k * (1 - k - x) / denominator_2
-    Fy = -(1 - k) * y / denominator_1 - k * y / denominator_2  # new
+    Fy = -(1 - k) * y / denominator_1 - k * y / denominator_2
     return Fx, Fy
 
 
 @jit
-def pdot_denominators(x, y, k):
-    denominator_1 = ((x + k) ** 2 + y ** 2) * sqrt((x + k) ** 2 + y ** 2)
-    denominator_2 = ((1 - k - x) ** 2 + y ** 2) * sqrt((1 - k - x) ** 2 + y ** 2)
-    return denominator_1, denominator_2
-
-
-@jit
-def get_pdot_x(x, y, p_y):
-    denominator_1, denominator_2 = pdot_denominators(x, y, k)
-    pdot_x = p_y - ((1 - k) * (x + k)) / denominator_1 + k * (1 - k - x) / denominator_2
-    return pdot_x
-
-
-@jit
-def get_pdot_y(x, y, p_x):
-    denominator_1, denominator_2 = pdot_denominators(x, y, k)
-    pdot_y = -p_x - (1 - k) * y / denominator_1 - k * y / denominator_2
-    return pdot_y
-
-
-@jit
-def get_v_x(y, p_x):
-    v_x = p_x + y
-    return v_x
-
-
-@jit
-def get_v_y(x, p_y):
-    v_y = p_y - x
-    return v_y
+def explicit_euler_step(h, x, y, p_x, p_y):
+    """
+    Unused function, left here mostly to show the difference between explicit and
+    symplectic integrators
+    """
+    # Step 1 - get all time derivatives
+    v_x = get_v_x(y, p_x)
+    v_y = get_v_y(x, p_y)
+    pdot_x = get_pdot_x(x, y, p_y)
+    pdot_y = get_pdot_y(x, y, p_x)
+    # Step 2 - linear extrapolation
+    x = x + v_x * h
+    y = y + v_y * h
+    p_x = p_x + pdot_x * h
+    p_y = p_y + pdot_y * h
 
 
 @jit
 def explicit_euler_step(h, x, y, p_x, p_y):
+    """
+    Unused function, left here mostly to show the difference between explicit and
+    symplectic integrators
+    """
     # Step 1 - get all time derivatives
     v_x = get_v_x(y, p_x)
     v_y = get_v_y(x, p_y)
@@ -106,6 +95,53 @@ def symplectic_euler_step(h, x, y, p_x, p_y):
 
 
 @jit
+def symplectic_euler_step1(h, x, y, p_x, p_y):
+    # Step 1
+    pdot_x = get_pdot_x(x, y, p_y)
+    p_x = (p_x + (pdot_x + Fy * h) * h) / (1.0 + h * h)
+    pdot_y = get_pdot_y(x, y, p_x)
+    p_y = p_y + pdot_y * h
+    # Step 2
+    v_x = get_v_x(y, p_x)
+    v_y = get_v_y(x, p_y)
+    x = x + v_x * h
+    y = y + v_y * h
+    return x, y, p_x, p_y
+
+
+@jit
+def symplectic_euler_step2(h, x, y, p_x, p_y):
+    # Step 1
+    pdot_x = get_pdot_x(x, y, p_y)
+    pdot_y = get_pdot_y(x, y, p_x)
+    p_x = p_x + pdot_x * h
+    p_y = p_y + pdot_y * h
+    # Step 2
+    v_x = get_v_x(y, p_x)
+    x = (x + (v_x + p_y * h) * h) / (1.0 + h * h)
+    v_y = get_v_y(x, p_y)
+    y = y + v_y * h
+    return x, y, p_x, p_y
+
+
+# @jit
+# def symplectic_euler_step(h, x, y, p_x, p_y):
+#     # Step 3
+#     pdot_x = get_pdot_x(x, y, p_y)
+#     pdot_y = get_pdot_y(x, y, p_x)
+#     p_x = p_x + pdot_x * h
+#     p_y = p_y + pdot_y * h
+#     # Step 1
+#     v_x = get_v_x(y, p_x)
+#     x = (x + (v_x + p_y * h) * h) / (1.0 + h ** 2)
+#     # Step 2
+#     v_y = get_v_y(x, p_y)
+#     y = y + v_y * h
+
+#     return x, y, p_x, p_y
+
+
+@jit
 def symplectic_verlet_step(h, x, y, p_x, p_y):
     hh = 0.5 * h
     denominator = 1.0 / (1.0 + hh ** 2)
@@ -116,12 +152,12 @@ def symplectic_verlet_step(h, x, y, p_x, p_y):
     v_y = get_v_y(x, p_y)
     y = y + v_y * hh
     # Step 2
-    Fx, Fy = F(x, y)
     pdot_x = get_pdot_x(x, y, p_y)
     pdot_y = get_pdot_y(x, y, p_x)
     p_x = (p_x + (2.0 * pdot_x + (2 * pdot_y + p_x) * hh) * hh) * denominator
     p_y = (
-        p_y + (pdot_y + get_pdot_y(x, y, p_x)) * hh)  # TODO: mixed, what's correct? Derive theory
+        p_y + (pdot_y + get_pdot_y(x, y, p_x)) * hh
+    )  # TODO: mixed, that correct? Derive theory
     # Step 3
     v_x = get_v_x(y, p_x)
     v_y = get_v_y(x, p_y)
