@@ -14,8 +14,8 @@ class planet:
             self.celestial_radius = lunar_radius
             self.celestial_mass = lunar_mass
             self.altitude = LUNAR_ALTITUDE
-            self.orbital_radius_nondim = None
-            self.orbital_velocity_nondim = None
+            self.orbital_radius_nondim = self.orbital_radius / unit_length
+            self.orbital_velocity_nondim = self.orbital_velocity / unit_velocity
         elif celestial == celestials.EARTH:
             self.orbital_radius = leo_radius
             self.orbital_velocity = leo_velocity

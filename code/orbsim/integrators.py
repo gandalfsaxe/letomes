@@ -63,10 +63,10 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
     path_storage = []
     path_storage.append([x, y, p_x, p_y, h])
     smallest_distance = 1e6
-    Dv = 1e10
+    Dv = None
     count = 0
     orbital_radius_lower_bound, orbital_radius_upper_bound = target.get_orbital_bounds()
-    print(orbital_radius_upper_bound)
+    #print(orbital_radius_upper_bound)
     earth = planet(celestials.EARTH)
     for i in range(max_iter):
 
@@ -132,7 +132,9 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
             Dv = sqrt(
                 v_radial ** 2 + (v_magnitude - target.orbital_velocity_nondim) ** 2
             )
-
+            path_storage.append([x, y, p_x, p_y, h])
+            break
+            
         path_storage.append([x, y, p_x, p_y, h])
 
         """check if we somehow accidentally struck the earth (whoops)"""
@@ -142,11 +144,11 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
         # not necessarily a crash, but we don't want paths that take us to such risky territories
         critical_distance = earth.get_critical_bounds()
         if earth_distance < critical_distance:
-            print("Anga crashed into the earth!")
-            return Dv, path_storage
+            #print("Anga crashed into the earth!")
+            return True, Dv, path_storage
 
     # import io
     # with open("tests/testsim.log", "w") as file:
     # file.writelines(str(path_storage))
-    print("smallest distance =", smallest_distance)
-    return Dv, path_storage
+    # print("smallest distance =", smallest_distance)
+    return False, smallest_distance, path_storage

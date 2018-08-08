@@ -31,15 +31,18 @@ def launch_sim(psi, max_iter=100000):
     burnDv_y = np.sin(burn_ang) * vhat_x + np.cos(burn_ang) * vhat_y
 
     # resultant momentum vector
-    p0_x = v_x + burnDv * burnDv_y - y0
-    p0_y = v_y + burnDv * burnDv_x + x0
+    p0_x = v_x + burnDv * burnDv_x - y0
+    p0_y = v_y + burnDv * burnDv_y + x0
 
     """SIMULATE"""
+    #print(f"running symplectic with [x0, y0, p0_x, p0_y]{[x0, y0, p0_x, p0_y]}")
     starttime = time.time()
-    result = symplectic(x0, y0, p0_x, p0_y, max_iter=max_iter)
+    successful, score, path = symplectic(x0, y0, p0_x, p0_y, max_iter=int(max_iter))
     symplectic_time=time.time()-starttime
-    print(f"\nsymplectic runtime: {symplectic_time}")
-    return result
+    if successful:
+        return score, path
+    else:
+        return (score*100)**2, path
 
 class space:
     def __init__(self):
