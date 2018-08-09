@@ -5,11 +5,11 @@ from numba import jit
 from pykep import epoch
 from pykep.planet import jpl_lp
 
-from . import earth_position_x, leo_radius_nondim, leo_velocity_nondim
+from . import *
 from .integrators import symplectic
 
 
-def launch_sim(psi, max_iter=100000):
+def launch_sim(psi, duration = 3/unit_time,max_iter=1e7):
     """
     return: [Dv, [x, y, px, py, h]]
     launch (not really a launch since we start from LEO) a 
@@ -39,9 +39,9 @@ def launch_sim(psi, max_iter=100000):
 
     """SIMULATE"""
     # print(f"running symplectic with [x0, y0, p0_x, p0_y]{[x0, y0, p0_x, p0_y]}")
-    starttime = time.time()
+    #starttime = time.time()
     successful, score, path = symplectic(x0, y0, p0_x, p0_y, max_iter=int(max_iter))
-    symplectic_time = time.time() - starttime
+    #symplectic_time = time.time() - starttime
     if successful:
         return score, path
     else:

@@ -1,6 +1,6 @@
 import time
 
-from orbsim.r3b_2d import unit_velocity
+from orbsim.r3b_2d import *
 from orbsim.plotting import orbitplot2d, orbitplot_non_inertial
 from orbsim.r3b_2d.simulators import launch_sim
 
@@ -21,7 +21,7 @@ if __name__ == "__main__":
         -0.000122173047640,
         3.111181716545691 / unit_velocity,
     ]
-    path = launch_sim(psi,max_iter=1e5)
+    path = launch_sim(psi,duration = 5/unit_time)
     orbitplot2d(path, psi, title="hohmann")
     orbitplot_non_inertial(path, psi, title="hohmann")
 
@@ -31,13 +31,13 @@ if __name__ == "__main__":
         0.000000000000000,
         -3.149483130653266 / unit_velocity,
     ]
-    path = launch_sim(psi,max_iter=1e6)
+    path = launch_sim(psi,duration=4/unit_time)
     orbitplot2d(path, psi, title="reverse hohmann")
     orbitplot_non_inertial(path, psi, title="reverse_hohmann")
 
     # low energy long
     psi = [3.794182930145708, 0.023901745288554, 3.090702702702703 / unit_velocity]
-    path = launch_sim(psi,max_iter=1e6)
+    path = launch_sim(psi,duration=200/unit_time)
     orbitplot2d(path, psi, title="LE long")
     orbitplot_non_inertial(path, psi, title="LE long")
 
@@ -47,7 +47,7 @@ if __name__ == "__main__":
         -0.144259374836607,
         3.127288444444444 / unit_velocity,
     ]
-    path = launch_sim(psi,max_iter=1e6)
+    path = launch_sim(psi,duration=41/unit_time)
     orbitplot2d(path, psi, title="LE short")
     orbitplot_non_inertial(path, psi, title="LE short")
 
@@ -57,13 +57,13 @@ if __name__ == "__main__":
         -0.075821466029764,
         3.135519748743719 / unit_velocity,
     ]
-    path = launch_sim(psi,max_iter=1e6)
+    path = launch_sim(psi,duration=3/unit_time)
     orbitplot2d(path, psi, title="3-day-hohmann")
     orbitplot_non_inertial(path, psi, title="3-day-hohmann")
 
     # 1-day-hohmann
     psi = [-2.277654673852600, 0.047996554429844, 3.810000000000000 / unit_velocity]
-    path = launch_sim(psi)
+    path = launch_sim(psi,duration=1/unit_time)
     orbitplot2d(path, psi, title="1-day-hohmann")
     orbitplot_non_inertial(path, psi, title="1-day-hohmann")
 
