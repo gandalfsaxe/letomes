@@ -30,22 +30,6 @@ from orbsim.r3b_2d.analyticals import get_pdot_x, get_pdot_y, get_v_x, get_v_y
 
 
 @jit
-def explicit_euler_step(h, x, y, p_x, p_y):
-    # Step 1 - get all time derivatives
-    v_x = get_v_x(y, p_x)
-    v_y = get_v_y(x, p_y)
-    pdot_x = get_pdot_x(x, y, p_y)
-    pdot_y = get_pdot_y(x, y, p_x)
-    # Step 2 - linear extrapolation
-    x = x + v_x * h
-    y = y + v_y * h
-    p_x = p_x + pdot_x * h
-    p_y = p_y + pdot_y * h
-
-    return x, y, p_x, p_y
-
-
-@jit
 def symplectic_euler_step(h, x, y, p_x, p_y):
     # Step 1
     v_x = get_v_x(y, p_x)

@@ -3,10 +3,9 @@ from math import sqrt
 
 from numba import jit
 
-from .analyticals import get_pdot_x, get_pdot_y
-
-from . import h_default, h_min, tol
-from ..planets import planet, celestials
+from . import h_default, h_min, tol, unit_length, unit_time
+from ..planets import celestials, planet
+from .analyticals import get_pdot_x, get_pdot_y, get_v_x, get_v_y
 
 
 @jit
@@ -113,7 +112,7 @@ def symplectic(
         target_distance_x = x - target.position_x
         target_distance_y = y - target.position_y
         target_distance = sqrt(target_distance_x ** 2 + target_distance_y ** 2)
-        if target_distance > 1e9/unit_length:
+        if target_distance > 1e9 / unit_length:
             print("we are way too far away, stranded in space!")
             return False, smallest_distance, path_storage
         smallest_distance = min(smallest_distance, target_distance)
@@ -172,3 +171,25 @@ def symplectic(
     # print("smallest distance =", smallest_distance)
     print([x, y, p_x, p_y, h])
     return False, smallest_distance, path_storage
+
+
+# region Unused integrators
+
+
+@jit
+def unused_explicit_euler_step(h, x, y, p_x, p_y):
+    # Step 1 - get all time derivatives
+    v_x = get_v_x(y, p_x)
+    v_y = get_v_y(x, p_y)
+    pdot_x = get_pdot_x(x, y, p_y)
+    pdot_y = get_pdot_y(x, y, p_x)
+    # Step 2 - linear extrapolation
+    x = x + v_x * h
+    y = y + v_y * h
+    p_x = p_x + pdot_x * h
+    p_y = p_y + pdot_y * h
+
+    return x, y, p_x, p_y
+
+
+# endregion
