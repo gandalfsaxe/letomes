@@ -21,7 +21,7 @@ if __name__ == "__main__":
         -0.000122173047640,
         3.111181716545691 / unit_velocity,
     ]
-    path = launch_sim(psi,max_iter=1e6)
+    path = launch_sim(psi,max_iter=1e5)
     orbitplot2d(path, psi, title="hohmann")
     orbitplot_non_inertial(path, psi, title="hohmann")
 

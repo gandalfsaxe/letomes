@@ -53,8 +53,16 @@ def relative_error(vec1, vec2):
     return sqrt(((x2 - x1) ** 2 + (y2 - y1) ** 2) / (x2 ** 2 + y2 ** 2))
 
 
-@jit
-def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)):
+# @jit
+def symplectic(
+    x0,
+    y0,
+    p0_x,
+    p0_y,
+    duration=3 / unit_time,
+    max_iter=1000,
+    target=planet(celestials.MOON),
+):
     """
     runs symplectic adaptive euler-verlet algorithm
     All values are with nondimensionalized units
@@ -68,11 +76,15 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
     path_storage.append([x, y, p_x, p_y, h])
     smallest_distance = 1e6
     Dv = None
-    count = 0
+    iteration_count = 0
     orbital_radius_lower_bound, orbital_radius_upper_bound = target.get_orbital_bounds()
     # print(orbital_radius_upper_bound)
     earth = planet(celestials.EARTH)
-    for i in range(max_iter):
+    while t < duration:
+        iteration_count += 1
+        if iteration_count > max_iter:
+            print("exceeded max iterations, stranded in space!")
+            return False, smallest_distance, path_storage
 
         x_euler, y_euler, p_euler_x, p_euler_y = euler_step(h, x, y, p_x, p_y)
         x_verlet, y_verlet, p_verlet_x, p_verlet_y = verlet_step(h, x, y, p_x, p_y)
@@ -101,6 +113,9 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
         target_distance_x = x - target.position_x
         target_distance_y = y - target.position_y
         target_distance = sqrt(target_distance_x ** 2 + target_distance_y ** 2)
+        if target_distance > 1e9/unit_length:
+            print("we are way too far away, stranded in space!")
+            return False, smallest_distance, path_storage
         smallest_distance = min(smallest_distance, target_distance)
 
         """For real though, are we there yet? (did we actually hit?)"""
@@ -155,4 +170,5 @@ def symplectic(x0, y0, p0_x, p0_y, max_iter=1000, target=planet(celestials.MOON)
     # with open("tests/testsim.log", "w") as file:
     # file.writelines(str(path_storage))
     # print("smallest distance =", smallest_distance)
+    print([x, y, p_x, p_y, h])
     return False, smallest_distance, path_storage

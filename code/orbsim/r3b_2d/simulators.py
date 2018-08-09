@@ -45,8 +45,7 @@ def launch_sim(psi, max_iter=100000):
     if successful:
         return score, path
     else:
-        return (score * 100) ** 2, path
-
+        return (1+score*10)**2, path
 
 class space:
     def __init__(self):
