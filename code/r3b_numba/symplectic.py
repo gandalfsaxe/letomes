@@ -29,16 +29,6 @@ from orbsim.r3b_2d import (
 from orbsim.r3b_2d.analyticals import get_pdot_x, get_pdot_y, get_v_x, get_v_y
 
 
-### TODO: DELETE SOON!!!
-@jit
-def F(x, y):
-    denominator_1 = ((x + k) ** 2 + y ** 2) * sqrt((x + k) ** 2 + y ** 2)
-    denominator_2 = ((1 - k - x) ** 2 + y ** 2) * sqrt((1 - k - x) ** 2 + y ** 2)
-    Fx = -((1 - k) * (x + k)) / denominator_1 + k * (1 - k - x) / denominator_2
-    Fy = -(1 - k) * y / denominator_1 - k * y / denominator_2  # new
-    return Fx, Fy
-
-
 @jit
 def explicit_euler_step(h, x, y, p_x, p_y):
     # Step 1 - get all time derivatives
@@ -83,7 +73,6 @@ def symplectic_verlet_step(h, x, y, p_x, p_y):
     v_y = get_v_y(x, p_y)
     y = y + v_y * hh
     # Step 2
-    Fx, Fy = F(x, y)
     pdot_x = get_pdot_x(x, y, p_y)
     pdot_y = get_pdot_y(x, y, p_x)
     p_x = (p_x + (2.0 * pdot_x + (2 * pdot_y + p_x) * hh) * hh) * denominator
