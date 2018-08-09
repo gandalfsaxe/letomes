@@ -196,7 +196,7 @@ def symplectic(
 
                         # Project velocity onto radius vector and subtract
                         # so velocity vector is along orbit
-                        vr = (v_x * rx + v_y * ry) / r
+                        vr = (v_x * rx + v_y * ry) / r  ## FIXME: Check if vr is correct
                         v_x = v_x - vr * rx / r
                         v_y = v_y - vr * ry / r
 
@@ -224,7 +224,7 @@ def symplectic(
                         return status
 
             # Check if we hit the earth
-            r = (x - earth_position_x) * (x - earth_position_x) + y * y
+            r = (x - earth_position_x) * (x - earth_position_x) + y * y  # FIXME: sqrt?
             r_high = earth_radius / unit_length
             if r < r_high * r_high:
                 return 100  # Hit earth surface
