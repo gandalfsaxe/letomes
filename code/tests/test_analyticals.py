@@ -3,8 +3,8 @@ import os
 
 import pytest
 
-from orbsim.analyticals import Pdot
-from orbsim.constants import k
+from orbsim.r3b_2d import k
+from orbsim.r3b_2d.analyticals import get_pdot_x, get_pdot_y, pdot_denominators
 
 
 @pytest.fixture()
@@ -20,64 +20,80 @@ def math_data():
 
 
 def test1_zeros(math_data):
-    X = 0
-    Y = 0
-    Px = 0
-    Py = 0
-    assert Pdot(X, Y, Px, Py) == pytest.approx(math_data["test1"])
+    x = 0
+    y = 0
+    p_x = 0
+    p_y = 0
+    assert [get_pdot_x(x, y, p_y), get_pdot_y(x, y, p_x)] == pytest.approx(
+        math_data["test1"]
+    )
 
 
 def test2_x_positive(math_data):
-    X = 0.5
-    Y = 0
-    Px = 0
-    Py = 0
-    assert Pdot(X, Y, Px, Py) == pytest.approx(math_data["test2"])
+    x = 0.5
+    y = 0
+    p_x = 0
+    p_y = 0
+    assert [get_pdot_x(x, y, p_y), get_pdot_y(x, y, p_x)] == pytest.approx(
+        math_data["test2"]
+    )
 
 
 def test3_y_negative(math_data):
-    X = 0
-    Y = -0.4
-    Px = 0
-    Py = 0
-    assert Pdot(X, Y, Px, Py) == pytest.approx(math_data["test3"])
+    x = 0
+    y = -0.4
+    p_x = 0
+    p_y = 0
+    assert [get_pdot_x(x, y, p_y), get_pdot_y(x, y, p_x)] == pytest.approx(
+        math_data["test3"]
+    )
 
 
 def test4_px_positive(math_data):
-    X = 0
-    Y = 0
-    Px = 2
-    Py = 0
-    assert Pdot(X, Y, Px, Py) == pytest.approx(math_data["test4"])
+    x = 0
+    y = 0
+    p_x = 2
+    p_y = 0
+    assert [get_pdot_x(x, y, p_y), get_pdot_y(x, y, p_x)] == pytest.approx(
+        math_data["test4"]
+    )
 
 
 def test5_py_negative(math_data):
-    X = 0
-    Y = 0
-    Px = 0
-    Py = -5
-    assert Pdot(X, Y, Px, Py) == pytest.approx(math_data["test5"])
+    x = 0
+    y = 0
+    p_x = 0
+    p_y = -5
+    assert [get_pdot_x(x, y, p_y), get_pdot_y(x, y, p_x)] == pytest.approx(
+        math_data["test5"]
+    )
 
 
 def test6_all_positive(math_data):
-    X = 1
-    Y = 2
-    Px = 3
-    Py = 4
-    assert Pdot(X, Y, Px, Py) == pytest.approx(math_data["test6"])
+    x = 1
+    y = 2
+    p_x = 3
+    p_y = 4
+    assert [get_pdot_x(x, y, p_y), get_pdot_y(x, y, p_x)] == pytest.approx(
+        math_data["test6"]
+    )
 
 
 def test7_all_negative(math_data):
-    X = -4
-    Y = -3
-    Px = -2
-    Py = -1
-    assert Pdot(X, Y, Px, Py) == pytest.approx(math_data["test7"])
+    x = -4
+    y = -3
+    p_x = -2
+    p_y = -1
+    assert [get_pdot_x(x, y, p_y), get_pdot_y(x, y, p_x)] == pytest.approx(
+        math_data["test7"]
+    )
 
 
 def test8_all_mixed(math_data):
-    X = -1
-    Y = 1
-    Px = -3
-    Py = 4
-    assert Pdot(X, Y, Px, Py) == pytest.approx(math_data["test8"])
+    x = -1
+    y = 1
+    p_x = -3
+    p_y = 4
+    assert [get_pdot_x(x, y, p_y), get_pdot_y(x, y, p_x)] == pytest.approx(
+        math_data["test8"]
+    )
