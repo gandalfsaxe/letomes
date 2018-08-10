@@ -19,7 +19,7 @@
   "python.unitTest.nosetestsEnabled": false,
   "python.unitTest.pyTestEnabled": true,
 
-  "terminal.integrated.cwd": "C:\\Users\\s113093\\Dropbox\\repositories\\letomes\\code",
+  "terminal.integrated.cwd": "code/",
 
   "cSpell.dictionaries": ["en", "latex", "html"],
   // Ignore pandoc-citeproc citations
