@@ -2,21 +2,21 @@ from enum import Enum
 
 from numba import jit
 
-from . import earth_mass, earth_radius, lunar_mass, lunar_radius
+from . import EARTH_MASS, EARTH_RADIUS, LUNAR_MASS, LUNAR_RADIUS
 from .r3b_2d import (
     EARTH_ALTITUDE,
     LUNAR_ALTITUDE,
     ORBITAL_TOLERANCE,
-    earth_position_x,
-    leo_radius,
-    leo_radius_nondim,
-    leo_velocity,
-    leo_velocity_nondim,
-    llo_radius,
-    llo_velocity,
-    lunar_position_x,
-    unit_length,
-    unit_velocity,
+    EARTH_POSITION_X,
+    LEO_RADIUS,
+    LEO_RADIUS_NONDIM,
+    LEO_VELOCITY,
+    LEO_VELOCITY_NONDIM,
+    LLO_RADIUS,
+    LLO_VELOCITY,
+    LUNAR_POSITION_X,
+    UNIT_LENGTH,
+    UNIT_VELOCITY,
 )
 
 
@@ -24,25 +24,25 @@ class Planet:
     def __init__(self, celestial):
         self.celestial = celestial
         if celestial == celestials.MOON:
-            self.orbital_radius = llo_radius
-            self.orbital_velocity = llo_velocity
-            self.position_x = lunar_position_x
+            self.orbital_radius = LLO_RADIUS
+            self.orbital_velocity = LLO_VELOCITY
+            self.position_x = LUNAR_POSITION_X
             self.position_y = 0
-            self.celestial_radius = lunar_radius
-            self.celestial_mass = lunar_mass
+            self.celestial_radius = LUNAR_RADIUS
+            self.celestial_mass = LUNAR_MASS
             self.altitude = LUNAR_ALTITUDE
-            self.orbital_radius_nondim = self.orbital_radius / unit_length
-            self.orbital_velocity_nondim = self.orbital_velocity / unit_velocity
+            self.orbital_radius_nondim = self.orbital_radius / UNIT_LENGTH
+            self.orbital_velocity_nondim = self.orbital_velocity / UNIT_VELOCITY
         elif celestial == celestials.EARTH:
-            self.orbital_radius = leo_radius
-            self.orbital_velocity = leo_velocity
-            self.position_x = earth_position_x
+            self.orbital_radius = LEO_RADIUS
+            self.orbital_velocity = LEO_VELOCITY
+            self.position_x = EARTH_POSITION_X
             self.position_y = 0
-            self.celestial_radius = earth_radius
-            self.celestial_mass = earth_mass
+            self.celestial_radius = EARTH_RADIUS
+            self.celestial_mass = EARTH_MASS
             self.altitude = EARTH_ALTITUDE
-            self.orbital_radius_nondim = leo_radius_nondim
-            self.orbital_velocity_nondim = leo_velocity_nondim
+            self.orbital_radius_nondim = LEO_RADIUS_NONDIM
+            self.orbital_velocity_nondim = LEO_VELOCITY_NONDIM
         elif celestial == celestials.MARS:
             self.orbital_radius = None
             self.orbital_velocity = None
@@ -57,13 +57,13 @@ class Planet:
     @jit
     def get_orbital_bounds(self):
         """returns [lower_bound, upper_bound] for successful celestial orbit"""
-        lower_bound = (self.orbital_radius - ORBITAL_TOLERANCE) / unit_length
-        upper_bound = (self.orbital_radius + ORBITAL_TOLERANCE) / unit_length
+        lower_bound = (self.orbital_radius - ORBITAL_TOLERANCE) / UNIT_LENGTH
+        upper_bound = (self.orbital_radius + ORBITAL_TOLERANCE) / UNIT_LENGTH
         return [lower_bound, upper_bound]
 
     @jit
     def get_critical_bounds(self):
-        return (self.celestial_radius / unit_length) ** 2
+        return (self.celestial_radius / UNIT_LENGTH) ** 2
 
 
 class celestials(Enum):

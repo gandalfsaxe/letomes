@@ -1,10 +1,10 @@
 {
-  "earth_radius": 6367.4447,
-  "earth_mass": 5.9721986e+24,
-  "lunar_radius": 1737.1,
-  "lunar_mass": 7.34767309e+22,
-  "earth_moon_distance": 384400.0,
-  "lunar_orbit_duration": 27.322,
+  "EARTH_RADIUS": 6367.4447,
+  "EARTH_MASS": 5.9721986e+24,
+  "LUNAR_RADIUS": 1737.1,
+  "LUNAR_MASS": 7.34767309e+22,
+  "EARTH_MOON_DISTANCE": 384400.0,
+  "LUNAR_ORBIT_DURATION": 27.322,
   "G": 6.67384e-11,
-  "day": 86400.0
+  "DAY": 86400.0
 }

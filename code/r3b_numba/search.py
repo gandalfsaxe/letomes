@@ -17,13 +17,13 @@ from multiprocessing import Pool
 
 import numpy as np
 
-from orbsim import day
+from orbsim import DAY
 from orbsim.r3b_2d import (
-    earth_position_x,
-    leo_radius_nondim,
-    leo_velocity,
-    unit_time,
-    unit_velocity,
+    EARTH_POSITION_X,
+    LEO_RADIUS_NONDIM,
+    LEO_VELOCITY,
+    UNIT_TIME,
+    UNIT_VELOCITY,
 )
 
 from .symplectic import symplectic
@@ -33,10 +33,10 @@ def print_search_results(stat, pos, ang, burn, x0, y0, p0_x, p0_y, dv, toa):
     print(
         "# --------------------------------------------------------------------------"
     )
-    print("duration = %i/unit_time" % (max(1, int(ceil(toa * unit_time)))))
+    print("duration = %i/unit_time" % (max(1, int(ceil(toa * UNIT_TIME)))))
     print("pos      = %.15lf" % (pos))
     print("ang      = %.15lf" % (ang))
-    print("burn     = %.15lf/unit_velocity" % (burn * unit_velocity))
+    print("burn     = %.15lf/unit_velocity" % (burn * UNIT_VELOCITY))
     print("x0       = %.15lf" % (x0))
     print("y0       = %.15lf" % (y0))
     print("p0_x      = %.15lf" % (p0_x))
@@ -44,13 +44,13 @@ def print_search_results(stat, pos, ang, burn, x0, y0, p0_x, p0_y, dv, toa):
     print(
         "# --------------------------------------------------------------------------"
     )
-    print("# dV(earth-escape) = %f km/s" % (abs(burn) * unit_velocity))
+    print("# dV(earth-escape) = %f km/s" % (abs(burn) * UNIT_VELOCITY))
     if stat > 0 and stat < 100:
         print("# Min moon distance= %f" % (stat))
     elif stat < 0:
-        print("# dV(moon-capture) = %f km/s" % (dv * unit_velocity))
-        print("# dV(total)        = %f km/s" % ((abs(burn) + dv) * unit_velocity))
-        print("# Flight-time      = %f days" % (toa * unit_time))
+        print("# dV(moon-capture) = %f km/s" % (dv * UNIT_VELOCITY))
+        print("# dV(total)        = %f km/s" % ((abs(burn) + dv) * UNIT_VELOCITY))
+        print("# Flight-time      = %f days" % (toa * UNIT_TIME))
     else:
         print("# Crashed on earth!")
     print(
@@ -96,13 +96,13 @@ def search(thread, threads, n, duration, positions, angles, burns):
         burn = burns[burn_i]
 
         # Calculate initial conditions
-        x0 = np.cos(pos) * leo_radius_nondim
-        y0 = np.sin(pos) * leo_radius_nondim
-        v_norm_x = -y0 / leo_radius_nondim
-        v_y_norm = x0 / leo_radius_nondim
-        v_x = (leo_velocity / unit_velocity) * v_norm_x
-        v_y = (leo_velocity / unit_velocity) * v_y_norm
-        x0 += earth_position_x
+        x0 = np.cos(pos) * LEO_RADIUS_NONDIM
+        y0 = np.sin(pos) * LEO_RADIUS_NONDIM
+        v_norm_x = -y0 / LEO_RADIUS_NONDIM
+        v_y_norm = x0 / LEO_RADIUS_NONDIM
+        v_x = (LEO_VELOCITY / UNIT_VELOCITY) * v_norm_x
+        v_y = (LEO_VELOCITY / UNIT_VELOCITY) * v_y_norm
+        x0 += EARTH_POSITION_X
         bx = np.cos(ang) * v_norm_x - np.sin(ang) * v_y_norm
         by = np.sin(ang) * v_norm_x + np.cos(ang) * v_y_norm
         p0_x = (
@@ -213,7 +213,7 @@ def search_mt(
     trials = num_pos * num_ang * num_burn
     print(positions)
     print(angles)
-    print(burns * unit_velocity)
+    print(burns * UNIT_VELOCITY)
 
     # Set threads
     threads = min(threads, num_pos)

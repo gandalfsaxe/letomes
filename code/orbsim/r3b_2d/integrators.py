@@ -3,7 +3,7 @@ from math import sqrt
 
 from numba import jit
 
-from . import h_default, h_min, tol, unit_length, unit_time
+from . import h_DEFAULT, h_MIN_DEFAULT, STEP_ERROR_TOLERANCE, UNIT_LENGTH, UNIT_TIME
 from ..planets import celestials, Planet
 from .analyticals import get_pdot_x, get_pdot_y, get_v_x, get_v_y
 
@@ -66,7 +66,7 @@ def symplectic(
     y0,
     p0_x,
     p0_y,
-    duration=3 / unit_time,
+    duration=3 / UNIT_TIME,
     max_iter=1000,
     target=Planet(celestials.MOON),
 ):
@@ -74,8 +74,8 @@ def symplectic(
     runs symplectic adaptive euler-verlet algorithm
     All values are with nondimensionalized units
     """
-    h = h_default
-    hmin = h_min
+    h = h_DEFAULT
+    h_min = h_MIN_DEFAULT
     t = 0  # total elapsed time
     x, y, p_x, p_y = [x0, y0, p0_x, p0_y]
 
@@ -101,14 +101,14 @@ def symplectic(
         )
         err = relative_error([x_euler, y_euler], [x_verlet, y_verlet])
 
-        if err < tol or h <= hmin:
+        if err < STEP_ERROR_TOLERANCE or h <= h_min:
             x = x_verlet
             y = y_verlet
             p_x = p_verlet_x
             p_y = p_verlet_y
 
             t += h
-            h = max(hmin, h * max(0.1, 0.8 * sqrt(tol / err)))
+            h = max(h_min, h * max(0.1, 0.8 * sqrt(STEP_ERROR_TOLERANCE / err)))
             # TODO: explain this with /HH's new comments. 0.8 is chosen empirically
             # old explanation below:
             """Accept the step only if the weighted error is no more than the
@@ -117,14 +117,14 @@ def symplectic(
 
         else:
             # print(f"deny step {h},{err}")
-            h = max(hmin, h / 2)
+            h = max(h_min, h / 2)
             continue
 
         """Are we nearly there yet? (calculate distance)"""
         target_distance_x = x - target.position_x
         target_distance_y = y - target.position_y
         target_distance = sqrt(target_distance_x ** 2 + target_distance_y ** 2)
-        if target_distance > 1e9 / unit_length:
+        if target_distance > 1e9 / UNIT_LENGTH:
             print("we are way too far away, stranded in space!")
             return False, smallest_distance, path_storage
         smallest_distance = min(smallest_distance, target_distance)

@@ -15,41 +15,39 @@ from math import pi, sqrt
 import numpy as np
 from numba import jit
 
-from orbsim import day, earth_radius
+from orbsim import DAY, EARTH_RADIUS
 from orbsim.r3b_2d import (
     ORBITAL_TOLERANCE,
-    earth_position_x,
+    EARTH_POSITION_X,
     k,
-    llo_radius,
-    llo_velocity,
-    lunar_position_x,
-    unit_length,
-    unit_velocity,
+    LLO_RADIUS,
+    LLO_VELOCITY,
+    LUNAR_POSITION_X,
+    UNIT_LENGTH,
+    UNIT_VELOCITY,
+    h_DEFAULT,
+    h_MIN_DEFAULT,
+    STEP_ERROR_TOLERANCE,
 )
 from orbsim.r3b_2d.analyticals import get_pdot_x, get_pdot_y, get_v_x, get_v_y
-
 from orbsim.r3b_2d.integrators import euler_step_symplectic, verlet_step_symplectic
 
 
-@jit  # ('void(int64, float64, float64, float64, float64, float64, float64, float64[:], float64[:], float64[:], float64[:])')
+@jit
 def symplectic(
-    n, duration, x0, y0, p0_x, p0_y, xs, ys, p_xs, p_ys, step_errors, h_list, info
+    n, duration, x, y, p_x, p_y, xs, ys, p_xs, p_ys, step_errors, h_list, info
 ):
+    # Initialize values
+    h = h_DEFAULT
+    h_min = h_MIN_DEFAULT
+    # STEP_ERROR_TOLERANCE = STEP_ERROR_TOLERANCE
 
-    # Initialize initial conditions
-    h = 1e-6
-    h_min = 1e-10
-    tol = 1e-9
-    max_steps = duration
-    x = x0
-    y = y0
-    p_x = p0_x
-    p_y = p0_y
+    # max_steps = duration
     step_error = 1e-15
     status = 1
     target_dist = 1
     target = 1
-    target_pos_x = lunar_position_x
+    target_pos_x = LUNAR_POSITION_X
     # target = 2; target_pos_x = L1_position_x
     target_pos_y = 0
 
@@ -85,9 +83,9 @@ def symplectic(
             )
 
             # Accept the step only if the weighted error is no more than the
-            # tolerance tol.  Estimate an h that will yield an error of tol on
+            # tolerance STEP_ERROR_TOLERANCE. Estimate an h that will yield an error of STEP_ERROR_TOLERANCE on
             # the next step and use 0.8 of this value to avoid failures.
-            if step_error < tol or h <= h_min:
+            if step_error < STEP_ERROR_TOLERANCE or h <= h_min:
 
                 # Accept step
                 x = x2
@@ -97,7 +95,9 @@ def symplectic(
 
                 # Forward time by step
                 t = t + h
-                h = max(h_min, h * max(0.1, 0.8 * sqrt(tol / step_error)))
+                h = max(
+                    h_min, h * max(0.1, 0.8 * sqrt(STEP_ERROR_TOLERANCE / step_error))
+                )
 
             else:
                 # No accept, reduce h to half
@@ -112,11 +112,11 @@ def symplectic(
             # Check if we hit the target
             if status == 1:
                 if target == 1:
-                    r_low = (llo_radius - ORBITAL_TOLERANCE) / unit_length
-                    r_high = (llo_radius + ORBITAL_TOLERANCE) / unit_length
+                    r_low = (LLO_RADIUS - ORBITAL_TOLERANCE) / UNIT_LENGTH
+                    r_high = (LLO_RADIUS + ORBITAL_TOLERANCE) / UNIT_LENGTH
                 else:
                     r_low = 0
-                    r_high = ORBITAL_TOLERANCE / unit_length
+                    r_high = ORBITAL_TOLERANCE / UNIT_LENGTH
 
                 if r > r_low and r < r_high:
 
@@ -134,14 +134,14 @@ def symplectic(
 
                         # Now adjust velocity to lunar orbit velocity
                         vt = sqrt(v_x * v_x + v_y * v_y)
-                        p_x = (llo_velocity / unit_velocity) * v_x / vt - y
-                        p_y = (llo_velocity / unit_velocity) * v_y / vt + x
+                        p_x = (LLO_VELOCITY / UNIT_VELOCITY) * v_x / vt - y
+                        p_y = (LLO_VELOCITY / UNIT_VELOCITY) * v_y / vt + x
 
                         # Total velocity change
                         dv = sqrt(
                             vr * vr
-                            + (vt - llo_velocity / unit_velocity)
-                            * (vt - llo_velocity / unit_velocity)
+                            + (vt - LLO_VELOCITY / UNIT_VELOCITY)
+                            * (vt - LLO_VELOCITY / UNIT_VELOCITY)
                         )
                     else:
                         dv = sqrt(v_x * v_x + v_y * v_y)
@@ -156,8 +156,8 @@ def symplectic(
                         return status
 
             # Check if we hit the earth
-            r = (x - earth_position_x) * (x - earth_position_x) + y * y  # FIXME: sqrt?
-            r_high = earth_radius / unit_length
+            r = (x - EARTH_POSITION_X) * (x - EARTH_POSITION_X) + y * y  # FIXME: sqrt?
+            r_high = EARTH_RADIUS / UNIT_LENGTH
             if r < r_high * r_high:
                 return 100  # Hit earth surface
 

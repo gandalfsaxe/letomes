@@ -5,7 +5,7 @@ import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 
 from .planets import celestials
-from .r3b_2d import L1_position_x, earth_position_x, k, lunar_position_x
+from .r3b_2d import L1_POSITION_X, EARTH_POSITION_X, k, LUNAR_POSITION_X
 
 
 def orbitplot3d(completed_path, psi, title=None):
@@ -20,9 +20,9 @@ def orbitplot3d(completed_path, psi, title=None):
 
     ax.plot(xs, ys, range(len(hs)), color="black", linewidth=2)
 
-    ax.scatter([earth_position_x], [0], color="blue")
-    ax.scatter([lunar_position_x], [0], color="grey")
-    ax.scatter([L1_position_x], [0], color="pink")
+    ax.scatter([EARTH_POSITION_X], [0], color="blue")
+    ax.scatter([LUNAR_POSITION_X], [0], color="grey")
+    ax.scatter([L1_POSITION_X], [0], color="pink")
 
     circle_x = [cos(x / 100.0 * 2 * pi) for x in range(100)]
     circle_y = [sin(x / 100.0 * 2 * pi) for x in range(100)]
@@ -54,11 +54,11 @@ def orbitplot2d(completed_path, psi=None, title=None):
     Xs = xs * np.cos(ts) - ys * np.sin(ts)
     Ys = xs * np.sin(ts) + ys * np.cos(ts)
 
-    Xs_earth = earth_position_x * np.cos(ts)
-    Ys_earth = earth_position_x * np.sin(ts)
+    Xs_earth = EARTH_POSITION_X * np.cos(ts)
+    Ys_earth = EARTH_POSITION_X * np.sin(ts)
 
-    Xs_moon = lunar_position_x * np.cos(ts)
-    Ys_moon = lunar_position_x * np.sin(ts)
+    Xs_moon = LUNAR_POSITION_X * np.cos(ts)
+    Ys_moon = LUNAR_POSITION_X * np.sin(ts)
 
     Hs = [
         pxs[i] ** 2 / 2
@@ -115,9 +115,9 @@ def orbitplot_non_inertial(completed_path, psi=None, title=None):
         fig.suptitle(f"DeltaV = {Dv}")
 
     ax.plot(xs, ys, color="black", linewidth=2)
-    ax.scatter([earth_position_x], [0], color="blue")
-    ax.scatter([lunar_position_x], [0], color="grey")
-    ax.scatter([L1_position_x], [0], color="pink")
+    ax.scatter([EARTH_POSITION_X], [0], color="blue")
+    ax.scatter([LUNAR_POSITION_X], [0], color="grey")
+    ax.scatter([L1_POSITION_X], [0], color="pink")
 
     circle_x, circle_y = orbital_circle(celestials.MOON)
 

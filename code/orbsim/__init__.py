@@ -9,31 +9,31 @@ Unless otherwise noted, all units will be in:
 """
 
 ### TABLE / PHYSICAL CONSTANTS ###
-earth_radius = 6367.4447  # km
-earth_mass = 5.9721986e24  # kg
+EARTH_RADIUS = 6367.4447  # km
+EARTH_MASS = 5.9721986e24  # kg
 
-lunar_radius = 1737.1  # km
-lunar_mass = 7.34767309e22  # kg
+LUNAR_RADIUS = 1737.1  # km
+LUNAR_MASS = 7.34767309e22  # kg
 
-earth_moon_distance = 384400.0  # km
-lunar_orbit_duration = 27.322  # days
+EARTH_MOON_DISTANCE = 384400.0  # km
+LUNAR_ORBITAL_DURATION = 27.322  # days
 
 G = 6.67384e-11  # m^3 kg^-1 s^-2
-day = 24.0 * 3600.0  # s
+DAY = 24.0 * 3600.0  # s
 
 
 def update_constants_json():
 
     # Write constants to text file
     constants_dict = {
-        "earth_radius": earth_radius,
-        "earth_mass": earth_mass,
-        "lunar_radius": lunar_radius,
-        "lunar_mass": lunar_mass,
-        "earth_moon_distance": earth_moon_distance,
-        "lunar_orbit_duration": lunar_orbit_duration,
+        "EARTH_RADIUS": EARTH_RADIUS,
+        "EARTH_MASS": EARTH_MASS,
+        "LUNAR_RADIUS": LUNAR_RADIUS,
+        "LUNAR_MASS": LUNAR_MASS,
+        "EARTH_MOON_DISTANCE": EARTH_MOON_DISTANCE,
+        "LUNAR_ORBIT_DURATION": LUNAR_ORBITAL_DURATION,
         "G": G,
-        "day": day,
+        "DAY": DAY,
     }
 
     orbsim_path = os.path.dirname(os.path.abspath(__file__))

@@ -9,7 +9,7 @@ from . import *
 from .integrators import symplectic
 
 
-def launch_sim(psi, duration = 3/unit_time,max_iter=1e7):
+def launch_sim(psi, duration = 3/UNIT_TIME,max_iter=1e7):
     """
     return: [Dv, [x, y, px, py, h]]
     launch (not really a launch since we start from LEO) a 
@@ -19,15 +19,15 @@ def launch_sim(psi, duration = 3/unit_time,max_iter=1e7):
 
     """define init params"""
     # position (where on earth do we start our burn)
-    x0 = np.cos(pos_ang) * leo_radius_nondim
-    y0 = np.sin(pos_ang) * leo_radius_nondim
-    x0 += earth_position_x
+    x0 = np.cos(pos_ang) * LEO_RADIUS_NONDIM
+    y0 = np.sin(pos_ang) * LEO_RADIUS_NONDIM
+    x0 += EARTH_POSITION_X
 
     # how fast are we going when we start?
     vhat_x = -np.sin(pos_ang)
     vhat_y = np.cos(pos_ang)
-    v_x = (leo_velocity_nondim) * vhat_x
-    v_y = (leo_velocity_nondim) * vhat_y
+    v_x = (LEO_VELOCITY_NONDIM) * vhat_x
+    v_y = (LEO_VELOCITY_NONDIM) * vhat_y
 
     # burn vector: At what angle do we launch outward, and how hard do we push?
     burnDv_x = np.cos(burn_ang) * vhat_x - np.sin(burn_ang) * vhat_y

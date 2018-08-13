@@ -14,13 +14,13 @@ from math import pi, sqrt
 
 import numpy as np
 
-from orbsim import day
+from orbsim import DAY
 from orbsim.r3b_2d import (
-    llo_radius,
-    llo_velocity,
-    unit_length,
-    unit_time,
-    unit_velocity,
+    LLO_RADIUS,
+    LLO_VELOCITY,
+    UNIT_LENGTH,
+    UNIT_TIME,
+    UNIT_VELOCITY,
 )
 
 from .search import print_search_results, search, search_mt
@@ -84,14 +84,14 @@ def hohmann(threads, n):
     print("# Running Hohmann.")
 
     # Hohmann trajectory < 6 days
-    duration = 6 / unit_time
+    duration = 6 / UNIT_TIME
     best_total_dv = 1e9
     positions = 100
     angles = 1
     burns = 200
     pos = -3 * pi / 4
     ang = 0
-    burn = 3.11 / unit_velocity  # Forward Hohmann
+    burn = 3.11 / UNIT_VELOCITY  # Forward Hohmann
     # burn_low = -3.14/unit_velocity # Reverse Hohmann
 
     # Super fast Hohmann trajectory < 1 days
@@ -106,7 +106,7 @@ def hohmann(threads, n):
 
     pos_range = pi / 4
     ang_range = pi / 8
-    burn_range = 0.1 / unit_velocity
+    burn_range = 0.1 / UNIT_VELOCITY
 
     # Start search
     searches = 0
@@ -165,7 +165,7 @@ def hohmann(threads, n):
 
     # Print best result
     print("################ Best ################")
-    print("# Best dV(total)   = %f km/s" % (best_total_dv * unit_velocity))
+    print("# Best dV(total)   = %f km/s" % (best_total_dv * UNIT_VELOCITY))
     print_search_results(
         best_stat,
         best_pos,
@@ -190,7 +190,7 @@ def hohmann(threads, n):
     info = np.zeros(2)
 
     # Do trajectory
-    duration = 10 / unit_time
+    duration = 10 / UNIT_TIME
     status = symplectic(
         n, duration, x0, y0, p0_x, p0_y, xs, ys, p_xs, p_ys, step_errors, h_list, info
     )
@@ -212,17 +212,17 @@ def low_energy(threads, n):
     print("# Running low_energy.")
 
     # Low-energy trajectory < 200 days
-    duration = 200 / unit_time
+    duration = 200 / UNIT_TIME
     best_total_dv = 1e9
     positions = 100
     angles = 1
     burns = 200
     pos = -3 * pi / 4
     ang = 0
-    burn = 3.12 / unit_velocity
+    burn = 3.12 / UNIT_VELOCITY
     pos_range = pi
     ang_range = 0
-    burn_range = 0.01 / unit_velocity
+    burn_range = 0.01 / UNIT_VELOCITY
 
     # Start search
     searches = 0
@@ -290,7 +290,7 @@ def low_energy(threads, n):
     info = np.zeros(2)
 
     # Do trajectory
-    duration = toa + (2.0 * pi * llo_radius / llo_velocity) / (unit_time * day)
+    duration = toa + (2.0 * pi * LLO_RADIUS / LLO_VELOCITY) / (UNIT_TIME * DAY)
     status = symplectic(
         n, duration, x0, y0, p0_x, p0_y, xs, ys, p_xs, p_ys, step_errors, h_list, info
     )
@@ -312,7 +312,7 @@ def low_energy_parts8(threads, n):
     print("# Running low_energy_parts8.")
 
     # Low-energy-short trajectory < 47 days
-    duration = 200 / unit_time
+    duration = 200 / UNIT_TIME
     best_total_dv = 1e9
     best_toa = 0
     positions = 55
@@ -324,10 +324,10 @@ def low_energy_parts8(threads, n):
         pos = i * pi / 4
         ang = 0
         # burn = 3.12/unit_velocity # moon
-        burn = 3.09 / unit_velocity  # L1
+        burn = 3.09 / UNIT_VELOCITY  # L1
         pos_range = 2 * pi / 16
         ang_range = pi / 2
-        burn_range = 0.1 / unit_velocity
+        burn_range = 0.1 / UNIT_VELOCITY
 
         # Start search
         searches = 0
@@ -387,7 +387,7 @@ def low_energy_parts8(threads, n):
     # Print best result
     if best_total_dv < 1e9:
         print("################ Best ################")
-        print("# Best dV(total)   = %f km/s" % (best_total_dv * unit_velocity))
+        print("# Best dV(total)   = %f km/s" % (best_total_dv * UNIT_VELOCITY))
         print_search_results(
             best_stat,
             best_pos,
@@ -450,7 +450,7 @@ def refine(threads, n, duration, pos, ang, burn, x0, y0, p0_x, p0_y):
     # Divide circular earth orbit into 8 parts
     pos_range = 2 * pi / 16 * 0.1
     ang_range = pi / 100 * 0.1
-    burn_range = 0.1 / unit_velocity * 0.1
+    burn_range = 0.1 / UNIT_VELOCITY * 0.1
 
     # Start search
     searches = 0
@@ -509,7 +509,7 @@ def refine(threads, n, duration, pos, ang, burn, x0, y0, p0_x, p0_y):
 
     # Print best result
     print("################ Best ################")
-    print("# Best dV(total)   = %f km/s" % (best_total_dv * unit_velocity))
+    print("# Best dV(total)   = %f km/s" % (best_total_dv * UNIT_VELOCITY))
     print_search_results(
         best_stat,
         best_pos,
@@ -534,7 +534,7 @@ def refine(threads, n, duration, pos, ang, burn, x0, y0, p0_x, p0_y):
     info = np.zeros(2)
 
     # Do trajectory
-    duration = toa + (2.0 * pi * llo_radius / llo_velocity) / (unit_time * day)
+    duration = toa + (2.0 * pi * LLO_RADIUS / LLO_VELOCITY) / (UNIT_TIME * DAY)
     status = symplectic(
         n, duration, x0, y0, p0_x, p0_y, xs, ys, p_xs, p_ys, step_errors, h_list, info
     )
