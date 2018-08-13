@@ -9,39 +9,47 @@ from .analyticals import get_pdot_x, get_pdot_y, get_v_x, get_v_y
 
 
 @jit
-def euler_step(h, x, y, p_x, p_y):
-    """takes a single time step of the symplectic euler algorithm"""
-    v_x = p_x + y
-    x = (x + h * (v_x + p_y * h)) / (1.0 + h ** 2)
-    v_y = p_y - x
-    y += v_y * h
+def euler_step_symplectic(h, x, y, p_x, p_y):
+    """Takes a single time step of the symplectic Euler algorithm"""
+    # Step 1
+    v_x = get_v_x(y, p_x)
+    x = (x + (v_x + p_y * h) * h) / (1.0 + h ** 2)
+    # Step 2
+    v_y = get_v_y(x, p_y)
+    y = y + v_y * h
+    # Step 3
+    pdot_x = get_pdot_x(x, y, p_y)
+    pdot_y = get_pdot_y(x, y, p_x)
+    p_x = p_x + pdot_x * h
+    p_y = p_y + pdot_y * h
 
-    Pdot_x, Pdot_y = [get_pdot_x(x, y, p_y), get_pdot_y(x, y, p_x)]
-    p_x += Pdot_x * h
-    p_y += Pdot_y * h
     return x, y, p_x, p_y
 
 
 @jit
-def verlet_step(h, x, y, p_x, p_y):
-    """takes a half step, then another half step in the symplectic Verlet algorithm"""
-    half_h = h / 2
-    denominator = 1.0 / (1 + half_h ** 2)
+def verlet_step_symplectic(h, x, y, p_x, p_y):
+    """Takes a half step, then another half step in the symplectic Verlet algorithm"""
+    hh = 0.5 * h
+    denominator = 1.0 / (1.0 + hh ** 2)
+    # Step 1
+    v_x = get_v_x(y, p_x)
+    x = (x + (v_x + p_y * hh) * hh) * denominator
+    # Step 2
+    v_y = get_v_y(x, p_y)
+    y = y + v_y * hh
+    # Step 2
+    pdot_x = get_pdot_x(x, y, p_y)
+    pdot_y = get_pdot_y(x, y, p_x)
+    p_x = (p_x + (2.0 * pdot_x + (2 * pdot_y + p_x) * hh) * hh) * denominator
+    p_y = (
+        p_y + (pdot_y + get_pdot_y(x, y, p_x)) * hh
+    )  # TODO: mixed, what's correct? Derive theory
+    # Step 3
+    v_x = get_v_x(y, p_x)
+    v_y = get_v_y(x, p_y)
+    x += v_x * hh
+    y += v_y * hh
 
-    v_x = p_x + y
-    x = (x + half_h * (v_x + p_y * half_h)) * denominator
-    v_y = p_y - x
-    y += v_y * half_h
-
-    Pdot_x, Pdot_y = [get_pdot_x(x, y, p_y), get_pdot_y(x, y, p_x)]
-    p_x = (p_x + (2.0 * Pdot_x + (Pdot_y * 2 + p_x) * half_h) * half_h) * denominator
-    #Pdot_y2 = get_pdot_y(x, y, p_x)
-    p_y += (Pdot_y * 2 + p_x) * half_h
-
-    v_x = p_x + y
-    v_y = p_y - x
-    x += v_x * half_h
-    y += v_y * half_h
     return x, y, p_x, p_y
 
 
@@ -85,8 +93,12 @@ def symplectic(
             print("exceeded max iterations, stranded in space!")
             return False, smallest_distance, path_storage
 
-        x_euler, y_euler, p_euler_x, p_euler_y = euler_step(h, x, y, p_x, p_y)
-        x_verlet, y_verlet, p_verlet_x, p_verlet_y = verlet_step(h, x, y, p_x, p_y)
+        x_euler, y_euler, p_euler_x, p_euler_y = euler_step_symplectic(
+            h, x, y, p_x, p_y
+        )
+        x_verlet, y_verlet, p_verlet_x, p_verlet_y = verlet_step_symplectic(
+            h, x, y, p_x, p_y
+        )
         err = relative_error([x_euler, y_euler], [x_verlet, y_verlet])
 
         if err < tol or h <= hmin:

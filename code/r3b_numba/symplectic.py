@@ -28,48 +28,7 @@ from orbsim.r3b_2d import (
 )
 from orbsim.r3b_2d.analyticals import get_pdot_x, get_pdot_y, get_v_x, get_v_y
 
-
-@jit
-def symplectic_euler_step(h, x, y, p_x, p_y):
-    # Step 1
-    v_x = get_v_x(y, p_x)
-    x = (x + (v_x + p_y * h) * h) / (1.0 + h ** 2)
-    # Step 2
-    v_y = get_v_y(x, p_y)
-    y = y + v_y * h
-    # Step 3
-    pdot_x = get_pdot_x(x, y, p_y)
-    pdot_y = get_pdot_y(x, y, p_x)
-    p_x = p_x + pdot_x * h
-    p_y = p_y + pdot_y * h
-
-    return x, y, p_x, p_y
-
-
-@jit
-def symplectic_verlet_step(h, x, y, p_x, p_y):
-    hh = 0.5 * h
-    denominator = 1.0 / (1.0 + hh ** 2)
-    # Step 1
-    v_x = get_v_x(y, p_x)
-    x = (x + (v_x + p_y * hh) * hh) * denominator
-    # Step 2
-    v_y = get_v_y(x, p_y)
-    y = y + v_y * hh
-    # Step 2
-    pdot_x = get_pdot_x(x, y, p_y)
-    pdot_y = get_pdot_y(x, y, p_x)
-    p_x = (p_x + (2.0 * pdot_x + (2 * pdot_y + p_x) * hh) * hh) * denominator
-    p_y = (
-        p_y + (pdot_y + get_pdot_y(x, y, p_x)) * hh
-    )  # TODO: mixed, what's correct? Derive theory
-    # Step 3
-    v_x = get_v_x(y, p_x)
-    v_y = get_v_y(x, p_y)
-    x += v_x * hh
-    y += v_y * hh
-
-    return x, y, p_x, p_y
+from orbsim.r3b_2d.integrators import euler_step_symplectic, verlet_step_symplectic
 
 
 @jit  # ('void(int64, float64, float64, float64, float64, float64, float64, float64[:], float64[:], float64[:], float64[:])')
@@ -117,8 +76,8 @@ def symplectic(
                 h_min = 2 * h_min
 
             # Adaptive symplectic euler/midpoint
-            x1, y1, p1_x, p1_y = symplectic_euler_step(h, x, y, p_x, p_y)
-            x2, y2, p2_x, p2_y = symplectic_verlet_step(h, x, y, p_x, p_y)
+            x1, y1, p1_x, p1_y = euler_step_symplectic(h, x, y, p_x, p_y)
+            x2, y2, p2_x, p2_y = verlet_step_symplectic(h, x, y, p_x, p_y)
 
             # Relative local error of step
             step_error = sqrt(

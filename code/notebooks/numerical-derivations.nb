@@ -226,7 +226,7 @@ ef0accd3346c"]
 Cell[CellGroupData[{
 
 Cell[TextData[{
- "Symplectic Verlet: file: symplectic.py, function: symplectic_verlet_step  \
+ "Symplectic Verlet: file: symplectic.py, function: verlet_step_symplectic  \
 (solve 4.18-4.25 for ",
  Cell[BoxData[
   FormBox[
