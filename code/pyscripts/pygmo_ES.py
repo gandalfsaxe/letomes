@@ -15,6 +15,7 @@ from pygmo import algorithm
 import os
 import sys
 import json
+from numba import jit
 
 import time
 import numpy as np
@@ -55,9 +56,11 @@ class saddle_space:
     def __init__(self):
         self.dim = 2
     
+    @jit
     def fitness(self,x):
         return [G[int(x[0]),int(x[1])]]
     
+    @jit
     def get_bounds(self):
         return ([0,0],[99,99])
     
