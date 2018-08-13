@@ -20,7 +20,7 @@ from .r3b_2d import (
 )
 
 
-class planet:
+class Planet:
     def __init__(self, celestial):
         self.celestial = celestial
         if celestial == celestials.MOON:

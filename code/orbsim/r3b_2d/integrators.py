@@ -4,7 +4,7 @@ from math import sqrt
 from numba import jit
 
 from . import h_default, h_min, tol, unit_length, unit_time
-from ..planets import celestials, planet
+from ..planets import celestials, Planet
 from .analyticals import get_pdot_x, get_pdot_y, get_v_x, get_v_y
 
 
@@ -68,7 +68,7 @@ def symplectic(
     p0_y,
     duration=3 / unit_time,
     max_iter=1000,
-    target=planet(celestials.MOON),
+    target=Planet(celestials.MOON),
 ):
     """
     runs symplectic adaptive euler-verlet algorithm
@@ -86,7 +86,7 @@ def symplectic(
     iteration_count = 0
     orbital_radius_lower_bound, orbital_radius_upper_bound = target.get_orbital_bounds()
     # print(orbital_radius_upper_bound)
-    earth = planet(celestials.EARTH)
+    earth = Planet(celestials.EARTH)
     while t < duration:
         iteration_count += 1
         if iteration_count > max_iter:
