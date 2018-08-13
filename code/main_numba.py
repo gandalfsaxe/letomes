@@ -75,7 +75,7 @@ def run_test():
 
     runtime = time.time()
 
-    n = 1000000
+    n = 1000000  # FIXME: What the duck is n doing here
 
     # Set coordinates
     if MODE == "leo":  # Low Earth Orbit, one closed orbit
