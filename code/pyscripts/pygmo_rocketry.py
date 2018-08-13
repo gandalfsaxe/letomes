@@ -13,7 +13,7 @@ import json
 from orbsim.r3b_2d import *
 from orbsim.r3b_2d.analyticals import *
 from orbsim.r3b_2d.simulators import launch_sim
-import time
+from time import time
 from random import shuffle
 import math
 
@@ -23,12 +23,14 @@ import math
 
 class saddle_space:
     def __init__(self):
-        self.dim = 3
-    
+        pass
+
+    @jit
     def fitness(self,psi):
         res,_ = launch_sim(psi,max_iter=1e5)
         return [res]
-    
+
+    @jit
     def get_bounds(self):
         return ([-pi,-pi,-4],[pi,pi,4])
     
@@ -93,7 +95,7 @@ def pygmo_es():
     udp = saddle_space()  # user defined problem
     prob = pg.problem(udp) # Beautiful white snow
 
-    archi = pg.archipelago(algo=uda, prob=udp, n=4, pop_size=2)
+    archi = pg.archipelago(algo=uda, prob=udp, n=100, pop_size=2)
     archi.evolve()
     sols = archi.get_champions_f()
     idx = sols.index(min(sols))
@@ -109,5 +111,7 @@ def pygmo_es():
 
 
 if __name__ == '__main__':
+    start = time()
     pygmo_es()
+    print(time()-start)
 
