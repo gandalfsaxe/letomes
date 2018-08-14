@@ -1,32 +1,43 @@
 {
-  "editor.rulers": [88],
+  // TERMINAL
+  "terminal.integrated.cwd": "code/",
 
+  // PYTHON
+  "python.formatting.provider": "black",
+  "editor.rulers": [88], // default for python formatter black
   "[python]": {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.organizeImports": false
     }
   },
-  "python.formatting.provider": "black",
+  // PYTHON UNIT TEST
+  "python.unitTest.pyTestEnabled": true,
+  "python.unitTest.pyTestArgs": ["code"], // only looks for unit tests in ./code/
 
+  // MARKDOWN
   "[markdown]": {
-    "editor.detectIndentation": true,
     "editor.tabSize": 2
   },
-  "python.unitTest.pyTestArgs": ["."],
-
-  "python.unitTest.unittestEnabled": false,
-  "python.unitTest.nosetestsEnabled": false,
-  "python.unitTest.pyTestEnabled": true,
-
-  "terminal.integrated.cwd": "code/",
-
+  // MARKDOWN PREVIEW ENHANCED
+  // "markdown-preview-enhanced.pandocMarkdownFlavor": "markdown", TODO: needed or not?
+  "markdown-preview-enhanced.pandocArguments": "--filter=pandoc-crossref, --filter=pandoc-citeproc, --filter=pandoc-latex-newpage",
+  "markdown-preview-enhanced.usePandocParser": true, // render with pandoc instead of remarkable
+  "pandoc.pdfOptString": "-F pandoc-crossref -F pandoc-citeproc -F pandoc-latex-newpage",
+  // MARKDOWNLINT
+  "markdownlint.config": {
+    "MD033": false, // disable no-inline-html (allow HTML code)
+    "MD026": {
+      "punctuation": ".,;:!"
+    }, // change no-trailing-punctuation (allow "?" in headers)
+    "MD040": false // disable fenced-code-language (allow no langauge to be specified)
+  },
+  // MARKDOWN CSPELL
   "cSpell.dictionaries": ["en", "latex", "html"],
-  // Ignore pandoc-citeproc citations
   "cSpell.languageSettings": [
     {
       "languageId": "markdown",
-      "ignoreRegExpList": "\\[@.+\\]/g"
+      "ignoreRegExpList": ["\\[@.+\\]/g"] // ignore pandoc-citeproc citations
     }
   ],
   "cSpell.words": [
