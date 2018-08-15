@@ -28,7 +28,7 @@ from orbsim.r3b_2d import (
     UNIT_TIME,
     UNIT_VELOCITY,
 )
-from r3b_numba import reduced3body as r3b
+from r3b_bsc import reduced3body as r3b
 
 
 def run_test():
