@@ -4,6 +4,7 @@ Reduced 3-body Problem testing script
 Testing the reduced 3-body problem solvers with different numerical algorithms.
 TODO: Add more description + how to use
 """
+import multiprocessing
 import os
 import pathlib
 import sys
@@ -15,18 +16,18 @@ import numpy as np
 
 from orbsim import DAY, EARTH_RADIUS, LUNAR_RADIUS
 from orbsim.r3b_2d import (
-    ORBITAL_TOLERANCE,
-    L1_POSITION_X,
     EARTH_POSITION_X,
-    k,
+    L1_POSITION_X,
     LEO_RADIUS,
     LEO_VELOCITY,
     LLO_RADIUS,
     LLO_VELOCITY,
     LUNAR_POSITION_X,
+    ORBITAL_TOLERANCE,
     UNIT_LENGTH,
     UNIT_TIME,
     UNIT_VELOCITY,
+    k,
 )
 from r3b_bsc import reduced3body as r3b
 
@@ -68,10 +69,8 @@ def run_test():
     log_file = open(OUTPUT_DIR + "log_" + MODE_NAME + ".log", "w")
     sys.stdout = log_file
 
-    try:
-        threads = int(os.environ["OMP_NUM_THREADS"])
-    except KeyError:
-        threads = 1
+    # Threads will typically be 8 on quadcore machines
+    threads = multiprocessing.cpu_count()  # If raises NotImplementedError, do this instead https://stackoverflow.com/a/14840102/2948823 
 
     runtime = time.time()
 
