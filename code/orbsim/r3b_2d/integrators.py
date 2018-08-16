@@ -3,8 +3,8 @@ from math import sqrt
 
 from numba import jit
 
-from . import h_DEFAULT, h_MIN_DEFAULT, STEP_ERROR_TOLERANCE, UNIT_LENGTH, UNIT_TIME
-from ..planets import celestials, Planet
+from . import *
+from ..planets import celestials
 from .analyticals import get_pdot_x, get_pdot_y, get_v_x, get_v_y
 
 
@@ -60,16 +60,8 @@ def relative_error(vec1, vec2):
     return sqrt(((x2 - x1) ** 2 + (y2 - y1) ** 2) / (x2 ** 2 + y2 ** 2))
 
 
-@jit
-def symplectic(
-    x0,
-    y0,
-    p0_x,
-    p0_y,
-    duration=3 / UNIT_TIME,
-    max_iter=1000,
-    target=Planet(celestials.MOON),
-):
+@jit(nopython=True)
+def symplectic(x0, y0, p0_x, p0_y, duration=3 / UNIT_TIME, max_iter=10000):
     """
     runs symplectic adaptive euler-verlet algorithm
     All values are with nondimensionalized units
@@ -84,11 +76,35 @@ def symplectic(
     smallest_distance = 1e6
     Dv = None
     iteration_count = 0
-    orbital_radius_lower_bound, orbital_radius_upper_bound = target.get_orbital_bounds()
     # print(orbital_radius_upper_bound)
-    earth = Planet(celestials.EARTH)
+    # earth = Planet(celestials.EARTH)
+    target_orbital_radius = LLO_RADIUS
+    target_orbital_velocity = LLO_VELOCITY
+    target_position_x = LUNAR_POSITION_X
+    target_position_y = 0
+    target_celestial_radius = LUNAR_RADIUS
+    target_celestial_mass = LUNAR_MASS
+    target_altitude = LUNAR_ALTITUDE
+    target_orbital_radius_nondim = target_orbital_radius / UNIT_LENGTH
+    target_orbital_velocity_nondim = target_orbital_velocity / UNIT_VELOCITY
+
+    earth_orbital_radius = LEO_RADIUS
+    earth_orbital_velocity = LEO_VELOCITY
+    earth_position_x = EARTH_POSITION_X
+    earth_position_y = 0
+    earth_celestial_radius = EARTH_RADIUS
+    earth_celestial_mass = EARTH_MASS
+    earth_altitude = EARTH_ALTITUDE
+    earth_orbital_radius_nondim = LEO_RADIUS_NONDIM
+    earth_orbital_velocity_nondim = LEO_VELOCITY_NONDIM
+
+    orbital_radius_lower_bound = (
+        target_orbital_radius - ORBITAL_TOLERANCE
+    ) / UNIT_LENGTH
+    orbital_radius_upper_bound = (
+        target_orbital_radius + ORBITAL_TOLERANCE
+    ) / UNIT_LENGTH
     while t < duration:
-        iteration_count += 1
         if iteration_count > max_iter:
             print("exceeded max iterations, stranded in space!")
             return False, smallest_distance, path_storage
@@ -102,6 +118,7 @@ def symplectic(
         err = relative_error([x_euler, y_euler], [x_verlet, y_verlet])
 
         if err < STEP_ERROR_TOLERANCE or h <= h_min:
+            iteration_count += 1
             x = x_verlet
             y = y_verlet
             p_x = p_verlet_x
@@ -121,8 +138,8 @@ def symplectic(
             continue
 
         """Are we nearly there yet? (calculate distance)"""
-        target_distance_x = x - target.position_x
-        target_distance_y = y - target.position_y
+        target_distance_x = x - target_position_x
+        target_distance_y = y - target_position_y
         target_distance = sqrt(target_distance_x ** 2 + target_distance_y ** 2)
         if target_distance > 1e9 / UNIT_LENGTH:
             print("we are way too far away, stranded in space!")
@@ -160,7 +177,7 @@ def symplectic(
 
             # Delta-V for the maneuver
             Dv = sqrt(
-                v_radial ** 2 + (v_magnitude - target.orbital_velocity_nondim) ** 2
+                v_radial ** 2 + (v_magnitude - target_orbital_velocity_nondim) ** 2
             )
             path_storage.append([x, y, p_x, p_y, h])
             break
@@ -169,10 +186,10 @@ def symplectic(
 
         """check if we somehow accidentally struck the earth (whoops)"""
 
-        earth_distance = sqrt((x - earth.position_x) ** 2 + (y - earth.position_y) ** 2)
+        earth_distance = sqrt((x - earth_position_x) ** 2 + (y - earth_position_y) ** 2)
 
         # not necessarily a crash, but we don't want paths that take us to such risky territories
-        critical_distance = earth.get_critical_bounds()
+        critical_distance = (earth_celestial_radius / UNIT_LENGTH) ** 2
         if earth_distance < critical_distance:
             # print("Anga crashed into the earth!")
             return True, Dv, path_storage
