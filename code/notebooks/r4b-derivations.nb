@@ -1,0 +1,1354 @@
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[         0,          0]
+NotebookDataLength[     59465,       1353]
+NotebookOptionsPosition[     57068,       1298]
+NotebookOutlinePosition[     57445,       1315]
+CellTagsIndexPosition[     57402,       1312]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"Quiet", "@", 
+  RowBox[{"Remove", "[", "\"\<`*\>\"", "]"}]}]], "Input",
+ CellChangeTimes->{{3.7434187763908863`*^9, 3.743418776846551*^9}},
+ CellLabel->"In[62]:=",ExpressionUUID->"45d150d0-e859-42d0-b241-2540353c1783"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"d0", "=", 
+   SqrtBox[
+    RowBox[{
+     SuperscriptBox["r", "2"], "+", 
+     SuperscriptBox["r0", "2"], "-", 
+     RowBox[{"2", "r", " ", "r0", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Sin", "[", "\[Theta]", "]"}], 
+         RowBox[{"Sin", "[", "\[Theta]0", "]"}], 
+         RowBox[{"Cos", "[", 
+          RowBox[{"\[Phi]", "-", "\[Phi]0"}], "]"}]}], "+", 
+        RowBox[{
+         RowBox[{"Cos", "[", "\[Theta]", "]"}], 
+         RowBox[{"Cos", "[", "\[Theta]0", "]"}]}]}], ")"}]}]}]]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.7434298100057383`*^9, 3.743429881927965*^9}},
+ CellLabel->"In[35]:=",ExpressionUUID->"bf832a20-408d-4d9c-ae0e-eb7359f97dfc"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"D", "[", 
+   RowBox[{
+    RowBox[{"1", "/", "d0"}], ",", "r"}], "]"}], "//", 
+  "FullSimplify"}]], "Input",
+ CellChangeTimes->{{3.743429883710384*^9, 3.7434298981162243`*^9}, {
+  3.7434301193369427`*^9, 3.743430119760706*^9}, {3.7434305013928843`*^9, 
+  3.743430501941449*^9}},
+ CellLabel->"In[36]:=",ExpressionUUID->"988b709d-f583-41a2-98da-ec25ee05bfb8"],
+
+Cell[BoxData[
+ FractionBox[
+  RowBox[{
+   RowBox[{"-", "r"}], "+", 
+   RowBox[{"r0", " ", 
+    RowBox[{"Cos", "[", "\[Theta]", "]"}], " ", 
+    RowBox[{"Cos", "[", "\[Theta]0", "]"}]}], "+", 
+   RowBox[{"r0", " ", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"\[Phi]", "-", "\[Phi]0"}], "]"}], " ", 
+    RowBox[{"Sin", "[", "\[Theta]", "]"}], " ", 
+    RowBox[{"Sin", "[", "\[Theta]0", "]"}]}]}], 
+  SuperscriptBox[
+   RowBox[{"(", 
+    RowBox[{
+     SuperscriptBox["r", "2"], "+", 
+     SuperscriptBox["r0", "2"], "-", 
+     RowBox[{"2", " ", "r", " ", "r0", " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Cos", "[", "\[Theta]", "]"}], " ", 
+         RowBox[{"Cos", "[", "\[Theta]0", "]"}]}], "+", 
+        RowBox[{
+         RowBox[{"Cos", "[", 
+          RowBox[{"\[Phi]", "-", "\[Phi]0"}], "]"}], " ", 
+         RowBox[{"Sin", "[", "\[Theta]", "]"}], " ", 
+         RowBox[{"Sin", "[", "\[Theta]0", "]"}]}]}], ")"}]}]}], ")"}], 
+   RowBox[{"3", "/", "2"}]]]], "Output",
+ CellChangeTimes->{{3.7434298866099453`*^9, 3.743429898565402*^9}, {
+   3.743430102376072*^9, 3.743430130711816*^9}, 3.7434305080948687`*^9},
+ CellLabel->"Out[36]=",ExpressionUUID->"3fc826aa-3880-403f-b5c6-79a51af39e32"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"D", "[", 
+   RowBox[{
+    RowBox[{"1", "/", "d0"}], ",", "\[Theta]"}], "]"}], "//", 
+  "FullSimplify"}]], "Input",
+ CellChangeTimes->{{3.743429883710384*^9, 3.7434298981162243`*^9}, {
+  3.743430097622122*^9, 3.7434301269390574`*^9}, {3.743430503870555*^9, 
+  3.743430503963282*^9}},
+ CellLabel->"In[37]:=",ExpressionUUID->"805ac6f2-81b1-4fcc-b963-53f86eea4834"],
+
+Cell[BoxData[
+ FractionBox[
+  RowBox[{"r", " ", "r0", " ", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"-", 
+       RowBox[{"Cos", "[", "\[Theta]0", "]"}]}], " ", 
+      RowBox[{"Sin", "[", "\[Theta]", "]"}]}], "+", 
+     RowBox[{
+      RowBox[{"Cos", "[", "\[Theta]", "]"}], " ", 
+      RowBox[{"Cos", "[", 
+       RowBox[{"\[Phi]", "-", "\[Phi]0"}], "]"}], " ", 
+      RowBox[{"Sin", "[", "\[Theta]0", "]"}]}]}], ")"}]}], 
+  SuperscriptBox[
+   RowBox[{"(", 
+    RowBox[{
+     SuperscriptBox["r", "2"], "+", 
+     SuperscriptBox["r0", "2"], "-", 
+     RowBox[{"2", " ", "r", " ", "r0", " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Cos", "[", "\[Theta]", "]"}], " ", 
+         RowBox[{"Cos", "[", "\[Theta]0", "]"}]}], "+", 
+        RowBox[{
+         RowBox[{"Cos", "[", 
+          RowBox[{"\[Phi]", "-", "\[Phi]0"}], "]"}], " ", 
+         RowBox[{"Sin", "[", "\[Theta]", "]"}], " ", 
+         RowBox[{"Sin", "[", "\[Theta]0", "]"}]}]}], ")"}]}]}], ")"}], 
+   RowBox[{"3", "/", "2"}]]]], "Output",
+ CellChangeTimes->{{3.7434298866099453`*^9, 3.743429898565402*^9}, {
+   3.743430102498514*^9, 3.74343013189193*^9}, 3.743430508892544*^9},
+ CellLabel->"Out[37]=",ExpressionUUID->"9ee52112-9135-47bf-8f78-e2ea5aac4b10"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"D", "[", 
+   RowBox[{
+    RowBox[{"1", "/", "d0"}], ",", "\[Phi]"}], "]"}], "//", 
+  "FullSimplify"}]], "Input",
+ CellChangeTimes->{{3.743429883710384*^9, 3.7434298981162243`*^9}, {
+  3.743430100460353*^9, 3.743430128688795*^9}, {3.7434305054282618`*^9, 
+  3.743430505530889*^9}},
+ CellLabel->"In[38]:=",ExpressionUUID->"65dc0d9c-b102-41bc-b2af-a0181b5e608a"],
+
+Cell[BoxData[
+ RowBox[{"-", 
+  FractionBox[
+   RowBox[{"r", " ", "r0", " ", 
+    RowBox[{"Sin", "[", "\[Theta]", "]"}], " ", 
+    RowBox[{"Sin", "[", "\[Theta]0", "]"}], " ", 
+    RowBox[{"Sin", "[", 
+     RowBox[{"\[Phi]", "-", "\[Phi]0"}], "]"}]}], 
+   SuperscriptBox[
+    RowBox[{"(", 
+     RowBox[{
+      SuperscriptBox["r", "2"], "+", 
+      SuperscriptBox["r0", "2"], "-", 
+      RowBox[{"2", " ", "r", " ", "r0", " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Cos", "[", "\[Theta]", "]"}], " ", 
+          RowBox[{"Cos", "[", "\[Theta]0", "]"}]}], "+", 
+         RowBox[{
+          RowBox[{"Cos", "[", 
+           RowBox[{"\[Phi]", "-", "\[Phi]0"}], "]"}], " ", 
+          RowBox[{"Sin", "[", "\[Theta]", "]"}], " ", 
+          RowBox[{"Sin", "[", "\[Theta]0", "]"}]}]}], ")"}]}]}], ")"}], 
+    RowBox[{"3", "/", "2"}]]]}]], "Output",
+ CellChangeTimes->{{3.7434298866099453`*^9, 3.743429898565402*^9}, {
+   3.74343010258077*^9, 3.743430132479753*^9}, 3.743430509253281*^9},
+ CellLabel->"Out[38]=",ExpressionUUID->"00bee628-7cb2-4706-bd78-3eb35c7f2259"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"D", "[", 
+   RowBox[{
+    FractionBox["1", 
+     RowBox[{
+      RowBox[{"Sin", "[", "\[Theta]", "]"}], "^", "2"}]], ",", "\[Theta]"}], 
+   "]"}], "//", "Expand"}]], "Input",
+ CellChangeTimes->{{3.743433528598633*^9, 3.74343356361961*^9}, {
+  3.743433635605177*^9, 3.743433638157672*^9}},
+ CellLabel->"In[43]:=",ExpressionUUID->"c0324a36-39e7-4cc6-87e0-899d1a08e974"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"-", "2"}], " ", 
+  RowBox[{"Cot", "[", "\[Theta]", "]"}], " ", 
+  SuperscriptBox[
+   RowBox[{"Csc", "[", "\[Theta]", "]"}], "2"]}]], "Output",
+ CellChangeTimes->{{3.743433541811685*^9, 3.743433564182952*^9}, 
+   3.74343363956551*^9},
+ CellLabel->"Out[43]=",ExpressionUUID->"428e57fa-aab3-45df-b6de-f288486a66e5"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"UnitConvert", "[", 
+  RowBox[{
+   SqrtBox[
+    FractionBox[
+     RowBox[{
+      RowBox[{
+       TemplateBox[{"\"Earth\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"Planet\"", ",", "\"Earth\""}], "]"}],
+         "\"Entity[\\\"Planet\\\", \\\"Earth\\\"]\"","\"planet\""},
+        "Entity"], "[", 
+       TemplateBox[{"\"semimajor axis\"",RowBox[{"EntityProperty", "[", 
+           RowBox[{"\"Planet\"", ",", "\"SemimajorAxis\""}], "]"}],
+         "\"EntityProperty[\\\"Planet\\\", \\\"SemimajorAxis\\\"]\""},
+        "EntityProperty"], "]"}], "^", "3"}], 
+     RowBox[{
+      RowBox[{"Quantity", "[", 
+       RowBox[{"None", ",", "\"\<GravitationalConstant\>\""}], "]"}], "*", 
+      RowBox[{
+       TemplateBox[{"\"Sun\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"Star\"", ",", "\"Sun\""}], "]"}],
+         "\"Entity[\\\"Star\\\", \\\"Sun\\\"]\"","\"star\""},
+        "Entity"], "[", 
+       TemplateBox[{"\"mass\"",RowBox[{"EntityProperty", "[", 
+           RowBox[{"\"Star\"", ",", "\"Mass\""}], "]"}],
+         "\"EntityProperty[\\\"Star\\\", \\\"Mass\\\"]\""},
+        "EntityProperty"], "]"}]}]]], ",", "\"\<seconds\>\""}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.743433535163677*^9, 3.743433535884759*^9}, {
+  3.743434757587307*^9, 3.743434784027179*^9}, {3.743434844730974*^9, 
+  3.743434900158256*^9}, {3.743434944561243*^9, 3.743435009446274*^9}, {
+  3.7434351158918133`*^9, 3.743435121372896*^9}, {3.7434351740350647`*^9, 
+  3.743435175262719*^9}, {3.743435475422553*^9, 3.7434354758395643`*^9}, {
+  3.743435914248041*^9, 3.743435916766191*^9}},
+ CellLabel->"In[16]:=",ExpressionUUID->"c913f872-2a87-444b-9d45-4c63ab3fc75e"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "5.022694762848043558818195`4.3325484393256355*^6","\"s\"","seconds",
+   "\"Seconds\""},
+  "Quantity"]], "Output",
+ CellChangeTimes->{
+  3.743435014742991*^9, {3.743435121783024*^9, 3.743435141686504*^9}, 
+   3.7434351764392967`*^9, {3.743435472468317*^9, 3.743435476918635*^9}, 
+   3.743435917616572*^9},
+ CellLabel->"Out[16]=",ExpressionUUID->"3fca866b-b736-4503-820c-0de8e89bee28"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ NamespaceBox["WolframAlphaQueryResults",
+  DynamicModuleBox[{Typeset`q$$ = "earth sun orbital angular velocity", 
+   Typeset`opts$$ = {
+   AppearanceElements -> {"Extrusion", "Warnings", "Assumptions", "Pods"}, 
+    Asynchronous -> All, 
+    Method -> {
+     "ExtrusionChosen" -> {
+       "BasicDimensions", "Basic dimensions", 1, 1, "Content"}, 
+      "Formats" -> {"cell", "minput", "moutput", "msound", "dataformats"}}}, 
+   Typeset`elements$$ = {"Extrusion", "Warnings", "Assumptions", "Pods"}, 
+   Typeset`pod1$$ = XMLElement[
+   "pod", {"error" -> "false", "id" -> "Input", "numsubpods" -> "1", 
+     "position" -> "100", "scanner" -> "Identity", "title" -> 
+     "Input interpretation"}, {
+     XMLElement["subpod", {"title" -> ""}, {
+       XMLElement["minput", {}, {"QuantityVariable[\"AngularVelocity\"]"}], 
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox[
+            TagBox[
+             FormBox[
+              TemplateBox[{
+                TemplateBox[{
+                  TagBox["\"angular velocity\"", Identity], "\"  \""}, 
+                 "RowDefault"], 
+                StyleBox[
+                 
+                 RowBox[{
+                  "\"(\"", "\[NoBreak]", "\"physical quantity\"", 
+                   "\[NoBreak]", "\")\""}], {
+                  GrayLevel[0.6], LinebreakAdjustments -> {1, 100, 1, 0, 100},
+                   LineIndent -> 0}, StripOnInput -> False]}, "RowDefault"], 
+              TraditionalForm], 
+             PolynomialForm[#, TraditionalOrder -> False]& ], 
+            TraditionalForm]], "Output", {
+          Background -> None, 
+           GraphicsBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics"}, 
+             DefaultAxesStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsAxes"], DefaultFrameStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsFrame"], DefaultFrameTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsFrameTicks"], 
+             DefaultTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsTicks"]}, 
+           Graphics3DBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics3D"}}}, 
+          NumberPoint -> ".", CellSize -> {550, Automatic}, 
+          AutoStyleOptions -> {"HighlightFormattingErrors" -> False}, 
+          RenderingOptions -> {
+           "3DRenderingMethod" -> "BSPTreeOrDepthBuffer"}]}], 
+       XMLElement["dataformats", {}, {"plaintext,minput"}]}]}], 
+   Typeset`pod2$$ = XMLElement[
+   "pod", {"error" -> "false", "id" -> "CommonSymbol", "numsubpods" -> "1", 
+     "position" -> "200", "scanner" -> "PhysicalQuantity", "title" -> 
+     "Common symbol"}, {
+     XMLElement["subpod", {"title" -> ""}, {
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox["\[Omega]", TraditionalForm]], "Output", {
+          Background -> None, 
+           GraphicsBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics"}, 
+             DefaultAxesStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsAxes"], DefaultFrameStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsFrame"], DefaultFrameTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsFrameTicks"], 
+             DefaultTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsTicks"]}, 
+           Graphics3DBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics3D"}}}, 
+          NumberPoint -> ".", CellSize -> {550, Automatic}, 
+          AutoStyleOptions -> {"HighlightFormattingErrors" -> False}, 
+          RenderingOptions -> {
+           "3DRenderingMethod" -> "BSPTreeOrDepthBuffer"}]}], 
+       XMLElement[
+       "dataformats", {}, {
+        "plaintext,computabledata,formatteddata,formuladata"}]}]}], 
+   Typeset`pod3$$ = XMLElement[
+   "pod", {"error" -> "false", "id" -> "BasicDimensions", "numsubpods" -> "1",
+      "position" -> "300", "primary" -> "true", "scanner" -> 
+     "PhysicalQuantity", "title" -> "Basic dimensions"}, {
+     XMLElement["subpod", {"title" -> "", "primary" -> "true"}, {
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox[
+            TagBox[
+             RowBox[{
+               TemplateBox[{"\"[time]\"", 
+                 RowBox[{"-", "1"}]}, "Superscript", SyntaxForm -> 
+                SuperscriptBox], " ", "\"[angle]\""}], HoldForm], 
+            TraditionalForm]], "Output", {
+          Background -> None, 
+           GraphicsBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics"}, 
+             DefaultAxesStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsAxes"], DefaultFrameStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsFrame"], DefaultFrameTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsFrameTicks"], 
+             DefaultTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsTicks"]}, 
+           Graphics3DBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics3D"}}}, 
+          NumberPoint -> ".", CellSize -> {550, Automatic}, 
+          AutoStyleOptions -> {"HighlightFormattingErrors" -> False}, 
+          RenderingOptions -> {
+           "3DRenderingMethod" -> "BSPTreeOrDepthBuffer"}]}], 
+       XMLElement[
+       "dataformats", {}, {
+        "plaintext,computabledata,formatteddata,formuladata"}]}]}], 
+   Typeset`pod4$$ = XMLElement[
+   "pod", {"error" -> "false", "id" -> "StandardUnitsForPhysicalQuantity", 
+     "numsubpods" -> "1", "position" -> "400", "scanner" -> 
+     "PhysicalQuantity", "title" -> "Standard unit for angular velocity"}, {
+     XMLElement["subpod", {"title" -> ""}, {
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox[
+            StyleBox[
+             TagBox[
+              RowBox[{
+                TagBox[
+                 RowBox[{
+                   StyleBox[
+                    
+                    RowBox[{
+                    "\"rad\"", "\[InvisibleSpace]", "\"/\"", 
+                    "\[InvisibleSpace]", "\"s\""}], FontFamily -> "Helvetica",
+                     FontSize -> Smaller]}], Identity], "  ", 
+                StyleBox[
+                 
+                 RowBox[{
+                  "\"(\"", "\[NoBreak]", "\"radian per second\"", 
+                   "\[NoBreak]", "\")\""}], {
+                 FontFamily -> "Helvetica", FontSize -> Smaller, 
+                  GrayLevel[0.6], LinebreakAdjustments -> {1, 100, 1, 0, 100},
+                   LineIndent -> 0}, StripOnInput -> False]}], "UnitOnly", 
+              SyntaxForm -> Dot], LinebreakAdjustments -> {1, 100, 1, 0, 100},
+              LineIndent -> 0, ZeroWidthTimes -> False], TraditionalForm]], 
+          "Output", {
+          Background -> None, 
+           GraphicsBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics"}, 
+             DefaultAxesStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsAxes"], DefaultFrameStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsFrame"], DefaultFrameTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsFrameTicks"], 
+             DefaultTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsTicks"]}, 
+           Graphics3DBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics3D"}}}, 
+          NumberPoint -> ".", CellSize -> {550, Automatic}, 
+          AutoStyleOptions -> {"HighlightFormattingErrors" -> False}, 
+          RenderingOptions -> {
+           "3DRenderingMethod" -> "BSPTreeOrDepthBuffer"}]}], 
+       XMLElement[
+       "dataformats", {}, {
+        "plaintext,computabledata,formatteddata,numberdata,quantitydata"}]}]}]\
+, Typeset`pod5$$ = XMLElement[
+   "pod", {"error" -> "false", "id" -> "PQUsageType", "numsubpods" -> "1", 
+     "position" -> "500", "scanner" -> "PhysicalQuantity", "title" -> 
+     "Usage type"}, {
+     XMLElement["subpod", {"title" -> ""}, {
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox[
+            StyleBox[
+             RowBox[{"\"scalar\"", 
+               StyleBox[
+                RowBox[{"\[NoBreak]", 
+                  PaneBox[
+                  "\"  |  \"", BaselinePosition -> Baseline, BaseStyle -> 
+                   GrayLevel[0.6]]}], AutoSpacing -> True], "\"vector\""}], 
+             LinebreakAdjustments -> {1, 10, 0, 0, 100}, LineIndent -> 0], 
+            TraditionalForm]], "Output", {
+          Background -> None, 
+           GraphicsBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics"}, 
+             DefaultAxesStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsAxes"], DefaultFrameStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsFrame"], DefaultFrameTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsFrameTicks"], 
+             DefaultTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsTicks"]}, 
+           Graphics3DBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics3D"}}}, 
+          NumberPoint -> ".", CellSize -> {550, Automatic}, 
+          AutoStyleOptions -> {"HighlightFormattingErrors" -> False}, 
+          RenderingOptions -> {
+           "3DRenderingMethod" -> "BSPTreeOrDepthBuffer"}]}], 
+       XMLElement[
+       "dataformats", {}, {"plaintext,computabledata,formatteddata"}]}]}], 
+   Typeset`pod6$$ = XMLElement[
+   "pod", {"error" -> "false", "id" -> "AlternateDescriptions", "numsubpods" -> 
+     "1", "position" -> "600", "scanner" -> "PhysicalQuantity", "title" -> 
+     "Alternate descriptions"}, {
+     XMLElement["subpod", {"title" -> ""}, {
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox[
+            StyleBox[
+             RowBox[{
+               TagBox["\"angular rate\"", Identity], 
+               StyleBox[
+                RowBox[{"\[NoBreak]", 
+                  PaneBox[
+                  "\"  |  \"", BaselinePosition -> Baseline, BaseStyle -> 
+                   GrayLevel[0.6]]}], AutoSpacing -> True], 
+               TagBox["\"circular speed\"", Identity], 
+               StyleBox[
+                RowBox[{"\[NoBreak]", 
+                  PaneBox[
+                  "\"  |  \"", BaselinePosition -> Baseline, BaseStyle -> 
+                   GrayLevel[0.6]]}], AutoSpacing -> True], 
+               TagBox["\"rotational speed\"", Identity]}], 
+             LinebreakAdjustments -> {1, 10, 0, 0, 100}, LineIndent -> 0], 
+            TraditionalForm]], "Output", {
+          Background -> None, 
+           GraphicsBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics"}, 
+             DefaultAxesStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsAxes"], DefaultFrameStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsFrame"], DefaultFrameTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsFrameTicks"], 
+             DefaultTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsTicks"]}, 
+           Graphics3DBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics3D"}}}, 
+          NumberPoint -> ".", CellSize -> {550, Automatic}, 
+          AutoStyleOptions -> {"HighlightFormattingErrors" -> False}, 
+          RenderingOptions -> {
+           "3DRenderingMethod" -> "BSPTreeOrDepthBuffer"}]}], 
+       XMLElement[
+       "dataformats", {}, {"plaintext,computabledata,formatteddata"}]}]}], 
+   Typeset`pod7$$ = XMLElement[
+   "pod", {"error" -> "false", "id" -> "PQItoPQ", "numsubpods" -> "5", 
+     "position" -> "700", "scanner" -> "PhysicalQuantity", "title" -> 
+     "Common subcases"}, {
+     XMLElement["subpod", {"title" -> ""}, {
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox[
+            TagBox["\"average bicycle cadence\"", Identity], 
+            TraditionalForm]], "Output", {
+          Background -> None, 
+           GraphicsBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics"}, 
+             DefaultAxesStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsAxes"], DefaultFrameStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsFrame"], DefaultFrameTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsFrameTicks"], 
+             DefaultTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsTicks"]}, 
+           Graphics3DBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics3D"}}}, 
+          NumberPoint -> ".", CellSize -> {550, Automatic}, 
+          AutoStyleOptions -> {"HighlightFormattingErrors" -> False}, 
+          RenderingOptions -> {
+           "3DRenderingMethod" -> "BSPTreeOrDepthBuffer"}]}], 
+       XMLElement[
+       "dataformats", {}, {"plaintext,computabledata,formatteddata"}]}], 
+     XMLElement["subpod", {"title" -> ""}, {
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox[
+            TagBox["\"bicycle cadence\"", Identity], TraditionalForm]], 
+          "Output", {
+          Background -> None, 
+           GraphicsBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics"}, 
+             DefaultAxesStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsAxes"], DefaultFrameStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsFrame"], DefaultFrameTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsFrameTicks"], 
+             DefaultTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsTicks"]}, 
+           Graphics3DBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics3D"}}}, 
+          NumberPoint -> ".", CellSize -> {550, Automatic}, 
+          AutoStyleOptions -> {"HighlightFormattingErrors" -> False}, 
+          RenderingOptions -> {
+           "3DRenderingMethod" -> "BSPTreeOrDepthBuffer"}]}], 
+       XMLElement[
+       "dataformats", {}, {"plaintext,computabledata,formatteddata"}]}], 
+     XMLElement["subpod", {"title" -> ""}, {
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox[
+            TagBox["\"equatorial angular velocity\"", Identity], 
+            TraditionalForm]], "Output", {
+          Background -> None, 
+           GraphicsBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics"}, 
+             DefaultAxesStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsAxes"], DefaultFrameStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsFrame"], DefaultFrameTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsFrameTicks"], 
+             DefaultTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsTicks"]}, 
+           Graphics3DBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics3D"}}}, 
+          NumberPoint -> ".", CellSize -> {550, Automatic}, 
+          AutoStyleOptions -> {"HighlightFormattingErrors" -> False}, 
+          RenderingOptions -> {
+           "3DRenderingMethod" -> "BSPTreeOrDepthBuffer"}]}], 
+       XMLElement[
+       "dataformats", {}, {"plaintext,computabledata,formatteddata"}]}], 
+     XMLElement["subpod", {"title" -> ""}, {
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox[
+            TagBox["\"maximum bicycle cadence\"", Identity], 
+            TraditionalForm]], "Output", {
+          Background -> None, 
+           GraphicsBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics"}, 
+             DefaultAxesStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsAxes"], DefaultFrameStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsFrame"], DefaultFrameTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsFrameTicks"], 
+             DefaultTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsTicks"]}, 
+           Graphics3DBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics3D"}}}, 
+          NumberPoint -> ".", CellSize -> {550, Automatic}, 
+          AutoStyleOptions -> {"HighlightFormattingErrors" -> False}, 
+          RenderingOptions -> {
+           "3DRenderingMethod" -> "BSPTreeOrDepthBuffer"}]}], 
+       XMLElement[
+       "dataformats", {}, {"plaintext,computabledata,formatteddata"}]}], 
+     XMLElement["subpod", {"title" -> ""}, {
+       XMLElement["cell", {"compressed" -> False, "string" -> True}, {
+         Cell[
+          BoxData[
+           FormBox[
+            TagBox["\"twist\"", Identity], TraditionalForm]], "Output", {
+          Background -> None, 
+           GraphicsBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics"}, 
+             DefaultAxesStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsAxes"], DefaultFrameStyle -> Directive[
+               GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 
+               1, "GraphicsFrame"], DefaultFrameTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsFrameTicks"], 
+             DefaultTicksStyle -> 
+             Directive[
+              FontFamily -> "Times", FontSize -> 10, "GraphicsTicks"]}, 
+           Graphics3DBoxOptions -> {
+            DefaultBaseStyle -> {FontFamily -> "Times", "Graphics3D"}}}, 
+          NumberPoint -> ".", CellSize -> {550, Automatic}, 
+          AutoStyleOptions -> {"HighlightFormattingErrors" -> False}, 
+          RenderingOptions -> {
+           "3DRenderingMethod" -> "BSPTreeOrDepthBuffer"}]}], 
+       XMLElement[
+       "dataformats", {}, {"plaintext,computabledata,formatteddata"}]}]}], 
+   Typeset`aux1$$ = {True, False, {False}, True}, Typeset`aux2$$ = {
+   True, False, {False}, True}, Typeset`aux3$$ = {True, False, {False}, True},
+    Typeset`aux4$$ = {True, False, {False}, True}, Typeset`aux5$$ = {
+   True, False, {False}, True}, Typeset`aux6$$ = {True, False, {False}, True},
+    Typeset`aux7$$ = {True, False, {False}, True}, Typeset`asyncpods$$ = {}, 
+   Typeset`nonpods$$ = {
+    XMLElement["assumptions", {"count" -> "1"}, {
+      XMLElement[
+      "assumption", {
+       "type" -> "Clash", "word" -> "angular velocity", "template" -> 
+        "Assuming \"${word}\" is ${desc1}. Use as ${desc2} instead", "count" -> 
+        "3"}, {
+        XMLElement[
+        "value", {
+         "name" -> "PhysicalQuantity", "desc" -> "a physical quantity", 
+          "input" -> "*C.angular+velocity-_*PhysicalQuantity-"}, {}], 
+        XMLElement[
+        "value", {
+         "name" -> "MathWorld", "desc" -> 
+          " referring to a mathematical definition", "input" -> 
+          "*C.angular+velocity-_*MathWorld-"}, {}], 
+        XMLElement[
+        "value", {
+         "name" -> "Word", "desc" -> "a word", "input" -> 
+          "*C.angular+velocity-_*Word-"}, {}]}]}], 
+    XMLElement["warnings", {"count" -> "1"}, {
+      XMLElement[
+      "reinterpret", {
+       "text" -> "Using closest Wolfram|Alpha interpretation:", "new" -> 
+        "angular velocity", "score" -> "0.36281512605042016", "level" -> 
+        "medium"}, {"\n   ", 
+        XMLElement[
+        "alternative", {"score" -> "0.2514705882352941", "level" -> "low"}, {
+         "earth sun"}], "\n  "}]}]}, Typeset`initdone$$ = True, 
+   Typeset`queryinfo$$ = {
+   "success" -> "true", "error" -> "false", "numpods" -> "7", "datatypes" -> 
+    "PhysicalQuantity", "timedout" -> "", "timedoutpods" -> "", "timing" -> 
+    "5.166", "parsetiming" -> "0.", "parsetimedout" -> "false", "recalculate" -> 
+    "", "id" -> "MSPa48131biede9ia43bdc3d000063fg5fceef336ei7", "host" -> 
+    "http://www5a.wolframalpha.com", "server" -> "53", "related" -> "", 
+    "version" -> "2.6"}, Typeset`sessioninfo$$ = {
+   "TimeZone" -> 2., 
+    "Date" -> {2018, 8, 16, 21, 12, 2.339882`7.121768945152356}, "Line" -> 5, 
+    "SessionID" -> 22109175807425201952}, Typeset`showpods$$ = {1, 2, 3, 4, 5,
+    6, 7}, Typeset`failedpods$$ = {}, Typeset`chosen$$ = {
+   "BasicDimensions", "Basic dimensions", 1, 1, "Content"}, Typeset`open$$ = 
+   False, Typeset`newq$$ = "earth sun orbital angular velocity"}, 
+   DynamicBox[ToBoxes[
+     AlphaIntegration`FormatAlphaResults[
+      Dynamic[{
+       1, {Typeset`pod1$$, Typeset`pod2$$, Typeset`pod3$$, Typeset`pod4$$, 
+         Typeset`pod5$$, Typeset`pod6$$, Typeset`pod7$$}, {
+        Typeset`aux1$$, Typeset`aux2$$, Typeset`aux3$$, Typeset`aux4$$, 
+         Typeset`aux5$$, Typeset`aux6$$, Typeset`aux7$$}, Typeset`chosen$$, 
+        Typeset`open$$, Typeset`elements$$, Typeset`q$$, Typeset`opts$$, 
+        Typeset`nonpods$$, Typeset`queryinfo$$, Typeset`sessioninfo$$, 
+        Typeset`showpods$$, Typeset`failedpods$$, Typeset`newq$$}]], 
+     StandardForm],
+    ImageSizeCache->{218., {47., 17.}},
+    TrackedSymbols:>{Typeset`showpods$$, Typeset`failedpods$$}],
+   DynamicModuleValues:>{},
+   Initialization:>If[
+     Not[Typeset`initdone$$], Null; 
+     WolframAlphaClient`Private`doAsyncUpdates[
+       Hold[{
+        Typeset`pod1$$, Typeset`pod2$$, Typeset`pod3$$, Typeset`pod4$$, 
+         Typeset`pod5$$, Typeset`pod6$$, Typeset`pod7$$}], 
+       Typeset`asyncpods$$, 
+       Dynamic[Typeset`failedpods$$]]; Typeset`asyncpods$$ = {}; 
+     Typeset`initdone$$ = True],
+   SynchronousInitialization->False],
+  BaseStyle->{Deployed -> True},
+  DeleteWithContents->True,
+  Editable->False,
+  SelectWithContents->True]], "WolframAlphaShortInput",
+ CellLabel->"In[5]:=",ExpressionUUID->"6fe89226-80f4-4709-94be-a38165383d72"],
+
+Cell[BoxData[
+ InterpretationBox[
+  FrameBox[
+   StyleBox[
+    FormBox[
+     TagBox[
+      RowBox[{
+       TemplateBox[{"\"[time]\"",RowBox[{"-", "1"}]},
+        "Superscript"], " ", "\<\"[angle]\"\>"}],
+      HoldForm],
+     TraditionalForm], "Output",
+    CellSize->{550, Automatic},
+    AutoStyleOptions->{"HighlightFormattingErrors"->False},
+    ScriptLevel->0,
+    NumberPoint->".",
+    RenderingOptions->{"3DRenderingMethod"->"BSPTreeOrDepthBuffer"},
+    FontFamily->"Times",
+    FontSize->14,
+    Background->None,
+    GraphicsBoxOptions->{DefaultAxesStyle->Directive[
+      GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 1, 
+      "GraphicsAxes"],
+    DefaultBaseStyle->{FontFamily -> "Times", "Graphics"},
+    DefaultFrameStyle->Directive[
+      GrayLevel[0, 0.35], FontColor -> GrayLevel[0.25], FontOpacity -> 1, 
+      "GraphicsFrame"],
+    DefaultFrameTicksStyle->Directive[
+     FontFamily -> "Times", FontSize -> 10, "GraphicsFrameTicks"],
+    DefaultTicksStyle->Directive[
+     FontFamily -> "Times", FontSize -> 10, "GraphicsTicks"]},
+    Graphics3DBoxOptions->{
+    DefaultBaseStyle->{FontFamily -> "Times", "Graphics3D"}}],
+   BaseStyle->{Plain},
+   FrameMargins->10,
+   FrameStyle->GrayLevel[0.85],
+   RoundingRadius->5,
+   StripOnInput->False],
+  WolframAlphaResult[
+  "earth sun orbital angular velocity", {{"BasicDimensions", 1}, 
+    "Content"}]]], "Output",
+ CellChangeTimes->{{3.743435509143469*^9, 3.743435528584147*^9}},
+ CellLabel->"Out[5]=",ExpressionUUID->"801cfd19-8068-452c-8fd4-e6337928686a"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   TemplateBox[{"\"Earth\"",RowBox[{"Entity", "[", 
+       RowBox[{"\"Planet\"", ",", "\"Earth\""}], "]"}],
+     "\"Entity[\\\"Planet\\\", \\\"Earth\\\"]\"","\"planet\""},
+    "Entity"], "[", 
+   TemplateBox[{"\"semimajor axis\"",RowBox[{"EntityProperty", "[", 
+       RowBox[{"\"Planet\"", ",", "\"SemimajorAxis\""}], "]"}],
+     "\"EntityProperty[\\\"Planet\\\", \\\"SemimajorAxis\\\"]\""},
+    "EntityProperty"], "]"}], "/", 
+  RowBox[{"(", 
+   RowBox[{
+    NamespaceBox["WolframAlphaQueryParseResults",
+     DynamicModuleBox[{Typeset`q$$ = "earth orbital period", Typeset`newq$$ = 
+      "earth orbital period", Typeset`chosen$$ = 
+      "Entity[\"Planet\", \"Earth\"][EntityProperty[\"Planet\", \"OrbitPeriod\
+\"]]", Typeset`open$$ = False}, 
+      PaneSelectorBox[{False->
+       DynamicModuleBox[{WolframAlphaClient`Private`show$$ = False, 
+        WolframAlphaClient`Private`assumptionsQ$$ = True}, 
+        TagBox[
+         FrameBox[
+          TagBox[GridBox[{
+             {
+              InputFieldBox[Dynamic[Typeset`newq$$], String,
+               Appearance->None,
+               BaseStyle->{"CalculateInput"},
+               ContinuousAction->True,
+               Enabled->True,
+               FieldSize->{{1, 40}, {1, 
+                  DirectedInfinity[1]}},
+               TrapSelection->False], 
+              ButtonBox[
+               TagBox[
+                TooltipBox[
+                 StyleBox["\<\"\[RightGuillemet]\"\>",
+                  StripOnInput->False,
+                  LineColor->RGBColor[1, 0.5, 0],
+                  FrontFaceColor->RGBColor[1, 0.5, 0],
+                  BackFaceColor->RGBColor[1, 0.5, 0],
+                  GraphicsColor->RGBColor[1, 0.5, 0],
+                  FontColor->RGBColor[1, 0.5, 0]],
+                 DynamicBox[
+                  ToBoxes[
+                   FEPrivate`FrontEndResource[
+                   "WAStrings", "InterpretationAssumptions"], StandardForm]]],
+                
+                Annotation[#, 
+                 Dynamic[
+                  FEPrivate`FrontEndResource[
+                  "WAStrings", "InterpretationAssumptions"]], "Tooltip"]& ],
+               Appearance->None,
+               BaselinePosition->Baseline,
+               ButtonFunction:>(Quiet[
+                  WolframAlpha[]]; Typeset`open$$ = True; 
+                WolframAlphaClient`Private`extrudeFromFastParse[
+                 "earth orbital period", 
+                  Defer[
+                   Entity["Planet", "Earth"][
+                    EntityProperty["Planet", "OrbitPeriod"]]], "Fast parse"]; 
+                Typeset`open$$ = False),
+               ContentPadding->False,
+               Evaluator->Automatic,
+               Method->"Queued"], 
+              ItemBox[
+               ButtonBox[
+                PaneSelectorBox[{True->
+                 TagBox[
+                  TooltipBox[
+                   
+                   DynamicBox[FEPrivate`FrontEndResource[
+                    "WABitmaps", "OrangeSquarePlus"],
+                    ImageSizeCache->{10., {3., 8.}}],
+                   DynamicBox[
+                    ToBoxes[
+                    FEPrivate`FrontEndResource["WAStrings", "ShowAllResults"],
+                     StandardForm]]],
+                  Annotation[#, 
+                   Dynamic[
+                    FEPrivate`FrontEndResource[
+                    "WAStrings", "ShowAllResults"]], "Tooltip"]& ], False->
+                 TagBox[
+                  TooltipBox[
+                   
+                   DynamicBox[FEPrivate`FrontEndResource[
+                    "WABitmaps", "GraySquarePlus"],
+                    ImageSizeCache->{10., {3., 8.}}],
+                   DynamicBox[
+                    ToBoxes[
+                    FEPrivate`FrontEndResource["WAStrings", "ShowAllResults"],
+                     StandardForm]]],
+                  Annotation[#, 
+                   Dynamic[
+                    FEPrivate`FrontEndResource[
+                    "WAStrings", "ShowAllResults"]], "Tooltip"]& ]}, Dynamic[
+                 WolframAlphaClient`Private`show$$],
+                 ImageSize->All],
+                Appearance->None,
+                ButtonFunction:>(Quiet[
+                   WolframAlpha[]]; If[
+                   Or[
+                    CurrentValue["OptionKey"], 
+                    CurrentValue["AltKey"]], SelectionMove[
+                    ButtonNotebook[], All, ButtonCell, AutoScroll -> False]; 
+                   NotebookWrite[
+                    ButtonNotebook[], 
+                    Cell[
+                    Typeset`newq$$, "WolframAlphaShort", FormatType -> 
+                    "TextForm"], All], Typeset`open$$ = True; 
+                   WolframAlphaClient`Private`extrudeFromFastParse[
+                    "earth orbital period", 
+                    Defer[
+                    Entity["Planet", "Earth"][
+                    EntityProperty["Planet", "OrbitPeriod"]]], "Fast parse"]; 
+                   Typeset`open$$ = False]),
+                Evaluator->Automatic,
+                Method->"Queued"],
+               Alignment->{Right, Top},
+               StripOnInput->False]},
+             {
+              PaneBox[
+               TagBox[
+                TooltipBox[
+                 ButtonBox[
+                  PaneSelectorBox[{False->
+                   StyleBox[
+                    RowBox[{
+                    TemplateBox[{"\"Earth\"",RowBox[{"Entity", "[", 
+                    RowBox[{"\"Planet\"", ",", "\"Earth\""}], "]"}],
+                    "\"Entity[\\\"Planet\\\", \\\"Earth\\\"]\"","\"planet\""},
+                    
+                    "Entity"], "[", 
+                    
+                    TemplateBox[{
+                    "\"orbital period\"",RowBox[{"EntityProperty", "[", 
+                    RowBox[{"\"Planet\"", ",", "\"OrbitPeriod\""}], "]"}],
+                    "\"EntityProperty[\\\"Planet\\\", \\\"OrbitPeriod\\\"]\""},
+                    "EntityProperty"], "]"}],
+                    StripOnInput->False,
+                    NumberMarks->False], True->
+                   StyleBox[
+                    RowBox[{
+                    TemplateBox[{"\"Earth\"",RowBox[{"Entity", "[", 
+                    RowBox[{"\"Planet\"", ",", "\"Earth\""}], "]"}],
+                    "\"Entity[\\\"Planet\\\", \\\"Earth\\\"]\"","\"planet\""},
+                    
+                    "Entity"], "[", 
+                    
+                    TemplateBox[{
+                    "\"orbital period\"",RowBox[{"EntityProperty", "[", 
+                    RowBox[{"\"Planet\"", ",", "\"OrbitPeriod\""}], "]"}],
+                    "\"EntityProperty[\\\"Planet\\\", \\\"OrbitPeriod\\\"]\""},
+                    "EntityProperty"], "]"}],
+                    StripOnInput->False,
+                    ShowSyntaxStyles->False,
+                    NumberMarks->False,
+                    FontColor->RGBColor[1, 0.5, 0]]}, Dynamic[
+                    CurrentValue["MouseOver"]],
+                   BaseStyle->{ShowStringCharacters -> True},
+                   FrameMargins->0,
+                   ImageSize->Automatic],
+                  Alignment->Left,
+                  Appearance->None,
+                  BaseStyle->{},
+                  ButtonFunction:>(SelectionMove[
+                    ButtonNotebook[], All, ButtonCell]; NotebookWrite[
+                    ButtonNotebook[], 
+                    Cell[
+                    BoxData[
+                    RowBox[{
+                    TemplateBox[{"\"Earth\"", 
+                    RowBox[{"Entity", "[", 
+                    RowBox[{"\"Planet\"", ",", "\"Earth\""}], "]"}], 
+                    "\"Entity[\\\"Planet\\\", \\\"Earth\\\"]\"", 
+                    "\"planet\""}, "Entity"], "[", 
+                    TemplateBox[{"\"orbital period\"", 
+                    RowBox[{"EntityProperty", "[", 
+                    RowBox[{"\"Planet\"", ",", "\"OrbitPeriod\""}], "]"}], 
+                    "\"EntityProperty[\\\"Planet\\\", \
+\\\"OrbitPeriod\\\"]\""}, "EntityProperty"], "]"}]], "Input"], All]; 
+                   SelectionMove[
+                    ButtonNotebook[], After, CellContents]),
+                  Evaluator->Automatic,
+                  ImageSize->Automatic,
+                  Method->"Preemptive"],
+                 DynamicBox[
+                  ToBoxes[
+                   FEPrivate`FrontEndResource["WAStrings", "RemoveResults"], 
+                   StandardForm]]],
+                Annotation[#, 
+                 Dynamic[
+                  FEPrivate`FrontEndResource["WAStrings", "RemoveResults"]], 
+                 "Tooltip"]& ],
+               AppearanceElements->{},
+               BaseStyle->{ShowStringCharacters -> True, ScriptLevel -> 0},
+               ImageSize->{Automatic, {1, 100}},
+               Scrollbars->{False, Automatic}], "\[SpanFromLeft]", 
+              "\[SpanFromLeft]"}
+            },
+            AutoDelete->False,
+            BaselinePosition->{1, 1},
+            FrameStyle->GrayLevel[0.85],
+            GridBoxAlignment->{"Columns" -> {{Left}}},
+            
+            GridBoxDividers->{
+             "Columns" -> {{False}}, "Rows" -> {False, {True}, False}},
+            
+            GridBoxItemSize->{
+             "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+           "Grid"],
+          Alignment->Top,
+          Background->Dynamic[
+            FEPrivate`If[
+             FEPrivate`And[
+              FEPrivate`SameQ[
+               FEPrivate`Head[Typeset`newq$$], String], 
+              FEPrivate`UnsameQ[Typeset`q$$, Typeset`newq$$]], 
+             RGBColor[1., 0.975, 0.95], 
+             GrayLevel[1]]],
+          BaselinePosition->Baseline,
+          FrameStyle->GrayLevel[0.85],
+          ImageSize->Automatic,
+          RoundingRadius->5,
+          StripOnInput->False],
+         EventHandlerTag[{
+          "MouseEntered" :> 
+           FEPrivate`Set[WolframAlphaClient`Private`show$$, True], 
+           "MouseExited" :> 
+           FEPrivate`Set[WolframAlphaClient`Private`show$$, False], Method -> 
+           "Preemptive", PassEventsDown -> Automatic, PassEventsUp -> True}]],
+        
+        DynamicModuleValues:>{}], True->
+       TagBox[GridBox[{
+          {
+           
+           DynamicModuleBox[{WolframAlphaClient`Private`show$$ = False, 
+            WolframAlphaClient`Private`assumptionsQ$$ = True}, 
+            TagBox[
+             FrameBox[
+              TagBox[GridBox[{
+                 {
+                  InputFieldBox[Dynamic[Typeset`newq$$], String,
+                   Appearance->None,
+                   BaseStyle->{"CalculateInput"},
+                   ContinuousAction->True,
+                   Enabled->True,
+                   FieldSize->{{1, 40}, {1, 
+                    DirectedInfinity[1]}},
+                   TrapSelection->False], 
+                  ButtonBox[
+                   TagBox[
+                    TooltipBox[
+                    StyleBox["\<\"\[RightGuillemet]\"\>",
+                    StripOnInput->False,
+                    LineColor->RGBColor[1, 0.5, 0],
+                    FrontFaceColor->RGBColor[1, 0.5, 0],
+                    BackFaceColor->RGBColor[1, 0.5, 0],
+                    GraphicsColor->RGBColor[1, 0.5, 0],
+                    FontColor->RGBColor[1, 0.5, 0]],
+                    DynamicBox[
+                    ToBoxes[
+                    FEPrivate`FrontEndResource[
+                    "WAStrings", "InterpretationAssumptions"], StandardForm]]],
+                    Annotation[#, 
+                    Dynamic[
+                    FEPrivate`FrontEndResource[
+                    "WAStrings", "InterpretationAssumptions"]], "Tooltip"]& ],
+                   
+                   Appearance->None,
+                   BaselinePosition->Baseline,
+                   ButtonFunction:>(Quiet[
+                    WolframAlpha[]]; Typeset`open$$ = True; 
+                    WolframAlphaClient`Private`extrudeFromFastParse[
+                    "earth orbital period", 
+                    Defer[
+                    Entity["Planet", "Earth"][
+                    EntityProperty["Planet", "OrbitPeriod"]]], "Fast parse"]; 
+                    Typeset`open$$ = False),
+                   ContentPadding->False,
+                   Evaluator->Automatic,
+                   Method->"Queued"], 
+                  ItemBox[
+                   ButtonBox[
+                    PaneSelectorBox[{True->
+                    TagBox[
+                    TooltipBox[
+                    
+                    DynamicBox[FEPrivate`FrontEndResource[
+                    "WABitmaps", "OrangeSquarePlus"]],
+                    DynamicBox[
+                    ToBoxes[
+                    FEPrivate`FrontEndResource["WAStrings", "ShowAllResults"],
+                     StandardForm]]],
+                    Annotation[#, 
+                    Dynamic[
+                    FEPrivate`FrontEndResource[
+                    "WAStrings", "ShowAllResults"]], "Tooltip"]& ], False->
+                    TagBox[
+                    TooltipBox[
+                    
+                    DynamicBox[FEPrivate`FrontEndResource[
+                    "WABitmaps", "GraySquarePlus"]],
+                    DynamicBox[
+                    ToBoxes[
+                    FEPrivate`FrontEndResource["WAStrings", "ShowAllResults"],
+                     StandardForm]]],
+                    Annotation[#, 
+                    Dynamic[
+                    FEPrivate`FrontEndResource[
+                    "WAStrings", "ShowAllResults"]], "Tooltip"]& ]}, Dynamic[
+                    WolframAlphaClient`Private`show$$],
+                    ImageSize->All],
+                    Appearance->None,
+                    ButtonFunction:>(Quiet[
+                    WolframAlpha[]]; If[
+                    Or[
+                    CurrentValue["OptionKey"], 
+                    CurrentValue["AltKey"]], SelectionMove[
+                    ButtonNotebook[], All, ButtonCell, AutoScroll -> False]; 
+                    NotebookWrite[
+                    ButtonNotebook[], 
+                    Cell[
+                    Typeset`newq$$, "WolframAlphaShort", FormatType -> 
+                    "TextForm"], All], Typeset`open$$ = True; 
+                    WolframAlphaClient`Private`extrudeFromFastParse[
+                    "earth orbital period", 
+                    Defer[
+                    Entity["Planet", "Earth"][
+                    EntityProperty["Planet", "OrbitPeriod"]]], "Fast parse"]; 
+                    Typeset`open$$ = False]),
+                    Evaluator->Automatic,
+                    Method->"Queued"],
+                   Alignment->{Right, Top},
+                   StripOnInput->False]},
+                 {
+                  PaneBox[
+                   TagBox[
+                    TooltipBox[
+                    ButtonBox[
+                    PaneSelectorBox[{False->
+                    StyleBox[
+                    RowBox[{
+                    TemplateBox[{"\"Earth\"",RowBox[{"Entity", "[", 
+                    RowBox[{"\"Planet\"", ",", "\"Earth\""}], "]"}],
+                    "\"Entity[\\\"Planet\\\", \\\"Earth\\\"]\"","\"planet\""},
+                    
+                    "Entity"], "[", 
+                    
+                    TemplateBox[{
+                    "\"orbital period\"",RowBox[{"EntityProperty", "[", 
+                    RowBox[{"\"Planet\"", ",", "\"OrbitPeriod\""}], "]"}],
+                    "\"EntityProperty[\\\"Planet\\\", \\\"OrbitPeriod\\\"]\""},
+                    "EntityProperty"], "]"}],
+                    StripOnInput->False,
+                    NumberMarks->False], True->
+                    StyleBox[
+                    RowBox[{
+                    TemplateBox[{"\"Earth\"",RowBox[{"Entity", "[", 
+                    RowBox[{"\"Planet\"", ",", "\"Earth\""}], "]"}],
+                    "\"Entity[\\\"Planet\\\", \\\"Earth\\\"]\"","\"planet\""},
+                    
+                    "Entity"], "[", 
+                    
+                    TemplateBox[{
+                    "\"orbital period\"",RowBox[{"EntityProperty", "[", 
+                    RowBox[{"\"Planet\"", ",", "\"OrbitPeriod\""}], "]"}],
+                    "\"EntityProperty[\\\"Planet\\\", \\\"OrbitPeriod\\\"]\""},
+                    "EntityProperty"], "]"}],
+                    StripOnInput->False,
+                    ShowSyntaxStyles->False,
+                    NumberMarks->False,
+                    FontColor->RGBColor[1, 0.5, 0]]}, Dynamic[
+                    CurrentValue["MouseOver"]],
+                    BaseStyle->{ShowStringCharacters -> True},
+                    FrameMargins->0,
+                    ImageSize->Automatic],
+                    Alignment->Left,
+                    Appearance->None,
+                    BaseStyle->{},
+                    ButtonFunction:>(SelectionMove[
+                    ButtonNotebook[], All, ButtonCell]; NotebookWrite[
+                    ButtonNotebook[], 
+                    Cell[
+                    BoxData[
+                    RowBox[{
+                    TemplateBox[{"\"Earth\"", 
+                    RowBox[{"Entity", "[", 
+                    RowBox[{"\"Planet\"", ",", "\"Earth\""}], "]"}], 
+                    "\"Entity[\\\"Planet\\\", \\\"Earth\\\"]\"", 
+                    "\"planet\""}, "Entity"], "[", 
+                    TemplateBox[{"\"orbital period\"", 
+                    RowBox[{"EntityProperty", "[", 
+                    RowBox[{"\"Planet\"", ",", "\"OrbitPeriod\""}], "]"}], 
+                    "\"EntityProperty[\\\"Planet\\\", \
+\\\"OrbitPeriod\\\"]\""}, "EntityProperty"], "]"}]], "Input"], All]; 
+                    SelectionMove[
+                    ButtonNotebook[], After, CellContents]),
+                    Evaluator->Automatic,
+                    ImageSize->Automatic,
+                    Method->"Preemptive"],
+                    DynamicBox[
+                    ToBoxes[
+                    FEPrivate`FrontEndResource["WAStrings", "RemoveResults"], 
+                    StandardForm]]],
+                    Annotation[#, 
+                    Dynamic[
+                    FEPrivate`FrontEndResource["WAStrings", "RemoveResults"]],
+                     "Tooltip"]& ],
+                   AppearanceElements->{},
+                   BaseStyle->{ShowStringCharacters -> True, ScriptLevel -> 0},
+                   ImageSize->{Automatic, {1, 100}},
+                   Scrollbars->{False, Automatic}], "\[SpanFromLeft]", 
+                  "\[SpanFromLeft]"}
+                },
+                AutoDelete->False,
+                BaselinePosition->{1, 1},
+                FrameStyle->GrayLevel[0.85],
+                GridBoxAlignment->{"Columns" -> {{Left}}},
+                GridBoxDividers->{
+                 "Columns" -> {{False}}, "Rows" -> {False, {True}, False}},
+                
+                GridBoxItemSize->{
+                 "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+               "Grid"],
+              Alignment->Top,
+              Background->Dynamic[
+                FEPrivate`If[
+                 FEPrivate`And[
+                  FEPrivate`SameQ[
+                   FEPrivate`Head[Typeset`newq$$], String], 
+                  FEPrivate`UnsameQ[Typeset`q$$, Typeset`newq$$]], 
+                 RGBColor[1., 0.975, 0.95], 
+                 GrayLevel[1]]],
+              BaselinePosition->Baseline,
+              FrameStyle->GrayLevel[0.85],
+              ImageSize->Automatic,
+              RoundingRadius->5,
+              StripOnInput->False],
+             
+             EventHandlerTag[{
+              "MouseEntered" :> 
+               FEPrivate`Set[WolframAlphaClient`Private`show$$, True], 
+               "MouseExited" :> 
+               FEPrivate`Set[WolframAlphaClient`Private`show$$, False], 
+               Method -> "Preemptive", PassEventsDown -> Automatic, 
+               PassEventsUp -> True}]],
+            DynamicModuleValues:>{}]},
+          {
+           InterpretationBox[
+            StyleBox[
+             
+             DynamicBox[FEPrivate`FrontEndResource[
+              "FEExpressions", "NecklaceAnimator"][20]],
+             AnimatorBoxOptions->{ImageSize->20}],
+            Animator[Appearance -> "Necklace", ImageSize -> 20],
+            BaseStyle->{"Deploy"}]}
+         },
+         BaselinePosition->{1, 1},
+         DefaultBaseStyle->"Column",
+         GridBoxAlignment->{"Columns" -> {{Left}}},
+         GridBoxItemSize->{
+          "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+        "Column"]}, Dynamic[
+        TrueQ[Typeset`open$$]],
+       BaseStyle->{Deployed -> True},
+       ImageSize->Automatic],
+      DynamicModuleValues:>{}],
+     BaseStyle->{Deployed -> True},
+     DeleteWithContents->True,
+     Editable->False,
+     SelectWithContents->True], "/", 
+    RowBox[{"(", 
+     RowBox[{"2", "Pi"}], ")"}]}], ")"}]}]], "WolframAlphaShortInput",
+ CellChangeTimes->{{3.743435634210697*^9, 3.74343566735529*^9}, {
+  3.743435728149148*^9, 3.743435753536614*^9}},
+ CellLabel->"In[13]:=",ExpressionUUID->"9dd74527-0803-4f74-a3be-d2e7d7fb5726"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "0.01720212641319059728397580319759680328`7.958567835319735",
+   RowBox[{"\"au\"", "\[InvisibleSpace]", "\"/\"", "\[InvisibleSpace]", 
+     "\"day\""}],"astronomical units per day",FractionBox[
+   "\"AstronomicalUnit\"", "\"Days\""]},
+  "Quantity"]], "Output",
+ CellChangeTimes->{
+  3.743435538287133*^9, {3.743435631928434*^9, 3.743435667905057*^9}, {
+   3.743435736359943*^9, 3.7434357555441923`*^9}},
+ CellLabel->"Out[13]=",ExpressionUUID->"aa6fd85a-62b2-4370-91bb-64b4c10ec3b8"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"UnitConvert", "[", 
+  RowBox[{"%", ",", "\"\<Kilometers per seconds\>\""}], "]"}]], "Input",
+ CellChangeTimes->{{3.7434357589579487`*^9, 3.743435786249302*^9}, {
+  3.743435888928157*^9, 3.7434358901576767`*^9}},
+ CellLabel->"In[15]:=",ExpressionUUID->"124f294a-fc49-4e1e-b1f9-44c45f1f3e49"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "29.7847393857122887378`7.958567835319735",
+   RowBox[{"\"km\"", "\[InvisibleSpace]", "\"/\"", "\[InvisibleSpace]", 
+     "\"s\""}],"kilometers per second",FractionBox[
+   "\"Kilometers\"", "\"Seconds\""]},
+  "Quantity"]], "Output",
+ CellChangeTimes->{3.7434357871153593`*^9, 3.743435890957077*^9},
+ CellLabel->"Out[15]=",ExpressionUUID->"233df88f-81ae-4651-838e-ab73aafe205c"]
+}, Open  ]]
+},
+WindowSize->{720, 855},
+WindowMargins->{{Automatic, 0}, {Automatic, -1}},
+WindowStatusArea->None,
+FrontEndVersion->"11.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (March 5, \
+2018)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[400, 13, 242, 4, 30, "Input",ExpressionUUID->"45d150d0-e859-42d0-b241-2540353c1783"],
+Cell[645, 19, 723, 20, 39, "Input",ExpressionUUID->"bf832a20-408d-4d9c-ae0e-eb7359f97dfc"],
+Cell[CellGroupData[{
+Cell[1393, 43, 391, 9, 30, "Input",ExpressionUUID->"988b709d-f583-41a2-98da-ec25ee05bfb8"],
+Cell[1787, 54, 1217, 31, 58, "Output",ExpressionUUID->"3fc826aa-3880-403f-b5c6-79a51af39e32"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3041, 90, 396, 9, 30, "Input",ExpressionUUID->"805ac6f2-81b1-4fcc-b963-53f86eea4834"],
+Cell[3440, 101, 1262, 33, 58, "Output",ExpressionUUID->"9ee52112-9135-47bf-8f78-e2ea5aac4b10"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4739, 139, 394, 9, 30, "Input",ExpressionUUID->"65dc0d9c-b102-41bc-b2af-a0181b5e608a"],
+Cell[5136, 150, 1093, 27, 58, "Output",ExpressionUUID->"00bee628-7cb2-4706-bd78-3eb35c7f2259"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6266, 182, 401, 10, 49, "Input",ExpressionUUID->"c0324a36-39e7-4cc6-87e0-899d1a08e974"],
+Cell[6670, 194, 347, 8, 34, "Output",ExpressionUUID->"428e57fa-aab3-45df-b6de-f288486a66e5"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7054, 207, 1666, 34, 113, "Input",ExpressionUUID->"c913f872-2a87-444b-9d45-4c63ab3fc75e"],
+Cell[8723, 243, 415, 9, 72, "Output",ExpressionUUID->"3fca866b-b736-4503-820c-0de8e89bee28"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9175, 257, 24044, 482, 81, "WolframAlphaShortInput",ExpressionUUID->"6fe89226-80f4-4709-94be-a38165383d72"],
+Cell[33222, 741, 1543, 41, 58, "Output",ExpressionUUID->"801cfd19-8068-452c-8fd4-e6337928686a"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[34802, 787, 20972, 476, 96, "WolframAlphaShortInput",ExpressionUUID->"9dd74527-0803-4f74-a3be-d2e7d7fb5726"],
+Cell[55777, 1265, 513, 10, 38, "Output",ExpressionUUID->"aa6fd85a-62b2-4370-91bb-64b4c10ec3b8"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[56327, 1280, 314, 5, 30, "Input",ExpressionUUID->"124f294a-fc49-4e1e-b1f9-44c45f1f3e49"],
+Cell[56644, 1287, 408, 8, 36, "Output",ExpressionUUID->"233df88f-81ae-4651-838e-ab73aafe205c"]
+}, Open  ]]
+}
+]
+*)
+
