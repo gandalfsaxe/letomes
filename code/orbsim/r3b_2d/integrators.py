@@ -1,14 +1,14 @@
 import time
 from math import sqrt
 
-from numba import jit
+from numba import njit, jit, float64, boolean
 
 from . import *
 from ..planets import celestials
 from .analyticals import get_pdot_x, get_pdot_y, get_v_x, get_v_y
 
 
-@jit
+@njit
 def euler_step_symplectic(h, x, y, p_x, p_y):
     """Takes a single time step of the symplectic Euler algorithm"""
     # Step 1
@@ -26,7 +26,7 @@ def euler_step_symplectic(h, x, y, p_x, p_y):
     return x, y, p_x, p_y
 
 
-@jit
+@njit
 def verlet_step_symplectic(h, x, y, p_x, p_y):
     """Takes a half step, then another half step in the symplectic Verlet algorithm"""
     hh = 0.5 * h
@@ -53,19 +53,22 @@ def verlet_step_symplectic(h, x, y, p_x, p_y):
     return x, y, p_x, p_y
 
 
-@jit
+@njit
 def relative_error(vec1, vec2):
     x1, y1 = vec1
     x2, y2 = vec2
     return sqrt(((x2 - x1) ** 2 + (y2 - y1) ** 2) / (x2 ** 2 + y2 ** 2))
 
 
-@jit(nopython=True)
-def symplectic(x0, y0, p0_x, p0_y, duration=3 / UNIT_TIME, max_iter=10000):
+@njit()
+def symplectic(
+    x0, y0, p0_x, p0_y, score, success, duration=3 / UNIT_TIME, max_iter=10000
+):
     """
     runs symplectic adaptive euler-verlet algorithm
     All values are with nondimensionalized units
     """
+    success = False
     h = h_DEFAULT
     h_min = h_MIN_DEFAULT
     t = 0  # total elapsed time
@@ -107,7 +110,8 @@ def symplectic(x0, y0, p0_x, p0_y, duration=3 / UNIT_TIME, max_iter=10000):
     while t < duration:
         if iteration_count > max_iter:
             print("exceeded max iterations, stranded in space!")
-            return False, smallest_distance, path_storage
+            score[0] = smallest_distance
+            return path_storage
 
         x_euler, y_euler, p_euler_x, p_euler_y = euler_step_symplectic(
             h, x, y, p_x, p_y
@@ -143,7 +147,8 @@ def symplectic(x0, y0, p0_x, p0_y, duration=3 / UNIT_TIME, max_iter=10000):
         target_distance = sqrt(target_distance_x ** 2 + target_distance_y ** 2)
         if target_distance > 1e9 / UNIT_LENGTH:
             print("we are way too far away, stranded in space!")
-            return False, smallest_distance, path_storage
+            score[0] = smallest_distance
+            return path_storage
         smallest_distance = min(smallest_distance, target_distance)
 
         """For real though, are we there yet? (did we actually hit?)"""
@@ -151,7 +156,8 @@ def symplectic(x0, y0, p0_x, p0_y, duration=3 / UNIT_TIME, max_iter=10000):
             smallest_distance >= orbital_radius_lower_bound
             and smallest_distance <= orbital_radius_upper_bound
         ):
-            """ we are in orbit range"""
+            success = True
+            """ SUCCESS! We are in orbit range"""
             # current velocity vector
             v_x = p_x + y
             v_y = p_y - x
@@ -180,7 +186,8 @@ def symplectic(x0, y0, p0_x, p0_y, duration=3 / UNIT_TIME, max_iter=10000):
                 v_radial ** 2 + (v_magnitude - target_orbital_velocity_nondim) ** 2
             )
             path_storage.append([x, y, p_x, p_y, h])
-            break
+            score[0] = Dv
+            return path_storage
 
         path_storage.append([x, y, p_x, p_y, h])
 
@@ -192,33 +199,34 @@ def symplectic(x0, y0, p0_x, p0_y, duration=3 / UNIT_TIME, max_iter=10000):
         critical_distance = (earth_celestial_radius / UNIT_LENGTH) ** 2
         if earth_distance < critical_distance:
             # print("Anga crashed into the earth!")
-            return True, Dv, path_storage
+            score[0] = smallest_distance
+            return path_storage
 
     # import io
     # with open("tests/testsim.log", "w") as file:
     # file.writelines(str(path_storage))
     # print("smallest distance =", smallest_distance)
-    print([x, y, p_x, p_y, h])
-    return False, smallest_distance, path_storage
+    score[0] = smallest_distance
+    return path_storage
 
 
 # region Unused integrators
 
 
-@jit
-def unused_explicit_euler_step(h, x, y, p_x, p_y):
-    # Step 1 - get all time derivatives
-    v_x = get_v_x(y, p_x)
-    v_y = get_v_y(x, p_y)
-    pdot_x = get_pdot_x(x, y, p_y)
-    pdot_y = get_pdot_y(x, y, p_x)
-    # Step 2 - linear extrapolation
-    x = x + v_x * h
-    y = y + v_y * h
-    p_x = p_x + pdot_x * h
-    p_y = p_y + pdot_y * h
+# @jit
+# def unused_explicit_euler_step(h, x, y, p_x, p_y):
+#     # Step 1 - get all time derivatives
+#     v_x = get_v_x(y, p_x)
+#     v_y = get_v_y(x, p_y)
+#     pdot_x = get_pdot_x(x, y, p_y)
+#     pdot_y = get_pdot_y(x, y, p_x)
+#     # Step 2 - linear extrapolation
+#     x = x + v_x * h
+#     y = y + v_y * h
+#     p_x = p_x + pdot_x * h
+#     p_y = p_y + pdot_y * h
 
-    return x, y, p_x, p_y
+#     return x, y, p_x, p_y
 
 
 # endregion

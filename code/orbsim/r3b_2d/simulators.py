@@ -1,15 +1,13 @@
 import time
 
 import numpy as np
-from numba import jit
-from pykep import epoch
-from pykep.planet import jpl_lp
+from numba import njit
 
 from . import *
 from .integrators import symplectic
 
 
-@jit(nopython=True)
+@njit
 def launch_sim(psi, duration=3 / UNIT_TIME, max_iter=1e7):
     """
     return: [Dv, [x, y, px, py, h]]
@@ -41,19 +39,12 @@ def launch_sim(psi, duration=3 / UNIT_TIME, max_iter=1e7):
     """SIMULATE"""
     # print(f"running symplectic with [x0, y0, p0_x, p0_y]{[x0, y0, p0_x, p0_y]}")
     # starttime = time.time()
-    successful, score, path = symplectic(x0, y0, p0_x, p0_y, max_iter=int(max_iter))
-    # symplectic_time = time.time() - starttime
-    if successful:
-        return score, path
+    score = [0.0]
+    success = False
+    path = symplectic(x0, y0, p0_x, p0_y, score, success, max_iter=int(max_iter))
+    print(score[0])
+    if success:
+        return score[0], path
     else:
-        return (1 + score * 10) ** 2, path
+        return (1 + score[0] * 10) ** 2, path
 
-
-class space:
-    def __init__(self):
-        self.mars = jpl_lp("mars")
-        self.earth = jpl_lp("earth")
-
-
-def net_gravitational_force(epoch, position):
-    pass
