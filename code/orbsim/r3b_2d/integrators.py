@@ -60,7 +60,7 @@ def relative_error(vec1, vec2):
     return sqrt(((x2 - x1) ** 2 + (y2 - y1) ** 2) / (x2 ** 2 + y2 ** 2))
 
 
-@njit()
+@njit
 def symplectic(
     x0, y0, p0_x, p0_y, score, success, duration=3 / UNIT_TIME, max_iter=10000
 ):

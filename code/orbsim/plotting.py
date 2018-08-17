@@ -5,7 +5,7 @@ import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 
 from .planets import celestials
-from .r3b_2d import L1_POSITION_X, EARTH_POSITION_X, k, LUNAR_POSITION_X
+from .r3b_2d import *
 
 
 def orbitplot3d(completed_path, psi, title=None):
@@ -33,6 +33,45 @@ def orbitplot3d(completed_path, psi, title=None):
     ax.scatter(xs[-1], ys[-1], len(hs), color="red")
 
     plt.show()
+
+
+def leo_plot(completed_path, psi=None, title=None):
+    """
+    input: output of launch_sim, its launch parameters, and an optional title if the file is to be saved
+    
+    Plots a figure of the inputted orbit, with start point marked in green, and point marked in red, earth and moon/mars marked as well.
+    """
+    Dv, path = completed_path  # [Dv,[x,y,px,py,h]]
+
+    xs = [e[0] for e in path]
+    ys = [e[1] for e in path]
+    pxs = [e[2] for e in path]
+    pys = [e[3] for e in path]
+    hs = [e[4] for e in path]
+
+    ts = np.linspace(0, sum(hs), len(path))
+
+    fig = plt.figure()
+    ax = fig.gca()
+    if psi is not None:
+        fig.suptitle(f"DeltaV = {Dv}, psi = {[round(p,3) for p in psi]}")
+    else:
+        fig.suptitle(f"DeltaV = {Dv}")
+
+    ax.set_aspect("equal")
+
+    ax.plot(xs, ys, color="black", linewidth="2")
+    earth = plt.Circle((EARTH_POSITION_X, 0),EARTH_RADIUS/UNIT_LENGTH, color="blue")
+    ax.add_artist(earth)
+
+    # ax.scatter(xs[0], xs[0], color="green")
+    # ax.scatter(xs[-1], xs[-1], color="red")
+
+    if title is None:
+        plt.show()
+    else:
+        filename = f"./path_{title}.pdf"
+        plt.savefig(filename)
 
 
 def orbitplot2d(completed_path, psi=None, title=None):
@@ -75,10 +114,11 @@ def orbitplot2d(completed_path, psi=None, title=None):
     fig = plt.figure()
     ax = fig.gca()
     if psi is not None:
-        fig.suptitle(f"DeltaV = {Dv}, hyperparameters = {[round(p,3) for p in psi]}")
+        fig.suptitle(f"DeltaV = {Dv}, psi = {[round(p,3) for p in psi]}")
     else:
         fig.suptitle(f"DeltaV = {Dv}")
 
+    ax.set_aspect("equal")
     ax.plot(Xs, Ys, color="black", linewidth=2)
     ax.plot(Xs_earth, Ys_earth, color="blue", linewidth=1)
     ax.plot(Xs_moon, Ys_moon, color="grey", linewidth=0.5)
@@ -110,7 +150,7 @@ def orbitplot_non_inertial(completed_path, psi=None, title=None):
     fig = plt.figure()
     ax = fig.gca()
     if psi is not None:
-        fig.suptitle(f"DeltaV = {Dv}, hyperparameters = {[round(p,3) for p in psi]}")
+        fig.suptitle(f"DeltaV = {Dv}, psi = {[round(p,3) for p in psi]}")
     else:
         fig.suptitle(f"DeltaV = {Dv}")
 
@@ -121,6 +161,7 @@ def orbitplot_non_inertial(completed_path, psi=None, title=None):
 
     circle_x, circle_y = orbital_circle(celestials.MOON)
 
+    ax.set_aspect("equal")    
     ax.plot(circle_x, circle_y, color="grey")
 
     ax.scatter(xs[-0], ys[0], color="green")

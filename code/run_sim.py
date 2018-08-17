@@ -1,7 +1,7 @@
 import time
 
 from orbsim.r3b_2d import *
-from orbsim.plotting import orbitplot2d, orbitplot_non_inertial
+from orbsim.plotting import orbitplot2d, orbitplot_non_inertial, leo_plot
 from orbsim.r3b_2d.simulators import launch_sim
 from argparse import ArgumentParser
 
@@ -30,8 +30,8 @@ if __name__ == "__main__":
     if "leo" in paths:
         # leo
         psi = [0.0, 0.0, 0.0]
-        path = launch_sim(psi, duration=1 / UNIT_TIME)
-        orbitplot2d(path, psi, title="leo")
+        path = launch_sim(psi, duration=0.0625 / UNIT_TIME)
+        leo_plot(path, psi, title="leo")
 
     if "h" in paths:
         # hohmann
@@ -51,7 +51,7 @@ if __name__ == "__main__":
             0.000000000000000,
             -3.149483130653266 / UNIT_VELOCITY,
         ]
-        path = launch_sim(psi, duration=4 / UNIT_TIME)
+        path = launch_sim(psi, duration=1 / UNIT_TIME)
         orbitplot2d(path, psi, title="reverse hohmann")
         orbitplot_non_inertial(path, psi, title="reverse_hohmann")
 

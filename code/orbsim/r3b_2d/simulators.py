@@ -41,7 +41,9 @@ def launch_sim(psi, duration=3 / UNIT_TIME, max_iter=1e7):
     # starttime = time.time()
     score = [0.0]
     success = False
-    path = symplectic(x0, y0, p0_x, p0_y, score, success, max_iter=int(max_iter))
+    path = symplectic(
+        x0, y0, p0_x, p0_y, score, success, duration=duration, max_iter=int(max_iter)
+    )
     print(score[0])
     if success:
         return score[0], path
