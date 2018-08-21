@@ -16,6 +16,17 @@
             "stopOnEntry": false
         },
         {
+            "name": "Python: Debug Search Hohmann",
+            "type": "python",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/code",
+            "program": "${workspaceFolder}/code/main_bsc.py",
+            "args": [
+                "sh"
+            ],
+            "stopOnEntry": false
+        },
+        {
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
