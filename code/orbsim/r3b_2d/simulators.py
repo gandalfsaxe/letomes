@@ -15,6 +15,7 @@ def launch_sim(psi, duration=3 / UNIT_TIME, max_iter=1e7):
     single rocket with a given set of hyperparameters, return the resulting path
     """
     pos_ang, burn_ang, burnDv = psi  # extract parameters from decision vector
+    burnDv /= UNIT_VELOCITY
 
     """define init params"""
     # position (where on earth do we start our burn)
@@ -44,9 +45,13 @@ def launch_sim(psi, duration=3 / UNIT_TIME, max_iter=1e7):
     path = symplectic(
         x0, y0, p0_x, p0_y, score, success, duration=duration, max_iter=int(max_iter)
     )
-    print(score[0])
     if success:
-        return score[0], path
+        print("SUCCESS")
+        final_score = score[0]+burnDv
+        print("score = ", final_score)
+        return final_score, path
     else:
-        return (1 + score[0] * 10) ** 2, path
+        final_score=((1 + score[0]) * 10) ** 2
+        print("score = ", final_score)
+        return final_score, path
 

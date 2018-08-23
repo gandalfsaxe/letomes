@@ -9,8 +9,6 @@ import matplotlib.gridspec as gridspec
 from IPython import display
 import numpy as np
 
-plt.rcParams["image.cmap"] = "gray"
-plt.rcParams["image.interpolation"] = "nearest"
 import pygmo as pg
 from pygmo import algorithm
 import os
