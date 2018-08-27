@@ -15,6 +15,10 @@
   "python.unitTest.pyTestEnabled": true,
   "python.unitTest.pyTestArgs": ["code"], // only looks for unit tests in ./code/
 
+  // LATEX WORKSHOP
+  // Ignore underfull or overfull \hbox, last resort
+  // "latex-workshop.message.badbox.show": false,
+
   // MARKDOWN
   "[markdown]": {
     "editor.tabSize": 2
@@ -32,7 +36,43 @@
     }, // change no-trailing-punctuation (allow "?" in headers)
     "MD040": false // disable fenced-code-language (allow no langauge to be specified)
   },
-  // MARKDOWN CSPELL
+  // SPELL RIGHT
+  "spellright.language": "en",
+  "spellright.documentTypes": [
+    // "markdown",
+    "plaintext"
+    // "latex"
+  ],
+  // CSPELL
+  "cSpell.enabledLanguageIds": [
+    // "latex",
+    "python",
+    // --MISC-- (probably not used)
+    "asciidoc",
+    "c",
+    "cpp",
+    "csharp",
+    "css",
+    "go",
+    "handlebars",
+    "html",
+    "jade",
+    "javascript",
+    "javascriptreact",
+    "json",
+    "less",
+    "markdown",
+    "php",
+    "plaintext",
+    "pub",
+    "restructuredtext",
+    "rust",
+    "scss",
+    "text",
+    "typescript",
+    "typescriptreact",
+    "yml"
+  ],
   "cSpell.dictionaries": ["en", "latex", "html"],
   "cSpell.languageSettings": [
     {
@@ -49,6 +89,7 @@
     "Saxe",
     "Slingshooters",
     "Störmer",
+    "Texmaker",
     "Verlet",
     "analyticals",
     "architectured",
@@ -78,6 +119,7 @@
     "stepsize",
     "symplectic",
     "symplectically",
+    "trimmarks",
     "verlet",
     "xlabel",
     "xlim",
