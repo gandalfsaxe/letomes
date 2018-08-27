@@ -41,17 +41,17 @@ def launch_sim(psi, duration=3 / UNIT_TIME, max_iter=1e7):
     # print(f"running symplectic with [x0, y0, p0_x, p0_y]{[x0, y0, p0_x, p0_y]}")
     # starttime = time.time()
     score = [0.0]
-    success = False
+    success = [0]
     path = symplectic(
         x0, y0, p0_x, p0_y, score, success, duration=duration, max_iter=int(max_iter)
     )
-    if success:
-        print("SUCCESS")
-        final_score = score[0]+burnDv
-        print("score = ", final_score)
+    if success[0] == 1:
+        # print("SUCCESS")
+        final_score = score[0] + burnDv
+        # print("score = ", final_score)
         return final_score, path
     else:
-        final_score=((1 + score[0]) * 10) ** 2
-        print("score = ", final_score)
+        final_score = ((1 + score[0]) * 10) ** 2
+        # print("score = ", final_score)
         return final_score, path
 

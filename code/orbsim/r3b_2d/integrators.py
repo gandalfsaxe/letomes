@@ -68,7 +68,7 @@ def symplectic(
     runs symplectic adaptive euler-verlet algorithm
     All values are with nondimensionalized units
     """
-    success = False
+    success[0] = 0
     h = h_DEFAULT
     h_min = h_MIN_DEFAULT
     t = 0  # total elapsed time
@@ -109,7 +109,7 @@ def symplectic(
     ) / UNIT_LENGTH
     while t < duration:
         if iteration_count > max_iter:
-            print("exceeded max iterations, stranded in space!")
+            # print("exceeded max iterations, stranded in space!")
             score[0] = smallest_distance
             return path_storage
 
@@ -146,7 +146,7 @@ def symplectic(
         target_distance_y = y - target_position_y
         target_distance = sqrt(target_distance_x ** 2 + target_distance_y ** 2)
         if target_distance > 1e9 / UNIT_LENGTH:
-            print("we are way too far away, stranded in space!")
+            # print("we are way too far away, stranded in space!")
             score[0] = smallest_distance
             return path_storage
         smallest_distance = min(smallest_distance, target_distance)
@@ -156,7 +156,6 @@ def symplectic(
             smallest_distance >= orbital_radius_lower_bound
             and smallest_distance <= orbital_radius_upper_bound
         ):
-            success = True
             """ SUCCESS! We are in orbit range"""
             # current velocity vector
             v_x = p_x + y
@@ -186,6 +185,7 @@ def symplectic(
                 v_radial ** 2 + (v_magnitude - target_orbital_velocity_nondim) ** 2
             )
             path_storage.append([x, y, p_x, p_y, h])
+            success[0] = 1
             score[0] = Dv
             return path_storage
 
