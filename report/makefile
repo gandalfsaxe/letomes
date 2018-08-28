@@ -1,12 +1,12 @@
 XELATEX=xelatex -file-line-error -interaction=nonstopmode
 
 .PHONY: all
-all: Thesis.tex
-	latexmk -pdf -pdflatex="$(XELATEX)" -use-make Thesis.tex
+all: thesis-letomes.tex
+	latexmk -pdf -pdflatex="$(XELATEX)" -use-make thesis-letomes.tex
 
 .PHONY: auto
-auto: Thesis.tex
-	latexmk -pdf -pdflatex="$(XELATEX)" -use-make -pvc Thesis.tex
+auto: thesis-letomes.tex
+	latexmk -pdf -pdflatex="$(XELATEX)" -use-make -pvc thesis-letomes.tex
 
 .PHONY: clean
 clean:
