@@ -36,6 +36,7 @@
     }, // change no-trailing-punctuation (allow "?" in headers)
     "MD040": false // disable fenced-code-language (allow no langauge to be specified)
   },
+
   // SPELL RIGHT
   "spellright.language": "en",
   "spellright.documentTypes": [
@@ -43,9 +44,13 @@
     "plaintext"
     // "latex"
   ],
-  // CSPELL
+
+  // CODE SPELL CHECKER
+  "cSpell.enabled": true,
+  "cSpell.dictionaries": ["en", "latex", "html"],
+  // Enable / disable by language
   "cSpell.enabledLanguageIds": [
-    // "latex",
+    "latex",
     "python",
     // --MISC-- (probably not used)
     "asciidoc",
@@ -73,8 +78,19 @@
     "typescriptreact",
     "yml"
   ],
-  "cSpell.dictionaries": ["en", "latex", "html"],
+  // Define dictionary for latex template
+  "cSpell.dictionaryDefinitions": [
+    {
+      "name": "lauersens-cspell",
+      "path": ".vscode/lauersens-cspell.txt"
+    }
+  ],
+  // Activate dictionary for latex template, for latex and markdown
   "cSpell.languageSettings": [
+    {
+      "languageId": "latex, markdown",
+      "dictionaries": ["lauersens-cspell"]
+    },
     {
       "languageId": "markdown",
       "ignoreRegExpList": ["\\[@.+\\]/g"] // ignore pandoc-citeproc citations
