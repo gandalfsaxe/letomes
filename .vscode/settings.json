@@ -11,6 +11,10 @@
       "source.organizeImports": false
     }
   },
+  // Disable warnings unused imports (Oisin insists in import * :P)
+  "python.linting.pylintArgs": [
+    "--disable=W0614"
+],
   // PYTHON UNIT TEST
   "python.unitTest.pyTestEnabled": true,
   "python.unitTest.pyTestArgs": ["code"], // only looks for unit tests in ./code/
