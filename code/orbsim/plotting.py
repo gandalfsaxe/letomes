@@ -8,7 +8,7 @@ from .planets import celestials
 from .r3b_2d import *
 
 
-def orbitplot3d(completed_path, psi, title=None):
+def orbitplot3d(completed_path, psi,  filepath=".", title=None):
     Dv, path = completed_path
 
     xs = [e[0] for e in path]
@@ -35,7 +35,7 @@ def orbitplot3d(completed_path, psi, title=None):
     plt.show()
 
 
-def leo_plot(completed_path, psi=None, title=None):
+def leo_plot(completed_path, psi=None,  filepath=".", title=None):
     """
     input: output of launch_sim, its launch parameters, and an optional title if the file is to be saved
     
@@ -70,11 +70,11 @@ def leo_plot(completed_path, psi=None, title=None):
     if title is None:
         plt.show()
     else:
-        filename = f"./path_{title}.pdf"
+        filename = f"{filepath}/path_{title}.pdf"
         plt.savefig(filename)
 
 
-def orbitplot2d(completed_path, psi=None, title=None):
+def orbitplot2d(completed_path, psi=None, filepath=".",title=None):
     """
     input: output of launch_sim, its launch parameters, and an optional title if the file is to be saved
     
@@ -129,11 +129,11 @@ def orbitplot2d(completed_path, psi=None, title=None):
     if title is None:
         plt.show()
     else:
-        filename = f"./path_{title}.pdf"
+        filename = f"{filepath}/path_{title}.pdf"
         plt.savefig(filename)
 
 
-def orbitplot_non_inertial(completed_path, psi=None, title=None):
+def orbitplot_non_inertial(completed_path, psi=None,  filepath=".", title=None):
     """
     input: output of launch_sim, its launch parameters, and an optional title if the file is to be saved
     
@@ -169,7 +169,7 @@ def orbitplot_non_inertial(completed_path, psi=None, title=None):
     if title is None:
         plt.show()
     else:
-        filename = f"./path_{title}_non-inertial.pdf"
+        filename = f"{filepath}/path_{title}_non-inertial.pdf"
         plt.savefig(filename)
 
 
