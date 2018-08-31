@@ -41,6 +41,12 @@
     "MD040": false // disable fenced-code-language (allow no langauge to be specified)
   },
 
+  // TODO HIGHLIGHT
+  "todohighlight.include": [
+    "**/*.py",
+    "**/*.tex"
+  ],
+
   // SPELL RIGHT
   "spellright.language": "en",
   "spellright.documentTypes": [
