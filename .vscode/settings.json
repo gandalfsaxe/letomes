@@ -20,8 +20,8 @@
   "python.unitTest.pyTestArgs": ["code"], // only looks for unit tests in ./code/
 
   // LATEX WORKSHOP
-  // Ignore underfull or overfull \hbox, last resort
-  // "latex-workshop.message.badbox.show": false,
+  "latex-workshop.latex.autoBuild.onSave.enabled": true,
+  // "latex-workshop.message.badbox.show": false, // Ignore underfull or overfull \hbox, last resort
 
   // MARKDOWN
   "[markdown]": {
