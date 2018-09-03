@@ -1,12 +1,14 @@
-import json
-import os
-
 """
+Constants common to all simulations.
+
 Unless otherwise noted, all units will be in:
 - Mass:   kg
 - Length: km
-- Time:   days
+- Time:   days  TODO: Change to seconds due to better fit with typical time step size
 """
+
+import json
+import os
 
 ### TABLE / PHYSICAL CONSTANTS ###
 EARTH_RADIUS = 6367.4447  # km

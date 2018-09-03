@@ -1,6 +1,18 @@
+"""
+Constants specific to R4B-3D (Restricted 4-Body Problem in 3 Dimensions)
+
+Unless otherwise noted, all units will be in:
+- Mass:   kg
+- Length: km
+- Time:   days  TODO: Change to seconds due to better fit with typical time step size
+
+Variable name conventions:
+- non_dim: dimensionless (nondimensionalized)
+"""
+
 import json
 import os
-from math import pi, pow, sqrt
+from math import pi, sqrt
 
 from orbsim import (
     G,
@@ -12,16 +24,6 @@ from orbsim import (
     LUNAR_ORBITAL_DURATION,
     LUNAR_RADIUS,
 )
-
-"""
-Unless otherwise noted, all units will be in:
-- Mass:   kg
-- Length: km
-- Time:   days
-
-Variable name conventions:
-- non_dim: dimensionless (nondimensionalized)
-"""
 
 ### SIMULATION CONSTANTS ###
 # class: Planets (planets.py)
@@ -64,6 +66,7 @@ LEO_VELOCITY_NONDIM = LEO_VELOCITY / UNIT_VELOCITY  # dimless
 
 
 def update_constants_json():
+    """ Write constant to constants.json file in same directory"""
 
     # Write constants to text file
     constants_dict = {

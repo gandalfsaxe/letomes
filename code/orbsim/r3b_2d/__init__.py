@@ -1,3 +1,13 @@
+"""
+Unless otherwise noted, all units will be in:
+- Mass:   kg
+- Length: km
+- Time:   days  TODO: Change to seconds due to better fit with typical time step size
+
+Variable name conventions:
+- non_dim: dimensionless (nondimensionalized)
+"""
+
 import json
 import os
 from math import pi, sqrt
@@ -12,16 +22,6 @@ from orbsim import (
     LUNAR_ORBITAL_DURATION,
     LUNAR_RADIUS,
 )
-
-"""
-Unless otherwise noted, all units will be in:
-- Mass:   kg
-- Length: km
-- Time:   days
-
-Variable name conventions:
-- non_dim: dimensionless (nondimensionalized)
-"""
 
 ### SIMULATION CONSTANTS ###
 # class: Planets (planets.py)
