@@ -8,7 +8,7 @@ from .integrators import symplectic
 
 
 @njit
-def launch_sim(psi, duration=3 / UNIT_TIME, max_iter=1e7):
+def launch_sim(psi, duration=3, max_iter=1e7):
     """
     return: [Dv, [x, y, px, py, h]]
     launch (not really a launch since we start from LEO) a 
@@ -16,6 +16,7 @@ def launch_sim(psi, duration=3 / UNIT_TIME, max_iter=1e7):
     """
     pos_ang, burn_ang, burnDv = psi  # extract parameters from decision vector
     burnDv /= UNIT_VELOCITY
+    duration /= UNIT_TIME
 
     """define init params"""
     # position (where on earth do we start our burn)
