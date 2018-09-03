@@ -18,11 +18,11 @@ from orbsim import (
     G,
     DAY,
     EARTH_MASS,
-    EARTH_MOON_DISTANCE,
     EARTH_RADIUS,
     LUNAR_MASS,
-    LUNAR_ORBITAL_DURATION,
     LUNAR_RADIUS,
+    a_EARTH,
+    T_EARTH,
 )
 
 ### SIMULATION CONSTANTS ###
@@ -37,15 +37,6 @@ h_MIN_DEFAULT = 1e-10  # dimless time
 STEP_ERROR_TOLERANCE = 1e-9  # dimless time
 
 
-# Dimensionless constants
-k = LUNAR_MASS / (EARTH_MASS + LUNAR_MASS)  # dimless
-
-# Note that Y for both Earth and Moon is always zero in (X,Y) system
-LUNAR_POSITION_X = 1 - k
-EARTH_POSITION_X = -k
-L1_POSITION_X = 1 - pow(k / 3, 1 / 3)
-
-
 ### DERIVED BOUNDARY CONDITIONS ###
 LEO_RADIUS = EARTH_RADIUS + EARTH_ALTITUDE  # km
 LLO_RADIUS = LUNAR_RADIUS + LUNAR_ALTITUDE  # km
@@ -56,9 +47,10 @@ LLO_VELOCITY = sqrt(G * LUNAR_MASS / (LLO_RADIUS * 1000.0)) / 1000.0  # km/s
 
 ### NONDIMENSIONALIZATION ###
 # Characteristic units
-UNIT_LENGTH = EARTH_MOON_DISTANCE  # km
-UNIT_TIME = LUNAR_ORBITAL_DURATION / (2.0 * pi)  # days
-UNIT_VELOCITY = UNIT_LENGTH / (UNIT_TIME * DAY)  # km/s
+UNIT_LENGTH = a_EARTH  # km
+UNIT_TIME = T_EARTH  # days
+UNIT_VELOCITY = 4.7403885  # km/s
+UNIT_VELOCITY2 = UNIT_LENGTH / (UNIT_TIME * DAY)  # km/s (just a check)
 
 # Nondimensionalized boundary conditions
 LEO_RADIUS_NONDIM = LEO_RADIUS / UNIT_LENGTH  # dimless
@@ -77,11 +69,6 @@ def update_constants_json():
         "h_DEFAULT": h_DEFAULT,
         "h_MIN": h_MIN_DEFAULT,
         "STEP_ERROR_TOLERANCE": STEP_ERROR_TOLERANCE,
-        # Dimensionless constants
-        "k": k,
-        "LUNAR_POSITION_X": LUNAR_POSITION_X,
-        "EARTH_POSITION_X": EARTH_POSITION_X,
-        "L1_POSITION_X": L1_POSITION_X,
         ### DERIVED BOUNDARY CONDITIONS ###
         "LEO_RADIUS": LEO_RADIUS,
         "LLO_RADIUS": LLO_RADIUS,
@@ -92,6 +79,7 @@ def update_constants_json():
         "UNIT_LENGTH": UNIT_LENGTH,
         "UNIT_TIME": UNIT_TIME,
         "UNIT_VELOCITY": UNIT_VELOCITY,
+        "UNIT_VELOCITY2": UNIT_VELOCITY2,
         # Nondimensionalized boundary conditions
         "LEO_RADIUS_NONDIM": LEO_RADIUS_NONDIM,
         "LEO_VELOCITY_NONDIM": LEO_VELOCITY_NONDIM,

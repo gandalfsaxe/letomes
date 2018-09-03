@@ -14,11 +14,16 @@ import os
 EARTH_RADIUS = 6367.4447  # km
 EARTH_MASS = 5.9721986e24  # kg
 
+# Lunar quantities
 LUNAR_RADIUS = 1737.1  # km
 LUNAR_MASS = 7.34767309e22  # kg
-
 EARTH_MOON_DISTANCE = 384400.0  # km
 LUNAR_ORBITAL_DURATION = 27.322  # days
+
+# Solar system quantities (see r4b-units.nb)
+a_EARTH = 1.49597887e8  # km (semi major axis of Earth's orbit)
+T_EARTH = 3.1558149e7  # s (orbital period of Earth)
+
 
 G = 6.67384e-11  # m^3 kg^-1 s^-2
 DAY = 24.0 * 3600.0  # s
