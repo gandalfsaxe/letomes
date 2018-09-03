@@ -1,6 +1,6 @@
 import json
 import os
-from math import pi, pow, sqrt
+from math import pi, sqrt
 
 from orbsim import (
     G,
