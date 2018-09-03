@@ -1,13 +1,13 @@
+"""
+Equations of motion for R3B-2D system (Restricted 3-Body Problem in 2 Dimensions).
+Derived via Hamiltons's equations.
+"""
+
 from math import sqrt
 
 from numba import njit
 
 from . import k
-
-
-"""
-static functions that evaluate some expression formulated in the paper
-"""
 
 
 @njit
