@@ -40,6 +40,8 @@ def update_constants_json():
         "LUNAR_MASS": LUNAR_MASS,
         "EARTH_MOON_DISTANCE": EARTH_MOON_DISTANCE,
         "LUNAR_ORBIT_DURATION": LUNAR_ORBITAL_DURATION,
+        "a_EARTH": a_EARTH,
+        "T_EARTH": T_EARTH,
         "G": G,
         "DAY": DAY,
     }
