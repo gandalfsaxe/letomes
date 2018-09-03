@@ -13,7 +13,8 @@
   },
   // Disable warnings unused imports (Oisin insists in import * :P)
   "python.linting.pylintArgs": [
-    "--disable=W0614"
+    "--disable=W0614",
+    "--disable=C0103"
 ],
   // PYTHON UNIT TEST
   "python.unitTest.pyTestEnabled": true,
