@@ -64,6 +64,7 @@ LEO_VELOCITY_NONDIM = LEO_VELOCITY / UNIT_VELOCITY  # dimless
 
 
 def update_constants_json():
+    """ Write constant to constants.json file in same directory"""
 
     # Write constants to text file
     constants_dict = {

@@ -23,6 +23,7 @@ DAY = 24.0 * 3600.0  # s
 
 
 def update_constants_json():
+    """ Write constants to constants.json file in same directory"""
 
     # Write constants to text file
     constants_dict = {
