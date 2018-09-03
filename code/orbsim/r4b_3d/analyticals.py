@@ -2,7 +2,6 @@
 Equations of motion for R3B-2D system (Restricted 3-Body Problem in 2 Dimensions).
 Derived via Hamiltons's equations.
 """
-
 from math import cos, sin, sqrt, tan
 
 from numba import njit

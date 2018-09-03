@@ -9,7 +9,6 @@ Unless otherwise noted, all units will be in:
 Variable name conventions:
 - non_dim: dimensionless (nondimensionalized)
 """
-
 import json
 import os
 from math import pi, sqrt
