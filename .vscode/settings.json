@@ -13,8 +13,8 @@
   },
   // Disable warnings unused imports (Oisin insists in import * :P)
   "python.linting.pylintArgs": [
-    "--disable=W0614",
-    "--disable=C0103"
+    // "--disable=W0614", // Unused imports from wildcard import
+    "--disable=C0103"  // Ignores mixed case constants
 ],
   // PYTHON UNIT TEST
   "python.unitTest.pyTestEnabled": true,
@@ -108,6 +108,7 @@
     }
   ],
   "cSpell.words": [
+    "Bdot",
     "Brandenborg",
     "CUDA",
     "Daly",
@@ -125,6 +126,7 @@
     "Mathematica",
     "Oisin",
     "Poul",
+    "Rdot",
     "Salimans",
     "Saxe",
     "Slingshooters",
@@ -151,6 +153,7 @@
     "linkcolor",
     "mkdir",
     "mplot",
+    "njit",
     "nondim",
     "nondimensionalization",
     "nondimensionalized",
