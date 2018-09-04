@@ -2,6 +2,9 @@
 
 \chapter{Discussion}
 
+\section{Errors Found in Old BSc Code}
+We found some mathematical errors in the old code; argue for why they don’t invalidate the old results
+
 \section{Stability of Trajectories: Lyapunov Exponent}
 argue for correctness of method and trustworthiness of trajectories by quantifying the inherent chaos: Basically, we are addressing the fact that this is a numerical simulation, and therefore a compressed view of the real thing. It is important to argue that that compression is not too much.
 
@@ -97,11 +100,11 @@ A good heuristic for whether or not our paths are precise enough would be a meas
 % \end{figure}
 
 
-\section{Usefulness of ES}
+\section{Brute Force vs. ES}
 how well does it compare to the old brute-force method? Do we get anything out of estimating a gradient? Do our results’ quality scale with a more complex model? (more noise points more annealing).
 
 \section{Delta-v Travel Time Trade-off}
-plot this, if we can get enough different successful trajectories. What does that plot look like?)
+Delta-v Travel Time Trade-off. Plot this, if we can get enough different successful trajectories. What does that plot look like?
 
 \section{Performance Optimization}
 was PaGMO a good choice? Is it a reasonable problem to run on GPU or are we transporting too much data?

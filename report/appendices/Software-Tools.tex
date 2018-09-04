@@ -1,0 +1,30 @@
+% !TEX root = ../thesis-letomes.tex
+\chapter{Software Tools and Libraries} \label{apx:software}
+
+\section{Docker}
+
+In our attempts to do things ``The Right Way'' from the start, we pursued docker for some time near the start of the project. The appeal of docker is that it gives a program total platform independence, since one delivers the program bundled together with a `container'; a miniature virtual machine, that has all the necessary software in exactly the correct versions with the same configuration as the environment in which the program is run by the developer. We created such a container, and were conducting our initial experiments in it, but regrettably, the HPC cluster that was available to us could not allow the installation of docker, since parts of it run with root access. Since the HPC cluster is shared by the entire institution, this is not permitted by procedure, so the concept was abandoned, and we took the time to manually initialize the environments that the program was to run on.
+
+
+\section{PyKEP - Python Library for Astrodynamics}
+
+\section{pykep and PyGMO}
+
+pykep is an open-source engine for formulating and solving problems of space flight nature. It's developed by the European Space Agency, in cooperation with NASA's JPL and the space flight community at large. The library interfaces with data on ephemerides\footnote{object trajectories computed to give position at a given time} for every recorded celestial body and major/minor asteroid. It uses PyGMO as its back end, which is a C++ library\footnote{PaGMO: Parallel Global Multi-objective Optimizer. It is developed by the same people at ESA as pykep} for solving optimization problems, wrapped in python. pykep essentially lets users define their optimization problem in a pedagogical way, redefines it in a format that PyGMO can receive, and lets \emph{it} do all the heavy lifting. pykep then relays that information back to the user.
+
+PyGMO implements a wide variety of algorithms, among which we find both the CMA-ES\footnote{CMA-ES: Covariance Matrix Adaptation Evolution Strategy} and xNES\footnote{xNES: Exponential Natural Evolution Strategy} methods, which are both very relevant for our problem.
+
+\section{Implementation Details} 
+
+PyGMO is all about performance through parallelization, and implements a neat metaphor. It creates an `archipelago' of `islands', with populations of `individuals'. These individuals are defined by a `chromosome' (decision vector), which is perturbed each cycle according to whichever algorithm is being run. The best performing individual after some number of cycles is crowned the `champion', and `migrates' to neighboring islands in the archipelago, where they then join their population and fight once more. This continues until the entire archipelago agrees on a champion (convergence). Since the islands are independent while they are fighting, the model makes any algorithm very parallelizable.
+
+\section{MGA-1DSM}
+We use a pykep mission type called Multiple Gravity Assist with One Deep Space Maneuver (mga*1dsm), which allows one deep space maneuver per leg of the journey: [earth, venus, earth] would define a round trip with two legs: earth-venus and venus-earth, each leg allowing one maneuver. The mission defines a decision vector of the form:
+\begin{equation}
+    [t0, T]+[u,v,V*{inf},eta_1, \alpha_1] + [\beta_2, \frac{rP}{rV},eta_2,\alpha_2]+ ... +[\beta_n,\frac{rP_n}{rV_n},eta_n,\alpha_n] ,
+\end{equation}
+where \todo{Explanation of decision vector}
+
+\section{PaGMO Implementation Details}
+\todo{explaining the metaphor behind PaGMO, and why we think it useful}.
+PaGMO provides its functionality through a very sensibly architectured interface. One defines a \emph{Problem}, an \emph{Algorithm}, and an \emph{Archipelago} (or just a single \emph{Island} if no parallelization is desired). The problem gives bounds and a fitness evaluation function, the algorithm exposes an \texttt{evolve} function, which, when called, should execute a single run of the algorithm, whatever its criterion for termination is. The archipelago is parameterized by a problem and an algorithm, as well as how many islands it should contain, and what the population of each island should be. We then call upon the archipelago to begin evolution, which happens `under the hood' as it were. Each individual in an island's population represents a randomly chosen decision vector, or a set of hyperparameters \(\psi\), and the algorithm is run on this annealed set until termination. The result(s) with the highest fitness values (the champions) are then moved to neighboring islands, where they fight other champions from the last generation, until finally the archipelago converges, and each island's champion is returned. Each island runs in a separate thread, with communication only of the very lightweight champion decision vectors between neighbors. As such, the framework is very performant as a way to scale up an algorithm such as ours, especially as it takes care of the annealing that a problem prone to local minima--such as ours--needs.
