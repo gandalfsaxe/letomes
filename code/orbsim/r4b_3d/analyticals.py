@@ -9,21 +9,28 @@ from numba import njit
 
 @njit
 def get_Rdot(B_r):
+    """Rdot(R, theta, phi, B_r, B_theta, B_phi) from Hamilton's equations"""
     return B_r
 
 
 @njit
 def get_thetadot(B_theta, R):
+    """thetadot(R, theta, phi, B_r, B_theta, B_phi) from Hamilton's equations"""
     return B_theta / (R ** 2)
 
 
 @njit
 def get_phidot(B_phi, R, theta):
+    """phidot(R, theta, phi, B_r, B_theta, B_phi) from Hamilton's equations"""
     return B_phi / (R ** 2 * sin(theta) ** 2)
 
 
 @njit
-def Bdot(B_theta, B_phi, R, theta, phi, nus, Rs, thetas, phis):
+def get_Bdot(B_theta, B_phi, R, theta, phi, nus, Rs, thetas, phis):
+    """
+    All three Bdot(R, theta, phi, B_r, B_theta, B_phi) from Hamilton's equations
+    (e.g. Bdot_r, Bdot_theta and Bdot_phi)
+    """
     r_p1 = B_theta ** 2 / (R ** 3)
     r_p2 = B_phi ** 2 / (R ** 3)
     r_p3 = 0
