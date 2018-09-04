@@ -58,6 +58,11 @@ LEO_VELOCITY = sqrt(G * EARTH_MASS / (LEO_RADIUS * 1000.0)) / 1000.0  # km/s
 LLO_RADIUS = LUNAR_RADIUS + LUNAR_ALTITUDE  # km
 LLO_VELOCITY = sqrt(G * LUNAR_MASS / (LLO_RADIUS * 1000.0)) / 1000.0  # km/s
 
+# Stationary Sun
+R_SUN = 0
+THETA_SUN = 0
+PHI_SUN = 0
+
 ############### NONDIMENSIONALIZATION ###############
 
 # Nondimensionalized boundary conditions
@@ -87,11 +92,14 @@ def update_constants_json():
         "UNIT_TIME": UNIT_TIME,
         "UNIT_VELOCITY": UNIT_VELOCITY,
         "UNIT_VELOCITY2": UNIT_VELOCITY2,
-        ### DERIVED BOUNDARY CONDITIONS ###
+        ############### DERIVED BOUNDARY CONDITIONS ##################
         "LEO_RADIUS": LEO_RADIUS,
         "LEO_VELOCITY": LEO_VELOCITY,
         "LLO_RADIUS": LLO_RADIUS,
         "LLO_VELOCITY": LLO_VELOCITY,
+        "R_SUN": R_SUN,
+        "THETA_SUN": THETA_SUN,
+        "PHI_SUN": PHI_SUN,
         ############### NONDIMENSIONALIZATION ###############
         "LEO_RADIUS_NONDIM": LEO_RADIUS_NONDIM,
         "LEO_VELOCITY_NONDIM": LEO_VELOCITY_NONDIM,
