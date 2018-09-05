@@ -315,6 +315,7 @@
 
 \usepackage{subfig}  % needed for our way of doing sub-figures
 \usepackage{caption} % needed for our way of doing sub-figures
+\usepackage{bm} % for bold greek symbols
 
 
 %%%%%%%%%% Extra commands %%%%%%%%%%
@@ -330,7 +331,7 @@
 \renewcommand{\vec}[1]{\mathbf{#1}}
 
 % unit vector commands
-\newcommand{\unitvector}[1]{\operatorname{}\!\mathbf{\hat{#1}}}
+\newcommand{\unitvector}[1]{\operatorname{}\!\bm{\hat{#1}}}
 
 \newcommand{\xhat}{\unitvector{x}}
 \newcommand{\yhat}{\unitvector{y}}
@@ -342,3 +343,5 @@
 
 % partial derivative command
 \newcommand{\pd}[2]{\operatorname{}\frac{\partial #1}{\partial #2}}
+% ordinary derivative command
+\newcommand{\od}[2]{\operatorname{}\frac{\mathrm{d} #1}{\mathrm{d} #2}}
