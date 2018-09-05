@@ -8,6 +8,15 @@ The project has been defined by a relatively wide scope of disciplines that we h
 
 
 \section{Software Architecture Overview}
+Our system is organized as two modules with an interface between them. The top-level module is the ES algorithm and its various auxiliary functions, and the bottom level module is the orbsim module, which takes care of the astrophysics aspect; turning launch parameters into trajectories. Between them is an interface that turns machine learning parameters into astrophysic parameters, and the reverse. Visualized in \cref{fig:software_architecture}, this architecture lets us keep variable names consistent with the literature for both domains. The multidisciplinary nature of this project and its authors made this a boon.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.76\linewidth]{fig/software_architecture}
+    \label{fig:software_architecture}
+    \caption{The architecture of the project, ES module inputs parameters to orbital simulator, which returns scores and trajectories}
+\end{figure}
+
 \section{Legacy Software from BSc Project}
 \section{Unit Testing}
 ensuring correctness of complex system with many edits taking place.
@@ -40,26 +49,32 @@ This module contains a ton of different convenience functions that compute some 
 Here, we define a planet class, which we use to store the various constants associated with a given planet. Note that we also consider the moon a planet for this purpose. We keep information such as mass and safe orbital radius here, again to simplify and improve the readability of the main algorithm. The full list of planetary constants can be seen in \todoref{Planetary constants}
 
 \subsection{The ES module}
-
 \begin{enumerate}
     \item hyperparameters
-    \item adaptive measures (e.g. less precise paths for the gradient estimation step than for the candidate points themselves)
     \item trial and error (finding a model that worked)
 \end{enumerate}
 
-\todo{Do hyperparamters, adaptive measures, trial and error}
+\todo{Do hyperparameters, trial and error}
 
 
 The ES module conducts black-box optimization on a decision vector that describes the initial parameters for a launch. Every time the algorithm wants to find the fitness of a given point in our parameter space, it calls the orbsim module with those parameters, using the returned value as the function to minimize. The algorithm is parallelized through the use of PaGMO, which runs the ES algorithm on multiple cores independently, with many separate starting conditions.
 
-The module defines a PyGMO \emph{problem} class, which gives the bounds and fitness function for our optimization space. The fitness function takes the decision vector \(\psi\) as argument, calls on orbsim to run a simulation with the contained parameters, and returns the result of that simulation: The \(\Delta v\) value, or if the rocket did not hit the target, how close it came at the minimum. The fitness is a single scalar, so the fact that that scalar can mean two different things (a change in velocity or a distance) gives some problems for estimating gradients in our space. We mitigate this by penalizing an unsuccessful mission heavily, by adding an upward bias and weight, as well as squaring the result, to amplify the effect of small differences in minimum distance.
+The module defines a PyGMO \emph{problem} class, which gives the bounds and fitness function for our optimization space. The fitness function takes the decision vector \(\psi\) as argument, calls on orbsim to run a simulation with the contained parameters, and returns the result of that simulation: The \(\Delta v\) value, or if the rocket did not hit the target, how close it came at the minimum, \(d_{min}\). The fitness is a single scalar, so the fact that that scalar can mean two different things (a change in velocity or a distance) gives some problems for estimating gradients in our space. We mitigate this by penalizing an unsuccessful mission heavily, by adding an upward bias and weight, as well as squaring the result, to amplify the effect of small differences in \(d_{min}\).
 
-We then define the ES algorithm within the PyGMO framework, which defines an \emph{evolve} function, which executes a single run of the algorithm. This function takes a \emph{population} \(\Psi\), a collection of decision vectors, and for each vector at step \emph{t} \((\psi_{i,t})\) creates several jittered copies of those vectors, akin to creating a gaussian point cloud in the 3-dimensional problem space that the vectors span. Each of these points is then tested (the fitness function is run) and the average of those jittered points, weighted according to fitness score, is deemed as the location for the next point \(\psi_{i,t+1}\). The algorithm then runs until it has converged upon a local minimum, or until some maximum number of steps has been reached.
+We then define the ES algorithm with an \texttt{evolve} function, which executes a single run of the algorithm. This function takes a population \(\psi\): A collection of decision vectors. For each vector at step t \((\psi_{i,t})\), \texttt{evolve} creates several jittered copies \(\epsilon\) of those vectors, akin to creating a gaussian point cloud in the 3-dimensional problem space that the vectors span. Each of the points in \(\epsilon\) is then run through the fitness function, and the weighted average over \(\epsilon\) -- according to fitness score -- is deemed as the direction for the next point \(\psi_{i,t+1}\). We then take a step in that direction, modified by our learning rate \(\alpha\). This process repeats, until the algorithm has converged upon a local minimum, or until some maximum number of steps have been taken.
 
-Next, we create an \emph{archipelago}, another PyGMO concept. It is, as the name suggests, a collection of \emph{islands} which each run the algorithm on their own separate populations. Each island runs in parallel. This convenient metaphor and easy implementation is the main draw of PyGMO for us. 
+For the points in \(\epsilon\), we took an adaptive approach, in the interest of performance. \(\epsilon_i\) should contain enough points to get a decent estimation of the gradient around \(\psi_i\). That number is of the order \num{1e3}. This implies a large number of fitness evaluations, and with our relatively expensive fitness function, we needed to compromise a bit. We let the fitness function accept a custom limit on its runtime, and let evaluations \(F(\theta_\epsilon)\) terminate after a number of steps that was two orders of magnitude lower than that for \(F(\theta_\psi)\). For such evaluations, we also increased the error tolerance commensurately, since it would otherwise mean that those paths would be only one a fraction of  the length, which would have been completely useless.
+
+This adaptive precision approach was a reasonable compromise, we found, since the specific error of the \(\theta_\epsilon\) paths is relatively unimportant. After all, they are only there to give an estimate of which direction improves the score. When we make a move, we select new values for \(\psi\), and conduct a full-precision fitness evaluation for it. The only worry was, that in a sufficiently chaotic system, the increased error could cause the ES algorithm to move in the wrong direction, but we estimated that to be an edge-case, solved by annealing.
+
+This function is run in parallel on many cores, each with a different set of starting conditions \(\psi\). When all threads have finished, the best results are extracted and plotted, giving their \(\Delta v\).
+
+Originally, we took care of parallelization with PyGMO's method of creating an archipelago, i.e a collection of islands. Each island would then run the algorithm on their own separate populations. Each island is assigned its own thread of execution. This convenient metaphor and easy implementation was the main draw of PyGMO for us, but we found that it introduced a significant performance overhead, and furthermore did not allow customization to the degree that we required. We therefore reimplemented the parallelization with less abstraction towards the end of the project.
+
 
 
 \section{High Performance Computing}
+ES uses an approach that requires a very large number of evaluations of its fitness function. 
 as it relates to ES with an expensive objective function.
 
 \todo{making the case for parallelism, given that trajectories are independent}
