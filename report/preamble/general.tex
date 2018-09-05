@@ -309,7 +309,15 @@
 \makeatother
 
 
-%%% Custom additions to template from Gandalf and Oisin %%%
+%%%%%%%%%%%%%%%% Custom additions to template from Gandalf and Oisin %%%%%%%%%%%%%%%%
+
+%%%%%%%%%% Extra packages %%%%%%%%%%
+
+\usepackage{subfig}  % needed for our way of doing sub-figures
+\usepackage{caption} % needed for our way of doing sub-figures
+
+
+%%%%%%%%%% Extra commands %%%%%%%%%%
 
 % Extra todonotes
 \newcommand{\todoref}[1]{\todo[color=blue!40]{#1}}
@@ -321,5 +329,16 @@
 % \vec command will be mathbf instead of arrows above.
 \renewcommand{\vec}[1]{\mathbf{#1}}
 
-\usepackage{subfig}
-\usepackage{caption}
+% unit vector commands
+\newcommand{\unitvector}[1]{\operatorname{}\!\mathbf{\hat{#1}}}
+
+\newcommand{\xhat}{\unitvector{x}}
+\newcommand{\yhat}{\unitvector{y}}
+\newcommand{\zhat}{\unitvector{z}}
+
+\newcommand{\rhat}{\unitvector{r}}
+\newcommand{\thetahat}{\unitvector{\theta}}
+\newcommand{\phihat}{\unitvector{\phi}}
+
+% partial derivative command
+\newcommand{\pd}[2]{\operatorname{}\frac{\partial #1}{\partial #2}}
