@@ -40,7 +40,7 @@ def evolve(psis):
 
             step_norm = np.dot(reward, noise)  # F, in the literature
             step = alpha * step_norm
-            print("new individual = {str(psi+step)}")
+            print("new individual = ", str(psi+step))
             psis[idx] = psi + step  # mutate the population/take the step
     return psis
 
