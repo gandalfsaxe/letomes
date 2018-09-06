@@ -19,16 +19,16 @@ We adopt the spherical coordinate system which customary in astrodynamics. The c
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.50\linewidth]{fig/3D_Spherical}
-    \caption{Spherical coordinates \((r, \theta, \phi)\). Radial distance \(r\), polar angle \(\theta\) (theta), and azimuthal angle \(\phi\) (phi). Source: \cite{WikiSpherical}.}
+    \caption{Spherical coordinates \((r, \theta, \phi)\). Radial distance \(r\), polar angle \(\theta\) (theta), and azimuthal angle \(\phi\) (phi). In our heliocentric system the sun is assumed to be stationary at the origin. Source: \cite{WikiSpherical}.}
     \label{fig:3D_Spherical}
 \end{figure}
 
 And the coordinate transform equations to and from the cartesian coordinate system are:
 
 \begin{align}
-    x &= r \sin{\theta}\cos{\phi}, \label{eq:x(r,theta,phi)} \\
-    y &= r \sin{\theta}\sin{\phi}, \label{eq:y(r,theta,phi)}\\
-    z &= r \cos{\theta}, \label{eq:z(r,theta,phi)}
+    x &= r \sin{\theta}\cos{\phi}, \label{eq:x(q)} \\
+    y &= r \sin{\theta}\sin{\phi}, \label{eq:y(q)}\\
+    z &= r \cos{\theta}, \label{eq:z(q)}
 \end{align}
 
 and
@@ -111,8 +111,9 @@ so we get
 The gravitational potential is \todoref{find some non-wikipedia reference here}
 
 \begin{align}
-    V = -G m_s \sum\limits_{i} \frac{M_i}{\left| \vec{r} - \vec{r_i} \right|}
+    V = -G m_s \sum\limits_{i} \frac{M_i}{\left| \vec{r} - \vec{r_i} \right|},
 \end{align}
+where \(i\) denotes the celestial bodies acting on the spacecraft, i.e. in our system Sun, Earth and Mars.
 
 So we finally get the Lagrangian
 
@@ -122,9 +123,179 @@ So we finally get the Lagrangian
 \end{align}
 
 \subsubsection{Step 2: Generalized Momenta \(p_i\)}
+\begin{align}
+    p_r &= \pd{L}{\dot{r}} = m_s \dot{r} \label{eq:pr} \\
+    p_\theta &= \pd{L}{\dot{\theta}} = m_s r^2 \dot{\theta} \label{eq:ptheta} \\
+    p_\phi &= \pd{L}{\dot{\phi}} = m_s r^2 \sin^2{\theta} \dot{\phi} \label{eq:pphi}
+\end{align}
 
+\subsubsection{Step 3: \(\dot{q} = \dot{q}_i(\vec{q}, \vec{p}, t)\)}
+\begin{align}
+    \dot{r} &= \frac{p_r}{m_s} \\
+    \dot{\theta} &= \frac{p_\theta}{m_s r^2} \\
+    \dot{\phi} &= \frac{p_\phi}{m_s r^2 \sin^2{\theta}}
+\end{align}
 
-\subsection{Equations of Motion}
+We can now rewrite \(L\) to make it independent of \(\dot{q}\) by substituting the expressions above:
+
+\begin{align}
+    T &= \frac{1}{2} m_s (\dot{r}^2 + r^2\dot{\theta}^2 + r^2\sin^2{\theta}\,\dot{\phi}^2) \\
+    &= \frac{1}{2} m_s \left(\frac{p_r^2}{m_s^2} + r^2\frac{p_\theta^2}{m_s^2 r^4} + r^2\sin^2{\theta}\frac{p_\phi^2}{m_s^2 r^4 \sin^4{\theta}} \right) \\
+    &= \frac{p_r^2}{2 m_s} + \frac{p_\theta^2}{2 m_s r^2} + \frac{p_\phi^2}{2 m_s r^2 \sin^2{\theta}} \\
+\end{align}
+
+So we have
+
+\begin{align}
+    L = \frac{p_r^2}{2 m_s} + \frac{p_\theta^2}{2 m_s r^2} + \frac{p_\phi^2}{2 m_s r^2 \sin^2{\theta}} + G m_s \sum\limits_{i} \frac{M_i}{\left| \vec{r} - \vec{r_i} \right|}
+\end{align}
+
+\subsubsection{Step 4: Hamiltonian \(H\)}
+\begin{align}
+    H(\vec{q}, \vec{p}, t) &= \sum\limits_{i}p_i \dot{q_i} - L \\
+    &= \sum\limits_{i}p_i \dot{q_i}(\vec{q}, \vec{p}, t) - L \\
+    &= p_r \frac{p_r}{m_s} + p_\theta \frac{p_\theta}{m_s r^2} + p_\phi + \frac{p_\phi}{m_s r^2 \sin^2{\theta}} \nonumber \\
+    &- \left( \frac{p_r^2}{2 m_s} + \frac{p_\theta^2}{2 m_s r^2} + \frac{p_\phi^2}{2 m_s r^2 \sin^2{\theta}} + G m_s \sum\limits_{i} \frac{M_i}{\left| \vec{r} - \vec{r_i} \right|} \right) \\
+    \Leftrightarrow H &= \frac{p_r^2}{2 m_s} + \frac{p_\theta^2}{2 m_s r^2} + \frac{p_\phi^2}{2 m_s r^2 \sin^2{\theta}} - G m_s \sum\limits_{i} \frac{M_i}{\left| \vec{r} - \vec{r_i} \right|}
+\end{align}
+
+At this point we want to expand the expression \(\left| \vec{r} - \vec{r_i} \right|\) in anticipation of needing to differentiate \(H\) with respect to the coordinates. Using the equations for the \(x, y, z\) coordinates \cref{eq:x(q),eq:y(q),eq:z(q)} we get
+
+\begin{align}
+    d_i = \left|\vec{r} - \vec{r}_i \right| &= \sqrt{(x-x_i)^2 + (y-y_i)^2 + (z-z_i)^2}
+\end{align}
+and
+\begin{align}
+    (x-x_i)^2 &= (r\sin{\theta}\cos{\phi} - r\sin{\theta}\cos{\phi})^2 \nonumber \\
+    &= \tikz[baseline]{
+        \node[fill=orange!20,anchor=base]
+        {\(r^2\sin^2{\theta}\cos^2{\phi}\)}
+    } + \tikz[baseline]{
+        \node[fill=red!20,anchor=base]
+        {\(r_i^2\sin^2{\theta_i}\cos^2{\phi_i}\)}
+    } - 2r r_i \sin{\theta}\sin{\theta_i}\cos{\phi}\cos{\phi_i} \label{eq:x-dist-squared} \\
+    (y-y_i)^2 &= (r\sin{\theta}\sin{\phi} - r\sin{\theta}\sin{\phi})^2 \nonumber \\
+    &= \tikz[baseline]{
+        \node[fill=orange!20,anchor=base]
+        {\(r^2\sin^2{\theta}\sin^2{\phi}\)}
+    } + \tikz[baseline]{
+        \node[fill=red!20,anchor=base]
+        {\(r_i^2\sin^2{\theta_i}\sin^2{\phi_i}\)}
+    } - 2r r_i \sin{\theta}\sin{\theta_i}\sin{\phi}\sin{\phi_i} \label{eq:y-dist-squared} \\
+    (z-z_i)^2 &= (r\cos{\theta} - r\cos{\theta})^2 \nonumber \\
+    &= \tikz[baseline]{
+        \node[fill=orange!20,anchor=base]
+        {\(r^2\cos^2{\theta}\)}
+    } + \tikz[baseline]{
+        \node[fill=red!20,anchor=base]
+        {\(r_i^2\cos^2{\theta_i}\)}
+    } - 2r r_i \cos{\theta}\cos{\theta_i}. \label{eq:z-dist-squared}
+\end{align}
+Now adding all three \cref{eq:x-dist-squared,eq:y-dist-squared,eq:z-dist-squared} the orange terms add to \(r^2\) and the red terms add to \(r_i^2\) and we get
+
+\begin{align}
+    d_i &= \sqrt{
+        \tikz[baseline]{\node[fill=orange!20,anchor=base]{\(r^2\)}}
+        + \tikz[baseline]{\node[fill=red!20,anchor=base]{\(r_i^2\)}}
+        -2r r_i(\cos{\theta}\cos{\theta_i}+\sin{\theta}\sin{\theta_i}(
+            \tikz[baseline]{\node[fill=blue!20,anchor=base]{
+                \(\cos{\phi}\cos{\phi_i} + \sin{\phi}\sin{\phi_i}\)}}
+        ))
+    } \\
+    &= \sqrt{(r - r_i)^2(\cos{\theta}\cos{\theta_i}+\sin{\theta}\sin{\theta_i}(\cos{\phi - \phi_i}))},
+\end{align}
+where the blue factor was simplified using the sum rule \\
+\(\cos{\alpha}\cos{\beta} + \sin{\alpha}\sin{\beta} = cos{\alpha-\beta}\)\cite{WeissteinTrig}.
+
+So we can finally express \(H\) as
+\begin{equation}
+    \begin{aligned}
+        H &= \frac{p_r^2}{2 m_s} + \frac{p_\theta^2}{2 m_s r^2} + \frac{p_\phi^2}{2 m_s r^2 \sin^2{\theta}} \\
+        &- G m_s \sum\limits_{i} \frac{M_i}{\sqrt{(r - r_i)^2\left[\cos{\theta}\cos{\theta_i}+\sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i})\right]}}
+    \end{aligned}
+\end{equation}
+
+\subsubsection{Step 5: Hamilton's Equations}
+\begin{align}
+    \dot{r} = \pd{H}{p_r} &= \frac{p_r}{m_s} \label{eq:rdot} \\[0.3cm]
+    \dot{\theta} = \pd{H}{p_\theta} &= \frac{p_\theta}{m_s r^2} \label{eq:thetadot} \\[0.3cm]
+    \dot{\phi} = \pd{H}{p_\phi} &= \frac{p_\phi}{m_s r^2 \sin^2{\theta}} \label{eq:phidot}  \\[0.3cm]
+    \begin{split}
+        \dot{p}_r = -\pd{H}{q_r} &= \frac{p_\theta^2}{m_s r^3} + \frac{p_\phi^2}{m_s r^3 \sin^2{\theta} } \\
+        &+ G m_s \sum\limits_{i} M_i \frac{-\left[r - r_i \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)}\right) \right]}{\left[(r - r_i)^2 \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)} \right) \right]^{3/2}} \label{eq:prdot}
+    \end{split} \\[0.3cm]
+    \begin{split}
+        \dot{p}_\theta = -\pd{H}{q_\theta} &= \frac{p_\phi^2}{m_s r^2 \sin^2{\theta} \tan{\theta}} \\
+        &+ G m_s \sum\limits_{i} M_i \frac{- r r_i \left[\sin{\theta}\cos{\theta_i} + \cos{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)} \right]}{\left[(r - r_i)^2 \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)} \right) \right]^{3/2}} \label{eq:pthetadot}
+    \end{split} \\[0.3cm]
+    \begin{split}
+        \dot{p}_r = -\pd{H}{q_r} &= \frac{p_\theta^2}{m_s r^3} + \frac{p_\phi^2}{m_s r^3 \sin^2{\theta} } \\
+        &+ G m_s \sum\limits_{i} M_i \frac{-r r_i \sin{\theta}\sin{\theta_i}\sin{(\phi - \phi_i)}}{\left[(r - r_i)^2 \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)} \right) \right]^{3/2}} \label{eq:pphidot}
+    \end{split}
+\end{align}
+
+Those are our equations of motion. However before we try to solve them, we will remove all units.
+
+\subsection{HR4B Equations of Motion - Nondimensionalized}
+We will now choose suitable characteristic units, which has a number of benefits:
+\begin{itemize}
+    \item The equations gets slightly simplified
+    \item The order of the effects of different forces in the system becomes more apparent.
+    \item Many of the calculations in numerical algorithms happens at an order of about 1. 
+\end{itemize}
+
+The characteristic units are chosen as:
+\begin{align}
+    \text{Unit length: } k_r &= a_{\Earth}\ {\color{gray} \approx \SI{1.50e8}{\km}}  \\[0.2cm]
+    \text{Unit time: } k_t &= T_{\Earth} = \frac{2\pi}{\omega_\Earth} = 2\pi \sqrt{\frac{a_\Earth^3}{G M_\Sun}}\ {\color{gray} \approx \SI{3.16e7}{\s} \text{ (1 year)}} \\[0.2cm]
+    \text{Unit speed: } k_v &= \frac{k_r}{k_t} = \frac{a_\Earth \omega_\Earth}{2\pi} = \frac{1}{2\pi} \sqrt{\frac{G M_\Sun}{a_\Earth}}\ {\color{gray} \approx \SI{4.74}{\km/\s}}
+\end{align}
+where \(a_\Earth\) is the semi-major axis of Earth's orbit in kilometers, see \cref{fig:earth-semi-major-axis}, \(T_\Earth\) is Earth's orbital period (i.e. 1 year) in seconds and the characteristic speed thus becomes Earth's average orbital speed with respect to the sun.
+
+We don't need a characteristic mass \(m_s\) since the mass cancels out in the equations of motion for the quantity we care about, delta-v.
+
+The unit for time is expressed in seconds because we found heuristically we needed time steps on the order of \(\SI{1}{\s}\) to maintain an error per step of about \num{10e-9}.
+
+The unit for length is expressed in kilometers because it is customary to use \si{\km/\s} as unit of speed for celestial objects.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.60\linewidth]{fig/earth-semi-major-axis}
+    \caption{Semi-major axis of Earth's elliptical orbit, used as the characteristic length of the system}
+    \label{fig:earth-semi-major-axis}
+\end{figure}
+
+Looking at the \(p_i\) from \cref{eq:pr,eq:ptheta,eq:pphi} we can infer their units:
+
+\begin{align}
+    k_{pr} &= \frac{k_m}{k_r k_t} \\[0.2cm]
+    k_{p\theta} &= \frac{k_m k_r^2}{k_t} = k_{pr} k_r \\[0.2cm]
+    k_{p\phi} &= k_{p\theta}
+\end{align}
+
+We now introduce the quantity
+
+\begin{equation}
+    b_i = \frac{p_i}{m_s}.
+\end{equation}
+It proves useful to introduce into Hamilton's equations because the mass cancels out (as expected from Newton's 2nd Law, and thus removes the need for introducing  selecting characteristic mass \(k_m\). We will treat the interpretation later. \(b_i\) has units:
+
+\begin{align}
+    k_{br} = \frac{k_{pr}}{k_m} = \frac{k_r}{k_t} \\[0.2cm]
+    k_{b\theta} = \frac{k_{p\theta}}{k_m} = \frac{k_r^2}{k_t} \\[0.2cm]
+    k_{b\phi} = \frac{k_{p\phi}}{k_m} = \frac{k_r^2}{k_t}
+\end{align}
+
+To be continued... (see r4b-spherical.pdf)
+
+% For \cref{eq:rdot,eq:thetadot,eq:phidot} we set \(b_i = \frac{p_i}{m_s}\) and nondimensionalize:
+
+% \begin{align}
+%     \od{r}{t} = \frac{p_r}{m_s} \\
+%     \Leftrightarrow \od{r}{t} = b_r \\
+%     \Leftrightarrow \od{r}{t} = b_r \\ 
+% \end{align}
+
 
 
 \subsection{Numerical Algorithm}
