@@ -48,11 +48,11 @@ k = LUNAR_MASS / (EARTH_MASS + LUNAR_MASS)  # dimless
 
 # Initial orbit (Earth)
 LEO_RADIUS = EARTH_RADIUS + EARTH_ALTITUDE  # km
-LEO_VELOCITY = sqrt(G * EARTH_MASS / (LEO_RADIUS * 1000.0)) / 1000.0  # km/s
+LEO_VELOCITY = sqrt(G * EARTH_MASS / (LEO_RADIUS)) # km/s
 
 # Target orbit (Moon)
 LLO_RADIUS = LUNAR_RADIUS + LUNAR_ALTITUDE  # km
-LLO_VELOCITY = sqrt(G * LUNAR_MASS / (LLO_RADIUS * 1000.0)) / 1000.0  # km/s
+LLO_VELOCITY = sqrt(G * LUNAR_MASS / (LLO_RADIUS))  # km/s
 
 # Initial Positions (Note that Y for both Earth and Moon is always zero in (X,Y) system)
 LUNAR_POSITION_X = 1 - k
