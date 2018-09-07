@@ -15,20 +15,23 @@ pi2 = pi / 2
 
 @njit
 def evolve(psis):
-    sigma = 0.001
-    alpha = 0.003  # learningrate
+    init_sigma = 0.01
+    init_alpha = 0.03  # learningrate
 
     iterations = 3
     # for each iteration, jitter around starting points, and move in the
     # best direction (weighted average jitter coordinates according to
     # fitness score)
     for idx in range(len(psis)):
+        sigma = init_sigma
+        alpha = init_alpha
         for _ in range(iterations):
             psi = psis[idx]
             noise = np.random.randn(10, 3)
             epsis = psi + sigma * noise  # the point cloud around psi
 
             """calculate the reward in the cloud"""
+            psi_reward = -launch_sim(psi, duration=10, max_iter=1e7)[0]
             reward = np.zeros(len(epsis))
             for jdx in range(len(epsis)):
                 epsi = epsis[jdx]
@@ -40,8 +43,11 @@ def evolve(psis):
 
             step_norm = np.dot(reward, noise)  # F, in the literature
             step = alpha * step_norm
-            print("new individual = ", str(psi+step))
+            print("new individual = ")
+            print(psi + step)
             psis[idx] = psi + step  # mutate the population/take the step
+            sigma = min(1.2, init_sigma, init_sigma * (psi_reward * 8))
+            alpha = max(0.8, min(init_alpha, init_alpha * (psi_reward * 8)))
     return psis
 
     # for i in range(iterations):
