@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     82895,       2182]
-NotebookOptionsPosition[     75488,       2039]
-NotebookOutlinePosition[     75865,       2056]
-CellTagsIndexPosition[     75822,       2053]
+NotebookDataLength[     83171,       2188]
+NotebookOptionsPosition[     75669,       2044]
+NotebookOutlinePosition[     76047,       2061]
+CellTagsIndexPosition[     76004,       2058]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1812,6 +1812,11 @@ Cell[BoxData[
   "Out[738]=",ExpressionUUID->"c07f3122-0ae2-4ee9-b3ef-e1d19a664660"]
 }, Open  ]],
 
+Cell["So a little more simplified we have:", "Text",
+ CellChangeTimes->{{3.745331070533177*^9, 
+  3.745331076520562*^9}},ExpressionUUID->"aa4f586b-264c-4e26-83e5-\
+1ff9db22d32c"],
+
 Cell[CellGroupData[{
 
 Cell[BoxData[
@@ -2037,7 +2042,7 @@ Cell[BoxData[
 }, Open  ]]
 }, Open  ]]
 },
-WindowSize->{720, 855},
+WindowSize->{960, 1155},
 WindowMargins->{{Automatic, 0}, {Automatic, -1}},
 WindowStatusArea->None,
 FrontEndVersion->"11.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (March 5, \
@@ -2139,7 +2144,7 @@ Cell[CellGroupData[{
 Cell[33326, 927, 157, 3, 45, "Subsubsection",ExpressionUUID->"922cd5dd-cf66-4890-b367-e88ca7bd7615"],
 Cell[CellGroupData[{
 Cell[33508, 934, 370, 9, 30, "Input",ExpressionUUID->"d0a9caa6-d1e8-41d4-81b9-72896d0491f7"],
-Cell[33881, 945, 3114, 83, 230, "Output",ExpressionUUID->"b5ec0578-a233-4b0d-9330-104dcb1f8a2c"]
+Cell[33881, 945, 3114, 83, 181, "Output",ExpressionUUID->"b5ec0578-a233-4b0d-9330-104dcb1f8a2c"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]],
@@ -2151,7 +2156,7 @@ Cell[38073, 1060, 755, 16, 51, "Output",ExpressionUUID->"7a79437f-18d1-4385-9d5f
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[38865, 1081, 575, 12, 30, "Input",ExpressionUUID->"78608010-2522-4733-809c-f5a854c80883"],
-Cell[39443, 1095, 767, 17, 87, "Output",ExpressionUUID->"b5fe9365-f25b-43cd-b6f5-faa0b5df53eb"]
+Cell[39443, 1095, 767, 17, 53, "Output",ExpressionUUID->"b5fe9365-f25b-43cd-b6f5-faa0b5df53eb"]
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[40247, 1117, 524, 12, 30, "Input",ExpressionUUID->"4d86703d-3891-4f15-9245-c09423af1c6d"],
@@ -2159,11 +2164,11 @@ Cell[40774, 1131, 819, 19, 54, "Output",ExpressionUUID->"55bcd88d-1a4b-46e0-87f4
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[41630, 1155, 504, 12, 30, "Input",ExpressionUUID->"8e90969f-6ccc-4176-b09c-2655e3eb0436"],
-Cell[42137, 1169, 5487, 141, 208, "Output",ExpressionUUID->"6b44be71-28df-4994-9f56-6b811989f363"]
+Cell[42137, 1169, 5487, 141, 160, "Output",ExpressionUUID->"6b44be71-28df-4994-9f56-6b811989f363"]
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[47661, 1315, 521, 12, 30, "Input",ExpressionUUID->"10746d68-cea8-4577-8496-eaf6e9c5f3de"],
-Cell[48185, 1329, 4792, 120, 208, "Output",ExpressionUUID->"62cac8bd-c7d6-4b81-9bf7-bf4cb67851a8"]
+Cell[48185, 1329, 4792, 120, 160, "Output",ExpressionUUID->"62cac8bd-c7d6-4b81-9bf7-bf4cb67851a8"]
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[53014, 1454, 515, 12, 30, "Input",ExpressionUUID->"01fc6d9f-85e4-465b-a57e-a432b018e915"],
@@ -2177,9 +2182,10 @@ Cell[CellGroupData[{
 Cell[58546, 1606, 4282, 116, 155, "Input",ExpressionUUID->"2ef9b303-1fe7-457b-8037-cccd2c7804ed"],
 Cell[62831, 1724, 3524, 87, 156, "Output",ExpressionUUID->"c07f3122-0ae2-4ee9-b3ef-e1d19a664660"]
 }, Open  ]],
+Cell[66370, 1814, 178, 3, 35, "Text",ExpressionUUID->"aa4f586b-264c-4e26-83e5-1ff9db22d32c"],
 Cell[CellGroupData[{
-Cell[66392, 1816, 4585, 108, 232, "Input",ExpressionUUID->"885af61f-e6b7-4ed1-991d-c6925968d274"],
-Cell[70980, 1926, 4456, 107, 208, "Output",ExpressionUUID->"4ab86d5b-67af-4c72-91cc-5749f84e4016"]
+Cell[66573, 1821, 4585, 108, 253, "Input",ExpressionUUID->"885af61f-e6b7-4ed1-991d-c6925968d274"],
+Cell[71161, 1931, 4456, 107, 160, "Output",ExpressionUUID->"4ab86d5b-67af-4c72-91cc-5749f84e4016"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
@@ -2187,6 +2193,4 @@ Cell[70980, 1926, 4456, 107, 208, "Output",ExpressionUUID->"4ab86d5b-67af-4c72-9
 }
 ]
 *)
-
-(* End of internal cache information *)
 

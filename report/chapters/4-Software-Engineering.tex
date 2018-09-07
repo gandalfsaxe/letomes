@@ -8,7 +8,7 @@ The project has been defined by a relatively wide scope of disciplines that we h
 
 
 \section{Software Architecture Overview}
-Our system is organized as two modules with an interface between them. The top-level module is the ES algorithm and its various auxiliary functions, and the bottom level module is the orbsim module, which takes care of the astrophysics aspect; turning launch parameters into trajectories. Between them is an interface that turns machine learning parameters into astrophysic parameters, and the reverse. Visualized in \cref{fig:software_architecture}, this architecture lets us keep variable names consistent with the literature for both domains. The multidisciplinary nature of this project and its authors made this a boon.
+Our system is organized as two modules with an interface between them. The top-level module is the ES algorithm and its various auxiliary functions, and the bottom level module is the orbsim module, which takes care of the astrophysics aspect; turning launch parameters into trajectories. Between them is an interface that turns machine learning parameters into astrophysics parameters, and the reverse. Visualized in \cref{fig:software_architecture}\todo{NICER DRAWING COMING UP}, this architecture lets us keep variable names consistent with the literature for both domains. The multidisciplinary nature of this project and its authors made this a boon.
 
 \begin{figure}
     \centering
@@ -24,7 +24,7 @@ ensuring correctness of complex system with many edits taking place.
 \subsection{Orbsim Module}
 We have arranged our code into a python module that offers us some nice modularity and extensibility, at least as far as our relatively specific problem is concerned. What follows is an explanation of the architecture of this module.
 
-We packaged the new simulator into its own python module, installable with pip, to ensure proper reproducibility across machines and different python configurations. We then implemented the simulator into our ES framework, which we had previously developed using mock data, and tuned its hyperparameters to let it function as a decent search strategy for the lunar case. As we pursued this goal, performance became a severe issue. The ES algorithm wants to compute trajectories thousands or millions of times, and that was not feasible with each trajectory taking \SIrange{60}{300}{\second} to compute, so we delved into the simulator again in order to optimize it with regards to runtime.
+We packaged the new simulator into its own python module, installable with pip, to ensure proper reproducibility across machines and different python configurations. We then implemented the simulator into our ES framework, which we had previously developed using mock data, and tuned its launch parameters to let it function as a decent search strategy for the lunar case. As we pursued this goal, performance became a severe issue. The ES algorithm wants to compute trajectories thousands or millions of times, and that was not feasible with each trajectory taking \SIrange{60}{300}{\second} to compute, so we delved into the simulator again in order to optimize it with regards to runtime.
 
 \subsubsection{Abstractions}
 
@@ -34,7 +34,7 @@ The simulator is a numerical solver for an analytical problem, implementing algo
 
 Here, we have the interface between ES portion and simulator.
 
-\noindent The function \texttt{launch\_sim} takes hyperparameters that the ES algorithm uses for its optimization (in the form of a decision vector \(\psi\)), reformulates them, and starts a simulation based on them. It then returns a delta-v for that single run, along with the associated saved path. That delta-v is, as mentioned before, our fitness function, so based on that result, ES can continue to do its job.
+\noindent The function \texttt{launch\_sim} takes launch parameters that the ES algorithm uses for its optimization (in the form of a decision vector \(\psi\)), reformulates them, and starts a simulation based on them. It then returns a delta-v for that single run, along with the associated saved path. That delta-v is, as mentioned before, our fitness function, so based on that result, ES can continue to do its job.
 
 \subsubsection{Integrators module}
 
@@ -43,10 +43,6 @@ This contains the main loop of our simulator algorithm, along with subfunctions 
 \subsubsection{Analyticals module}
 
 This module contains a ton of different convenience functions that compute some intermediate equation for use in the main algorithm. They are hidden away here to reduce clutter in \texttt{Integrators.py}.
-
-\subsubsection{Planets module}
-
-Here, we define a planet class, which we use to store the various constants associated with a given planet. Note that we also consider the moon a planet for this purpose. We keep information such as mass and safe orbital radius here, again to simplify and improve the readability of the main algorithm. The full list of planetary constants can be seen in \todoref{Planetary constants}
 
 \subsection{The ES module}
 \begin{enumerate}
