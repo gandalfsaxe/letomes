@@ -18,33 +18,33 @@ The Lyapunov exponent describes the rate of change as time goes on between time 
 
 \subsection{Implementation}
 
-We ran several simulations of known good trajectories, with their starting conditions very slightly perturbed, in such a way that the trajectories initially diverged from each other by a value less that 1e-8, chosen as the square root of the precision of the 64-bit floating point numbers that describe the coordinates. The trajectories were then discretized to synchronize the variable length of the time steps, and then compared in pairs, tick by tick, yielding a list of euclidean distances at each step. We then took the natural logarithm of these lists, giving us the graph pictured in figure \todoref{lyapunov}. The graph varied heavily depending on the gist of the trajectory in question, with trajectories that made multiple passes near earth giving the tooth-like distance graphs pictured in fig. \todoref{lyapunov a}. Trajectories that did not visit earth more than once gave much more `normal' results, given what we see in the literature pertaining to Lyapunov exponent analysis. Clearly, passing into the LEO domain has a powerful stabilizing effect on the the chaotic system, acting like a focal lens for the trajectories passing through. It's not completely trivial to give a Lyapunov exponent from this, but since the individual tooth-segments have a more or less equivalent slope, we simply took the average slope of the first five teeth. A deeper look into this cyclical chaos would be interesting, but we did not delve deeper than this.
+We ran several simulations of known good trajectories, with their starting conditions very slightly perturbed, in such a way that the trajectories initially diverged from each other by a value less that 1e-8, chosen as the square root of the precision of the 64-bit floating point numbers that describe the coordinates. The trajectories were then discretized to synchronize the variable length of the time steps, and then compared in pairs, tick by tick, yielding a list of euclidean distances at each step. We then took the natural logarithm of these lists, giving us the plots pictured in figure \ref{fig:long_leto_slope} and \ref{fig:hohmann_slope}. The graph varied heavily depending on the gist of the trajectory in question, with trajectories that made multiple passes near earth giving the tooth-like distance graphs pictured in fig. \ref{fig:long_leto_slope}. Trajectories that did not visit earth more than once gave much more `normal' results, given what we see in the literature pertaining to Lyapunov exponent analysis. Clearly, passing into the LEO domain has a powerful stabilizing effect on the the chaotic system, acting like a focal lens for the trajectories passing through. It's not completely trivial to give a Lyapunov exponent from this, but since the individual tooth-segments have a more or less equivalent slope, we simply took the average slope of the first five teeth. A deeper look into this cyclical chaos would be interesting, but we did not delve deeper than this.
 
 A good heuristic for whether or not our paths are precise enough would be a measure that would give some confidence interval for final position, given the gist of a trajectory, and the duration of flight along it. We have calculated such measures, presented in fig. \todoref{reflyapunov heuristic}.
 
 \begin{figure}
     \centering
-    \subfloat[test-a]{
-        \includegraphics[width=0.46\linewidth]{temp/img1}
-        \label{img1}
+    \subfloat[a straight-forward Hohmann transfer]{
+        \includegraphics[width=0.46\linewidth]{fig/path_hohmann_non-inertial}
+        \label{fig:path_hohmann_non-inertial}
     }
     \hfill
-    \subfloat[test-b]{
-        \includegraphics[width=0.46\linewidth]{temp/img2}
-        \label{img2)}
+    \subfloat[the rate of separation between infinitesimally perturbed versions of the Hohmann transfer]{
+        \includegraphics[width=0.46\linewidth]{fig/hohmann_slope}
+        \label{fig:hohmann_slope}
     }
     \\
-    \subfloat[test-c]{
-        \includegraphics[width=0.46\linewidth]{temp/img3}
-        \label{img3}
+    \subfloat[a relatively long LETO path]{
+        \includegraphics[width=0.46\linewidth]{fig/path_long_leto_non-inertial}
+        \label{fig:path_long_leto_non-inertial}
     }
     \hfill
-    \subfloat[test-d]{
-        \includegraphics[width=0.46\linewidth]{temp/img4}
-        \label{img4)}
+    \subfloat[the rate of separation of two infinitesimally perturbed versions of the long LETO]{
+        \includegraphics[width=0.46\linewidth]{fig/long_leto_slope}
+        \label{fig:long_leto_slope}
     }
-    \caption{Overall caption}
-    \label{fig:somelabel}
+    \caption{Examples of some of the different types of transfers that are possible within the model. Each of these were taken as starting points, and simulated again with slightly perturbed starting conditions. The difference between these perturbations were then measured, and plotted in \textbf{b} and \textbf{d}, on a logarithmic scale. The slope of these plots is the lyapunov exponent. We can see that passing into a deep gravity well has a stabilizing effect on the chaos in the system.}
+    \label{fig:lyapunov}
 \end{figure} 
 
 % \begin{figure}
