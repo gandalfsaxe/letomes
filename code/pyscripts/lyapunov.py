@@ -28,10 +28,9 @@ for title, psi, duration in examples:
     psis = []
     paths = []
     for i in range(N):
-        permute_psi = psi
-        permute_psi[2] = psi[2] + i * 1e-4
-        path = launch_sim(psi, max_iter=2e6, duration=duration)
-        psis.append(psi)
+        permute_psi = np.array(psi)+np.array([i*1e-4,i*1e-4,i*1e-4])
+        path = launch_sim(permute_psi, max_iter=1e7, duration=duration)
+        psis.append(permute_psi)
         paths.append(path)
 
     # In[26]:   
@@ -152,3 +151,6 @@ for title, psi, duration in examples:
         )
     print(f"mean slope = {np.mean(slopes)}")
 
+    for i,lyap in enumerate(lyaps):
+        print(title)
+        print(f"max_dist={max(lyap)}\nmin_dist={min(lyap[1:])}\nmean_dist={np.mean(lyap)}\n")
