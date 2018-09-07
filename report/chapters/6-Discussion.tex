@@ -101,7 +101,9 @@ A good heuristic for whether or not our paths are precise enough would be a meas
 
 
 \section{Brute Force vs. ES}
-how well does it compare to the old brute-force method? Do we get anything out of estimating a gradient? Do our results’ quality scale with a more complex model? (more noise points more annealing).
+In this section, we will examine the usefulness of using the ES algorithm over the brute force alternative. Do we get anything out of estimating a gradient? Do our results’ quality scale with a more complex model?
+
+The ES method is in the general case a more intelligent of searching for these things. However, its not a magical panacea that just spits out fabulous results from a naive application. The brute force method took advantage of a lot of human intuition in terms of where to search. We gave it a limited fan of possibilities in a region that we knew to be reasonable. The ES algorithm definitely gave the best results when we imposed equivalent limitations on it.
 
 \section{Delta-v Travel Time Trade-off}
 Delta-v Travel Time Trade-off. Plot this, if we can get enough different successful trajectories. What does that plot look like?
