@@ -157,6 +157,7 @@
     "njit",
     "nondim",
     "nondimensionalization",
+    "nondimensionalize",
     "nondimensionalized",
     "numba",
     "numpy",

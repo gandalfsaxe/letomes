@@ -75,7 +75,7 @@ def symplectic(
     x, y, p_x, p_y = [x0, y0, p0_x, p0_y]
 
     path_storage = []
-    path_storage.append([x, y, p_x, p_y, h])
+    path_storage.append([x, y, p_x, p_y, h, t])
     smallest_distance = 1e6
     Dv = None
     iteration_count = 0
@@ -184,12 +184,12 @@ def symplectic(
             Dv = sqrt(
                 v_radial ** 2 + (v_magnitude - target_orbital_velocity_nondim) ** 2
             )
-            path_storage.append([x, y, p_x, p_y, h])
+            path_storage.append([x, y, p_x, p_y, h, t])
             success[0] = 1
             score[0] = Dv
             return path_storage
 
-        path_storage.append([x, y, p_x, p_y, h])
+        path_storage.append([x, y, p_x, p_y, h, t])
 
         """check if we somehow accidentally struck the earth (whoops)"""
 
