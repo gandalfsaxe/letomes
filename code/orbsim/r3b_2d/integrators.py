@@ -62,7 +62,7 @@ def relative_error(vec1, vec2):
 
 @njit
 def symplectic(
-    x0, y0, p0_x, p0_y, score, success, duration=3 / UNIT_TIME, max_iter=10000
+    x0, y0, p0_x, p0_y, score, success, duration=3 / UNIT_TIME, max_iter=1e7
 ):
     """
     runs symplectic adaptive euler-verlet algorithm
@@ -73,6 +73,9 @@ def symplectic(
     h_min = h_MIN_DEFAULT
     t = 0  # total elapsed time
     x, y, p_x, p_y = [x0, y0, p0_x, p0_y]
+
+    tol = (STEP_ERROR_TOLERANCE) * (1e7 / max_iter)
+    print(tol)
 
     path_storage = []
     path_storage.append([x, y, p_x, p_y, h, t])
@@ -121,7 +124,7 @@ def symplectic(
         )
         err = relative_error([x_euler, y_euler], [x_verlet, y_verlet])
 
-        if err < STEP_ERROR_TOLERANCE or h <= h_min:
+        if err < tol or h <= h_min:
             iteration_count += 1
             x = x_verlet
             y = y_verlet
@@ -129,7 +132,7 @@ def symplectic(
             p_y = p_verlet_y
 
             t += h
-            h = max(h_min, h * max(0.1, 0.8 * sqrt(STEP_ERROR_TOLERANCE / err)))
+            h = max(h_min, h * max(0.1, 0.8 * sqrt(tol / err)))
             # TODO: explain this with /HH's new comments. 0.8 is chosen empirically
             # old explanation below:
             """Accept the step only if the weighted error is no more than the
@@ -145,7 +148,7 @@ def symplectic(
         target_distance_x = x - target_position_x
         target_distance_y = y - target_position_y
         target_distance = sqrt(target_distance_x ** 2 + target_distance_y ** 2)
-        if target_distance > 1e9 / UNIT_LENGTH:
+        if target_distance > 1e8 / UNIT_LENGTH:
             # print("we are way too far away, stranded in space!")
             score[0] = smallest_distance
             return path_storage
@@ -167,7 +170,7 @@ def symplectic(
             """
 
             # project velocity vector onto radial direction unit-vector. This is what we
-            # want to subtract from the velocity vector to obtain the tangental component (closed circular orbit)
+            # want to subtract from the velocity vector to obtain the tangential component (closed circular orbit)
             v_radial = (
                 v_x * target_distance_x + v_y * target_distance_y
             ) / target_distance

@@ -11,6 +11,7 @@ from math import pi
 pi8 = pi / 8
 pi4 = pi / 4
 pi2 = pi / 2
+pix2 = pi * 2
 
 
 @njit
@@ -31,17 +32,17 @@ def evolve(psis):
             epsis = psi + sigma * noise  # the point cloud around psi
 
             """calculate the reward in the cloud"""
-            psi_reward = -launch_sim(psi, duration=10, max_iter=1e7)[0]
+            psi_reward = -launch_sim(psi, duration=10, max_iter=1e7)[1]
             reward = np.zeros(len(epsis))
             for jdx in range(len(epsis)):
                 epsi = epsis[jdx]
                 reward[jdx] = -launch_sim(epsi, duration=10, max_iter=1e5)[
-                    0
+                    1
                 ]  # launch a simulation for each point
             reward -= reward.mean()
             reward /= reward.std()
 
-            step_norm = np.dot(reward, noise)  # F, in the literature
+            step_norm = np.dot(reward, noise)
             step = alpha * step_norm
             print("new individual = ")
             print(psi + step)
@@ -73,18 +74,23 @@ def evolve(psis):
     # return 0
 
 
-class saddle_space:
-    def __init__(self):
-        pass
-
-    @njit
-    def fitness(self, psi):
-        res, _ = launch_sim(psi, duration=50, max_iter=1e7)
+@njit
+def scale_result(success, res):
+    if success:
         return [-res]
+    else:
+        return [-((res * 10) ** 2)]
 
-    @njit
-    def get_bounds(self):
-        return ([-pi, -pi8, 2], [pi2, pi4, 4])
+
+@njit
+def fitness(psi):
+    success, res, _ = launch_sim(psi, duration=50, max_iter=1e7)
+    return scale_result(success, res)
+
+
+@njit
+def get_bounds():
+    return ([0, -pi, 3], [pix2, 0, 4])
 
 
 if __name__ == "__main__":
