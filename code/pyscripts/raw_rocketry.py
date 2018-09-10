@@ -32,12 +32,12 @@ def evolve(psis):
             epsis = psi + sigma * noise  # the point cloud around psi
 
             """calculate the reward in the cloud"""
-            psi_reward = -launch_sim(psi, duration=10, max_iter=1e7)[1]
+            psi_reward = -launch_sim(psi, duration=10, max_iter=1e7)[0]
             reward = np.zeros(len(epsis))
             for jdx in range(len(epsis)):
                 epsi = epsis[jdx]
                 reward[jdx] = -launch_sim(epsi, duration=10, max_iter=1e5)[
-                    1
+                    0
                 ]  # launch a simulation for each point
             reward -= reward.mean()
             reward /= reward.std()
@@ -84,8 +84,8 @@ def scale_result(success, res):
 
 @njit
 def fitness(psi):
-    success, res, _ = launch_sim(psi, duration=50, max_iter=1e7)
-    return scale_result(success, res)
+    res, _ = launch_sim(psi, duration=50, max_iter=1e7)
+    return [-res]
 
 
 @njit

@@ -25,12 +25,12 @@ pi2 = pi / 2
 
 
 def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
-    init_sigma = 0.01
+    init_sigma = 0.01  # spread
     init_alpha = 0.03  # learningrate
 
     sigma = np.ones(nIndividuals) * init_sigma
     alpha = np.ones(nIndividuals) * init_alpha
-    for i in range(nIterations):
+    for _ in range(nIterations):
 
         """
         make list of all paths to integrate
@@ -42,6 +42,9 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         jitter *= saddle_space().get_ranges()  # I put this here! Not in paper!
         jitter[0] *= 0  # Make sure all set island phis are evaluated without jitter
         points = jitter + psis
+
+        jitter = jitter.reshape(nIndividuals, nJitter, 3)
+        jitter = np.array([sigma[idx] * jitt for idx, jitt in enumerate(jitter)])
         successes = np.zeros(nIndividuals * nJitter, dtype=bool)
         scores = np.zeros(nIndividuals * nJitter)
 
@@ -85,23 +88,27 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
 
         print("success=", successes)
         print("score=", scores)
-        for idx, score in enumerate(scores):
-            if not successes[idx]:
-                # punish paths that do not hit planet
-                score = ((score + 1) * 10) ** 2
 
         scores -= scores.mean()
         scores /= scores.std()
 
-        psi_scores = scores[::nJitter]
-        steps_norm = np.dot(psi_scores, jitter)
-        for idx, score in enumerate(psi_scores):
-            sigma[idx] = init_sigma * score
-            alpha[idx] = init_alpha * score
-            steps = alpha[idx] * steps_norm
-            psis[idx] += steps
+        scores = scores.reshape(nIndividuals, nJitter)
+        steps = np.zeros([nIndividuals, 3])
+        for idx, score in enumerate(scores):
+            if not successes[idx]:
+                # punish paths that do not hit planet
+                scores[idx] = ((score + 1) * 10) ** 2
 
-        
+            steps[idx] = np.dot(scores[idx], jitter[idx]) * alpha[idx]
+
+        psi_scores = scores.T[0]
+        for idx, score in enumerate(psi_scores):
+            new_sigma = init_sigma * score
+            new_alpha = init_alpha * score
+            sigma[idx] = new_sigma
+            alpha[idx] = new_alpha
+
+        psis += steps
 
 
 class saddle_space:

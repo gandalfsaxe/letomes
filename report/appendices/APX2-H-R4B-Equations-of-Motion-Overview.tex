@@ -1,0 +1,51 @@
+% !TEX root =../thesis-letomes.tex
+\chapter{H-R4B Equations of Motion Overview} \label{apx:hcr4b-overview}
+
+\begin{equation} \tag{2.67}
+    \boxed{
+            \dot{R} = B_r
+    }
+\end{equation}
+
+
+\begin{equation} \tag{2.72}
+    \boxed{
+            \dot{\theta} = \frac{B_\theta}{R^2}
+    }
+\end{equation}
+
+
+\begin{equation} \tag{2.76}
+    \boxed{
+            \dot{\phi} = \frac{B_\phi}{R^2 \sin^2{\theta}}
+    }
+\end{equation}
+
+
+\begin{equation} \tag{2.86}
+    \boxed{
+        \!\begin{aligned}
+        \dot{B}_r = &\frac{B_\theta^2}{R^3} + \frac{B_\phi^2}{R^3 \sin^2{\theta}} \\
+        & + \sum\limits_{i} \eta_i \frac{-\left[R - R_k \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)}\right) \right]}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)} \right) \right]}^{3/2}
+        \end{aligned}
+    }
+\end{equation}
+
+
+\begin{equation} \tag{2.87}
+    \boxed{
+        \!\begin{aligned}
+            \dot{B}_\theta = &\frac{B_\phi^2}{R^2 \sin^2{\theta} \tan{\theta}} \\
+            &+ \sum\limits_{i} \eta_i \frac{R R_k \left[-\sin{\theta}\cos{\theta_i} + \cos{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)} \right]}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)} \right) \right]^{3/2}}
+        \end{aligned}
+    }
+\end{equation}
+
+
+\begin{equation} \tag{2.88}
+    \boxed{
+        \!\begin{aligned}
+            \dot{B}_\phi = &\sum\limits_{i} \eta_i \frac{- R R_k \sin{\theta}\sin{\theta_i}\sin{(\phi - \phi_i)}}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)} \right) \right]^{3/2}}
+        \end{aligned}
+    }
+\end{equation}
