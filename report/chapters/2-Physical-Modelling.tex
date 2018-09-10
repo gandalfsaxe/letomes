@@ -222,7 +222,7 @@ So we can finally express \(H\) as
     \dot{\phi} = \pd{H}{p_\phi} &= \frac{p_\phi}{m_s r^2 \sin^2{\theta}} \label{eq:phidot}  \\[0.3cm]
     \begin{split}
         \dot{p}_r = -\pd{H}{r} &= \frac{p_\theta^2}{m_s r^3} + \frac{p_\phi^2}{m_s r^3 \sin^2{\theta} } \\
-        &+ G m_s \sum\limits_{k} M_k \frac{-\left[r_i - r_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right) \right]}{\left[(r - r_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \label{eq:prdot}
+        &+ G m_s \sum\limits_{k} M_k \frac{-\left[r - r_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right) \right]}{\left[(r - r_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \label{eq:prdot}
     \end{split} \\[0.3cm]
     \begin{split}
         \dot{p}_\theta = -\pd{H}{\theta} &= \frac{p_\phi^2}{m_s r^2 \sin^2{\theta} \tan{\theta}} \\
@@ -383,28 +383,29 @@ As an overview, \cref{apx:hcr4b-overview} shows all six nondimensionalized equat
 This algorithm manifests as a mixture between explicit and implicit Euler. New values of \emph{coordinates} \((R, \theta, \phi)_{i+1}\) on the left-hand side refer to unknown values from the new time step \((R, \theta, \phi, B_r, B_\theta, B_\phi)_{i+1}\) on the right hand side. All new values of \emph{generalized momenta} \((B_r, B_\theta, B_\phi)_{i}\) refer only to known values from the current time step \((R, \theta, \phi, B_r, B_\theta, B_\phi)_{i}\) on the right hand side:
 
 \begin{align}
-    R_{i+1} &= B_r h + R_i \label{eq:euler-R_i+1-implicit}, \\[0.4cm]
-    \theta_{i+1} &= \frac{B_{\theta,i+1}}{R_{i+1}^2} h + \theta_i, \label{eq:euler-theta_i+1-implicit} \\[0.4cm]
-    \phi_{i+1} &= \frac{B_{\phi,i+1}}{R_{i+1}^2 \sin^2{\theta_{i+1}}} h + \phi_i, \label{eq:euler-phi_i+1-implicit}
+    R_{i+1} &= R_i + B_{r,i+1} h \label{eq:euler-R_i+1-implicit}, \\[0.4cm]
+    \theta_{i+1} &= \theta_i + \frac{B_{\theta,i+1}}{R_{i+1}^2} h, \label{eq:euler-theta_i+1-implicit} \\[0.4cm]
+    \phi_{i+1} &= \phi_i + \frac{B_{\phi,i+1}}{R_{i+1}^2 \sin^2{\theta_{i+1}}} h, \label{eq:euler-phi_i+1-implicit}
 \end{align}
 \begin{align}    
     \begin{aligned}
-        B_{r,i+1} = &\frac{B_{\theta,i}^2}{R_i^3} + \frac{B_{\phi,i}^2}{R_i^3 \sin^2{\theta_i}} \\
-        & + \sum\limits_{k} \eta_k \frac{-\left[R_i - R_{k,i} \left(\cos{\theta_i}\cos{\theta_i} + \sin{\theta_i}\sin{\theta_i}\cos{(\phi - \phi_{k,i})}\right) \right]}{\left[(R_i - R_{k,i})^2 \left(\cos{\theta_i}\cos{\theta_i} + \sin{\theta_i}\sin{\theta_i}\cos{(\phi - \phi_{k,i})} \right) \right]}^{3/2}, \label{eq:euler-Br_i+1-explicit}
+        B_{r,i+1} = & B_{r,i} + \left[ \frac{B_{\theta,i}^2}{R_i^3} + \frac{B_{\phi,i}^2}{R_i^3 \sin^2{\theta_i}} \right. \\
+        & + \left. {} \sum\limits_{k} \eta_k \frac{-\left[R_i - R_{k,i} \left(\cos{\theta_i}\cos{\theta_{k,i}} + \sin{\theta_i}\sin{\theta_{k,i}}\cos{(\phi_i - \phi_{k,i})}\right) \right]}{\left[(R_i - R_{k,i})^2 \left(\cos{\theta_i}\cos{\theta_{k,i}} + \sin{\theta_i}\sin{\theta_{k,i}}\cos{(\phi_i - \phi_{k,i})} \right) \right]}^{3/2} \right] h , \label{eq:euler-Br_i+1-explicit}
     \end{aligned} \\[0.4cm]
     \begin{aligned}
-        B_{\theta,i+1} = &\frac{B_{\phi,i}^2}{R^2 \sin^2{\theta_i} \tan{\theta_i}} \\
-        &+ \sum\limits_{k} \eta_k \frac{R R_{k,i} \left[-\sin{\theta_i}\cos{\theta_i} + \cos{\theta_i}\sin{\theta_i}\cos{(\phi - \phi_{k,i})} \right]}{\left[(R_i - R_{k,i})^2 \left(\cos{\theta_i}\cos{\theta_i} + \sin{\theta_i}\sin{\theta_i}\cos{(\phi - \phi_{k,i})} \right) \right]^{3/2}}, \label{eq:euler-Btheta_i+1-explicit}
+        B_{\theta,i+1} = & B_{\theta,i} + \left[ \frac{B_{\phi,i}^2}{R_i^2 \sin^2{\theta_i} \tan{\theta_i}} \right. \\
+        & + \left. {} \sum\limits_{k} \eta_k \frac{R_i R_{k,i} \left[-\sin{\theta_i}\cos{\theta_{k,i}} + \cos{\theta_i}\sin{\theta_{k,i}}\cos{(\phi_i - \phi_{k,i})} \right]}{\left[(R_i - R_{k,i})^2 \left(\cos{\theta_i}\cos{\theta_{k,i}} + \sin{\theta_i}\sin{\theta_{k,i}}\cos{(\phi_i - \phi_{k,i})} \right) \right]^{3/2}} \right] h, \label{eq:euler-Btheta_i+1-explicit}
     \end{aligned} \\[0.4cm]
     \begin{aligned}
-        B_{\phi,i+1} = &\sum\limits_{k} \eta_k \frac{- R R_{k,i} \sin{\theta_i}\sin{\theta_i}\sin{(\phi - \phi_{k,i})}}{\left[(R_i - R_{k,i})^2 \left(\cos{\theta_i}\cos{\theta_i} + \sin{\theta_i}\sin{\theta_i}\cos{(\phi - \phi_{k,i})} \right) \right]^{3/2}}, \label{eq:euler-Bphi_i+1-explicit}
+        B_{\phi,i+1} = & B_{\phi,i} \\
+        & + \left[ \sum\limits_{k} \eta_k \frac{- R_i R_{k,i} \sin{\theta_i}\sin{\theta_{k,i}}\sin{(\phi_i - \phi_{k,i})}}{\left[(R_i - R_{k,i})^2 \left(\cos{\theta_i}\cos{\theta_{k,i}} + \sin{\theta_i}\sin{\theta_{k,i}}\cos{(\phi_i - \phi_{k,i})} \right) \right]^{3/2}} \right] h , \label{eq:euler-Bphi_i+1-explicit}
     \end{aligned}
 \end{align}
 where the index denote the new time step \(i+1\) and old time step \(i\) and \(h\) is the step size.
 We first solve the three coordinate equations \cref{eq:euler-R_i+1-implicit,eq:euler-theta_i+1-implicit,eq:euler-phi_i+1-implicit} for \(R_{i+1}, \theta_{i+1}, \phi_{i+1}\):
 
 \begin{align}
-    R_{i+1} &= R_i + B_{r,i+1} h \label{eq:euler-R_i+1-explicit}\\
+    R_{i+1} &= R_i + B_{r,i+1} h \label{eq:euler-R_i+1-explicit} \\
     \theta_{i+1} &= \frac{B_{\theta,i+1}}{R_{i+1}^2} h + \theta_i \label{eq:euler-theta_i+1-explicit} \\
     \phi_{i+1} &= \frac{B_{\phi,i+1}}{R_{i+1}^2 \sin^2{\theta_{i+1}}} h + \phi_i \label{eq:euler-phi_i+1-explicit}
 \end{align}
