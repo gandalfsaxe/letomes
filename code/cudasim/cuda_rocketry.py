@@ -88,8 +88,14 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
 
         print("successes=", successes, successes.shape)
         print("scores=", scores, scores.shape)
-        winners=np.array([(points.flatten()[idx],scores[idx]) for idx in range(len(scores)) if successes[idx]])
-        print(winners,winners.shape)
+        winners = np.array(
+            [
+                (points.flatten()[idx], scores[idx])
+                for idx in range(len(scores))
+                if successes[idx]
+            ]
+        )
+        print(winners, winners.shape)
 
         scores -= scores.mean()
         scores /= scores.std()
@@ -105,10 +111,8 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
 
         psi_scores = scores.T[0]
         for idx, score in enumerate(psi_scores):
-            new_sigma = init_sigma * score
-            new_alpha = init_alpha * score
-            sigma[idx] = new_sigma
-            alpha[idx] = new_alpha
+            sigma[idx] = init_sigma
+            alpha[idx] = init_alpha
 
         psis += steps
 
