@@ -3,14 +3,14 @@
 \chapter{Physical Modelling}
 We need a chapter to formulate our hypotheses, and generally give a before-the-fact run-down of what the project and report will be like.
 
-\section{CM-Centric Restricted 3-Body System (Earth-Moon)}
+\section{CM-Centric Restricted 3-Body System (C-R3B), Earth-Moon}
 
 \subsection{Equations of Motion}
 
 \subsection{Numerical Algorithm}
 
 
-\section{Heliocentric Restricted 4-Body System (Sun-Earth-Mars)}
+\section{Heliocentric Restricted 4-Body System (H-R4B), Sun-Earth-Mars}
 Simulating orbit from Earth to Mars requires a new model with at least four bodies: Sun, Earth, Mars and the Spacecraft. The coordinate system will be heliocentric and in spherical coordinates, and restricted meaning that the mass of the spacecraft is considered negligible compared to compared to the celestial masses, so we call this system the ``Heliocentric Restricted N-Body'' system. We will derive the equations of motion of the spacecraft by using Hamilton's equations, which naturally gives us a set of coupled first-order differential equations, and a set of conserved quantities as ``generalized momenta''.
 
 \subsection{Spherical Coordinate System}
@@ -18,7 +18,7 @@ We adopt the spherical coordinate system which customary in astrodynamics. The c
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.50\linewidth]{fig/3D_Spherical}
+    \includegraphics[width=0.50\linewidth]{fig/3D_Spherical2}
     \caption{Spherical coordinates \((r, \theta, \phi)\). Radial distance \(r\), polar angle \(\theta\) (theta), and azimuthal angle \(\phi\) (phi). In our heliocentric system the sun is assumed to be stationary at the origin. Source: \cite{WikiSpherical}.}
     \label{fig:3D_Spherical}
 \end{figure}
@@ -71,7 +71,7 @@ So the unit vectors in spherical coordinates are
     \phihat = \dfrac{\pd{\vec{r}}{\phi}}{\left| \pd{\vec{r}}{\phi} \right| } &= -\sin{\phi} \xhat + \cos{\phi} \zhat \label{eq:phi-hat}
 \end{align}
 
-\subsection{HR4B Equations of Motion}
+\subsection{H-R4B Equations of Motion}
 We will follow the 5-step process of arriving at Hamilton's equations outlined in \cref{apx:hamiltons}.
 
 \subsubsection{Step 1: Lagrangian \(L\)}
@@ -235,7 +235,7 @@ So we can finally express \(H\) as
 
 Those are our equations of motion. However before we try to solve them, we will remove all units.
 
-\subsection{HR4B Equations Nondimensionalized}
+\subsection{H-R4B Equations Nondimensionalized}
 We will now choose suitable characteristic units, which has a number of benefits:
 \begin{itemize}
     \item The equations gets slightly simplified
@@ -374,7 +374,7 @@ The exact same procedure for \(\dot{p_\theta}\) and \(\dot{p}_\phi\) gives us:
     }
 \end{equation}
 
-As an overview, \cref{apx:hcr4b-overview} shows all six nondimensionalized equations of motion one a single page.
+As an overview, \cref{apx:hr4b-overview} shows all six nondimensionalized equations of motion one a single page.
 
 \subsection{Numerical Integration Algorithm}
 
@@ -406,7 +406,7 @@ We first solve the three coordinate equations \cref{eq:euler-R_i+1-implicit,eq:e
 
 \begin{align}
     R_{i+1} &= R_i + B_{r,i+1} h \label{eq:euler-R_i+1-explicit} \\
-    \theta_{i+1} &= \frac{B_{\theta,i+1}}{R_{i+1}^2} h + \theta_i \label{eq:euler-theta_i+1-explicit} \\
-    \phi_{i+1} &= \frac{B_{\phi,i+1}}{R_{i+1}^2 \sin^2{\theta_{i+1}}} h + \phi_i \label{eq:euler-phi_i+1-explicit}
+    \theta_{i+1} &= \theta_i + \frac{B_{\theta,i+1}}{R_{i+1}^2} h \label{eq:euler-theta_i+1-explicit} \\
+    \phi_{i+1} &= \phi_i + \frac{B_{\phi,i+1}}{R_{i+1}^2 \sin^2{\theta_{i+1}}} h \label{eq:euler-phi_i+1-explicit}
 \end{align}
 see \cref{apx:hcr4b-euler} for derivations. We can now run the algorithm in the order \cref{eq:euler-Br_i+1-explicit,eq:euler-Btheta_i+1-explicit,eq:euler-Bphi_i+1-explicit,eq:euler-R_i+1-explicit,eq:euler-theta_i+1-explicit,eq:euler-phi_i+1-explicit}.
