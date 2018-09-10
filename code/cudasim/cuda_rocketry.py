@@ -35,7 +35,6 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         """
         make list of all paths to integrate
         """
-        sigma = init_sigma
         # Try randn when it works, to see if better.           -----v
         np.random.seed(0)
         jitter = np.random.rand(nJitter, nIndividuals, 3)
@@ -95,13 +94,14 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         scores /= scores.std()
 
         psi_scores = scores[::nJitter]
+        steps_norm = np.dot(psi_scores, jitter)
         for idx, score in enumerate(psi_scores):
             sigma[idx] = init_sigma * score
             alpha[idx] = init_alpha * score
+            steps = alpha[idx] * steps_norm
+            psis[idx] += steps
 
-        steps_norm = np.dot(psi_scores, jitter)
-        steps = alpha * steps_norm
-        psis = psis + steps
+        
 
 
 class saddle_space:
