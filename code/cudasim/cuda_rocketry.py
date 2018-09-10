@@ -35,7 +35,6 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         """
         make list of all paths to integrate
         """
-        sigma = init_sigma
         # Try randn when it works, to see if better.           -----v
         np.random.seed(0)
         jitter = np.random.rand(nJitter, nIndividuals, 3)
