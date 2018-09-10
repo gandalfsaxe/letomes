@@ -86,8 +86,10 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
             scoreArray,
         )
 
-        print("success=", successes)
-        print("score=", scores)
+        print("successes=", successes, successes.shape)
+        print("scores=", scores, scores.shape)
+        winners=np.array([(points.flatten()[idx],scores[idx]) for idx in range(len(scores)) if successes[idx]])
+        print(winners,winners.shape)
 
         scores -= scores.mean()
         scores /= scores.std()
@@ -131,7 +133,7 @@ class saddle_space:
 
 
 if __name__ == "__main__":
-    nIterations = 1
+    nIterations = 10
     nIndividuals = 1024
     nJitter = 32
     maxDuration = 5
