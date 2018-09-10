@@ -83,14 +83,14 @@ The kinetic energy of the system is
 In general the total derivative of a vector is:
 
 \begin{align}
-    \vec{v} &= \od{\vec{r}}{t} = \sum\limits_{i} \pd{\vec{r}}{q_i} \od{q_i}{t}, \\
-      &= \sum\limits_{i} \left|\pd{\vec{r}}{q_i}\right| \frac{\pd{\vec{r}}{q_i}}{\left|\pd{\vec{r}}{q_i}\right|} \od{q_i}{t}, \\
-      &= \sum\limits_{i} \left|\pd{\vec{r}}{q_i}\right| \od{q_i}{t} \unitvector{q}_i, \\
-      &= \sum\limits_{i} \left|\pd{\vec{r}}{q_i}\right| \dot{q_i} \unitvector{q}_i,
+    \vec{v} &= \od{\vec{r}}{t} = \sum\limits_{j} \pd{\vec{r}}{q_j} \od{q_j}{t}, \\
+      &= \sum\limits_{j} \left|\pd{\vec{r}}{q_j}\right| \frac{\pd{\vec{r}}{q_j}}{\left|\pd{\vec{r}}{q_j}\right|} \od{q_j}{t}, \\
+      &= \sum\limits_{j} \left|\pd{\vec{r}}{q_j}\right| \od{q_j}{t} \unitvector{q}_j, \\
+      &= \sum\limits_{j} \left|\pd{\vec{r}}{q_j}\right| \dot{q_j} \unitvector{q}_j,
     \end{align}
 
-where we have used that a unit vector for any coordinate system is \(\frac{\pd{\vec{r}}{q_i}}{\left|\pd{\vec{r}}{q_i}\right|} = \unitvector{q}_i\).
-We can now use the derivatives of the position vector we found earlier in \cref{eq:position-derived-r,eq:position-derived-theta,eq:position-derived-phi}, to substitute for \(\left|\pd{\vec{r}}{q_i}\right|\). We don't have to substitute in \(\unitvector{q}_i\) since our unit vectors are orthogonal, so they will yield either 0 or 1 when we square \(v\). So for the spherical coordinates we get:
+where we have used that a unit vector for any coordinate system is \(\frac{\pd{\vec{r}}{q_j}}{\left|\pd{\vec{r}}{q_j}\right|} = \unitvector{q}_j\).
+We can now use the derivatives of the position vector we found earlier in \cref{eq:position-derived-r,eq:position-derived-theta,eq:position-derived-phi}, to substitute for \(\left|\pd{\vec{r}}{q_j}\right|\). We don't have to substitute in \(\unitvector{q}_j\) since our unit vectors are orthogonal, so they will yield either 0 or 1 when we square \(v\). So for the spherical coordinates we get:
 
 \begin{align}
     \vec{v} = \dot{r}\rhat + r\dot{\theta}\thetahat + r\sin{\theta}\,\dot{\phi}\phihat
@@ -111,7 +111,7 @@ so we get
 The gravitational potential is \todoref{find some non-wikipedia reference here}
 
 \begin{align}
-    V = -G m_s \sum\limits_{i} \frac{M_i}{\left| \vec{r} - \vec{r_i} \right|},
+    V = -G m_s \sum\limits_{k} \frac{M_k}{\left| \vec{r} - \vec{r_k} \right|},
 \end{align}
 where \(i\) denotes the celestial bodies acting on the spacecraft, i.e. in our system Sun, Earth and Mars.
 
@@ -119,17 +119,17 @@ So we finally get the Lagrangian
 
 \begin{align}
     L &= T - V \\
-    \Leftrightarrow L &= \frac{1}{2} m_s (\dot{r}^2 + r^2\dot{\theta}^2 + r^2\sin^2{\theta}\,\dot{\phi}^2) + G m_s \sum\limits_{i} \frac{M_i}{\left| \vec{r} - \vec{r_i} \right|}
+    \Leftrightarrow L &= \frac{1}{2} m_s (\dot{r}^2 + r^2\dot{\theta}^2 + r^2\sin^2{\theta}\,\dot{\phi}^2) + G m_s \sum\limits_{k} \frac{M_k}{\left| \vec{r} - \vec{r_k} \right|}
 \end{align}
 
-\subsubsection{Step 2: Generalized Momenta \(p_i\)}
+\subsubsection{Step 2: Generalized Momenta \(p_j\)}
 \begin{align}
     p_r &= \pd{L}{\dot{r}} = m_s \dot{r} \label{eq:pr} \\
     p_\theta &= \pd{L}{\dot{\theta}} = m_s r^2 \dot{\theta} \label{eq:ptheta} \\
     p_\phi &= \pd{L}{\dot{\phi}} = m_s r^2 \sin^2{\theta} \dot{\phi} \label{eq:pphi}
 \end{align}
 
-\subsubsection{Step 3: \(\dot{q} = \dot{q}_i(\vec{q}, \vec{p}, t)\)}
+\subsubsection{Step 3: \(\dot{q} = \dot{q}_j(\vec{q}, \vec{p}, t)\)}
 \begin{align}
     \dot{r} &= \frac{p_r}{m_s} \\
     \dot{\theta} &= \frac{p_\theta}{m_s r^2} \\
@@ -147,62 +147,62 @@ We can now rewrite \(L\) to make it independent of \(\dot{q}\) by substituting t
 So we have
 
 \begin{align}
-    L = \frac{p_r^2}{2 m_s} + \frac{p_\theta^2}{2 m_s r^2} + \frac{p_\phi^2}{2 m_s r^2 \sin^2{\theta}} + G m_s \sum\limits_{i} \frac{M_i}{\left| \vec{r} - \vec{r_i} \right|}
+    L = \frac{p_r^2}{2 m_s} + \frac{p_\theta^2}{2 m_s r^2} + \frac{p_\phi^2}{2 m_s r^2 \sin^2{\theta}} + G m_s \sum\limits_{k} \frac{M_k}{\left| \vec{r} - \vec{r_k} \right|}
 \end{align}
 
 \subsubsection{Step 4: Hamiltonian \(H\)}
 \begin{align}
-    H(\vec{q}, \vec{p}, t) &= \sum\limits_{i}p_i \dot{q_i} - L \\
-    &= \sum\limits_{i}p_i \dot{q_i}(\vec{q}, \vec{p}, t) - L \\
+    H(\vec{q}, \vec{p}, t) &= \sum\limits_{j}p_j \dot{q_j} - L \\
+    &= \sum\limits_{j}p_j \dot{q_j}(\vec{q}, \vec{p}, t) - L \\
     &= p_r \frac{p_r}{m_s} + p_\theta \frac{p_\theta}{m_s r^2} + p_\phi + \frac{p_\phi}{m_s r^2 \sin^2{\theta}} \nonumber \\
-    &- \left( \frac{p_r^2}{2 m_s} + \frac{p_\theta^2}{2 m_s r^2} + \frac{p_\phi^2}{2 m_s r^2 \sin^2{\theta}} + G m_s \sum\limits_{i} \frac{M_i}{\left| \vec{r} - \vec{r_i} \right|} \right) \\
-    \Leftrightarrow H &= \frac{p_r^2}{2 m_s} + \frac{p_\theta^2}{2 m_s r^2} + \frac{p_\phi^2}{2 m_s r^2 \sin^2{\theta}} - G m_s \sum\limits_{i} \frac{M_i}{\left| \vec{r} - \vec{r_i} \right|}
+    &- \left( \frac{p_r^2}{2 m_s} + \frac{p_\theta^2}{2 m_s r^2} + \frac{p_\phi^2}{2 m_s r^2 \sin^2{\theta}} + G m_s \sum\limits_{k} \frac{M_k}{\left| \vec{r} - \vec{r_k} \right|} \right) \\
+    \Leftrightarrow H &= \frac{p_r^2}{2 m_s} + \frac{p_\theta^2}{2 m_s r^2} + \frac{p_\phi^2}{2 m_s r^2 \sin^2{\theta}} - G m_s \sum\limits_{k} \frac{M_k}{\left| \vec{r} - \vec{r_k} \right|}
 \end{align}
 
-At this point we want to expand the expression \(\left| \vec{r} - \vec{r_i} \right|\) in anticipation of needing to differentiate \(H\) with respect to the coordinates. Using the equations for the \(x, y, z\) coordinates \cref{eq:x(q),eq:y(q),eq:z(q)} we get
+At this point we want to expand the expression \(\left| \vec{r} - \vec{r_k} \right|\) in anticipation of needing to differentiate \(H\) with respect to the coordinates. Using the equations for the \(x, y, z\) coordinates \cref{eq:x(q),eq:y(q),eq:z(q)} we get
 
 \begin{align}
-    d_i = \left|\vec{r} - \vec{r}_i \right| &= \sqrt{(x-x_i)^2 + (y-y_i)^2 + (z-z_i)^2}
+    d_k = \left|\vec{r} - \vec{r}_k \right| &= \sqrt{(x-x_k)^2 + (y-y_k)^2 + (z-z_k)^2}
 \end{align}
 and
 \begin{align}
-    (x-x_i)^2 &= (r\sin{\theta}\cos{\phi} - r\sin{\theta}\cos{\phi})^2 \nonumber \\
+    (x-x_k)^2 &= (r\sin{\theta}\cos{\phi} - r\sin{\theta}\cos{\phi})^2 \nonumber \\
     &= \tikz[baseline]{
         \node[fill=orange!20,anchor=base]
         {\(r^2\sin^2{\theta}\cos^2{\phi}\)}
     } + \tikz[baseline]{
         \node[fill=red!20,anchor=base]
-        {\(r_i^2\sin^2{\theta_i}\cos^2{\phi_i}\)}
-    } - 2r r_i \sin{\theta}\sin{\theta_i}\cos{\phi}\cos{\phi_i} \label{eq:x-dist-squared} \\
-    (y-y_i)^2 &= (r\sin{\theta}\sin{\phi} - r\sin{\theta}\sin{\phi})^2 \nonumber \\
+        {\(r_k^2\sin^2{\theta_k}\cos^2{\phi_k}\)}
+    } - 2r r_k \sin{\theta}\sin{\theta_k}\cos{\phi}\cos{\phi_k} \label{eq:x-dist-squared} \\
+    (y-y_k)^2 &= (r\sin{\theta}\sin{\phi} - r\sin{\theta}\sin{\phi})^2 \nonumber \\
     &= \tikz[baseline]{
         \node[fill=orange!20,anchor=base]
         {\(r^2\sin^2{\theta}\sin^2{\phi}\)}
     } + \tikz[baseline]{
         \node[fill=red!20,anchor=base]
-        {\(r_i^2\sin^2{\theta_i}\sin^2{\phi_i}\)}
-    } - 2r r_i \sin{\theta}\sin{\theta_i}\sin{\phi}\sin{\phi_i} \label{eq:y-dist-squared} \\
-    (z-z_i)^2 &= (r\cos{\theta} - r\cos{\theta})^2 \nonumber \\
+        {\(r_k^2\sin^2{\theta_k}\sin^2{\phi_k}\)}
+    } - 2r r_k \sin{\theta}\sin{\theta_k}\sin{\phi}\sin{\phi_k} \label{eq:y-dist-squared} \\
+    (z-z_k)^2 &= (r\cos{\theta} - r\cos{\theta})^2 \nonumber \\
     &= \tikz[baseline]{
         \node[fill=orange!20,anchor=base]
         {\(r^2\cos^2{\theta}\)}
     } + \tikz[baseline]{
         \node[fill=red!20,anchor=base]
-        {\(r_i^2\cos^2{\theta_i}\)}
-    } - 2r r_i \cos{\theta}\cos{\theta_i}. \label{eq:z-dist-squared}
+        {\(r_k^2\cos^2{\theta_k}\)}
+    } - 2r r_k \cos{\theta}\cos{\theta_k}. \label{eq:z-dist-squared}
 \end{align}
-Now adding all three \cref{eq:x-dist-squared,eq:y-dist-squared,eq:z-dist-squared} the orange terms add to \(r^2\) and the red terms add to \(r_i^2\) and we get
+Now adding all three \cref{eq:x-dist-squared,eq:y-dist-squared,eq:z-dist-squared} the orange terms add to \(r^2\) and the red terms add to \(r_k^2\) and we get
 
 \begin{align}
-    d_i &= \sqrt{
+    d_k &= \sqrt{
         \tikz[baseline]{\node[fill=orange!20,anchor=base]{\(r^2\)}}
-        + \tikz[baseline]{\node[fill=red!20,anchor=base]{\(r_i^2\)}}
-        -2r r_i(\cos{\theta}\cos{\theta_i}+\sin{\theta}\sin{\theta_i}(
+        + \tikz[baseline]{\node[fill=red!20,anchor=base]{\(r_k^2\)}}
+        -2r r_k(\cos{\theta}\cos{\theta_k}+\sin{\theta}\sin{\theta_k}(
             \tikz[baseline]{\node[fill=blue!20,anchor=base]{
-                \(\cos{\phi}\cos{\phi_i} + \sin{\phi}\sin{\phi_i}\)}}
+                \(\cos{\phi}\cos{\phi_k} + \sin{\phi}\sin{\phi_k}\)}}
         ))
     } \\
-    &= \sqrt{(r - r_i)^2(\cos{\theta}\cos{\theta_i}+\sin{\theta}\sin{\theta_i}(\cos{\phi - \phi_i}))},
+    &= \sqrt{(r - r_k)^2(\cos{\theta}\cos{\theta_k}+\sin{\theta}\sin{\theta_k}(\cos{\phi - \phi_k}))},
 \end{align}
 where the blue factor was simplified using the sum rule \\
 \(\cos{\alpha}\cos{\beta} + \sin{\alpha}\sin{\beta} = cos{\alpha-\beta}\)\cite{WeissteinTrig}.
@@ -211,7 +211,7 @@ So we can finally express \(H\) as
 \begin{equation}
     \begin{aligned}
         H &= \frac{p_r^2}{2 m_s} + \frac{p_\theta^2}{2 m_s r^2} + \frac{p_\phi^2}{2 m_s r^2 \sin^2{\theta}} \\
-        &- G m_s \sum\limits_{i} \frac{M_i}{\sqrt{(r - r_i)^2\left[\cos{\theta}\cos{\theta_i}+\sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i})\right]}}
+        &- G m_s \sum\limits_{k} \frac{M_k}{\sqrt{(r - r_k)^2\left[\cos{\theta}\cos{\theta_k}+\sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k})\right]}}
     \end{aligned}
 \end{equation}
 
@@ -222,20 +222,20 @@ So we can finally express \(H\) as
     \dot{\phi} = \pd{H}{p_\phi} &= \frac{p_\phi}{m_s r^2 \sin^2{\theta}} \label{eq:phidot}  \\[0.3cm]
     \begin{split}
         \dot{p}_r = -\pd{H}{r} &= \frac{p_\theta^2}{m_s r^3} + \frac{p_\phi^2}{m_s r^3 \sin^2{\theta} } \\
-        &+ G m_s \sum\limits_{i} M_i \frac{-\left[r - r_i \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)}\right) \right]}{\left[(r - r_i)^2 \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)} \right) \right]^{3/2}} \label{eq:prdot}
+        &+ G m_s \sum\limits_{k} M_k \frac{-\left[r_i - r_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right) \right]}{\left[(r - r_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \label{eq:prdot}
     \end{split} \\[0.3cm]
     \begin{split}
         \dot{p}_\theta = -\pd{H}{\theta} &= \frac{p_\phi^2}{m_s r^2 \sin^2{\theta} \tan{\theta}} \\
-        &+ G m_s \sum\limits_{i} M_i \frac{r r_i \left[-\sin{\theta}\cos{\theta_i} + \cos{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)} \right]}{\left[(r - r_i)^2 \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)} \right) \right]^{3/2}} \label{eq:pthetadot}
+        &+ G m_s \sum\limits_{k} M_k \frac{r r_k \left[-\sin{\theta}\cos{\theta_k} + \cos{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right]}{\left[(r - r_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \label{eq:pthetadot}
     \end{split} \\[0.3cm]
     \begin{split}
-        \dot{p}_\phi = -\pd{H}{\phi} &= G m_s \sum\limits_{i} M_i \frac{- r r_i \sin{\theta}\sin{\theta_i}\sin{(\phi - \phi_i)}}{\left[(r - r_i)^2 \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)} \right) \right]^{3/2}} \label{eq:pphidot}
+        \dot{p}_\phi = -\pd{H}{\phi} &= G m_s \sum\limits_{k} M_k \frac{- r r_k \sin{\theta}\sin{\theta_k}\sin{(\phi - \phi_k)}}{\left[(r - r_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \label{eq:pphidot}
     \end{split}
 \end{align}
 
 Those are our equations of motion. However before we try to solve them, we will remove all units.
 
-\subsection{HR4B Equations of Motion - Nondimensionalized}
+\subsection{HR4B Equations Nondimensionalized}
 We will now choose suitable characteristic units, which has a number of benefits:
 \begin{itemize}
     \item The equations gets slightly simplified
@@ -264,7 +264,7 @@ The unit for length is expressed in kilometers because it is customary to use \s
     \label{fig:earth-semi-major-axis}
 \end{figure}
 
-Looking at the \(p_i\) from \cref{eq:pr,eq:ptheta,eq:pphi} we can infer their units:
+Looking at the \(p_j\) from \cref{eq:pr,eq:ptheta,eq:pphi} we can infer their units:
 
 \begin{align}
     k_{pr} &= \frac{k_m}{k_r k_t} \\[0.2cm]
@@ -275,9 +275,9 @@ Looking at the \(p_i\) from \cref{eq:pr,eq:ptheta,eq:pphi} we can infer their un
 We now introduce the quantity
 
 \begin{equation}
-    b_i = \frac{p_i}{m_s}.
+    b_j = \frac{p_j}{m_s}.
 \end{equation}
-It proves useful to introduce into Hamilton's equations because the mass cancels out (as expected from Newton's 2nd Law, and thus removes the need for introducing  selecting characteristic mass \(k_m\). We will treat the interpretation later. \(b_i\) has units:
+It proves useful to introduce into Hamilton's equations because the mass cancels out (as expected from Newton's 2nd Law, and thus removes the need for introducing  selecting characteristic mass \(k_m\). We will treat the interpretation later. \(b_j\) has units:
 
 \begin{align}
     k_{br} = \frac{k_{pr}}{k_m} = \frac{k_r}{k_t} \\[0.2cm]
@@ -285,7 +285,7 @@ It proves useful to introduce into Hamilton's equations because the mass cancels
     k_{b\phi} = \frac{k_{p\phi}}{k_m} = \frac{k_r^2}{k_t}
 \end{align}
 
-For the \(q_i\), \cref{eq:rdot,eq:thetadot,eq:phidot}, we set \(b_i = \frac{p_i}{m_s}\) and nondimensionalize:
+For the \(q_j\), \cref{eq:rdot,eq:thetadot,eq:phidot}, we set \(b_j = \frac{p_j}{m_s}\) and nondimensionalize:
 
 \begin{align}
     \od{r}{t} &= \frac{\blue{p_r}}{\blue{p_r}} \\[0.2cm]
@@ -309,24 +309,24 @@ For the \(q_i\), \cref{eq:rdot,eq:thetadot,eq:phidot}, we set \(b_i = \frac{p_i}
     \Leftrightarrow \boxed{\dot{\phi} = \frac{B_\phi}{R^2 \sin^2{\theta}}}
 \end{align}
 
-For the \(p_i\), \cref{eq:prdot,eq:pthetadot,eq:pphidot} , we first divide by \(m_s\) then set \(b_i = \frac{p_i}{m_s}\) (\blue{relevant terms marked in blue}) and \(\mu_i = G M_i\), and finally nondimensionalize:
+For the \(p_j\), \cref{eq:prdot,eq:pthetadot,eq:pphidot} , we first divide by \(m_s\) then set \(b_j = \frac{p_j}{m_s}\) (\blue{relevant terms marked in blue}) and \(\mu_k = G M_k\), and finally nondimensionalize:
 
 \begin{align}
     \begin{split}
         \od{\blue{p_r}}{t} = -\pd{H}{q_r} &= \frac{\blue{p_\theta^2}}{\blue{m_s} r^3} + \frac{\blue{p_\phi^2}}{\blue{m_s} r^3 \sin^2{\theta} } \\
-        &+ G \blue{m_s} \sum\limits_{i} M_i \frac{-\left[r - r_i \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)}\right) \right]}{\left[(r - r_i)^2 \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)} \right) \right]^{3/2}}
+        &+ G \blue{m_s} \sum\limits_{k} M_k \frac{-\left[r - r_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right) \right]}{\left[(r - r_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}}
     \end{split} \\[0.3cm]
     \begin{split}
         \Leftrightarrow \od{\blue{b_r}}{t} &= \frac{\blue{b_\theta^2}}{r^3} + \frac{\blue{b_\phi^2}}{r^3 \sin^2{\theta} } \\
-        &+ \sum\limits_{i} \mu_i \frac{-\left[r - r_i \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)}\right) \right]}{\left[(r - r_i)^2 \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)} \right) \right]^{3/2}}
+        &+ \sum\limits_{k} \mu_k \frac{-\left[r - r_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right) \right]}{\left[(r - r_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}}
     \end{split} \\[0.3cm]
     \begin{split}
         \Leftrightarrow \teal{\frac{k_{br}}{k_t}} \od{B_r}{T} &= \orange{\frac{k_{b\theta}^2}{k_r^3}} \frac{B_\theta^2}{R^3} + \orange{\frac{k_{b\phi}^2}{k_r^3}} \frac{B_\phi^2}{R^3 \sin^2{\theta} } \\
-        &+ \red{\frac{k_r^3}{k_t^2}\frac{1}{k_r^2}} \sum\limits_{i} \eta_i \frac{-\left[R - R_i \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)}\right) \right]}{\left[(R - R_i)^2 \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)} \right) \right]^{3/2}}
+        &+ \red{\frac{k_r^3}{k_t^2}\frac{1}{k_r^2}} \sum\limits_{k} \eta_k \frac{-\left[R - R_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right) \right]}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}}
     \end{split}
 \end{align}
 
-where the characteristic units are colored teal, orange and red, \([\mu] = [G] [M_i] = \frac{k_r^3}{k_m k_t^2} k_m = \frac{k_r^3}{k_t^2} \), the first part of the red factor, the second part being from the fraction inside the summation, having units \(\frac{1}{k_r^2}\). Dividing \(\frac{k_{br}}{k_t}\) over from the left-hand side the units cancel as they must:
+where the characteristic units are colored teal, orange and red, \([\mu] = [G] [M_k] = \frac{k_r^3}{k_m k_t^2} k_m = \frac{k_r^3}{k_t^2} \), the first part of the red factor, the second part being from the fraction inside the summation, having units \(\frac{1}{k_r^2}\). Dividing \(\frac{k_{br}}{k_t}\) over from the left-hand side the units cancel as they must:
 
 \begin{align}
     & \teal{\frac{k_t}{k_{br}}} \orange{\frac{k_{b\theta}^2}{k_r^3} } \\
@@ -347,8 +347,8 @@ and we are left with the nondimensionalized equation:
     \Leftrightarrow
     \boxed{
         \!\begin{aligned}
-        \dot{B_r} = &\frac{B_\theta^2}{R^3} + \frac{B_\phi^2}{R^3 \sin^2{\theta}} \\
-        & + \sum\limits_{i} \eta_i \frac{-\left[R - R_i \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)}\right) \right]}{\left[(R - R_i)^2 \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)} \right) \right]}^{3/2}
+        \dot{B}_r = &\frac{B_\theta^2}{R^3} + \frac{B_\phi^2}{R^3 \sin^2{\theta}} \\
+        & + \sum\limits_{k} \eta_k \frac{-\left[R - R_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right) \right]}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]}^{3/2}
         \end{aligned}
     }
 \end{equation}
@@ -360,7 +360,7 @@ The exact same procedure for \(\dot{p_\theta}\) and \(\dot{p}_\phi\) gives us:
     \boxed{
         \!\begin{aligned}
             \dot{B}_\theta = &\frac{B_\phi^2}{R^2 \sin^2{\theta} \tan{\theta}} \\
-            &+ \sum\limits_{i} \eta_i \frac{R R_i \left[-\sin{\theta}\cos{\theta_i} + \cos{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)} \right]}{\left[(R - R_i)^2 \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)} \right) \right]^{3/2}}
+            &+ \sum\limits_{k} \eta_k \frac{R R_k \left[-\sin{\theta}\cos{\theta_k} + \cos{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right]}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}}
         \end{aligned}
     }
 \end{equation}
@@ -369,11 +369,43 @@ The exact same procedure for \(\dot{p_\theta}\) and \(\dot{p}_\phi\) gives us:
     \Leftrightarrow
     \boxed{
         \!\begin{aligned}
-            \dot{B}_\phi = &\sum\limits_{i} \eta_i \frac{- R R_i \sin{\theta}\sin{\theta_i}\sin{(\phi - \phi_i)}}{\left[(R - R_i)^2 \left(\cos{\theta}\cos{\theta_i} + \sin{\theta}\sin{\theta_i}\cos{(\phi - \phi_i)} \right) \right]^{3/2}}
+            \dot{B}_\phi = &\sum\limits_{k} \eta_k \frac{- R R_k \sin{\theta}\sin{\theta_k}\sin{(\phi - \phi_k)}}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}}
         \end{aligned}
     }
 \end{equation}
 
 As an overview, \cref{apx:hcr4b-overview} shows all six nondimensionalized equations of motion one a single page.
 
-\subsection{Numerical Algorithm}
+\subsection{Numerical Integration Algorithm}
+
+\subsubsection{Symplectic Euler}
+
+This algorithm manifests as a mixture between explicit and implicit Euler. New values of \emph{coordinates} \((R, \theta, \phi)_{i+1}\) on the left-hand side refer to unknown values from the new time step \((R, \theta, \phi, B_r, B_\theta, B_\phi)_{i+1}\) on the right hand side. All new values of \emph{generalized momenta} \((B_r, B_\theta, B_\phi)_{i}\) refer only to known values from the current time step \((R, \theta, \phi, B_r, B_\theta, B_\phi)_{i}\) on the right hand side:
+
+\begin{align}
+    R_{i+1} &= B_r h + R_i \label{eq:euler-R_i+1-implicit}, \\[0.4cm]
+    \theta_{i+1} &= \frac{B_{\theta,i+1}}{R_{i+1}^2} h + \theta_i, \label{eq:euler-theta_i+1-implicit} \\[0.4cm]
+    \phi_{i+1} &= \frac{B_{\phi,i+1}}{R_{i+1}^2 \sin^2{\theta_{i+1}}} h + \phi_i, \label{eq:euler-phi_i+1-implicit}
+\end{align}
+\begin{align}    
+    \begin{aligned}
+        B_{r,i+1} = &\frac{B_{\theta,i}^2}{R_i^3} + \frac{B_{\phi,i}^2}{R_i^3 \sin^2{\theta_i}} \\
+        & + \sum\limits_{k} \eta_k \frac{-\left[R_i - R_{k,i} \left(\cos{\theta_i}\cos{\theta_i} + \sin{\theta_i}\sin{\theta_i}\cos{(\phi - \phi_{k,i})}\right) \right]}{\left[(R_i - R_{k,i})^2 \left(\cos{\theta_i}\cos{\theta_i} + \sin{\theta_i}\sin{\theta_i}\cos{(\phi - \phi_{k,i})} \right) \right]}^{3/2}, \label{eq:euler-Br_i+1-explicit}
+    \end{aligned} \\[0.4cm]
+    \begin{aligned}
+        B_{\theta,i+1} = &\frac{B_{\phi,i}^2}{R^2 \sin^2{\theta_i} \tan{\theta_i}} \\
+        &+ \sum\limits_{k} \eta_k \frac{R R_{k,i} \left[-\sin{\theta_i}\cos{\theta_i} + \cos{\theta_i}\sin{\theta_i}\cos{(\phi - \phi_{k,i})} \right]}{\left[(R_i - R_{k,i})^2 \left(\cos{\theta_i}\cos{\theta_i} + \sin{\theta_i}\sin{\theta_i}\cos{(\phi - \phi_{k,i})} \right) \right]^{3/2}}, \label{eq:euler-Btheta_i+1-explicit}
+    \end{aligned} \\[0.4cm]
+    \begin{aligned}
+        B_{\phi,i+1} = &\sum\limits_{k} \eta_k \frac{- R R_{k,i} \sin{\theta_i}\sin{\theta_i}\sin{(\phi - \phi_{k,i})}}{\left[(R_i - R_{k,i})^2 \left(\cos{\theta_i}\cos{\theta_i} + \sin{\theta_i}\sin{\theta_i}\cos{(\phi - \phi_{k,i})} \right) \right]^{3/2}}, \label{eq:euler-Bphi_i+1-explicit}
+    \end{aligned}
+\end{align}
+where the index denote the new time step \(i+1\) and old time step \(i\) and \(h\) is the step size.
+We first solve the three coordinate equations \cref{eq:euler-R_i+1-implicit,eq:euler-theta_i+1-implicit,eq:euler-phi_i+1-implicit} for \(R_{i+1}, \theta_{i+1}, \phi_{i+1}\):
+
+\begin{align}
+    R_{i+1} &= R_i + B_{r,i+1} h \label{eq:euler-R_i+1-explicit}\\
+    \theta_{i+1} &= \frac{B_{\theta,i+1}}{R_{i+1}^2} h + \theta_i \label{eq:euler-theta_i+1-explicit} \\
+    \phi_{i+1} &= \frac{B_{\phi,i+1}}{R_{i+1}^2 \sin^2{\theta_{i+1}}} h + \phi_i \label{eq:euler-phi_i+1-explicit}
+\end{align}
+see \cref{apx:hcr4b-euler} for derivations. We can now run the algorithm in the order \cref{eq:euler-Br_i+1-explicit,eq:euler-Btheta_i+1-explicit,eq:euler-Bphi_i+1-explicit,eq:euler-R_i+1-explicit,eq:euler-theta_i+1-explicit,eq:euler-phi_i+1-explicit}.
