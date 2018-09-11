@@ -26,7 +26,7 @@ pi2 = pi / 2
 
 def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
     init_sigma = 0.01  # spread
-    init_alpha = 0.03  # learningrate
+    init_alpha = 0.003  # learningrate
 
     sigma = np.ones(nIndividuals) * init_sigma
     alpha = np.ones(nIndividuals) * init_alpha

@@ -237,7 +237,7 @@ void symplectic(double x0,
             (y - earth_position_y) * (y - earth_position_y);
         // not necessarily a crash, but we don't want paths that take us to such risky territories
         double critical_distance = (earth_celestial_radius / UNIT_LENGTH) * (earth_celestial_radius / UNIT_LENGTH);
-        if (earth_distance_sqr < critical_distance * critical_distance)
+        if (earth_distance_sqr < critical_distance)
         {
             printf("Anga crashed into the earth!\n");
             success[0] = false;
