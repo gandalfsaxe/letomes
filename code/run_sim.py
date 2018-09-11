@@ -38,7 +38,7 @@ if __name__ == "__main__":
     if in_psi is not None and len(in_psi) == 3:
         # user defined
         psi = in_psi
-        path = launch_sim(psi, duration=3)
+        path = launch_sim(psi, duration=100)
         orbitplot2d(path, psi, title="userdef")
         orbitplot_non_inertial(path, psi, title="userdef")
     if paths is not None:

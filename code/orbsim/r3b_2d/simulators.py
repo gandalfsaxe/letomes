@@ -58,7 +58,7 @@ def launch_sim(psi, duration=3, max_iter=1e7):
         final_score = score[0] + burnDv
         # print("score = ", final_score)
     else:
-        final_score = ((1 + score[0]) * 10) ** 2
+        final_score = (1 + score[0]) * 10
         # print("score = ", final_score)
 
     return final_score, path
