@@ -143,7 +143,7 @@ class saddle_space:
 
     @jit
     def get_bounds(self):
-        return ([0, -pi, 3], [2 * pi, pi, 4])
+        return ([0, 0, 3], [2 * pi, 2 * pi, 4])
 
     @jit
     def get_ranges(self):
@@ -154,10 +154,10 @@ class saddle_space:
 @njit
 def ensure_bounds(pt):
     pos, ang, burn = pt
-    lb, ub = ([0, -pi, 3], [2 * pi, pi, 4])
+    lb, ub = ([0, 0, 3], [2 * pi, 2 * pi, 4])
     return [
         np.mod(pos, ub[0] - lb[0]),
-        np.mod(ang, lb[1]),
+        np.mod(ang, ub[1] - lb[1]),
         max(lb[2], min(ub[2], burn)),
     ]
 
