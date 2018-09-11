@@ -96,7 +96,7 @@ void symplectic(double x0,
         if (iteration_count > maxIter)
         {
             // printf("exceeded max iterations, stranded in space!\n");
-            printf(".")
+            printf(".");
             success[0] = false;
             score[0] = smallest_distance;
             return; //return path_storage
@@ -190,7 +190,7 @@ void symplectic(double x0,
         if (target_distance > too_far_away)
         {
             // printf("we are way too far away, stranded in space!\n");
-            printf("|")
+            printf("|");
             success[0] = false;
             score[0] = smallest_distance;
             return; //path_storage
@@ -226,7 +226,7 @@ void symplectic(double x0,
             Dv = sqrt(v_radial * v_radial + 
                       (v_magnitude - target_orbital_velocity_nondim) * (v_magnitude - target_orbital_velocity_nondim));
             //printf("SUCCESS! duration=%8.6g, Dv=%17.15g, iteration_count=%-10i\n", t * UNIT_TIME, Dv, iteration_count);
-            printf("O")
+            printf("O");
             success[0] = true;
             score[0] = Dv;
             return; // path_storage
@@ -244,7 +244,7 @@ void symplectic(double x0,
         if (earth_distance_sqr < critical_distance)
         {
             // printf("Anga crashed into the earth!\n");
-            printf("X")
+            printf("X");
             success[0] = false;
             score[0] = smallest_distance;
             return; // path_storage
