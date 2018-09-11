@@ -93,28 +93,31 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         print("successes=", successes, successes.shape)
         print("scores=", scores, scores.shape)
         points = points.reshape(nIndividuals * nJitter, 3)
+
+        scores = scores.reshape(nIndividuals, nJitter)
+        for idx, score in enumerate(scores):
+            scores[idx] = -(
+                score + points[idx][2]
+            )  # add burnDv to score and negate score since we are trying to minimize it
+
+            if not successes[idx]:
+                # punish paths that do not hit planet
+                scores[idx] = (score + 1) * 10
+
+        scores -= scores.mean()
+        scores /= scores.std()
+
+        steps = np.zeros([nIndividuals, 3])
+        steps[idx] = np.dot(scores[idx], jitter[idx]) * alpha[idx]
         winners = np.array(
             [
-                (points[idx], scores[idx])
+                (points[idx], scores.reshape(nIndividuals * nJitter)[idx])
                 for idx, success in enumerate(successes)
                 if success
             ]
         )
         for psi, score in winners:
             logfile.write(f"{psi}, {score}\n")
-
-        scores -= scores.mean()
-        scores /= scores.std()
-
-        scores = scores.reshape(nIndividuals, nJitter)
-        steps = np.zeros([nIndividuals, 3])
-        for idx, score in enumerate(scores):
-            scores[idx]=score + points[idx][2] # add burnDv to score
-            if not successes[idx]:
-                # punish paths that do not hit planet
-                scores[idx] = (score + 1) * 10
-
-            steps[idx] = np.dot(-scores[idx], jitter[idx]) * alpha[idx] ## negate score since we are trying to minimize it 
 
         psi_scores = scores.T[0]
         for idx, score in enumerate(psi_scores):
