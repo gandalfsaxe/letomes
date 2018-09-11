@@ -109,11 +109,12 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         scores = scores.reshape(nIndividuals, nJitter)
         steps = np.zeros([nIndividuals, 3])
         for idx, score in enumerate(scores):
+            scores[idx]=score + points[idx][2] # add burnDv to score
             if not successes[idx]:
                 # punish paths that do not hit planet
                 scores[idx] = (score + 1) * 10
 
-            steps[idx] = np.dot(scores[idx], jitter[idx]) * alpha[idx]
+            steps[idx] = np.dot(-scores[idx], jitter[idx]) * alpha[idx] ## negate score since we are trying to minimize it 
 
         psi_scores = scores.T[0]
         for idx, score in enumerate(psi_scores):
@@ -133,9 +134,9 @@ class saddle_space:
         # return [-res]
         return [0]
 
-    @jit
+    @njit
     def get_bounds(self):
-        return ([0, -pi, 3], [2 * pi, 0, 3.8])
+        return ([0, -pi, 3], [2 * pi, pi, 4])
 
     @jit
     def get_ranges(self):
@@ -146,7 +147,7 @@ class saddle_space:
 @njit
 def ensure_bounds(pt):
     pos, ang, burn = pt
-    lb, ub = ([0, -pi, 3], [2 * pi, 0, 3.8])
+    lb, ub = ([0, -pi, 3], [2 * pi, pi, 4])
     return [
         np.mod(pos, ub[0] - lb[0]),
         np.mod(ang, lb[1]),
