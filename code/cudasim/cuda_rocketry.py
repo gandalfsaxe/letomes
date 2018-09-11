@@ -129,7 +129,7 @@ class saddle_space:
 
     @jit
     def get_bounds(self):
-        return ([0, -pi, 3], [2 * pi, 0, 4])
+        return ([0, -pi, 3], [2 * pi, 0, 3.8])
 
     @jit
     def get_ranges(self):
