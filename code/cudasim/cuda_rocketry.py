@@ -88,7 +88,7 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
 
         print("successes=", successes, successes.shape)
         print("scores=", scores, scores.shape)
-        points.reshape(nIndividuals*nJitter,3)
+        points=points.reshape(nIndividuals*nJitter,3)
         winners = np.array(
             [
                 (points[idx], scores[idx])
