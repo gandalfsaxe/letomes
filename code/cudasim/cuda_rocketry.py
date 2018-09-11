@@ -30,6 +30,7 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
 
     sigma = np.ones(nIndividuals) * init_sigma
     alpha = np.ones(nIndividuals) * init_alpha
+    logfile = open(f"cudaES.log", "w")
     for _ in range(nIterations):
 
         """
@@ -38,13 +39,16 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         # Try randn when it works, to see if better.           -----v
         np.random.seed(0)
         jitter = np.random.rand(nJitter, nIndividuals, 3)
-        jitter = [sigma[idx] * jitt for idx, jitt in enumerate(jitter)]
-        jitter *= saddle_space().get_ranges()  # I put this here! Not in paper!
+        # jitter = [sigma[idx] * jitt for idx, jitt in enumerate(jitter)]
+        # jitter *= saddle_space().get_ranges()  # I put this here! Not in paper!
         jitter[0] *= 0  # Make sure all set island phis are evaluated without jitter
-        points = jitter + psis
-
         jitter = jitter.reshape(nIndividuals, nJitter, 3)
-        jitter = np.array([sigma[idx] * jitt for idx, jitt in enumerate(jitter)])
+        jitter = [sigma[idx] * jitt for idx, jitt in enumerate(jitter)]
+        points = jitter + psis
+        points = points.reshape(indi * jit, 3)
+        for i, pt in enumerate(points):
+            points[i] = ensure_bounds(pt)
+        points = points.reshape(nJitter, nIndividuals, 3)
         successes = np.zeros(nIndividuals * nJitter, dtype=bool)
         scores = np.zeros(nIndividuals * nJitter)
 
@@ -88,15 +92,16 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
 
         print("successes=", successes, successes.shape)
         print("scores=", scores, scores.shape)
-        points=points.reshape(nIndividuals*nJitter,3)
+        points = points.reshape(nIndividuals * nJitter, 3)
         winners = np.array(
             [
                 (points[idx], scores[idx])
-                for idx,success in enumerate(successes)
+                for idx, success in enumerate(successes)
                 if success
             ]
         )
-        print(winners, winners.shape)
+        for psi, score in winners:
+            logfile.write(f"{psi}, {score}\n")
 
         scores -= scores.mean()
         scores /= scores.std()
@@ -106,7 +111,7 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         for idx, score in enumerate(scores):
             if not successes[idx]:
                 # punish paths that do not hit planet
-                scores[idx] = ((score + 1) * 10) ** 2
+                scores[idx] = (score + 1) * 10
 
             steps[idx] = np.dot(scores[idx], jitter[idx]) * alpha[idx]
 
@@ -116,6 +121,7 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
             alpha[idx] = init_alpha
 
         psis += steps
+    logfile.close()
 
 
 class saddle_space:
@@ -135,6 +141,12 @@ class saddle_space:
     def get_ranges(self):
         bounds = self.get_bounds()
         return np.subtract(bounds[1], bounds[0])
+
+
+@njit
+def ensure_bounds(pt):
+    b1, b2 = ([0, -pi, 3], [2 * pi, 0, 3.8])
+    return [min(b2[i], max(b1[i], pt[i])) for i in range(len(pt))]
 
 
 if __name__ == "__main__":
