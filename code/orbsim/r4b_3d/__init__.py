@@ -60,7 +60,7 @@ LLO_VELOCITY = sqrt(G * LUNAR_MASS / (LLO_RADIUS * 1000.0)) / 1000.0  # km/s
 
 # Stationary Sun
 R_SUN = 0
-THETA_SUN = 0
+THETA_SUN = pi / 4
 PHI_SUN = 0
 
 ############### NONDIMENSIONALIZATION ###############
