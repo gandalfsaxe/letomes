@@ -39,13 +39,13 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         # Try randn when it works, to see if better.           -----v
         np.random.seed(0)
         jitter = np.random.rand(nJitter, nIndividuals, 3)
+        jitter = np.array([sigma[idx] * jitt for idx, jitt in enumerate(jitter)])
+        jitter[0] *= 0  # Make sure all set island phis are evaluated without jitter
+        points = jitter + psis
         # jitter = [sigma[idx] * jitt for idx, jitt in enumerate(jitter)]
         # jitter *= saddle_space().get_ranges()  # I put this here! Not in paper!
-        jitter[0] *= 0  # Make sure all set island phis are evaluated without jitter
         jitter = jitter.reshape(nIndividuals, nJitter, 3)
-        jitter = [sigma[idx] * jitt for idx, jitt in enumerate(jitter)]
-        points = jitter + psis
-        points = points.reshape(indi * jit, 3)
+        points = points.reshape(nIndividuals * nJitter, 3)
         for i, pt in enumerate(points):
             points[i] = ensure_bounds(pt)
         points = points.reshape(nJitter, nIndividuals, 3)
@@ -145,8 +145,13 @@ class saddle_space:
 
 @njit
 def ensure_bounds(pt):
-    b1, b2 = ([0, -pi, 3], [2 * pi, 0, 3.8])
-    return [min(b2[i], max(b1[i], pt[i])) for i in range(len(pt))]
+    pos, ang, burn = pt
+    lb, ub = ([0, -pi, 3], [2 * pi, 0, 3.8])
+    return [
+        np.mod(pos, ub[0] - lb[0]),
+        np.mod(ang, lb[1]),
+        max(lb[2], min(ub[2], burn)),
+    ]
 
 
 if __name__ == "__main__":
