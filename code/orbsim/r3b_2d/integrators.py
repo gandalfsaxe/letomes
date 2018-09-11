@@ -12,7 +12,7 @@ from .analyticals import get_pdot_x, get_pdot_y, get_v_x, get_v_y
 def euler_step_symplectic(h, x, y, p_x, p_y):
     """Takes a single time step of the symplectic Euler algorithm"""
     # Step 1
-    x = (x + (y + p_x + p_y * h) * h) / (1.0 + h ** 2)
+    x = (x + h * (p_y * h + p_x + y)) / (1.0 + h ** 2)
     # Step 2
     # y = (y - (x - p_y + p_x * h) * h) / (1.0 + h ** 2) # Also works but more complex
     y = y + (p_y - x) * h
