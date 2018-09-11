@@ -44,7 +44,6 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         points = jitter + psis
         # jitter = [sigma[idx] * jitt for idx, jitt in enumerate(jitter)]
         # jitter *= saddle_space().get_ranges()  # I put this here! Not in paper!
-        jitter = jitter.reshape(nIndividuals, nJitter, 3)
         points = points.reshape(nIndividuals * nJitter, 3)
         for i, pt in enumerate(points):
             points[i] = ensure_bounds(pt)
@@ -102,13 +101,18 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
 
             if not successes[idx]:
                 # punish paths that do not hit planet
-                scores[idx] = (score + 1) * 10
+                scores[idx] = (score + 1) * 100
 
         scores -= scores.mean()
         scores /= scores.std()
 
+        # generate steps for next generation
         steps = np.zeros([nIndividuals, 3])
-        steps[idx] = np.dot(scores[idx], jitter[idx]) * alpha[idx]
+        jitter = jitter.reshape(nIndividuals, nJitter, 3)
+        for idx in range(nIndividuals):
+            steps[idx] = np.dot(scores[idx], jitter[idx]) * alpha[idx]
+
+        # find successes and log them
         winners = np.array(
             [
                 (points[idx], scores.reshape(nIndividuals * nJitter)[idx])
@@ -137,7 +141,7 @@ class saddle_space:
         # return [-res]
         return [0]
 
-    @njit
+    @jit
     def get_bounds(self):
         return ([0, -pi, 3], [2 * pi, pi, 4])
 
