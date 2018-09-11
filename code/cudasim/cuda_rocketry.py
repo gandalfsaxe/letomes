@@ -92,7 +92,7 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         winners = np.array(
             [
                 (points[idx], scores[idx])
-                for idx,success in enumerate(scores)
+                for idx,success in enumerate(successes)
                 if success
             ]
         )
