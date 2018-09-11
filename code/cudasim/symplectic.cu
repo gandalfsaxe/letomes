@@ -16,8 +16,8 @@ inline double pdot_denominator1(double x, double y)
 __device__
 inline double pdot_denominator2(double x, double y)
 {
-    return ((x - 1 + k) * (x - 1 + k) + y * y) * 
-        sqrt((x - 1 + k) * (x - 1 + k) + y * y);
+    return ((x - 1 + K) * (x - 1 + K) + y * y) * 
+        sqrt((x - 1 + K) * (x - 1 + K) + y * y);
 }
 
 // from position and momentum vectors, returns generalized momentum, nondimensionalized
@@ -25,7 +25,7 @@ __device__
 inline double get_pdot_x(double x, double y, double p_y)
 {
     return p_y - ((1 - K) * (x + K)) / pdot_denominator1(x, y) + 
-        K * (x - 1 + k) / pdot_denominator2(x, y);
+        K * (x - 1 + K) / pdot_denominator2(x, y);
 }
 
 __device__
