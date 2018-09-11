@@ -319,15 +319,26 @@ def run_test():
         bbox_inches="tight",
     )
 
-    # Total energy error
-    H_avg = np.sum(H_list) / n
-    H_relative_errors = (H_list - H_avg) / H_avg
+    # Old and weird "Total energy error"
+    # # Total energy error
+    # H_avg = np.sum(H_list) / n
+    # H_relative_errors = (H_list - H_avg) / H_avg
+    # plt.figure()
+    # plt.plot(ts * UNIT_TIME, H_relative_errors)
+    # plt.xlabel("time (days)")
+    # plt.ylabel("Hamiltonian relative error (arbitrary units)")
+    # plt.savefig(
+    #     OUTPUT_DIR + "{}-energy_error_vs_time.{}".format(MODE_NAME, FORMAT),
+    #     bbox_inches="tight",
+    # )
+
+    # Total energy
     plt.figure()
-    plt.plot(ts * UNIT_TIME, H_relative_errors)
+    plt.plot(ts * UNIT_TIME, H_list)
     plt.xlabel("time (days)")
-    plt.ylabel("Hamiltonian relative error (arbitrary units)")
+    plt.ylabel("Hamiltonian (arbitrary units)")
     plt.savefig(
-        OUTPUT_DIR + "{}-energy_error_vs_time.{}".format(MODE_NAME, FORMAT),
+        OUTPUT_DIR + "{}-energy_vs_time.{}".format(MODE_NAME, FORMAT),
         bbox_inches="tight",
     )
 
