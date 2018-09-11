@@ -95,6 +95,7 @@ void symplectic(double x0,
     {
         if (iteration_count > maxIter)
         {
+            printf("%.15f", iteration_count)
             // printf("exceeded max iterations, stranded in space!\n");
             printf(".");
             success[0] = false;
