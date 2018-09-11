@@ -101,16 +101,12 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
 
             if not successes[idx]:
                 # punish paths that do not hit planet
-                scores[idx] = (score + 1) * 100
+                # sigma[idx] = init_sigma * 10
+                # alpha[idx] = init_alpha * 10
+                scores[idx] = -(score - 10) ** 2
 
         scores -= scores.mean()
         scores /= scores.std()
-
-        # generate steps for next generation
-        steps = np.zeros([nIndividuals, 3])
-        jitter = jitter.reshape(nIndividuals, nJitter, 3)
-        for idx in range(nIndividuals):
-            steps[idx] = np.dot(scores[idx], jitter[idx]) * alpha[idx]
 
         # find successes and log them
         winners = np.array(
@@ -122,6 +118,12 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         )
         for psi, score in winners:
             logfile.write(f"{psi}, {score}\n")
+
+        # generate steps for next generation
+        steps = np.zeros([nIndividuals, 3])
+        jitter = jitter.reshape(nIndividuals, nJitter, 3)
+        for idx in range(nIndividuals):
+            steps[idx] = np.dot(scores[idx], jitter[idx]) * alpha[idx]
 
         psi_scores = scores.T[0]
         for idx, score in enumerate(psi_scores):
@@ -163,13 +165,13 @@ def ensure_bounds(pt):
 
 
 if __name__ == "__main__":
-    nIterations = 10
+    nIterations = 100
     nIndividuals = 1024
     nJitter = 32
-    maxDuration = 5
+    maxDuration = 7
     maxSteps = 10e6
     prob = pg.problem(saddle_space())
-    pop = pg.population(prob=prob, size=nIndividuals, seed=0)
+    pop = pg.population(prob=prob, size=nIndividuals)
     # pop.set_x(0, [-2.277654673852600, 0.047996554429844, 3.810000000000000])
     # pop.set_x(1, [-0.138042744751570, -0.144259374836607, 3.127288444444444])
     # pop.set_x(2, [-2.086814820119193, -0.000122173047640, 3.111181716545691])
