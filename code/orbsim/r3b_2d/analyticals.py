@@ -24,7 +24,7 @@ def get_pdot_x(x, y, p_y):
 def get_pdot_y(x, y, p_x):
     """generalized momentum p_y (nondimensionalized) from position and momentum vectors"""
     denominator_1, denominator_2 = pdot_denominators(x, y)
-    pdot_y = -p_x - 1 + k * y / denominator_1 - k * y / denominator_2
+    pdot_y = -p_x - (1 - k) * y / denominator_1 - k * y / denominator_2
     return pdot_y
 
 
