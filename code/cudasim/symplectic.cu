@@ -89,7 +89,7 @@ void symplectic(double x0,
         (target_orbital_radius - ORBITAL_TOLERANCE) / UNIT_LENGTH;
     double orbital_radius_upper_bound = 
         (target_orbital_radius + ORBITAL_TOLERANCE) / UNIT_LENGTH;
-    float too_far_away = 4 / UNIT_LENGTH
+    float too_far_away = 4 / UNIT_LENGTH;
 
     while (t < maxDuration)
     {
