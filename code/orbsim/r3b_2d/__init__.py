@@ -32,7 +32,7 @@ ORBITAL_TOLERANCE = 10  # km
 # function: symplectic (integrators.py)
 h_DEFAULT = 1e-6  # dimless time
 h_MIN_DEFAULT = 1e-10  # dimless time
-STEP_ERROR_TOLERANCE = 1e-9  # dimless time
+STEP_ERROR_TOLERANCE = 1e-9  # dimless
 
 
 ############### CHARACTERISTIC UNITS ###############
@@ -48,7 +48,7 @@ k = LUNAR_MASS / (EARTH_MASS + LUNAR_MASS)  # dimless
 
 # Initial orbit (Earth)
 LEO_RADIUS = EARTH_RADIUS + EARTH_ALTITUDE  # km
-LEO_VELOCITY = sqrt(G * EARTH_MASS / (LEO_RADIUS)) # km/s
+LEO_VELOCITY = sqrt(G * EARTH_MASS / (LEO_RADIUS))  # km/s
 
 # Target orbit (Moon)
 LLO_RADIUS = LUNAR_RADIUS + LUNAR_ALTITUDE  # km
