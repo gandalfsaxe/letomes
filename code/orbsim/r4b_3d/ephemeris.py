@@ -1,3 +1,9 @@
+"""
+Functions for getting planets positions (ephemeris).
+Will either get done via table or simulated elliptical orbits, whichever proves easier.
+"""
+
+
 def get_ephemeris(datetime):
     """
     Return ephemeris (e.g. positions) at datetime.
