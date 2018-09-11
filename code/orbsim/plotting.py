@@ -17,10 +17,10 @@ def orbitplot2d(completed_path, psi=None, filepath=".", title=None):
     """
     score, path = completed_path  # [Dv,[x,y,px,py,h]]
 
-    xs, ys, pxs, pys, hs, _ = np.array(path).T
-    ts = np.linspace(
-        0, sum(hs), len(path)
-    )  # FIXME ts is not linear, so this makes no sense, i think?
+    xs, ys, pxs, pys, hs, ts = np.array(path).T
+    # ts = np.linspace(
+    #     0, sum(hs), len(path)
+    # )  # FIXME ts is not linear, so this makes no sense, i think?
 
     Xs = xs * np.cos(ts) - ys * np.sin(ts)
     Ys = xs * np.sin(ts) + ys * np.cos(ts)
@@ -39,7 +39,7 @@ def orbitplot2d(completed_path, psi=None, filepath=".", title=None):
     g_Xs, g_Ys = np.array([[Xs[idx], Ys[idx]] for idx in idxs]).T
     for i in range(N_PTS)[::increment]:
         ax.plot(g_Xs[i : i + increment], g_Ys[i : i + increment], linewidth=1)
-        print(i)
+
     ax.plot(Xs_earth, Ys_earth, color="grey", linewidth=0.5, alpha=0.8)
     ax.plot(Xs_moon, Ys_moon, color="grey", linewidth=0.5)
 
@@ -83,7 +83,6 @@ def orbitplot_non_inertial(completed_path, psi=None, filepath=".", title=None):
     g_xs, g_ys = np.array([[xs[idx], ys[idx]] for idx in idxs]).T
     for i in range(N_PTS)[::increment]:
         ax.plot(g_xs[i : i + increment], g_ys[i : i + increment], linewidth=1)
-        print(i)
 
     earth = plt.Circle((EARTH_POSITION_X, 0), EARTH_RADIUS / UNIT_LENGTH, color="blue")
     moon = plt.Circle((LUNAR_POSITION_X, 0), LUNAR_RADIUS / UNIT_LENGTH, color="grey")
