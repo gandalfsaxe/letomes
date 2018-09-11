@@ -109,6 +109,7 @@
   ],
   "cSpell.words": [
     "Bdot",
+    "Bdots",
     "Brandenborg",
     "CUDA",
     "Daly",
@@ -149,6 +150,7 @@
     "dimensionalities",
     "discretized",
     "ephemerides",
+    "ephemeris",
     "hohmann",
     "hyperparameters",
     "installable",
