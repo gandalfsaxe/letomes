@@ -89,13 +89,13 @@ void symplectic(double x0,
         (target_orbital_radius - ORBITAL_TOLERANCE) / UNIT_LENGTH;
     double orbital_radius_upper_bound = 
         (target_orbital_radius + ORBITAL_TOLERANCE) / UNIT_LENGTH;
-    float too_far_away = 4 / UNIT_LENGTH;
+    float too_far_away = 4;
 
     while (t < maxDuration)
     {
         if (iteration_count > maxIter)
         {
-            printf("%.15f", iteration_count)
+            // printf("%d > %f", iteration_count, maxIter);
             // printf("exceeded max iterations, stranded in space!\n");
             printf(".");
             success[0] = false;
