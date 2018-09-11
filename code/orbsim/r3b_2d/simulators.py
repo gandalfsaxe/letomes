@@ -3,7 +3,13 @@ import time
 import numpy as np
 from numba import njit
 
-from . import *
+from . import (
+    UNIT_TIME,
+    UNIT_VELOCITY,
+    LEO_RADIUS_NONDIM,
+    EARTH_POSITION_X,
+    LEO_VELOCITY_NONDIM,
+)
 from .integrators import symplectic
 
 
