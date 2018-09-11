@@ -3,11 +3,34 @@
 \chapter{Physical Modelling}
 We need a chapter to formulate our hypotheses, and generally give a before-the-fact run-down of what the project and report will be like.
 
-\section{CM-Centric Restricted 3-Body System (C-R3B), Earth-Moon}
+\section{CM-Centered Restricted 3-Body System (C-R3B), Earth-Moon}
+The center-of-mass-centered 3-body system (C-R3B) with the Earth and Moon was explored in \cite{Saxe2015}. We will shortly present the final nondimensionalized equations of motion here for reference, since we have done much analysis on the Earth-Moon system in this project as well.
 
-\subsection{Equations of Motion}
+\subsection{C-R3B Equations of Motion}
 
-\subsection{Numerical Algorithm}
+\begin{empheq}[box=\widefbox]{align}
+\label{eq:Xdot}
+\dot{X} = P_x + Y
+\end{empheq}
+
+\begin{empheq}[box=\widefbox]{align}
+\label{eq:Ydot}
+\dot{Y} = P_Y - X
+\end{empheq}
+
+\begin{empheq}[box=\widefbox]{align}
+\label{eq:Pdot_X}
+\dot{P}_X = P_Y - \dfrac{(1-k)(X+k)}{((X+k)^2+Y^2)^{3/2}} - \dfrac{k(X-1+k))}{((X-1+k))^2+Y^2)^{3/2}}
+\end{empheq}
+
+\begin{empheq}[box=\widefbox]{align}
+\label{eq:Pdot_Y}
+\dot{P}_Y = -P_X - \dfrac{(1-k)Y}{((X+k)^2+Y^2)^{3/2}} - \dfrac{k Y}{((X-1+k))^2+Y^2)^{3/2}}
+\end{empheq}
+where \(T\), \(X\), \(Y\), \(P_x\) and \(P_y\) are our dimensionless variables for time, positions, generalized impulse, and \(k=\dfrac{M_{\Moon}}{M_{\Earth} + M_{\Moon}}\), that is the ratio of Moon's mass to the total Moon and Earth mass.
+
+\subsection{C-R3B Numerical Algorithms}
+Both a symplectic Euler and symplectic Störmer-Verlet (also symplectic) were performed, see \cite{Saxe2015} for details.
 
 
 \section{Heliocentric Restricted 4-Body System (H-R4B), Sun-Earth-Mars}
@@ -204,8 +227,8 @@ Now adding all three \cref{eq:x-dist-squared,eq:y-dist-squared,eq:z-dist-squared
     } \\
     &= \sqrt{(r - r_k)^2(\cos{\theta}\cos{\theta_k}+\sin{\theta}\sin{\theta_k}(\cos{\phi - \phi_k}))},
 \end{align}
-where the blue factor was simplified using the sum rule \\
-\(\cos{\alpha}\cos{\beta} + \sin{\alpha}\sin{\beta} = cos{\alpha-\beta}\)\cite{WeissteinTrig}.
+where the blue factor was simplified using the sum rule \cite{WeissteinTrig}: \\
+\(\cos{\alpha}\cos{\beta} + \sin{\alpha}\sin{\beta} = cos{\alpha-\beta}\).
 
 So we can finally express \(H\) as
 \begin{equation}
@@ -290,24 +313,36 @@ For the \(q_j\), \cref{eq:rdot,eq:thetadot,eq:phidot}, we set \(b_j = \frac{p_j}
 \begin{align}
     \od{r}{t} &= \frac{\blue{p_r}}{\blue{p_r}} \\[0.2cm]
     \Leftrightarrow \od{r}{t} &= \blue{b_r} \\[0.2cm]
-    \Leftrightarrow \frac{k_r}{k_t} \od{R}{T} &= k_{br} B_r \\[0.4cm]
-    \Leftrightarrow \boxed{\dot{R} = B_r}
+    \Leftrightarrow \frac{k_r}{k_t} \od{R}{T} &= k_{br} B_r,
 \end{align}
+so we get
+\begin{empheq}[box=\widefbox]{align}
+    \label{eq:Rdot}
+    \dot{R} = B_r
+\end{empheq}
 
 \begin{align}
     \od{\theta}{t} &= \frac{\blue{p_\theta}}{\blue{m_s} r^2} \\[0.2cm]
     \Leftrightarrow \od{\theta}{t} &= \frac{\blue{b_\theta}}{r^2} \\[0.2cm]
     \Leftrightarrow \od{\theta}{t} &= \frac{b_\theta}{r^2} \\[0.2cm]
-    \Leftrightarrow \frac{1}{k_t} \od{\theta}{T} &= \frac{k_{b\theta}}{k_r^2} \frac{B_\theta}{R^2} \\[0.4cm]
-    \Leftrightarrow \boxed{\dot{\theta} = \frac{B_\theta}{R^2}} 
+    \Leftrightarrow \frac{1}{k_t} \od{\theta}{T} &= \frac{k_{b\theta}}{k_r^2} \frac{B_\theta}{R^2},
 \end{align}
+so we get
+\begin{empheq}[box=\widefbox]{align}
+    \label{eq:thetadot-nondim}
+    \dot{\theta} = \frac{B_\theta}{R^2}
+\end{empheq}
 
 \begin{align}
     \od{\phi}{t} &= \frac{\blue{p_\phi}}{{\blue{m_s}} r^2 \sin^2{\theta}} \\[0.3cm]
     \Leftrightarrow \od{\phi}{t} &= \frac{\blue{b_\phi}}{r^2 \sin^2{\theta}}  \\[0.3cm]
-    \Leftrightarrow \frac{1}{k_t} \frac{\Phi}{T} &= \frac{k_\phi}{k_r^2} \frac{B_\phi}{R^2 \sin^2{\theta}} \\[0.4cm]
-    \Leftrightarrow \boxed{\dot{\phi} = \frac{B_\phi}{R^2 \sin^2{\theta}}}
+    \Leftrightarrow \frac{1}{k_t} \frac{\Phi}{T} &= \frac{k_\phi}{k_r^2} \frac{B_\phi}{R^2 \sin^2{\theta}},
 \end{align}
+so we get
+\begin{empheq}[box=\widefbox]{align}
+    \label{eq:phidot-nondim}
+    \dot{\phi} = \frac{B_\phi}{R^2 \sin^2{\theta}}
+\end{empheq}
 
 For the \(p_j\), \cref{eq:prdot,eq:pthetadot,eq:pphidot} , we first divide by \(m_s\) then set \(b_j = \frac{p_j}{m_s}\) (\blue{relevant terms marked in blue}) and \(\mu_k = G M_k\), and finally nondimensionalize:
 
@@ -341,42 +376,29 @@ and equivalent same for the second orange since \(k_\theta\) and \(k_\phi\) have
     = &1
 \end{align}
 
-
 and we are left with the nondimensionalized equation:
-\begin{equation}
-    \Leftrightarrow
-    \boxed{
-        \!\begin{aligned}
-        \dot{B}_r = &\frac{B_\theta^2}{R^3} + \frac{B_\phi^2}{R^3 \sin^2{\theta}} \\
-        & + \sum\limits_{k} \eta_k \frac{-\left[R - R_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right) \right]}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}}
-        \end{aligned}
-    }
-\end{equation}
+\begin{empheq}[box=\widefbox]{align}
+    \label{eq:Brdot}
+    \dot{B}_r = &\frac{B_\theta^2}{R^3} + \frac{B_\phi^2}{R^3 \sin^2{\theta}} \\
+    & + \sum\limits_{k} \eta_k \frac{-\left[R - R_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right) \right]}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \nonumber
+\end{empheq}
 
 The exact same procedure for \(\dot{p_\theta}\) and \(\dot{p}_\phi\) gives us:
 
-\begin{equation}
-    \Leftrightarrow
-    \boxed{
-        \!\begin{aligned}
-            \dot{B}_\theta = &\frac{B_\phi^2}{R^2 \sin^2{\theta} \tan{\theta}} \\
-            &+ \sum\limits_{k} \eta_k \frac{R R_k \left[-\sin{\theta}\cos{\theta_k} + \cos{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right]}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}}
-        \end{aligned}
-    }
-\end{equation}
+\begin{empheq}[box=\widefbox]{align}
+    \label{eq:Bthetadot}
+    \dot{B}_\theta = &\frac{B_\phi^2}{R^2 \sin^2{\theta} \tan{\theta}} \\
+    &+ \sum\limits_{k} \eta_k \frac{R R_k \left[-\sin{\theta}\cos{\theta_k} + \cos{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right]}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \nonumber
+\end{empheq}
 
-\begin{equation}
-    \Leftrightarrow
-    \boxed{
-        \!\begin{aligned}
-            \dot{B}_\phi = &\sum\limits_{k} \eta_k \frac{- R R_k \sin{\theta}\sin{\theta_k}\sin{(\phi - \phi_k)}}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}}
-        \end{aligned}
-    }
-\end{equation}
+\begin{empheq}[box=\widefbox]{align}
+    \label{eq:Bphidot}
+    \dot{B}_\phi = &\sum\limits_{k} \eta_k \frac{- R R_k \sin{\theta}\sin{\theta_k}\sin{(\phi - \phi_k)}}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}}
+\end{empheq}
 
 As an overview, \cref{apx:hr4b-overview} shows all six nondimensionalized equations of motion one a single page.
 
-\subsection{Numerical Integration Algorithm}
+\subsection{H-R4B Numerical Integration Algorithm}
 
 \subsubsection{Symplectic Euler}
 In the explicit Euler, all quantities from the Hamiltonian derivative on the right hand refer to the old time step \(i\). In the implicit, they are all referring to the new time step \(i+1\), which results in implicit equations that can typically only be solved numerically.
