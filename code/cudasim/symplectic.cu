@@ -89,12 +89,14 @@ void symplectic(double x0,
         (target_orbital_radius - ORBITAL_TOLERANCE) / UNIT_LENGTH;
     double orbital_radius_upper_bound = 
         (target_orbital_radius + ORBITAL_TOLERANCE) / UNIT_LENGTH;
+    float too_far_away = 4 / UNIT_LENGTH
 
     while (t < maxDuration)
     {
         if (iteration_count > maxIter)
         {
-            printf("exceeded max iterations, stranded in space!\n");
+            // printf("exceeded max iterations, stranded in space!\n");
+            printf(".")
             success[0] = false;
             score[0] = smallest_distance;
             return; //return path_storage
@@ -185,9 +187,10 @@ void symplectic(double x0,
         double target_distance_x = x - target_position_x;
         double target_distance_y = y - target_position_y;
         double target_distance = sqrt(target_distance_x * target_distance_x + target_distance_y * target_distance_y);
-        if (target_distance > 1e9 / UNIT_LENGTH)
+        if (target_distance > too_far_away)
         {
-            printf("we are way too far away, stranded in space!\n");
+            // printf("we are way too far away, stranded in space!\n");
+            printf("|")
             success[0] = false;
             score[0] = smallest_distance;
             return; //path_storage
@@ -223,6 +226,7 @@ void symplectic(double x0,
             Dv = sqrt(v_radial * v_radial + 
                       (v_magnitude - target_orbital_velocity_nondim) * (v_magnitude - target_orbital_velocity_nondim));
             //printf("SUCCESS! duration=%8.6g, Dv=%17.15g, iteration_count=%-10i\n", t * UNIT_TIME, Dv, iteration_count);
+            printf("O")
             success[0] = true;
             score[0] = Dv;
             return; // path_storage
@@ -239,7 +243,8 @@ void symplectic(double x0,
         double critical_distance = (earth_celestial_radius / UNIT_LENGTH) * (earth_celestial_radius / UNIT_LENGTH);
         if (earth_distance_sqr < critical_distance)
         {
-            printf("Anga crashed into the earth!\n");
+            // printf("Anga crashed into the earth!\n");
+            printf("X")
             success[0] = false;
             score[0] = smallest_distance;
             return; // path_storage
