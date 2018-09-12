@@ -4,7 +4,14 @@
 We need a chapter to formulate our hypotheses, and generally give a before-the-fact run-down of what the project and report will be like.
 
 \section{CM-Centered Restricted 3-Body System (C-R3B), Earth-Moon}
-The center-of-mass-centered 3-body system (C-R3B) with the Earth and Moon was explored in \cite{Saxe2015}. We will shortly present the final nondimensionalized equations of motion here for reference, since we have done much analysis on the Earth-Moon system in this project as well.
+The center-of-mass-centered 3-body system (C-R3B) with the Earth and Moon was explored in \cite{Saxe2015}; refer to this for detailed derivations of C-R3B. We will present the final nondimensionalized equations of motion, and numerical integration algorithms for reference. The model is set up as in \cref{fig:r3b}.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[scale=0.75]{fig/r3b.pdf}
+    \caption{Restricted three-body problem. Two coordinate systems both with center of mass as origin: $(\mathscr{X},\mathscr{Y})$ is a stationary inertial frame, $(x,y)$ is a co-rotating non-inertial frame that rotates with the moon at angular frequency $\omega$. $M =$ mass of Earth, $m =$ mass of Moon, $\vec{R} =$ vector from CM to earth, $\vec{r} =$ vector from CM to Moon, $m_s =$ mass of spacecraft, $r_{S,E} =$ distance from spacecraft to Earth, $r_{S,M} =$ distance from spacecraft to Moon. In the dimensionless variables we introduce later, unit distance is $R+r$, which makes the dimensionless constant $k = \text{the CM-Earth distance} = \dfrac{R}{R+r} = $ and $1-k = \text{the CM-Moon distance} = \dfrac{r}{R+r}$ (Source: \cite{Saxe2015}).}
+    \label{fig:r3b}
+\end{figure}
 
 \subsection{C-R3B Equations of Motion}
 
@@ -30,23 +37,52 @@ The center-of-mass-centered 3-body system (C-R3B) with the Earth and Moon was ex
 where \(T\), \(X\), \(Y\), \(P_x\) and \(P_y\) are our dimensionless variables for time, positions, generalized impulse, and \(k=\dfrac{M_{\Moon}}{M_{\Earth} + M_{\Moon}}\), that is the ratio of Moon's mass to the total Moon and Earth mass.
 
 \subsection{C-R3B Numerical Algorithms}
-Both a symplectic Euler and symplectic Störmer-Verlet (also symplectic) were performed, see \cite{Saxe2015} for details.
+\subsubsection{C-R3B Symplectic Euler}
+Based on \cref{eq:Xdot,eq:Ydot,eq:Pdot_X,eq:Pdot_Y}, a symplectic Euler algorithm was found (For detailed derivation, see \cite{Saxe2015}):
 
+\begin{align}
+    X_{i+1} &= \dfrac{X_i + h (h P_{Y,i} + P_{X,i} + Y_i)}{1+h^2}, \\[0.4cm]
+    Y_{i+1} &= Y_i + h (P_{Y,i} - X_{i+1}), \label{eq:symplectic-euler-Y_i+1}
+\end{align}
+\begin{align}
+    \begin{aligned}
+        P_{X,i+1} &= P_{X,i} \\
+        &+ h \left(P_{Y,i} - \dfrac{(1-k)(k+X_{i+1})}{((k+X_{i+1})^2+Y_{i+1}^2)^{3/2}} + \dfrac{k(X_{i+1}-1+k)}{((X_{i+1}-1+k)^2+Y_{i+1}^2)^{3/2}}\right), \label{eq:symplectic-euler-PX_i+1}
+    \end{aligned} \\[0.4cm]
+    \begin{aligned}
+        P_{Y,i+1} &= P_{Y,i} \\
+        &+ h \left(-P_{X,i} - \dfrac{(1-k)Y_{i+1}}{((k+X_{i+1})^2+Y_{i+1}^2)^{3/2}} - \dfrac{k Y_{i+1}}{((X_{i+1}-1+k)^2+Y_{i+1}^2)^{3/2}}\right), \label{eq:symplectic-euler-PY_i+1}
+    \end{aligned}
+\end{align}
+where \(h\) is the step size, index \(i\) designates previous time step and \(i+1\) designates new time step. The algorithm is run in the same order as listed above.
+
+\subsubsection{C-R3B Symplectic Störmer-Verlet}
+Based on \cref{eq:Xdot,eq:Ydot,eq:Pdot_X,eq:Pdot_Y}, a symplectic Störmer-Verlet algorithm was also found (For detailed derivation, see \cite{Saxe2015}):
+
+\begin{align}
+    X_{i+1/2} &= \frac{h^2 P_{Y,i} + 2 h \dot{P}_{x,i} + 4 X_i}{4 + h^2} \label{eq:verlet-x_1/2} \\
+    Y_{i+1/2} &= Y_i + \dfrac{h}{2} (P_{Y,i} - X_{i+1/2}), \label{eq:verlet-y_1/2} \\
+    P_{X,i+1} &= \frac{h^2 (2 \dot{P}_{Y,i} + P_{X,i}) + 4 h \dot{P}_{X,i} + 4 P_{X,i} }{4 + h^2} \label{eq:verlet-px_1} \\
+    P_{Y,i+1} &= P_{Y,i} + \dfrac{h}{2} \left[-\dot{P}_Y(q_{i+1/2},p_i) -\dot{P}_Y(q_{i+1/2},p_{i+1}) \right], \label{eq:verlet-py_1} \\
+    X_{i+1} &= X_{i+1/2} + \dfrac{h}{2} (P_{X,i+1} + Y_{i+1/2}), \label{eq:verlet-x_1} \\
+    Y_{i+1} &= Y_{i+1/2} + \dfrac{h}{2} (P_{Y,i+1} - X_{i+1/2}), \label{eq:verlet-y_1}
+\end{align}
+where \(\dot{P}_X,\dot{P}_Y\) are \cref{eq:Pdot_X,eq:Pdot_Y}, \(h\) is the step size, index \(i\) designates previous time step and \(i+1\) designates new time step. The algorithm is run in the same order as listed above.
 
 \section{Heliocentric Restricted 4-Body System (H-R4B), Sun-Earth-Mars}
-Simulating orbit from Earth to Mars requires a new model with at least four bodies: Sun, Earth, Mars and the Spacecraft. The coordinate system will be heliocentric and in spherical coordinates, and restricted meaning that the mass of the spacecraft is considered negligible compared to compared to the celestial masses, so we call this system the ``Heliocentric Restricted N-Body'' system. We will derive the equations of motion of the spacecraft by using Hamilton's equations, which naturally gives us a set of coupled first-order differential equations, and a set of conserved quantities as ``generalized momenta''.
-
-\subsection{Spherical Coordinate System}
-We adopt the spherical coordinate system which customary in astrodynamics. The conventions used is in \cref{fig:3D_Spherical}.
+Simulating orbit from Earth to Mars requires a new model with at least four bodies: Sun, Earth, Mars and the Spacecraft. The coordinate system will be heliocentric and in spherical coordinates, and restricted meaning that the mass of the spacecraft is considered negligible compared to compared to the celestial masses, so we call this system the ``Heliocentric Restricted N-Body'' system, see \cref{fig:solar-system-model}. We will derive the equations of motion of the spacecraft by using Hamilton's equations, which naturally gives us a set of coupled first-order differential equations, and a set of conserved quantities as ``generalized momenta''.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.50\linewidth]{fig/3D_Spherical2}
-    \caption{Spherical coordinates \((r, \theta, \phi)\). Radial distance \(r\), polar angle \(\theta\) (theta), and azimuthal angle \(\phi\) (phi). In our heliocentric system the sun is assumed to be stationary at the origin. Source: \cite{WikiSpherical}.}
-    \label{fig:3D_Spherical}
+    \includegraphics[width=0.80\linewidth]{fig/solar-system-model}
+    \caption{ H-R4B model of spacecraft motion.The sun is assumed stationary at the origin of a spherical coordinate system, and the focus of two elliptical orbits of Earth and Mars. (Assets: \cite{WikiSpherical,flaticon})}
+    \label{fig:solar-system-model}
 \end{figure}
 
-And the coordinate transform equations to and from the cartesian coordinate system are:
+\subsection{Spherical Coordinate System}
+We adopt the spherical coordinate system which customary in astrodynamics, as shown in \cref{fig:solar-system-model}.
+
+The coordinate transform equations to and from the cartesian coordinate system are:
 
 \begin{align}
     x &= r \sin{\theta}\cos{\phi}, \label{eq:x(q)} \\
@@ -131,7 +167,7 @@ so we get
     T = \frac{1}{2} m_s (\dot{r}^2 + r^2\dot{\theta}^2 + r^2\sin^2{\theta}\,\dot{\phi}^2).
 \end{align}
 
-The gravitational potential is \todoref{find some non-wikipedia reference here}
+The gravitational potential is \cite{WikiGravPotential}
 
 \begin{align}
     V = -G m_s \sum\limits_{k} \frac{M_k}{\left| \vec{r} - \vec{r_k} \right|},
@@ -177,7 +213,7 @@ So we have
 \begin{align}
     H(\vec{q}, \vec{p}, t) &= \sum\limits_{j}p_j \dot{q_j} - L \\
     &= \sum\limits_{j}p_j \dot{q_j}(\vec{q}, \vec{p}, t) - L \\
-    &= p_r \frac{p_r}{m_s} + p_\theta \frac{p_\theta}{m_s r^2} + p_\phi + \frac{p_\phi}{m_s r^2 \sin^2{\theta}} \nonumber \\
+    &= p_r \frac{p_r}{m_s} + p_\theta \frac{p_\theta}{m_s r^2} + p_\phi + \frac{p_\phi}{m_s r^2 \sin^2{\theta}} \notag \\
     &- \left( \frac{p_r^2}{2 m_s} + \frac{p_\theta^2}{2 m_s r^2} + \frac{p_\phi^2}{2 m_s r^2 \sin^2{\theta}} + G m_s \sum\limits_{k} \frac{M_k}{\left| \vec{r} - \vec{r_k} \right|} \right) \\
     \Leftrightarrow H &= \frac{p_r^2}{2 m_s} + \frac{p_\theta^2}{2 m_s r^2} + \frac{p_\phi^2}{2 m_s r^2 \sin^2{\theta}} - G m_s \sum\limits_{k} \frac{M_k}{\left| \vec{r} - \vec{r_k} \right|}
 \end{align}
@@ -189,7 +225,7 @@ At this point we want to expand the expression \(\left| \vec{r} - \vec{r_k} \rig
 \end{align}
 and
 \begin{align}
-    (x-x_k)^2 &= (r\sin{\theta}\cos{\phi} - r\sin{\theta}\cos{\phi})^2 \nonumber \\
+    (x-x_k)^2 &= (r\sin{\theta}\cos{\phi} - r\sin{\theta}\cos{\phi})^2 \notag \\
     &= \tikz[baseline]{
         \node[fill=orange!20,anchor=base]
         {\(r^2\sin^2{\theta}\cos^2{\phi}\)}
@@ -197,7 +233,7 @@ and
         \node[fill=red!20,anchor=base]
         {\(r_k^2\sin^2{\theta_k}\cos^2{\phi_k}\)}
     } - 2r r_k \sin{\theta}\sin{\theta_k}\cos{\phi}\cos{\phi_k} \label{eq:x-dist-squared} \\
-    (y-y_k)^2 &= (r\sin{\theta}\sin{\phi} - r\sin{\theta}\sin{\phi})^2 \nonumber \\
+    (y-y_k)^2 &= (r\sin{\theta}\sin{\phi} - r\sin{\theta}\sin{\phi})^2 \notag \\
     &= \tikz[baseline]{
         \node[fill=orange!20,anchor=base]
         {\(r^2\sin^2{\theta}\sin^2{\phi}\)}
@@ -205,7 +241,7 @@ and
         \node[fill=red!20,anchor=base]
         {\(r_k^2\sin^2{\theta_k}\sin^2{\phi_k}\)}
     } - 2r r_k \sin{\theta}\sin{\theta_k}\sin{\phi}\sin{\phi_k} \label{eq:y-dist-squared} \\
-    (z-z_k)^2 &= (r\cos{\theta} - r\cos{\theta})^2 \nonumber \\
+    (z-z_k)^2 &= (r\cos{\theta} - r\cos{\theta})^2 \notag \\
     &= \tikz[baseline]{
         \node[fill=orange!20,anchor=base]
         {\(r^2\cos^2{\theta}\)}
@@ -380,7 +416,7 @@ and we are left with the nondimensionalized equation:
 \begin{empheq}[box=\widefbox]{align}
     \label{eq:Brdot}
     \dot{B}_r = &\frac{B_\theta^2}{R^3} + \frac{B_\phi^2}{R^3 \sin^2{\theta}} \\
-    & + \sum\limits_{k} \eta_k \frac{-\left[R - R_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right) \right]}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \nonumber
+    & + \sum\limits_{k} \eta_k \frac{-\left[R - R_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right) \right]}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \notag
 \end{empheq}
 
 The exact same procedure for \(\dot{p_\theta}\) and \(\dot{p}_\phi\) gives us:
@@ -388,7 +424,7 @@ The exact same procedure for \(\dot{p_\theta}\) and \(\dot{p}_\phi\) gives us:
 \begin{empheq}[box=\widefbox]{align}
     \label{eq:Bthetadot}
     \dot{B}_\theta = &\frac{B_\phi^2}{R^2 \sin^2{\theta} \tan{\theta}} \\
-    &+ \sum\limits_{k} \eta_k \frac{R R_k \left[-\sin{\theta}\cos{\theta_k} + \cos{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right]}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \nonumber
+    &+ \sum\limits_{k} \eta_k \frac{R R_k \left[-\sin{\theta}\cos{\theta_k} + \cos{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right]}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \notag
 \end{empheq}
 
 \begin{empheq}[box=\widefbox]{align}
