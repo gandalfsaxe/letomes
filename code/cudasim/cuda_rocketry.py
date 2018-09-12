@@ -92,9 +92,8 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
 
         print("successes=", successes, successes.shape)
         print("scores=", scores, scores.shape)
-        points = points.reshape(nIndividuals * nJitter, 3)
 
-        scores = scores.reshape(nIndividuals, nJitter)
+        points = points.reshape(nIndividuals * nJitter, 3)
         for idx, _ in enumerate(scores):
             scores[idx] = -(
                 scores[idx] + points[idx][2]
@@ -102,12 +101,13 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
 
             if not successes[idx]:
                 # punish paths that do not hit planet
-                sigma[idx] = init_sigma * 10
-                alpha[idx] = init_alpha * 10
+                # sigma[idx] = init_sigma * 10
+                # alpha[idx] = init_alpha * 10
                 scores[idx] = -(scores[idx] - 10) ** 2
 
         scores -= scores.mean()
         scores /= scores.std()
+        # scores = scores.reshape(nIndividuals * nJitter)
 
         # find successes and log them
         # winners = np.array(
@@ -131,12 +131,12 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         #     sigma[idx] = init_sigma
         #     alpha[idx] = init_alpha
 
-        psis += steps
         successes=successes.reshape(nIndividuals,nJitter)
         for idx, psi in enumerate(psis):
-            if successes[idx]:
-                winners.append(str([idx,psi,scores[idx]]),"\n")
+            if successes[idx][0]:
+                winners.append(str([idx,psi,scores[idx][0]])+"\n")
     
+        psis += steps
     logfile.writelines(winners)
     logfile.close()
 
