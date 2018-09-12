@@ -25,12 +25,13 @@ pi2 = pi / 2
 
 
 def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
-    init_sigma = 0.01  # spread
-    init_alpha = 0.003  # learningrate
+    init_sigma = 0.1  # spread
+    init_alpha = 0.03  # learningrate
 
     sigma = np.ones(nIndividuals) * init_sigma
     alpha = np.ones(nIndividuals) * init_alpha
     logfile = open(f"cudaES.log", "w")
+    winners=[]
     for _ in range(nIterations):
 
         """
@@ -94,30 +95,30 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         points = points.reshape(nIndividuals * nJitter, 3)
 
         scores = scores.reshape(nIndividuals, nJitter)
-        for idx, score in enumerate(scores):
+        for idx, _ in enumerate(scores):
             scores[idx] = -(
-                score + points[idx][2]
+                scores[idx] + points[idx][2]
             )  # add burnDv to score and negate score since we are trying to minimize it
 
             if not successes[idx]:
                 # punish paths that do not hit planet
-                # sigma[idx] = init_sigma * 10
-                # alpha[idx] = init_alpha * 10
-                scores[idx] = -(score - 10) ** 2
+                sigma[idx] = init_sigma * 10
+                alpha[idx] = init_alpha * 10
+                scores[idx] = -(scores[idx] - 10) ** 2
 
         scores -= scores.mean()
         scores /= scores.std()
 
         # find successes and log them
-        winners = np.array(
-            [
-                (points[idx], scores.reshape(nIndividuals * nJitter)[idx])
-                for idx, success in enumerate(successes)
-                if success
-            ]
-        )
-        for psi, score in winners:
-            logfile.write(f"{psi}, {score}\n")
+        # winners = np.array(
+        #     [
+        #         (points[idx], scores.reshape(nIndividuals * nJitter)[idx])
+        #         for idx, success in enumerate(successes)
+        #         if success
+        #     ]
+        # )
+        # for psi, score in winners:
+        #     logfile.write(f"{psi}, {score}\n")
 
         # generate steps for next generation
         steps = np.zeros([nIndividuals, 3])
@@ -131,6 +132,12 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         #     alpha[idx] = init_alpha
 
         psis += steps
+        successes=successes.reshape(nIndividuals,nJitter)
+        for idx, psi in enumerate(psis):
+            if successes[idx]:
+                winners.append(str([idx,psi,scores[idx]]),"\n")
+    
+    logfile.writelines(winners)
     logfile.close()
 
 
