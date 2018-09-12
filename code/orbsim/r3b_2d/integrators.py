@@ -5,7 +5,7 @@ from numba import njit, jit, float64, boolean
 
 from . import *
 from ..planets import celestials
-from .analyticals import get_pdot_x, get_pdot_y, get_v_x, get_v_y
+from .analyticals import get_pdot_x, get_pdot_y, get_xdot, get_ydot
 
 
 @njit
@@ -26,26 +26,21 @@ def euler_step_symplectic(h, x, y, p_x, p_y):
 @njit
 def verlet_step_symplectic(h, x, y, p_x, p_y):
     """Takes a half step, then another half step in the symplectic Verlet algorithm"""
-    hh = 0.5 * h
-    denominator = 1.0 / (1.0 + hh ** 2)
-    # Step 1
-    v_x = get_v_x(y, p_x)
-    x = (x + (v_x + p_y * hh) * hh) * denominator
-    # Step 2
-    v_y = get_v_y(x, p_y)
-    y = y + v_y * hh
-    # Step 2
-    pdot_x = get_pdot_x(x, y, p_y)
-    pdot_y = get_pdot_y(x, y, p_x)
-    p_x = (p_x + (2.0 * pdot_x + (2 * pdot_y + p_x) * hh) * hh) * denominator
-    p_y = (
-        p_y + (pdot_y + get_pdot_y(x, y, p_x)) * hh
-    )  # TODO: mixed, what's correct? Derive theory
-    # Step 3
-    v_x = get_v_x(y, p_x)
-    v_y = get_v_y(x, p_y)
-    x += v_x * hh
-    y += v_y * hh
+    # Step 1 - q_{i+1/2}
+    x = (h ** 2 * p_y + 2 * h * (p_x + y) + 4 * x) / (4 + h ** 2)
+    y = y + h / 2 * (p_y - x)
+
+    # Step 2 - p_{i+1}
+    pdot_x = get_pdot_x(x, y, p_y)  # old timestep
+    pdot_y = get_pdot_y(x, y, p_x)  # old timestep
+    p_x = (h ** 2 * (2 * pdot_y + p_x) + 4 * h * pdot_x + 4 * p_x) / (4 + h ** 2)
+    p_y = p_y + h / 2 * (pdot_y + get_pdot_y(x, y, p_x))
+
+    # Step 3 - q_{i+1}
+    xdot = get_xdot(y, p_x)
+    ydot = get_ydot(x, p_y)
+    x += h / 2 * xdot
+    y += h / 2 * ydot
 
     return x, y, p_x, p_y
 

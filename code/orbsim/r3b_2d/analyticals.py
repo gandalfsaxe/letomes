@@ -39,14 +39,14 @@ def pdot_denominators(x, y):
 
 
 @njit
-def get_v_x(y, p_x):
+def get_xdot(y, p_x):
     """speed in x direction, from coordinates and momenta"""
     v_x = p_x + y
     return v_x
 
 
 @njit
-def get_v_y(x, p_y):
+def get_ydot(x, p_y):
     """speed in y direction, from coordinates and momenta"""
     v_y = p_y - x
     return v_y
