@@ -39,8 +39,9 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         """
         # Try randn when it works, to see if better.           -----v
         np.random.seed(0)
-        jitter = np.random.rand(nJitter, nIndividuals, 3)
+        jitter = np.random.rand(nIndividuals, nJitter, 3)
         jitter = np.array([sigma[idx] * jitt for idx, jitt in enumerate(jitter)])
+        jitter= jitter.reshape(nJitter,nIndividuals,3)
         jitter[0] *= 0  # Make sure all set island phis are evaluated without jitter
         points = jitter + psis
         # jitter = [sigma[idx] * jitt for idx, jitt in enumerate(jitter)]
@@ -90,7 +91,7 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
             scoreArray,
         )
 
-        print("successes=", successes.sum)
+        print("successes=", successes.sum())
 
         points = points.reshape(nIndividuals * nJitter, 3)
         for idx, _ in enumerate(scores):
@@ -132,9 +133,10 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         #     alpha[idx] = init_alpha
 
         successes=successes.reshape(nIndividuals,nJitter)
+        # scores = scores.reshape(nIndividuals, nJitter)
         for idx, psi in enumerate(psis):
             if successes[idx][0]:
-                winners.append(str([idx,psi,scores[idx][0]])+"\n")
+                winners.append(str([idx,psi,scores[idx][0])+"\n")
     
         psis += steps
     logfile.writelines(winners)
