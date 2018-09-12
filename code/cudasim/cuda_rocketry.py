@@ -125,10 +125,10 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         for idx in range(nIndividuals):
             steps[idx] = np.dot(scores[idx], jitter[idx]) * alpha[idx]
 
-        psi_scores = scores.T[0]
-        for idx, score in enumerate(psi_scores):
-            sigma[idx] = init_sigma
-            alpha[idx] = init_alpha
+        # psi_scores = scores.T[0]
+        # for idx, score in enumerate(psi_scores):
+        #     sigma[idx] = init_sigma
+        #     alpha[idx] = init_alpha
 
         psis += steps
     logfile.close()

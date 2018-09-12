@@ -24,7 +24,7 @@ inline double pdot_denominator2(double x, double y)
 __device__
 inline double get_pdot_x(double x, double y, double p_y)
 {
-    return p_y - ((1 - K) * (x + K)) / pdot_denominator1(x, y) + 
+    return p_y - ((1 - K) * (x + K)) / pdot_denominator1(x, y) - 
         K * (x - 1 + K) / pdot_denominator2(x, y);
 }
 
