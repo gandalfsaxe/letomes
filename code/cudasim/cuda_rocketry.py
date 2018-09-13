@@ -31,7 +31,8 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
     sigma = np.ones(nIndividuals) * init_sigma
     alpha = np.ones(nIndividuals) * init_alpha
     logfile = open(f"cudaES.log", "w")
-    winners=[]
+    winners = []
+    intermediate_winners = []
     for _ in range(nIterations):
 
         """
@@ -41,7 +42,7 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         np.random.seed(0)
         jitter = np.random.rand(nIndividuals, nJitter, 3)
         jitter = np.array([sigma[idx] * jitt for idx, jitt in enumerate(jitter)])
-        jitter= jitter.reshape(nJitter,nIndividuals,3)
+        jitter = jitter.reshape(nJitter, nIndividuals, 3)
         jitter[0] *= 0  # Make sure all set island phis are evaluated without jitter
         points = jitter + psis
         # jitter = [sigma[idx] * jitt for idx, jitt in enumerate(jitter)]
@@ -109,7 +110,7 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         scores /= scores.std()
         print("scores=", scores, scores.shape)
 
-        # find successes and log them
+        # # find successes and log them
         # winners = np.array(
         #     [
         #         (points[idx], scores.reshape(nIndividuals * nJitter)[idx])
@@ -132,13 +133,20 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         #     sigma[idx] = init_sigma
         #     alpha[idx] = init_alpha
 
-        successes=successes.reshape(nIndividuals,nJitter)
+        successes = successes.reshape(nIndividuals, nJitter)
+        points = points.reshape(nIndividuals, nJitter, 3)
         # scores = scores.reshape(nIndividuals, nJitter)
         for idx, psi in enumerate(psis):
             if successes[idx][0]:
-                winners.append(str([idx,psi,scores[idx][0])+"\n")
-    
+                winners.append(str([idx, psi, scores[idx][0]]) + "\n")
+            for jdx, succ in enumerate(successes[idx]):
+                if succ:
+                    intermediate_winners.append(
+                        str([idx, points[idx][jdx], scores[idx][jdx]]) + "\n"
+                    )
+
         psis += steps
+
     logfile.writelines(winners)
     logfile.close()
 
