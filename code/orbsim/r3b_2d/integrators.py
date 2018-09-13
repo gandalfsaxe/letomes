@@ -66,8 +66,8 @@ def symplectic(
     t = 0  # total elapsed time
     x, y, p_x, p_y = [x0, y0, p0_x, p0_y]
 
-    tol = (STEP_ERROR_TOLERANCE) * (1e7 / max_iter)
-    print(tol)
+    tol = (STEP_ERROR_TOLERANCE)# * (1e7 / max_iter)
+    # print(tol)
 
     path_storage = []
     path_storage.append([x, y, p_x, p_y, h, t])
@@ -105,6 +105,7 @@ def symplectic(
     while t < duration:
         if iteration_count > max_iter:
             # print("exceeded max iterations, stranded in space!")
+            print('.')
             score[0] = smallest_distance
             return path_storage
 
@@ -140,8 +141,9 @@ def symplectic(
         target_distance_x = x - target_position_x
         target_distance_y = y - target_position_y
         target_distance = sqrt(target_distance_x ** 2 + target_distance_y ** 2)
-        if target_distance > 1e8 / UNIT_LENGTH:
+        if target_distance > 4:
             # print("we are way too far away, stranded in space!")
+            print("|")
             score[0] = smallest_distance
             return path_storage
         smallest_distance = min(smallest_distance, target_distance)
@@ -182,6 +184,7 @@ def symplectic(
             path_storage.append([x, y, p_x, p_y, h, t])
             success[0] = 1
             score[0] = Dv
+            print('O')
             return path_storage
 
         path_storage.append([x, y, p_x, p_y, h, t])
@@ -195,12 +198,14 @@ def symplectic(
         if earth_distance < critical_distance:
             # print("Anga crashed into the earth!")
             score[0] = smallest_distance
+            print('x')
             return path_storage
 
     # import io
     # with open("tests/testsim.log", "w") as file:
     # file.writelines(str(path_storage))
     # print("smallest distance =", smallest_distance)
+    print('?')
     score[0] = smallest_distance
     return path_storage
 

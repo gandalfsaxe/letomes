@@ -28,7 +28,7 @@ for title, psi, duration in examples:
     psis = []
     paths = []
     for i in range(N):
-        permute_psi = np.array(psi)+np.array([i*1e-4,i*1e-4,i*1e-4])
+        permute_psi = np.array(psi)+np.array([i*1e-5,i*1e-5,i*1e-5])
         path = launch_sim(permute_psi, max_iter=1e7, duration=duration)
         psis.append(permute_psi)
         paths.append(path)
