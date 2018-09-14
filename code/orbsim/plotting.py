@@ -8,7 +8,7 @@ from .planets import celestials
 from .r3b_2d import *
 
 
-def orbitplot2d(completed_path, psi=None, filepath=".", title=None):
+def orbitplot2d(completed_path, psi=None, filepath=".", title=None, multi_mode=False):
 
     """
     input: output of launch_sim, its launch parameters, and an optional title if the file is to be saved
@@ -31,10 +31,22 @@ def orbitplot2d(completed_path, psi=None, filepath=".", title=None):
     Xs_moon = LUNAR_POSITION_X * np.cos(ts)
     Ys_moon = LUNAR_POSITION_X * np.sin(ts)
 
-    idxs = get_idxs(hs)
+    idxs = get_idxs(ts)
     N_PTS = len(idxs)
     increment = 1000
-    fig, ax = fig_setup(score, psi, increment, idxs)
+
+    if multi_mode:
+        ax = plt.gca()
+    else:
+        fig, ax = fig_setup(score, psi)
+        cm = plt.get_cmap("bone")
+        ax.set_prop_cycle(
+            "color",
+            [
+                cm(0.8 - (1. * i / (N_PTS / increment)))
+                for i in range(int(N_PTS / increment))
+            ],
+        )
 
     g_Xs, g_Ys = np.array([[Xs[idx], Ys[idx]] for idx in idxs]).T
     for i in range(N_PTS)[::increment]:
@@ -58,14 +70,17 @@ def orbitplot2d(completed_path, psi=None, filepath=".", title=None):
     # ax.scatter(Xs[0], Ys[0], color="green")
     ax.scatter(Xs[-1], Ys[-1], color="red", marker="x", linewidth=0.6)
 
-    if title is None:
-        plt.show()
-    else:
-        filename = f"{filepath}/path_{title}.pdf"
-        plt.savefig(filename)
+    if not multi_mode:
+        if title is None:
+            plt.show()
+        else:
+            filename = f"{filepath}/path_{title}.pdf"
+            plt.savefig(filename)
 
 
-def orbitplot_non_inertial(completed_path, psi=None, filepath=".", title=None):
+def orbitplot_non_inertial(
+    completed_path, psi=None, filepath=".", title=None, multi_mode=False
+):
     """
     input: output of launch_sim, its launch parameters, and an optional title if the file is to be saved
     
@@ -78,7 +93,18 @@ def orbitplot_non_inertial(completed_path, psi=None, filepath=".", title=None):
     idxs = get_idxs(hs)
     N_PTS = len(idxs)
     increment = 1000
-    fig, ax = fig_setup(score, psi, increment, idxs)
+    if multi_mode:
+        ax = plt.gca()
+    else:
+        fig, ax = fig_setup(score, psi)
+        cm = plt.get_cmap("bone")
+        ax.set_prop_cycle(
+            "color",
+            [
+                cm(0.8 - (1. * i / (N_PTS / increment)))
+                for i in range(int(N_PTS / increment))
+            ],
+        )
 
     g_xs, g_ys = np.array([[xs[idx], ys[idx]] for idx in idxs]).T
     for i in range(N_PTS)[::increment]:
@@ -91,15 +117,16 @@ def orbitplot_non_inertial(completed_path, psi=None, filepath=".", title=None):
 
     ax.scatter([L1_POSITION_X], [0], marker="x", color="pink", linewidth=0.4)
     ax.scatter(xs[-1], ys[-1], color="red", marker="x", linewidth=0.6)
-    
+
     circle_x, circle_y = orbital_circle(celestials.MOON)
     ax.plot(circle_x, circle_y, color="grey", linewidth=0.3, alpha=0.3)
 
-    if title is None:
-        plt.show()
-    else:
-        filename = f"{filepath}/path_{title}_non-inertial.pdf"
-        plt.savefig(filename)
+    if not multi_mode:
+        if title is None:
+            plt.show()
+        else:
+            filename = f"{filepath}/path_{title}_non-inertial.pdf"
+            plt.savefig(filename)
 
 
 def get_idxs(hs):
@@ -116,8 +143,7 @@ def get_idxs(hs):
     return idxs
 
 
-def fig_setup(score, psi, increment, idxs):
-    N_PTS = len(idxs)
+def fig_setup(score, psi):
     fig = plt.figure()
     ax = fig.gca()
     if score < 100:
@@ -130,14 +156,6 @@ def fig_setup(score, psi, increment, idxs):
         fig.suptitle(f"{scorestr} = {score}")
 
     ax.set_aspect("equal")
-    cm = plt.get_cmap("bone")
-    ax.set_prop_cycle(
-        "color",
-        [
-            cm(0.8 - (1. * i / (N_PTS / increment)))
-            for i in range(int(N_PTS / increment))
-        ],
-    )
     return fig, ax
 
 
@@ -168,21 +186,54 @@ def orbitplot3d(completed_path, psi, filepath=".", title=None):
     plt.show()
 
 
-def leo_plot(completed_path, psi=None, filepath=".", title=None):
+def leo_plot(completed_path, psi=None, filepath=".", title=None, fig=None):
     """
     input: output of launch_sim, its launch parameters, and an optional title if the file is to be saved
     
     Plots a figure of the inputted orbit, with start point marked in green, and point marked in red, earth and moon/mars marked as well.
     """
     score, path = completed_path  # [Dv,[x,y,px,py,h]]
-    xs, ys, pxs, pys, hs, _ = np.array(path).T
-    ts = np.linspace(0, sum(hs), len(path))
+    xs, ys, pxs, pys, hs, ts = np.array(path).T
+    # ts = np.linspace(0, sum(hs), len(path))
 
-    fig,ax=fig_setup(score,psi,get_idxs(hs))
+    increment = 500
+    fig, ax = fig_setup(score, psi, increment, get_idxs(hs))
 
     ax.plot(xs, ys, color="black", linewidth="2")
     earth = plt.Circle((EARTH_POSITION_X, 0), EARTH_RADIUS / UNIT_LENGTH, color="blue")
     ax.add_artist(earth)
+
+    if title is None:
+        plt.show()
+    else:
+        filename = f"{filepath}/path_{title}.pdf"
+        plt.savefig(filename)
+
+
+def multi_plot(completed_paths, psis, plot_type, filepath=".", title=None):
+    N = len(completed_paths)
+    if len(psis) != N:
+        raise Exception("must have the same number of psis as paths")
+    fig = plt.figure()
+    ax = plt.gca()
+    ax.set_aspect("equal")
+    increment = 1000
+    cmap_cycle = ["bone", "hot", "winter", "autumn", "summer", "spring"]
+
+    for i, [cpath, psi] in enumerate(zip(completed_paths, psis)):
+        _, path = cpath
+        ts = np.array(path).T[5]
+        idxs = get_idxs(ts)
+
+        cm = plt.get_cmap(cmap_cycle[i % len(cmap_cycle)])
+        ax.set_prop_cycle(
+            "color",
+            [
+                cm(0.8 - (1. * i / (len(idxs) / increment)))
+                for i in range(int(len(idxs) / increment))
+            ],
+        )
+        plot_type(cpath, psi, multi_mode=True)
 
     if title is None:
         plt.show()
