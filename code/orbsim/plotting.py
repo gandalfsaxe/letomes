@@ -218,7 +218,7 @@ def multi_plot(completed_paths, psis, plot_type, filepath=".", title=None):
     ax = plt.gca()
     ax.set_aspect("equal")
     increment = 1000
-    cmap_cycle = ["bone", "hot", "winter", "autumn", "summer", "spring"]
+    cmap_cycle = ["bone", "winter", "autumn", "summer", "spring"]
 
     for i, [cpath, psi] in enumerate(zip(completed_paths, psis)):
         _, path = cpath

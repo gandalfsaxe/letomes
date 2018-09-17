@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from orbsim.r3b_2d.analyticals import *
 from orbsim.r3b_2d.simulators import launch_sim
-from orbsim.plotting import orbitplot2d, orbitplot_non_inertial
+from orbsim.plotting import orbitplot2d, orbitplot_non_inertial, multi_plot
 from orbsim import *
 from orbsim.r3b_2d import *
 
@@ -28,12 +28,12 @@ for title, psi, duration in examples:
     psis = []
     paths = []
     for i in range(N):
-        permute_psi = np.array(psi)+np.array([i*1e-5,i*1e-5,i*1e-5])
+        permute_psi = np.array(psi) + np.array([i * 1e-5, i * 1e-5, i * 1e-5])
         path = launch_sim(permute_psi, max_iter=1e7, duration=duration)
         psis.append(permute_psi)
         paths.append(path)
 
-    # In[26]:   
+    # In[26]:
 
     for i in range(len(paths)):
         orbitplot2d(
@@ -46,7 +46,7 @@ for title, psi, duration in examples:
             paths[i],
             psis[i],
             filepath="./lyapunov_figs/trajectories",
-            title=f"{title}_{i}",
+            title=f"{title}_nonin_{i}",
         )
 
     # In[ ]:
@@ -57,6 +57,21 @@ for title, psi, duration in examples:
             print(f"comparing {a} and {b}")
             if a >= b:
                 continue
+            multi_plot(
+                [paths[a], paths[b]],
+                [psis[a], psis[b]],
+                orbitplot2d,
+                filepath="./lyapunov_figs/trajectories",
+                title=f"{title}_multi_{a}_and_{b}",
+            )
+            multi_plot(
+                [paths[a], paths[b]],
+                [psis[a], psis[b]],
+                orbitplot_non_inertial,
+                filepath="./lyapunov_figs/trajectories",
+                title=f"{title}_nonin_multi_{a}_and_{b}",
+            )
+            plt.close('all')
             lyap = []
             _a = np.array(paths[a][1]).T
             _b = np.array(paths[b][1]).T
@@ -151,6 +166,9 @@ for title, psi, duration in examples:
         )
     print(f"mean slope = {np.mean(slopes)}")
 
-    for i,lyap in enumerate(lyaps):
+    for i, lyap in enumerate(lyaps):
         print(title)
-        print(f"max_dist={max(lyap)}\nmin_dist={min(lyap[1:])}\nmean_dist={np.mean(lyap)}\n")
+        print(
+            f"max_dist={max(lyap)}\nmin_dist={min(lyap[1:])}\nmean_dist={np.mean(lyap)}\n"
+        )
+
