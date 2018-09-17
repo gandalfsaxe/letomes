@@ -18,17 +18,17 @@ from orbsim.r3b_2d import *
 
 N = 4
 examples = [
-    ["hohmann", [-2.086814820119193, -0.000122173047640, 3.111181716545691], 5],
+    # ["hohmann", [-2.086814820119193, -0.000122173047640, 3.111181716545691], 5],
     ["long_leto", [3.794182930145708, 0.023901745288554, 3.090702702702703], 200],
-    ["short_leto", [-0.138042744751570, -0.144259374836607, 3.127288444444444], 41],
-    ["3-day_hohmann", [-2.272183066647597, -0.075821466029764, 3.135519748743719], 3],
-    ["1-day_hohmann", [-2.277654673852600, 0.047996554429844, 3.810000000000000], 1],
+    # ["short_leto", [-0.138042744751570, -0.144259374836607, 3.127288444444444], 41],
+    # ["3-day_hohmann", [-2.272183066647597, -0.075821466029764, 3.135519748743719], 3],
+    # ["1-day_hohmann", [-2.277654673852600, 0.047996554429844, 3.810000000000000], 1],
 ]  # [title, psi, duration]
 for title, psi, duration in examples:
     psis = []
     paths = []
     for i in range(N):
-        permute_psi = np.array(psi) + np.array([i * 1e-5, i * 1e-5, i * 1e-5])
+        permute_psi = np.array(psi) + np.array([i * 1e-6, i * 1e-6, i * 1e-6])
         path = launch_sim(permute_psi, max_iter=1e7, duration=duration)
         psis.append(permute_psi)
         paths.append(path)

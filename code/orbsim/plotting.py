@@ -18,9 +18,6 @@ def orbitplot2d(completed_path, psi=None, filepath=".", title=None, multi_mode=F
     score, path = completed_path  # [Dv,[x,y,px,py,h]]
 
     xs, ys, pxs, pys, hs, ts = np.array(path).T
-    # ts = np.linspace(
-    #     0, sum(hs), len(path)
-    # )  # FIXME ts is not linear, so this makes no sense, i think?
 
     Xs = xs * np.cos(ts) - ys * np.sin(ts)
     Ys = xs * np.sin(ts) + ys * np.cos(ts)
@@ -33,7 +30,7 @@ def orbitplot2d(completed_path, psi=None, filepath=".", title=None, multi_mode=F
 
     idxs = get_idxs(ts)
     N_PTS = len(idxs)
-    increment = 1000
+    increment = int(N_PTS/100)
 
     if multi_mode:
         ax = plt.gca()
@@ -43,7 +40,7 @@ def orbitplot2d(completed_path, psi=None, filepath=".", title=None, multi_mode=F
         ax.set_prop_cycle(
             "color",
             [
-                cm(0.8 - (1. * i / (N_PTS / increment)))
+                cm(max(0,0.9 - (1. * i / (N_PTS / increment))))
                 for i in range(int(N_PTS / increment))
             ],
         )
@@ -92,7 +89,7 @@ def orbitplot_non_inertial(
 
     idxs = get_idxs(hs)
     N_PTS = len(idxs)
-    increment = 1000
+    increment = int(N_PTS/100)
     if multi_mode:
         ax = plt.gca()
     else:
@@ -101,7 +98,7 @@ def orbitplot_non_inertial(
         ax.set_prop_cycle(
             "color",
             [
-                cm(0.8 - (1. * i / (N_PTS / increment)))
+                cm(max(0,0.9 - (1. * i / (N_PTS / increment))))
                 for i in range(int(N_PTS / increment))
             ],
         )
@@ -137,7 +134,7 @@ def get_idxs(hs):
     ):  # each time step h, check whether the little tally has reached our threshold.
         h = hs[i]  # if it has, take that index as a time step
         tally += h
-        if tally >= 1.5e-5:
+        if tally >= 1.5e-4:
             idxs.append(i)
             tally = 0
     return idxs
@@ -197,7 +194,7 @@ def leo_plot(completed_path, psi=None, filepath=".", title=None, fig=None):
     # ts = np.linspace(0, sum(hs), len(path))
 
     increment = 500
-    fig, ax = fig_setup(score, psi, increment, get_idxs(hs))
+    fig, ax = fig_setup(score, psi)
 
     ax.plot(xs, ys, color="black", linewidth="2")
     earth = plt.Circle((EARTH_POSITION_X, 0), EARTH_RADIUS / UNIT_LENGTH, color="blue")
@@ -217,21 +214,19 @@ def multi_plot(completed_paths, psis, plot_type, filepath=".", title=None):
     fig = plt.figure()
     ax = plt.gca()
     ax.set_aspect("equal")
-    increment = 1000
-    cmap_cycle = ["bone", "winter", "autumn", "summer", "spring"]
+    cmap_cycle = ["bone", "autumn", "winter", "summer", "spring"]
 
     for i, [cpath, psi] in enumerate(zip(completed_paths, psis)):
         _, path = cpath
         ts = np.array(path).T[5]
         idxs = get_idxs(ts)
+        increment = len(idxs)/100
+        # print(len(idxs),increment)
 
         cm = plt.get_cmap(cmap_cycle[i % len(cmap_cycle)])
         ax.set_prop_cycle(
             "color",
-            [
-                cm(0.8 - (1. * i / (len(idxs) / increment)))
-                for i in range(int(len(idxs) / increment))
-            ],
+            [cm(max(0,0.9 - (1. * i / 100))) for i in range(100)],
         )
         plot_type(cpath, psi, multi_mode=True)
 
@@ -240,6 +235,7 @@ def multi_plot(completed_paths, psis, plot_type, filepath=".", title=None):
     else:
         filename = f"{filepath}/path_{title}.pdf"
         plt.savefig(filename)
+    plt.close()
 
 
 def orbital_circle(celestial):

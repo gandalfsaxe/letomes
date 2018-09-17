@@ -1,5 +1,9 @@
 # Worklog
 
+## September 17th
+
+### Oisin worked on plots and computing final numbers for lyapunov aspect of discussion
+
 ## August 5
 
 ### Gandalf: Equation of motions for R4B
