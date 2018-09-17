@@ -25,22 +25,22 @@ A good heuristic for whether or not our paths are precise enough would be a meas
 \begin{figure}
     \centering
     \subfloat[a straight-forward Hohmann transfer]{
-        \includegraphics[width=0.46\linewidth]{fig/path_hohmann_non-inertial}
-        \label{fig:path_hohmann_non-inertial}
+        \includegraphics[width=0.46\linewidth]{fig/path_hohmann_nonin_multi_0_and_3}
+        \label{fig:path_hohmann_non-inertial_multi}
     }
     \hfill
     \subfloat[the rate of separation between infinitesimally perturbed versions of the Hohmann transfer]{
-        \includegraphics[width=0.46\linewidth]{fig/hohmann_slope}
+        \includegraphics[width=0.46\linewidth]{fig/hohmann_slope_0_and_3}
         \label{fig:hohmann_slope}
     }
     \\
     \subfloat[a relatively long LETO path]{
-        \includegraphics[width=0.46\linewidth]{fig/path_long_leto_non-inertial}
-        \label{fig:path_long_leto_non-inertial}
+        \includegraphics[width=0.46\linewidth]{fig/path_long_leto_nonin_multi_1_and_3}
+        \label{fig:path_long_leto_non-inertial_multi}
     }
     \hfill
     \subfloat[the rate of separation of two infinitesimally perturbed versions of the long LETO]{
-        \includegraphics[width=0.46\linewidth]{fig/long_leto_slope}
+        \includegraphics[width=0.46\linewidth]{fig/long_leto_slope_1_and_3}
         \label{fig:long_leto_slope}
     }
     \caption{Examples of some of the different types of transfers that are possible within the model. Each of these were taken as starting points, and simulated again with slightly perturbed starting conditions. The difference between these perturbations were then measured, and plotted in \textbf{b} and \textbf{d}, on a logarithmic scale. The slope of these plots is the lyapunov exponent. We can see that passing into a deep gravity well has a stabilizing effect on the chaos in the system.}
@@ -48,6 +48,8 @@ A good heuristic for whether or not our paths are precise enough would be a meas
 \end{figure} 
 
 Our analysis shows that given an initial perturbation in the order of \num{1e-6}, after 200 days we have an uncertainty of 50.000 kilometers. This is a very liberal upper bound for both our error and our flight time. A definite confirmation that the system is significantly chaotic, but not enough to invalidate our results. 
+
+A more reasonable initial perturbation on the order of \num{1e-8} (one order of magnitude greater than our error tolerance) gives us an uncertainty of less than \SI{2700}{km} after the same 200 days (before we pass the moon, which of course stops one path, and heavily diverges the other). This is very manageable for a spacecraft, since it can adjust for these imprecisions with its guidance thrusters early in the process.
 
 % \begin{figure}
 %     \centering
