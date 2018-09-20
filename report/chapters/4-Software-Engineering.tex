@@ -2,9 +2,7 @@
 
 \chapter{Software Engineering}
 
-The project has been defined by a relatively wide scope of disciplines that we have worked on. Mathematic derivations, astrophysics intuition, machine learning, high-performance computing, and software engineering. The last of those particularly because of the simultaneous need for rapid prototyping and strong performance characteristics. Essentially, we needed to be able to test a plethora of different ideas to answer all our questions, but since the computations are so relatively expensive, we wanted to build a few solid modules that could be treated as black boxes for our overarching purposes. Essentially, we rewrote the simulator from the precursor project from the ground up, with a focus on modularity and extensibility. This was done on basis of the model inherent in the original, to give us a consistent  with which to compare our new simulator.
-
-
+The project has been defined by a relatively wide scope of disciplines that we have worked on. Mathematic derivations, astrophysics intuition, machine learning, high-performance computing, and software engineering. The last of those particularly because of the simultaneous need for rapid prototyping and strong performance characteristics. Essentially, we needed to be able to test a plethora of different ideas to answer all our questions, but since the computations are so relatively expensive, we wanted to build a few solid modules that could be treated as black boxes for our overarching purposes. Essentially, we rewrote the simulator from the precursor project from the ground up, with a focus on modularity and extensibility. This was done on basis of the model inherent in the original, to give us a consistent "ground truth" with which to compare our new simulator.
 
 
 \section{Software Architecture Overview}
@@ -94,8 +92,6 @@ Once we had this architecture in place, and giving the same results as the origi
 \subsection{CUDA}
 
 We attempted to gain additional performance from our simulator, we tried to run it on GPUs. Given that the fitness evaluations are completely independent in ES, it is a great candidate for massive parallelization. This is also doable with Numba, but requires an even more granular refactoring of the simulator code, and conscious management of data transfer between CPU and GPU, since the communication overhead associated with GPU work can very easily eclipse the performance gained by the massive parallelization. We attempted to make the necessary changes, but in the end we could not get it to work, and decided that the medium level of parallelization that we could achieve easily would have to be enough. The HPC CPU clusters have two \SI{2.8}{\GHz} 10-core Intel Xeon processors, so they are nothing to scoff at by themselves. Still, performance has been a limiting factor for the types and number of experiments we could do on the ML front, so in the future, we would like to pursue the GPU angle further.
-
-
 
 \section{GPU programming with CUDA}
 massive parallelism vs. data transfer overhead.
