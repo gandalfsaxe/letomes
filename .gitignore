@@ -10,6 +10,8 @@ __pycache__/
 code/.vscode/.ropeproject/
 
 # folders
+code/notebooks/lyapunov_figs/*
+code/pyscripts/lyapunov_figs/*
 
 
 # python package pip setup (run with `pip install -e .` in code root)
