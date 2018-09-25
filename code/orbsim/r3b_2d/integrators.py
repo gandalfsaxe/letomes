@@ -9,7 +9,7 @@ from .analyticals import get_pdot_x, get_pdot_y, get_xdot, get_ydot
 
 
 @njit
-def euler_step_symplectic(#h, x, y, p_x, p_y):
+def euler_step_symplectic(h, x, y, p_x, p_y):
     """Takes a single time step of the symplectic Euler algorithm"""
     # Step 1
     x = (x + h * (p_y * h + p_x + y)) / (1.0 + h ** 2)
