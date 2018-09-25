@@ -9,11 +9,11 @@ from numba import njit  # boolean, float64, jit
 
 from .analyticals import get_Bdot
 
-from .ephemeris import get_ephemeris
+from .ephemerides import get_ephemerides_on_date
 
 
 @njit
-def euler_step_symplectic(datetime, h, R, theta, phi, B_r, B_theta, B_phi):
+def euler_step_symplectic(day, ephemerides, h, R, theta, phi, B_r, B_theta, B_phi):
     """Takes a single time step of the symplectic Euler algorithm"""
     # Update q
     R = R + h * B_r
@@ -21,7 +21,7 @@ def euler_step_symplectic(datetime, h, R, theta, phi, B_r, B_theta, B_phi):
     phi = phi + h * B_phi / (R ^ 2 + sin(theta) ** 2)
 
     # Get ephemeris and Bdots
-    R_ks, theta_ks, phi_ks = get_ephemeris(datetime)
+    R_ks, theta_ks, phi_ks = get_ephemerides_on_date(ephemerides, day)
     Bdot_r, Bdot_theta, Bdot_phi = get_Bdot(
         R, theta, phi, B_theta, B_phi, R_ks, theta_ks, phi_ks
     )
@@ -175,7 +175,8 @@ def euler_step_symplectic(datetime, h, R, theta, phi, B_r, B_theta, B_phi):
 #             """
 
 #             # project velocity vector onto radial direction unit-vector. This is what we
-#             # want to subtract from the velocity vector to obtain the tangental component (closed circular orbit)
+#             # want to subtract from the velocity vector to obtain the tangential
+#             # component (closed circular orbit)
 #             v_radial = (
 #                 v_x * target_distance_x + v_y * target_distance_y
 #             ) / target_distance
