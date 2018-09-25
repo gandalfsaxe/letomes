@@ -13,7 +13,7 @@ from .ephemerides import get_ephemerides_on_date
 
 
 @njit
-def euler_step_symplectic(day, ephemerides, h, R, theta, phi, B_r, B_theta, B_phi):
+def euler_step_symplectic(ephemerides_on_date, h, R, theta, phi, B_r, B_theta, B_phi):
     """Takes a single time step of the symplectic Euler algorithm"""
     # Update q
     R = R + h * B_r
@@ -21,7 +21,20 @@ def euler_step_symplectic(day, ephemerides, h, R, theta, phi, B_r, B_theta, B_ph
     phi = phi + h * B_phi / (R ^ 2 + sin(theta) ** 2)
 
     # Get ephemeris and Bdots
-    R_ks, theta_ks, phi_ks = get_ephemerides_on_date(ephemerides, day)
+    R_ks = []
+    theta_ks = []
+    phi_ks = []
+
+    for _, eph in ephemerides_on_date.items():
+
+        R_ks.append(eph["r"])
+        theta_ks.append(eph["theta"])
+        phi_ks.append(eph["phi"])
+
+    # print(R_ks)
+    # print(theta_ks)
+    # print(phi_ks)
+
     Bdot_r, Bdot_theta, Bdot_phi = get_Bdot(
         R, theta, phi, B_theta, B_phi, R_ks, theta_ks, phi_ks
     )

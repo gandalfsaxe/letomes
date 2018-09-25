@@ -35,6 +35,7 @@ LUNAR_ALTITUDE = 100.0  # km
 ORBITAL_TOLERANCE = 10  # km
 
 # function: symplectic (integrators.py)
+DAY0 = 0  # start day of simulation, day=0 is 2019-01-01 00:00:00
 h_DEFAULT = 1e-6  # dimless time
 h_MIN_DEFAULT = 1e-10  # dimless time
 STEP_ERROR_TOLERANCE = 1e-9  # dimless time

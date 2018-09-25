@@ -96,15 +96,18 @@ def get_ephemerides_on_date(ephemerides, date=0):
                 result = eph.loc[date]
             except KeyError:
                 closest_date = eph.index.get_loc(date, method="nearest")
-                print(
-                    "Date = {} rounded to date = {} (index = {})".format(
-                        date, eph.iloc[closest_date]["day"], closest_date
-                    )
-                )
-                print(eph.iloc[closest_date])
+                result = eph.iloc[closest_date]
+                # print(
+                #     "Date = {} rounded to date = {} (index = {})".format(
+                #         date, result["day"], closest_date
+                #     )
+                # )
+
+                # print(eph.iloc[closest_date])
             else:
-                print("Exact index found at date = {}".format(date))
-                print(eph.loc[date])
+                # print("Exact index found at date = {}".format(date))
+                # print(eph.loc[date])
+                pass
         else:
             raise ValueError(
                 "Date must be day in float or int (day=0 at 2019-01-01 00:00:00)"
@@ -119,5 +122,6 @@ if __name__ == "__main__":
     test_eph = get_ephemerides()
     print(test_eph)
 
-    test_eph_on_date = get_ephemerides_on_date(test_eph, 124.2)
+    test_eph_on_date = get_ephemerides_on_date(test_eph, 124.26)
     print(test_eph_on_date)
+
