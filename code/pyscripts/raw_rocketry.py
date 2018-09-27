@@ -1,4 +1,4 @@
-from orbsim.r3b_2d.simulators import launch_sim
+from orbsim.r3b_2d.simulators import run_sim
 from multiprocessing import Pool
 import multiprocessing as mp
 
@@ -32,11 +32,11 @@ def evolve(psis):
             epsis = psi + sigma * noise  # the point cloud around psi
 
             """calculate the reward in the cloud"""
-            psi_reward = -launch_sim(psi, duration=10, max_iter=1e7)[0]
+            psi_reward = -run_sim(psi, duration=10, max_iter=1e7)[0]
             reward = np.zeros(len(epsis))
             for jdx in range(len(epsis)):
                 epsi = epsis[jdx]
-                reward[jdx] = -launch_sim(epsi, duration=10, max_iter=1e5)[
+                reward[jdx] = -run_sim(epsi, duration=10, max_iter=1e5)[
                     0
                 ]  # launch a simulation for each point
             reward -= reward.mean()
@@ -84,7 +84,7 @@ def scale_result(success, res):
 
 @njit
 def fitness(psi):
-    res, _ = launch_sim(psi, duration=50, max_iter=1e7)
+    res, _ = run_sim(psi, duration=50, max_iter=1e7)
     return [-res]
 
 

@@ -1,4 +1,4 @@
-from orbsim.r3b_2d.simulators import launch_sim
+from orbsim.r3b_2d.simulators import run_sim
 from multiprocessing import Pool
 
 import matplotlib.pyplot as plt
@@ -7,7 +7,7 @@ import pygmo as pg
 from pygmo import algorithm
 import os
 import sys
-from orbsim.r3b_2d.simulators import launch_sim
+from orbsim.r3b_2d.simulators import run_sim
 from orbsim.plotting import orbitplot2d, orbitplot_non_inertial
 import time
 from numba import jit, njit

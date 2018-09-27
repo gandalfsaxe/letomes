@@ -7,7 +7,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from orbsim.r3b_2d.analyticals import *
-from orbsim.r3b_2d.simulators import launch_sim
+from orbsim.r3b_2d.simulators import run_sim
 from orbsim.plotting import orbitplot2d, orbitplot_non_inertial, multi_plot
 from orbsim import *
 from orbsim.r3b_2d import *
@@ -29,7 +29,7 @@ for title, psi, duration in examples:
     paths = []
     for i in range(N):
         permute_psi = np.array(psi) + np.array([i * 1e-6, i * 1e-6, i * 1e-6])
-        path = launch_sim(permute_psi, max_iter=1e7, duration=duration)
+        path = run_sim(permute_psi, max_iter=1e7, duration=duration)
         psis.append(permute_psi)
         paths.append(path)
 

@@ -43,8 +43,8 @@ STEP_ERROR_TOLERANCE = 1e-9  # dimless time
 
 ############### CHARACTERISTIC UNITS ###############
 
-UNIT_LENGTH = a_EARTH  # km
-UNIT_TIME = T_EARTH  # days
+UNIT_LENGTH = a_EARTH  # 1 AU in km/AU
+UNIT_TIME = T_EARTH  # 1 year in s/year
 UNIT_VELOCITY = 4.7403885  # km/s
 UNIT_VELOCITY2 = UNIT_LENGTH / (UNIT_TIME * DAY)  # km/s (just a check)
 
@@ -53,11 +53,11 @@ UNIT_VELOCITY2 = UNIT_LENGTH / (UNIT_TIME * DAY)  # km/s (just a check)
 
 # Initial orbit (Earth)
 LEO_RADIUS = EARTH_RADIUS + EARTH_ALTITUDE  # km
-LEO_VELOCITY = sqrt(G * EARTH_MASS / (LEO_RADIUS * 1000.0)) / 1000.0  # km/s
+LEO_VELOCITY = sqrt(G * EARTH_MASS / (LEO_RADIUS))  # km/s
 
 # Target orbit (Moon)
 LLO_RADIUS = LUNAR_RADIUS + LUNAR_ALTITUDE  # km
-LLO_VELOCITY = sqrt(G * LUNAR_MASS / (LLO_RADIUS * 1000.0)) / 1000.0  # km/s
+LLO_VELOCITY = sqrt(G * LUNAR_MASS / (LLO_RADIUS))  # km/s
 
 # Stationary Sun
 R_SUN = 0

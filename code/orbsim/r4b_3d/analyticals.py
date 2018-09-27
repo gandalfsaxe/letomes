@@ -2,7 +2,7 @@
 Equations of motion for R4B-3D system (Restricted 4-Body Problem in 3 Dimensions).
 Derived via Hamiltons's equations.
 """
-from math import cos, sin, sqrt, tan
+from math import cos, sin, sqrt, tan, acos, atan, pi
 
 from numba import njit
 
@@ -11,25 +11,25 @@ from orbsim.r4b_3d import ETA_EARTH, ETA_MARS, ETA_SUN
 eta_ks = [ETA_SUN, ETA_EARTH, ETA_MARS]
 
 
-@njit
+# @njit
 def get_Rdot(B_r):
     """Rdot(R, theta, phi, B_r, B_theta, B_phi) from Hamilton's equations"""
     return B_r
 
 
-@njit
+# @njit
 def get_thetadot(R, B_theta):
     """thetadot(R, theta, phi, B_r, B_theta, B_phi) from Hamilton's equations"""
     return B_theta / (R ** 2)
 
 
-@njit
+# @njit
 def get_phidot(R, theta, B_phi):
     """phidot(R, theta, phi, B_r, B_theta, B_phi) from Hamilton's equations"""
     return B_phi / (R ** 2 * sin(theta) ** 2)
 
 
-@njit
+# @njit
 def get_Bdot(R, theta, phi, B_theta, B_phi, R_ks, theta_ks, phi_ks):
     """
     All three Bdot from Hamilton's equations (Bdot_r, Bdot_theta and Bdot_phi)
@@ -57,16 +57,17 @@ def get_Bdot(R, theta, phi, B_theta, B_phi, R_ks, theta_ks, phi_ks):
     return Bdot_r, Bdot_theta, Bdot_phi
 
 
-@njit
+# @njit
 def Bdot_denominator(R, theta, phi, R_k, theta_k, phi_k):
     """fraction denominator for generalized momenta Bdot"""
     base = (R - R_k) ** 2 * (
         cos(theta) * cos(theta_k) + sin(theta) * sin(theta_k) * cos(phi - phi_k)
     )
+    print("base: {}".format(base))
     return base * sqrt(base)
 
 
-@njit
+# @njit
 def Bdot_numerators(R, theta, phi, R_k, theta_k, phi_k):
     """fraction numerators for generalized momenta Bdot"""
     n1 = -(
@@ -81,3 +82,48 @@ def Bdot_numerators(R, theta, phi, R_k, theta_k, phi_k):
     )
     n3 = -R * R_k * sin(theta) * sin(theta_k) * sin(phi - phi_k)
     return (n1, n2, n3)
+
+
+# TODO: Region
+
+
+def get_xyz(r, theta, phi):  # TODO: Optimize speed later
+    x = r * sin(theta) * cos(phi)
+    y = r * sin(theta) * sin(phi)
+    z = r * cos(theta)
+
+    return x, y, z
+
+
+def get_spherical(x, y, z):  # TODO: Optimize speed later
+    r = sqrt(x ** 2 + y ** 2 + z ** 2)
+    theta = acos(z / r)
+    if x >= 0:
+        phi = atan(y / x)
+    elif y >= 0:
+        phi = atan(y / x) + pi
+    else:
+        phi = atan(y / x) - pi
+
+    return r, theta, phi
+
+
+def get_distance_xyz(x1, y1, z1, x2, y2, z2):
+    return sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2)
+
+
+def get_distance_spherical(r1, theta1, phi1, r2, theta2, phi2):
+    return sqrt(
+        r1 ** 2
+        + r2 ** 2
+        - 2
+        * r1
+        * r2
+        * (
+            cos(theta1) * cos(theta2)
+            + sin(theta1)
+            * sin(theta2)
+            * (cos(phi1) * cos(phi2) + sin(phi1) * sin(phi2))
+        )
+    )
+

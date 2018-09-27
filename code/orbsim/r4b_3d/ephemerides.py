@@ -80,7 +80,10 @@ def get_ephemerides(
     return ephemerides
 
 
-def get_ephemerides_on_date(ephemerides, date=0):
+ephemerides = get_ephemerides()
+
+
+def get_ephemerides_on_date(date=0):
     """
     Get ephemerides of all bodies in input for specific date.
     --INPUT--
@@ -88,7 +91,6 @@ def get_ephemerides_on_date(ephemerides, date=0):
     date (int or float):                    Days since 2019-01-01 00:00:00
     """
     ephemerides_at_date_dict = {}
-
     for body, eph in ephemerides.items():
         # date is day (day=0 at 2019-01-01 00:00:00)
         if isinstance(date, int) or isinstance(date, float):
@@ -122,6 +124,6 @@ if __name__ == "__main__":
     test_eph = get_ephemerides()
     print(test_eph)
 
-    test_eph_on_date = get_ephemerides_on_date(test_eph, 124.26)
+    test_eph_on_date = get_ephemerides_on_date(124.26)
     print(test_eph_on_date)
 
