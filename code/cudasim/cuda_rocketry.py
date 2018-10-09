@@ -108,9 +108,6 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
                 # alpha[idx] = init_alpha * 10
                 scores[idx] = scores[idx] - 10
 
-        rankedscores = rankdata(scores, method="ordinal")
-        print(rankedscores, scores)
-
         # scores -= scores.mean()# it makes no sense to do this, PepeHands. this is the mean over all the initial points
         # scores /= scores.std()
         print("scores=", scores, scores.shape)
@@ -131,7 +128,10 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         scores = scores.reshape(nIndividuals, nJitter)
         jitter = jitter.reshape(nIndividuals, nJitter, 3)
         for idx in range(nIndividuals):
-            steps[idx] = np.dot(scores[idx], jitter[idx]) * alpha[idx]
+            ranked_scores = rankdata(
+                scores[idx]
+            )  # for each individual and its candidates, simply rank the fitness scores, so we get rid of outliers
+            steps[idx] = np.dot(ranked_scores[idx], jitter[idx]) * alpha[idx]
 
         # psi_scores = scores.T[0]
         # for idx, score in enumerate(psi_scores):
