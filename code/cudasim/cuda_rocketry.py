@@ -13,6 +13,7 @@ import time
 from numba import jit, njit
 import math
 from math import pi
+from scipy.stats import rankdata
 
 # from ctypes import cdll
 from ctypes import *
@@ -95,6 +96,7 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
         print("successes=", successes.sum())
 
         points = points.reshape(nIndividuals * nJitter, 3)
+
         for idx, _ in enumerate(scores):
             scores[idx] = -(
                 scores[idx] + points[idx][2]
@@ -104,10 +106,13 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
                 # punish paths that do not hit planet
                 # sigma[idx] = init_sigma * 10
                 # alpha[idx] = init_alpha * 10
-                scores[idx] = -((scores[idx] - 10) ** 2)
+                scores[idx] = scores[idx] - 10
 
-        scores -= scores.mean()
-        scores /= scores.std()
+        rankedscores = rankdata(scores, method="ordinal")
+        print(rankedscores, scores)
+
+        # scores -= scores.mean()# it makes no sense to do this, PepeHands. this is the mean over all the initial points
+        # scores /= scores.std()
         print("scores=", scores, scores.shape)
 
         # # find successes and log them
@@ -182,7 +187,7 @@ def ensure_bounds(pt):
 
 
 if __name__ == "__main__":
-    nIterations = 100
+    nIterations = 2
     nIndividuals = 1024
     nJitter = 32
     maxDuration = 7
