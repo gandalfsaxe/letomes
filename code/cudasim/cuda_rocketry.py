@@ -131,7 +131,7 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
             ranked_scores = rankdata(
                 scores[idx]
             )  # for each individual and its candidates, simply rank the fitness scores, so we get rid of outliers
-            steps[idx] = np.dot(ranked_scores[idx], jitter[idx]) * alpha[idx]
+            steps[idx] = np.dot(ranked_scores, jitter[idx]) * alpha[idx]
 
         # psi_scores = scores.T[0]
         # for idx, score in enumerate(psi_scores):
