@@ -9,7 +9,11 @@ import os
 import sys
 from orbsim.r3b_2d.simulators import run_sim
 from orbsim.plotting import orbitplot2d, orbitplot_non_inertial
-from orbsim.r3b_2d.analyticals import ensure_bounds, random_disjoint_intervals, collapse_intervals
+from orbsim.r3b_2d.analyticals import (
+    ensure_bounds,
+    random_disjoint_intervals,
+    collapse_intervals,
+)
 import time
 from numba import jit, njit
 import math
@@ -24,19 +28,18 @@ cudasim = cdll.LoadLibrary("./libcudasim.so")
 pi8 = pi / 8
 pi4 = pi / 4
 pi2 = pi / 2
-tau=2*pi
+tau = 2 * pi
 
 
-def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
+def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
     init_sigma = 0.3  # spread
     init_alpha = 0.003  # learningrate
-    sigma, alpha= init_sigma, init_alpha
+    sigma, alpha = init_sigma, init_alpha
     # sigma = np.ones(nIndividuals) * init_sigma
     # alpha = np.ones(nIndividuals) * init_alpha
     logfile = open(f"cudaES.log", "w")
     winners = []
     intermediate_winners = []
-    bounds = {'pos':np.array([[0,0*tau]]),'ang':np.array([[0,1*tau/16],[tau/2-tau/16,tau/2]]),'burn':np.array([[3.2,3.9]])}
     bounds_list = bounds.values()
     for _ in range(nIterations):
 
@@ -96,20 +99,27 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
 
         print("successes=", successes.sum())
 
-        for i,_ in enumerate(scores):
+        for i, _ in enumerate(scores):
             scores[i] += points[i][2]
             if not successes[i]:
                 scores[i] += 10
                 scores[i] *= 10
 
-        successes=successes.reshape(nJitter,nIndividuals)
-        scores = scores.reshape(nIndividuals,nJitter)
-        ranked_scores = np.array([rankdata(sig_eps,method='ordinal') for sig_eps in scores])
+        successes = successes.reshape(nJitter, nIndividuals)
+        scores = scores.reshape(nIndividuals, nJitter)
+        ranked_scores = np.array(
+            [rankdata(sig_eps, method="ordinal") for sig_eps in scores]
+        )
         ranked_scores = -ranked_scores
 
-        steps=np.zeros([nIndividuals,3])
-        jitter = jitter.transpose(1,0,2)
-        steps = np.array([np.dot(ranked_scores[idx],jitter[idx])*alpha for idx in range(len(steps))])
+        steps = np.zeros([nIndividuals, 3])
+        jitter = jitter.transpose(1, 0, 2)
+        steps = np.array(
+            [
+                np.dot(ranked_scores[idx], jitter[idx]) * alpha
+                for idx in range(len(steps))
+            ]
+        )
 
         successes = successes.reshape(nIndividuals, nJitter)
         points = points.reshape(nIndividuals, nJitter, 3)
@@ -129,36 +139,11 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
     logfile.close()
 
 
-class saddle_space:
-    def __init__(self):
-        pass
-
-    def fitness(self, psi):
-        # res, _ = launch_sim(psi, duration=50, max_iter=1e7)
-        # return [-res]
-        return [0]
-
-    @jit
-    def get_bounds(self):
-        return {'pos':np.array([[0,tau]]),'ang':np.array([[0,1*tau/16],[tau/2-tau/16,tau/2]]),'burn':np.array([[3.2,3.9]])}
-
-    # @jit
-    # def get_ranges(self):
-    #     bounds = self.get_bounds()
-    #     return np.subtract(bounds[1], bounds[0])
-
-    def check_bounds(self,v,bounds):
-        for b in bounds:
-            if v>=b[0] and v<=b[1]:
-                return v
-        return min([(abs(x-v),x) for x in bounds.flatten()])[1]
-
-    def ensure_bounds(self, pt):
-        bdict=self.get_bounds()
-        for i,b in enumerate(bdict.values()):
-            pt[i] = self.check_bounds(pt[i],b)
-        
-        return pt
+def initialize_psis(n, bounds):
+    psis = [
+        [random_disjoint_intervals(bounds[idx]) for idx in bounds] for _ in range(n)
+    ]
+    return psis
 
 
 if __name__ == "__main__":
@@ -167,10 +152,16 @@ if __name__ == "__main__":
     nJitter = 32
     maxDuration = 7
     maxSteps = 10e6
-    prob = pg.problem(saddle_space())
-    pop = pg.population(prob=prob, size=nIndividuals)
+    bounds = {
+        "pos": np.array([[0, 0 * tau]]),
+        "ang": np.array([[0, 1 * tau / 16], [tau / 2 - tau / 16, tau / 2]]),
+        "burn": np.array([[3.2, 3.9]]),
+    }
+    psis = initialize_psis(nIndividuals, bounds.values())
     # pop.set_x(0, [-2.277654673852600, 0.047996554429844, 3.810000000000000])
     # pop.set_x(1, [-0.138042744751570, -0.144259374836607, 3.127288444444444])
     # pop.set_x(2, [-2.086814820119193, -0.000122173047640, 3.111181716545691])
     # print(pop)
-    evolve(pop.get_x(), nIterations, nIndividuals, nJitter, maxDuration, maxSteps)
+    evolve(
+        psis, bounds.values(), nIterations, nIndividuals, nJitter, maxDuration, maxSteps
+    )
