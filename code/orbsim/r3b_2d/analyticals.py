@@ -85,3 +85,19 @@ def random_disjoint_intervals(bounds):
     ub = bounds[idx][1]
     R_star = (ub - lb) * npr.rand() + lb
     return R_star
+
+def check_bound(v,bound):
+    '''
+    checks a single value against its bounds, and returns 
+    the closest bound if it's in violation 
+    '''
+    for b in bound:
+        if v>=b[0] and v<=b[1]:
+            return v
+    return min([(abs(x-v),x) for x in bound.flatten()])[1]
+
+def ensure_bounds(psi, bounds):
+    new_psi=[]
+    for v, bound in zip(psi,bounds):
+        new_psi.append(check_bound(v,bound))
+    return new_psi

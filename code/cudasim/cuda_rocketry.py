@@ -9,6 +9,7 @@ import os
 import sys
 from orbsim.r3b_2d.simulators import run_sim
 from orbsim.plotting import orbitplot2d, orbitplot_non_inertial
+from orbsim.r3b_2d.analyticals import ensure_bounds, random_disjoint_intervals, collapse_intervals
 import time
 from numba import jit, njit
 import math
@@ -23,34 +24,34 @@ cudasim = cdll.LoadLibrary("./libcudasim.so")
 pi8 = pi / 8
 pi4 = pi / 4
 pi2 = pi / 2
+tau=2*pi
 
 
 def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
-    init_sigma = 0.1  # spread
-    init_alpha = 0.03  # learningrate
-
-    sigma = np.ones(nIndividuals) * init_sigma
-    alpha = np.ones(nIndividuals) * init_alpha
+    init_sigma = 0.3  # spread
+    init_alpha = 0.003  # learningrate
+    sigma, alpha= init_sigma, init_alpha
+    # sigma = np.ones(nIndividuals) * init_sigma
+    # alpha = np.ones(nIndividuals) * init_alpha
     logfile = open(f"cudaES.log", "w")
     winners = []
     intermediate_winners = []
+    bounds = {'pos':np.array([[0,0*tau]]),'ang':np.array([[0,1*tau/16],[tau/2-tau/16,tau/2]]),'burn':np.array([[3.2,3.9]])}
+    bounds_list = bounds.values()
     for _ in range(nIterations):
 
         """
         make list of all paths to integrate
         """
-        # Try randn when it works, to see if better.           -----v
         np.random.seed(0)
         jitter = np.random.rand(nIndividuals, nJitter, 3)
-        jitter = np.array([sigma[idx] * jitt for idx, jitt in enumerate(jitter)])
+        jitter = np.array([sigma * jitt for idx, jitt in enumerate(jitter)])
         jitter = jitter.reshape(nJitter, nIndividuals, 3)
-        jitter[0] *= 0  # Make sure all set island phis are evaluated without jitter
+        jitter[0] *= 0  # Make sure all set individuals are evaluated without jitter
         points = jitter + psis
-        # jitter = [sigma[idx] * jitt for idx, jitt in enumerate(jitter)]
-        # jitter *= saddle_space().get_ranges()  # I put this here! Not in paper!
         points = points.reshape(nIndividuals * nJitter, 3)
         for i, pt in enumerate(points):
-            points[i] = ensure_bounds(pt)
+            points[i] = ensure_bounds(pt, bounds_list)
         points = points.reshape(nJitter, nIndividuals, 3)
         successes = np.zeros(nIndividuals * nJitter, dtype=bool)
         scores = np.zeros(nIndividuals * nJitter)
@@ -95,48 +96,20 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
 
         print("successes=", successes.sum())
 
-        points = points.reshape(nIndividuals * nJitter, 3)
+        for i,_ in enumerate(scores):
+            scores[i] += points[i][2]
+            if not successes[i]:
+                scores[i] += 10
+                scores[i] *= 10
 
-        for idx, _ in enumerate(scores):
-            scores[idx] = -(
-                scores[idx] + points[idx][2]
-            )  # add burnDv to score and negate score since we are trying to minimize it
+        successes=successes.reshape(nJitter,nIndividuals)
+        scores = scores.reshape(nIndividuals,nJitter)
+        ranked_scores = np.array([rankdata(sig_eps,method='ordinal') for sig_eps in scores])
+        ranked_scores = -ranked_scores
 
-            if not successes[idx]:
-                # punish paths that do not hit planet
-                # sigma[idx] = init_sigma * 10
-                # alpha[idx] = init_alpha * 10
-                scores[idx] = scores[idx] - 10
-
-        # scores -= scores.mean()# it makes no sense to do this, PepeHands. this is the mean over all the initial points
-        # scores /= scores.std()
-        print("scores=", scores, scores.shape)
-
-        # # find successes and log them
-        # winners = np.array(
-        #     [
-        #         (points[idx], scores.reshape(nIndividuals * nJitter)[idx])
-        #         for idx, success in enumerate(successes)
-        #         if success
-        #     ]
-        # )
-        # for psi, score in winners:
-        #     logfile.write(f"{psi}, {score}\n")
-
-        # generate steps for next generation
-        steps = np.zeros([nIndividuals, 3])
-        scores = scores.reshape(nIndividuals, nJitter)
-        jitter = jitter.reshape(nIndividuals, nJitter, 3)
-        for idx in range(nIndividuals):
-            ranked_scores = rankdata(
-                scores[idx]
-            )  # for each individual and its candidates, simply rank the fitness scores, so we get rid of outliers
-            steps[idx] = np.dot(ranked_scores, jitter[idx]) * alpha[idx]
-
-        # psi_scores = scores.T[0]
-        # for idx, score in enumerate(psi_scores):
-        #     sigma[idx] = init_sigma
-        #     alpha[idx] = init_alpha
+        steps=np.zeros([nIndividuals,3])
+        jitter = jitter.transpose(1,0,2)
+        steps = np.array([np.dot(ranked_scores[idx],jitter[idx])*alpha for idx in range(len(steps))])
 
         successes = successes.reshape(nIndividuals, nJitter)
         points = points.reshape(nIndividuals, nJitter, 3)
@@ -147,7 +120,7 @@ def evolve(psis, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
             for jdx, succ in enumerate(successes[idx]):
                 if succ:
                     intermediate_winners.append(
-                        str([idx, points[idx][jdx], scores[idx][jdx]]) + "\n"
+                        str(" -- " + [idx, points[idx][jdx], scores[idx][jdx]]) + "\n"
                     )
 
         psis += steps
@@ -167,23 +140,25 @@ class saddle_space:
 
     @jit
     def get_bounds(self):
-        return ([0, 0, 3], [2 * pi, 2 * pi, 4])
+        return {'pos':np.array([[0,tau]]),'ang':np.array([[0,1*tau/16],[tau/2-tau/16,tau/2]]),'burn':np.array([[3.2,3.9]])}
 
-    @jit
-    def get_ranges(self):
-        bounds = self.get_bounds()
-        return np.subtract(bounds[1], bounds[0])
+    # @jit
+    # def get_ranges(self):
+    #     bounds = self.get_bounds()
+    #     return np.subtract(bounds[1], bounds[0])
 
+    def check_bounds(self,v,bounds):
+        for b in bounds:
+            if v>=b[0] and v<=b[1]:
+                return v
+        return min([(abs(x-v),x) for x in bounds.flatten()])[1]
 
-@njit
-def ensure_bounds(pt):
-    pos, ang, burn = pt
-    lb, ub = ([0, 0, 3], [2 * pi, 2 * pi, 4])
-    return [
-        np.mod(pos, ub[0] - lb[0]),
-        np.mod(ang, ub[1] - lb[1]),
-        max(lb[2], min(ub[2], burn)),
-    ]
+    def ensure_bounds(self, pt):
+        bdict=self.get_bounds()
+        for i,b in enumerate(bdict.values()):
+            pt[i] = self.check_bounds(pt[i],b)
+        
+        return pt
 
 
 if __name__ == "__main__":
