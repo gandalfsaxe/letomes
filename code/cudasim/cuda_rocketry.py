@@ -141,7 +141,7 @@ def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSte
 
 def initialize_psis(n, bounds):
     psis = [
-        [random_disjoint_intervals(bounds[idx]) for idx in bounds] for _ in range(n)
+        [random_disjoint_intervals(bounds) for bound in bounds] for _ in range(n)
     ]
     return psis
 
