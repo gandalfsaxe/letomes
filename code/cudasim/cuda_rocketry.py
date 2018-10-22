@@ -162,6 +162,7 @@ if __name__ == "__main__":
     # pop.set_x(1, [-0.138042744751570, -0.144259374836607, 3.127288444444444])
     # pop.set_x(2, [-2.086814820119193, -0.000122173047640, 3.111181716545691])
     # print(pop)
+    psis[0] = [-2.277654673852600, 0.047996554429844, 3.810000000000000]
     evolve(
         psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSteps
     )
