@@ -130,7 +130,7 @@ def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSte
             for jdx, succ in enumerate(successes[idx]):
                 if succ:
                     intermediate_winners.append(
-                        str(" -- " + [idx, points[idx][jdx], scores[idx][jdx]]) + "\n"
+                        " -- " + str([idx, points[idx][jdx], scores[idx][jdx]]) + "\n"
                     )
 
         psis += steps
