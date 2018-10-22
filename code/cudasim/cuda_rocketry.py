@@ -41,13 +41,13 @@ def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSte
     winners = []
     intermediate_winners = []
     bounds_list = bounds.values()
+    np.random.seed(0)
     for _ in range(nIterations):
 
         """
         make list of all paths to integrate
         """
-        np.random.seed(0)
-        jitter = np.random.rand(nIndividuals, nJitter, 3)
+        jitter = np.random.randn(nIndividuals, nJitter, 3)
         jitter = np.array([sigma * jitt for idx, jitt in enumerate(jitter)])
         jitter = jitter.reshape(nJitter, nIndividuals, 3)
         jitter[0] *= 0  # Make sure all set individuals are evaluated without jitter
@@ -98,14 +98,13 @@ def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSte
         )
 
         print("successes=", successes.sum())
-        points=points.reshape(nIndividuals*nJitter,3)
+        points = points.reshape(nIndividuals * nJitter, 3)
         for i, _ in enumerate(scores):
             scores[i] += points[i][2]
             if not successes[i]:
                 scores[i] += 10
                 scores[i] *= 10
 
-        successes = successes.reshape(nJitter, nIndividuals)
         scores = scores.reshape(nIndividuals, nJitter)
         ranked_scores = np.array(
             [rankdata(sig_eps, method="ordinal") for sig_eps in scores]
@@ -121,28 +120,31 @@ def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSte
             ]
         )
 
-        successes = successes.reshape(nIndividuals, nJitter)
         points = points.reshape(nIndividuals, nJitter, 3)
-        # scores = scores.reshape(nIndividuals, nJitter)
+        scores = scores.reshape(nIndividuals, nJitter)
+        successes = successes.reshape(nIndividuals, nJitter)
         for idx, psi in enumerate(psis):
             if successes[idx][0]:
                 winners.append(str([idx, psi, scores[idx][0]]) + "\n")
-            for jdx, succ in enumerate(successes[idx]):
+            for jdx, succ in enumerate(
+                successes[idx][1:]
+            ):  # all but the first value, since the first value is the individual itself
                 if succ:
                     intermediate_winners.append(
-                        " -- " + str([idx, points[idx][jdx], scores[idx][jdx]]) + "\n"
+                        " -- "
+                        + str([idx, points[idx][jdx + 1], scores[idx][jdx + 1]])
+                        + "\n"
                     )
 
         psis += steps
 
     logfile.writelines(winners)
+    logfile.writelines(intermediate_winners)
     logfile.close()
 
 
 def initialize_psis(n, bounds):
-    psis = [
-        [random_disjoint_intervals(bound) for bound in bounds] for _ in range(n)
-    ]
+    psis = [[random_disjoint_intervals(bound) for bound in bounds] for _ in range(n)]
     return psis
 
 
@@ -162,7 +164,5 @@ if __name__ == "__main__":
     # pop.set_x(1, [-0.138042744751570, -0.144259374836607, 3.127288444444444])
     # pop.set_x(2, [-2.086814820119193, -0.000122173047640, 3.111181716545691])
     # print(pop)
-    psis[0] = [-2.277654673852600, 0.047996554429844, 3.810000000000000]
-    evolve(
-        psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSteps
-    )
+    psis[0] = [4.005530633326986, 0.047996554429844, 3.810000000000000]
+    evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSteps)
