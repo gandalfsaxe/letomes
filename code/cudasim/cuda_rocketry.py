@@ -98,7 +98,7 @@ def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSte
         )
 
         print("successes=", successes.sum())
-
+        points=points.reshape(nIndividuals*nJitter,3)
         for i, _ in enumerate(scores):
             scores[i] += points[i][2]
             if not successes[i]:
@@ -157,11 +157,11 @@ if __name__ == "__main__":
         "ang": np.array([[0, 1 * tau / 16], [tau / 2 - tau / 16, tau / 2]]),
         "burn": np.array([[3.2, 3.9]]),
     }
-    psis = initialize_psis(nIndividuals, list(bounds.values()))
+    psis = initialize_psis(nIndividuals, bounds.values())
     # pop.set_x(0, [-2.277654673852600, 0.047996554429844, 3.810000000000000])
     # pop.set_x(1, [-0.138042744751570, -0.144259374836607, 3.127288444444444])
     # pop.set_x(2, [-2.086814820119193, -0.000122173047640, 3.111181716545691])
     # print(pop)
     evolve(
-        psis, bounds.values(), nIterations, nIndividuals, nJitter, maxDuration, maxSteps
+        psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSteps
     )
