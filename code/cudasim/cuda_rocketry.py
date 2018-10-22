@@ -153,7 +153,7 @@ if __name__ == "__main__":
     maxDuration = 7
     maxSteps = 10e6
     bounds = {
-        "pos": np.array([[0, 0 * tau]]),
+        "pos": np.array([[0, 1 * tau]]),
         "ang": np.array([[0, 1 * tau / 16], [tau / 2 - tau / 16, tau / 2]]),
         "burn": np.array([[3.2, 3.9]]),
     }
