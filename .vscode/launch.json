@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "Python: Debug LEO",
             "type": "python",
@@ -21,6 +22,17 @@
             "request": "launch",
             "cwd": "${workspaceFolder}/code",
             "program": "${workspaceFolder}/code/main_bsc.py",
+            "args": [
+                "sh"
+            ],
+            "stopOnEntry": false
+        },
+        {
+            "name": "Python: Debug R4B",
+            "type": "python",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/code",
+            "program": "${workspaceFolder}/code/run_r4b.py",
             "args": [
                 "sh"
             ],
