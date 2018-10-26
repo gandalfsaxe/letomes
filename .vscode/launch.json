@@ -28,7 +28,7 @@
             "stopOnEntry": false
         },
         {
-            "name": "Python: Debug R4B",
+            "name": "Python: Debug Run R4B",
             "type": "python",
             "request": "launch",
             "cwd": "${workspaceFolder}/code",
