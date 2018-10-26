@@ -1,6 +1,14 @@
 """
 Equations of motion for R4B-3D system (Restricted 4-Body Problem in 3 Dimensions).
 Derived via Hamiltons's equations.
+
+1. `analyticals.py`: set up the equations of motion.
+
+2. `integrators.py`: discretize the equations of motion and defines a single time step of the
+    chosen numerical algorithm.
+
+3. `simulators.py`: run the single steps from `integrators.py` repeatedly for some initial
+    conditions and stopping conditions.
 """
 from math import cos, sin, sqrt, tan, acos, atan, pi
 
