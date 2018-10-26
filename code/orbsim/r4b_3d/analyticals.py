@@ -261,7 +261,7 @@ def get_leo_speed(altitude=160):
         f"Initial LEO orbital speed at {altitude} km altitude (geocentric, km/s): "
         f"{v_kmps}"
         f" (Expected: 7.812 km/s (via Wolfram Alpha))"
-        # https://www.wolframalpha.com/input/?i=circular+orbital+speed+around+earth+altitude+160km
+        # https://www.wolframalpha.com/input/?i=circular+orbital+speed+earth+altitude+160km
     )
 
     return v_kmps
@@ -279,18 +279,24 @@ def get_leo_period(altitude=160):
 
     T = 2 * pi * sqrt((EARTH_RADIUS + altitude) ** 3 / ETA_EARTH)
 
-    logging.debug(f"Initial LEO orbital period at {altitude} km altitude (s): {T}")
+    logging.debug(
+        f"Initial LEO orbital period at {altitude} km altitude (s): {T}"
+        f"(Expected: 5261 s (via Wolfram Alpha)"
+    )
+    # https://www.wolframalpha.com/input/?i=circular+orbital+period+earth+altitude+160km
+
     logging.debug(
         f"Initial LEO orbital period at {altitude} km altitude (hours): {T/3600}"
-        f"Expected: ()"
+        f"(Expected: 1.461 h  (Via Wolfram Alpha)"
     )
+    # https://www.wolframalpha.com/input/?i=circular+orbital+period+earth+altitude+160km
 
     return T
 
 
 def get_leo_position_and_velocity(ephemerides, day, altitude=160):
     """Calculate direction of initial velocity vector.
-    Assumes ephemerides are given with 1 day interval. With a series of cross products, 
+    Assumes ephemerides are given with 1 day interval. With a series of cross products,
     calculate a LEO position perpendicular and velocity parallel to Earth's velocity
     vector in same direction and plane as Earth.
 
