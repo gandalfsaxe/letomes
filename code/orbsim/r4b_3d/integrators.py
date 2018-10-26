@@ -1,23 +1,26 @@
 """
 Implements symplectic integrators that integrates H-R4B system equations.
+
+1. `analyticals.py`: set up the equations of motion.
+
+2. `integrators.py`: discretize the equations of motion and defines a single time step of the
+    chosen numerical algorithm.
+
+3. `simulators.py`: run the single steps from `integrators.py` repeatedly for some initial
+    conditions and stopping conditions.
 """
+
+import logging
 
 # import time
 from math import pi, sin
 
-from numba import njit  # boolean, float64, jit
-
-from orbsim.r4b_3d import (
-    LEO_RADIUS_NONDIM,
-    LEO_VELOCITY_NONDIM,
-    UNIT_LENGTH,
-    UNIT_TIME,
-    UNIT_VELOCITY,
-    h_DEFAULT,
-    h_MIN_DEFAULT,
-)
 from orbsim.r4b_3d.analyticals import get_Bdot
 
+# from numba import njit  # boolean, float64, jit
+
+
+# logger = logging.getLogger()
 
 # @njit
 def euler_step_symplectic(ephemerides_on_date, h, R, theta, phi, B_r, B_theta, B_phi):
