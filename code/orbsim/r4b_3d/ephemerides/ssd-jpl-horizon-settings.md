@@ -10,7 +10,7 @@ Ephemeris Type [change] :  	OBSERVER
 **Display/Output [change] : 	download/save (plain text file)**
 
 _NOTE:_
-year 2265 chosen due to the output lines are limited. Chosing e.g. 2019-3019 gave error:
+year 2265 chosen due to the output lines are limited. Choosing e.g. 2019-3019 gave error:
 `Projected output length (~365243) exceeds 90024 line max -- change step-size`
 
 So we chose:
@@ -21,6 +21,8 @@ It also turns out that Mars ephemerides [only goes](https://ssd.jpl.nasa.gov/eph
 ## Table Settings
 
 See "Current Settings" above for enabled quantities. Many quantities are not used to included anyway due to being of potential interest.
+
+**Boldface:** changed from default
 
 NOTE the following quantities were `n.a.` even though they could've been of potential interest:
 - 27.	Sun-Target radial & -vel pos. angle
