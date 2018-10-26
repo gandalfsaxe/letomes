@@ -3,23 +3,28 @@ Functions for getting celestial body positions (ephemerides).
 These are used as input in equations of motions (analyticals.py) for distances to
 various celestial bodies.
 """
+import logging
 import os
+from math import floor
 
 import pandas as pd
 
+from orbsim.r4b_3d.logging import logging_setup
+
+logging_setup()
+
+logger = logging.getLogger()
+
 
 def get_ephemerides(
-    relative_path="ephemerides/",
-    planets=("earth", "mars"),
-    end_year="2020",
-    interpolation=9,
+    relative_path="ephemerides/", planets=("earth", "mars"), end_year="2020"
 ):
-    """
+    """ Get table of ephemerides for all specified bodies from 2019-01-01 00:00:00 until
+    01-01 00:00:00 of the end year.
     --INPUT--
     relative_path (str):            relative path of ephemerides files (to this script)
-    planets TUP(str):              list of planets to include
+    planets TUP(str):               list of planets to include
     end_year (str):                 end_year-01-01 will be last date in ephemerides.
-    interpolation (Boolean or int): number of interpolation points between two days
 
     --OUTOUT--:
     ephemerides (DICT("body": pandas.df))
@@ -28,44 +33,28 @@ def get_ephemerides(
     # Input value checks
     VALID_planets = ["earth", "mars"]
     VALID_END_YEARS = ["2020", "2039", "2262"]
-    VALID_INTERPOLATION_POINTS = [9]
 
     for planet in planets:
         if planet not in VALID_planets:
             raise ValueError(
-                "planets contain invalid planets (valid: 'earth' and 'mars')"
+                "Planets contain invalid planets (valid: 'earth' and 'mars')"
             )
 
     if end_year not in VALID_END_YEARS:
         raise ValueError("Invalid end year. Must be '2020', '2039' or '2262'.")
 
-    if interpolation not in VALID_INTERPOLATION_POINTS:
-        raise ValueError("Invalid INTERPOLATION_POINTS. Must be 9.")
-
     # Change workdir, construct filenames
-
     path_parts = os.path.realpath(__file__).split("/")[:-1]
     path_parts.append(relative_path)
     abs_path = "/".join(path_parts)
 
     os.chdir(abs_path)
-    # cwd = os.getcwd()
-    # print(cwd)
-
-    if interpolation:
-        extrapolated_filename_element = "_extrapolated-{}".format(interpolation)
-    else:
-        extrapolated_filename_element = ""
+    logging.debug(f"Current working directory: {os.getcwd()}")
 
     ephemerides_filename_dict = {}
 
     for planet in planets:
-        ephemerides_filename_dict[planet] = "{}_2019-{}{}.csv".format(
-            planet, end_year, extrapolated_filename_element
-        )
-    # print(ephemerides_filename_dict)
-
-    # Import csv files into dict
+        ephemerides_filename_dict[planet] = f"{planet}_2019-{end_year}.csv"
 
     # Read CSV files into dict
     ephemerides = {}
@@ -75,55 +64,49 @@ def get_ephemerides(
             0, "day", imported_body.index
         )  # 'day' also as first column
         ephemerides[body] = imported_body
-    # print(ephemerides)
 
     return ephemerides
 
 
-ephemerides = get_ephemerides()
-
-
-def get_ephemerides_on_date(date=0):
+def get_ephemerides_on_date(ephemerides, date=0):
     """
-    Get ephemerides of all bodies in input for specific date.
+    Get ephemerides of all bodies in input for specific input day (continuous).
     --INPUT--
     ephemerides (DICT("body": pandas.df)):  Dict of ephemerides, from get_ephemerides()
     date (int or float):                    Days since 2019-01-01 00:00:00
     """
-    ephemerides_at_date_dict = {}
+    day = date
+
+    day_lower = floor(day)
+    day_upper = day_lower + 1
+    day_increment = day % 1
+
+    interpolated_dict = {}
+
     for body, eph in ephemerides.items():
-        # date is day (day=0 at 2019-01-01 00:00:00)
-        if isinstance(date, int) or isinstance(date, float):
-            try:
-                result = eph.loc[date]
-            except KeyError:
-                closest_date = eph.index.get_loc(date, method="nearest")
-                result = eph.iloc[closest_date]
-                # print(
-                #     "Date = {} rounded to date = {} (index = {})".format(
-                #         date, result["day"], closest_date
-                #     )
-                # )
 
-                # print(eph.iloc[closest_date])
-            else:
-                # print("Exact index found at date = {}".format(date))
-                # print(eph.loc[date])
-                pass
-        else:
-            raise ValueError(
-                "Date must be day in float or int (day=0 at 2019-01-01 00:00:00)"
-            )  # TODO: Implement support for datetime / Timestamp
+        start_position_df = eph.iloc[[day_lower]]
+        end_position_df = eph.iloc[[day_upper]]
 
-        ephemerides_at_date_dict[body] = result
+        start_position_series = start_position_df.iloc[0]
+        end_position_series = end_position_df.iloc[0]
 
-    return ephemerides_at_date_dict
+        diff_position_series = end_position_series - start_position_series
+
+        interpolated_position = (
+            start_position_series + day_increment * diff_position_series
+        )
+
+        interpolated_dict[body] = interpolated_position
+
+    return interpolated_dict
 
 
 if __name__ == "__main__":
+
     test_eph = get_ephemerides()
-    print(test_eph)
+    logging.info(f"Ephemerides table:\n {test_eph}")
 
-    test_eph_on_date = get_ephemerides_on_date(124.26)
-    print(test_eph_on_date)
-
+    test_date = 124.26
+    test_eph_on_date = get_ephemerides_on_date(test_eph, test_date)
+    logging.info(f"Ephemerides on date {test_date}:\n {test_eph_on_date}")
