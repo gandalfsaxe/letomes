@@ -43,9 +43,10 @@ STEP_ERROR_TOLERANCE = 1e-9  # dimless time
 
 ############### CHARACTERISTIC UNITS ###############
 
-UNIT_LENGTH = a_EARTH  # 1 AU in km/AU
+UNIT_LENGTH = 149597870.700  # km/AU
+# (This is the precise definition, see https://en.wikipedia.org/wiki/Astronomical_unit)
 UNIT_TIME = T_EARTH  # 1 year in s/year
-UNIT_VELOCITY = 4.7403885  # km/s
+UNIT_VELOCITY = 4.7403885  # km/s (or 1 AU/y in km/s)
 UNIT_VELOCITY2 = UNIT_LENGTH / (UNIT_TIME * DAY)  # km/s (just a check)
 
 
