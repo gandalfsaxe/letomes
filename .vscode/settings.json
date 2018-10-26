@@ -16,7 +16,8 @@
     // "--disable=W0614", // Unused imports from wildcard import
     "--disable=C0103",  // Ignores mixed case constants,
     "--disable=W0511", // Ignores TODO
-    "--disable=C0330" // Ignores "Wrong hanging indentation..." func header due to black
+    "--disable=C0330", // Ignores "Wrong hanging indentation..." func header due to black
+    "--disable=W1203" // Ignores "Use % formatting in logging..."
 ],
   // PYTHON UNIT TEST
   "python.unitTest.pyTestEnabled": true,
@@ -154,7 +155,9 @@
     "chdir",
     "citecolor",
     "corotating",
+    "daym",
     "dimensionalities",
+    "discretize",
     "discretized",
     "ephemerides",
     "ephemeris",
@@ -164,10 +167,13 @@
     "iloc",
     "installable",
     "integrators",
+    "kmps",
     "letomes",
+    "linalg",
     "linkcolor",
     "mkdir",
     "mplot",
+    "nargs",
     "njit",
     "nondim",
     "nondimensionalization",
@@ -184,6 +190,7 @@
     "pykep",
     "pyplot",
     "pytest",
+    "qdot",
     "reimplemented",
     "reproducibility",
     "siunitx",
@@ -205,7 +212,8 @@
     "ylim",
     "ymax",
     "ymin",
-    "yscale"
+    "yscale",
+    "zdot"
   ]
 }
 
