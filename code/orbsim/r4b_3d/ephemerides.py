@@ -21,6 +21,12 @@ def get_ephemerides(
 ):
     """ Get table of ephemerides for all specified bodies from 2019-01-01 00:00:00 until
     01-01 00:00:00 of the end year.
+
+    Note that the raw ephemerides files (e.g. `horizons_results_earth_2019-2020.txt`)
+    are converted into the pre-processed files (e.g. `earth_2019-2020.csv`) by notebook
+    `eph-import.ipynb`, downloaded from URL https://ssd.jpl.nasa.gov/horizons.cgi
+    , with settings as described in `ssd-jpl-horizon-settings.md`.
+
     --INPUT--
     relative_path (str):            relative path of ephemerides files (to this script)
     planets TUP(str):               list of planets to include
