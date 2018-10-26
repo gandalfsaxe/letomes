@@ -66,8 +66,8 @@ def symplectic(
     t = 0  # total elapsed time
     x, y, p_x, p_y = [x0, y0, p0_x, p0_y]
 
-    tol = (STEP_ERROR_TOLERANCE) * (1e7 / max_iter)
-    print(tol)
+    tol = STEP_ERROR_TOLERANCE  # * (1e7 / max_iter)
+    # print(tol)
 
     path_storage = []
     path_storage.append([x, y, p_x, p_y, h, t])
