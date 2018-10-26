@@ -10,7 +10,7 @@ Implements symplectic integrators that integrates H-R4B system equations.
     conditions and stopping conditions.
 """
 
-import logging
+#  import logging
 
 # import time
 from math import pi, sin

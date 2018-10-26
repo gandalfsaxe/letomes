@@ -7,7 +7,7 @@ import logging
 
 def logging_setup(level="debug"):
     """Setup logging at specified level.
-   
+
     Keyword Arguments:
         level {str} -- debug level (default: {debug})
     """
@@ -34,7 +34,7 @@ def logging_setup(level="debug"):
         "%(asctime)s - %(levelname)s (%(funcName)s): %(message)s"
     )
 
-    fh = logging.FileHandler("code/logs/log.txt")
+    fh = logging.FileHandler("logs/log.txt")
     fh.setLevel(level)
     fh.setFormatter(formatter)
     logger.addHandler(fh)
