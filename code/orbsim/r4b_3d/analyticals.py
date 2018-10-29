@@ -28,7 +28,7 @@ from orbsim.r4b_3d import (
     UNIT_VELOCITY,
 )
 
-from orbsim.r4b_3d.ephemerides import get_ephemerides
+from orbsim.r4b_3d.ephemerides import get_ephemerides, get_ephemerides_on_day
 
 # from orbsim.r4b_3d.logging import logging_setup
 
@@ -130,7 +130,7 @@ def Bdot_numerators(R, theta, phi, R_k, theta_k, phi_k):
 # TODO: Region
 
 
-def get_B_R(Rdot):
+def get_B_r(Rdot):
     return Rdot
 
 
@@ -316,8 +316,11 @@ def get_leo_position_and_velocity(ephemerides, day, altitude=160):
 
     # Earth velocity at day = dr/dt ≈ Δr/Δt, where Δt = 1 day
     # i.e. Earth velocity estimated by difference of position vector 1 day apart / 1 day
-    earth_day = ephemerides["earth"].iloc[day]
-    earth_daym1 = ephemerides["earth"].iloc[day - 1]
+    eph_day = get_ephemerides_on_day(ephemerides, day)
+    eph_daym1 = get_ephemerides_on_day(ephemerides, day - 1)
+
+    earth_day = eph_day["earth"]
+    earth_daym1 = eph_daym1["earth"]
     earth_diff = earth_day - earth_daym1
 
     # Get positions of Earth at {day, day-1} in spherical and cartesian coordinates
