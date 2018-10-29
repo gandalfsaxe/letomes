@@ -16,6 +16,7 @@ conditions.
 # import time
 
 import logging
+import time
 from pprint import pprint
 
 from orbsim.r4b_3d import UNIT_TIME
@@ -59,6 +60,7 @@ def simulate(
         [type] -- [description]
     """
     logging.info("Starting simple simulation.")
+    t0 = time.time()
 
     max_iter = int(max_iter)
     day = psi[0]
@@ -106,14 +108,15 @@ def simulate(
         ps.append(p)
         q_p_list.append((q, p))
 
-        i += 1
-        t += h
-
         if i % 1000 == 0:
+            t1 = time.time()
+            sim_time = t1 - t0
+
             logging.debug(
-                f"Iteration {i} / {max_iter}"
-                f", time {t*UNIT_TIME/3600:.2f} hours / "
+                f"Iteration {str(i).rjust(len(str(max_iter)))} / {max_iter}"
+                f", in-sim time {t*UNIT_TIME/3600:.2f} hours / "
                 f"{max_duration*UNIT_TIME/3600:.2f} hours"
+                f"   (out-of-sim elapsed time: {format_seconds(sim_time)})"
             )
 
         if i >= max_iter:
@@ -132,9 +135,25 @@ def simulate(
             )
             break
 
-    # pprint(qs)
+        i += 1
+        t += h
 
-    return None
+    tf = time.time()
+    total_time = tf - t0
+    logging.info(f"Simulation duration: {format_seconds(total_time)} (HH:MM:SS)")
+
+    return (qs, ps, (t, i), ephemerides)
+
+
+def format_seconds(time):
+    hours = int(time // 3600)
+    time %= 3600
+    minutes = int(time // 60)
+    time %= 60
+    seconds = time
+    text = f"{hours:0>2d}:{minutes:0>2d}:{seconds:.2f}"
+
+    return text
 
 
 if __name__ == "__main__":
