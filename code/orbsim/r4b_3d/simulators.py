@@ -22,7 +22,7 @@ from pprint import pprint
 from orbsim.r4b_3d import UNIT_TIME
 from orbsim.r4b_3d.analyticals import (
     get_B_phi,
-    get_B_R,
+    get_B_r,
     get_B_theta,
     get_leo_position_and_velocity,
 )
@@ -63,7 +63,8 @@ def simulate(
     t0 = time.time()
 
     max_iter = int(max_iter)
-    day = psi[0]
+    t = psi[0]
+    day = t * UNIT_TIME / (3600 * 24)
 
     # Read ephemerides
     logging.debug("Getting ephemerides tables")
@@ -79,31 +80,56 @@ def simulate(
 
     # Initial momenta (p)
     Rdot, thetadot, phidot = leo_velocity_spherical
-    B_R = get_B_R(Rdot)
+    B_r = get_B_r(Rdot)
     B_theta = get_B_theta(R, thetadot)
     B_phi = get_B_phi(R, theta, phidot)
 
-    i = 0
-    t = 0
+    logging.debug(
+        f"Starting simulation at time {t} ({day} days) with step size h = {h} "
+        f"({h*UNIT_TIME} s)"
+        f", max {max_iter} iterations and max {max_duration*UNIT_TIME/3600/24} days"
+    )
 
+    # Iteration initialization
+    i = 0
+
+    ts = []
+    days = []
     qs = []
     ps = []
     q_p_list = []
 
-    logging.debug(
-        f"Starting simulation with h = {h} ({h*UNIT_TIME} s)"
-        f", max {max_iter} iterations and max {max_duration*UNIT_TIME/3600/24} days"
+    # Iteration 0
+    ts.append(t)
+    days.append(day)
+    qs.append([R, theta, phi])
+    ps.append([B_r, B_theta, B_phi])
+    q_p_list.append((qs[0], ps[0]))
+    t1 = time.time()
+    sim_time = t1 - t0
+    logging.info(
+        f"Iteration {str(i).rjust(len(str(max_iter)))} / {max_iter}"
+        f", in-sim time {t*UNIT_TIME/3600:.2f} hours / "
+        f"{max_duration*UNIT_TIME/3600:.2f} hours"
+        f"   (out-of-sim elapsed time: {format_time(sim_time)})"
     )
 
+    # Iteration loop
     while True:
+        i += 1
+        t += h
+        day = t * UNIT_TIME / (3600 * 24)
+
         eph_on_date = get_ephemerides_on_day(ephemerides, day)
 
         R, theta, phi, B_r, B_theta, B_phi = euler_step_symplectic(
-            eph_on_date, h, R, theta, phi, B_R, B_theta, B_phi
+            eph_on_date, h, R, theta, phi, B_r, B_theta, B_phi
         )
-
         q = [R, theta, phi]
         p = [B_r, B_theta, B_phi]
+
+        ts.append(t)
+        days.append(day)
         qs.append(q)
         ps.append(p)
         q_p_list.append((q, p))
@@ -112,40 +138,45 @@ def simulate(
             t1 = time.time()
             sim_time = t1 - t0
 
-            logging.debug(
+            logging.info(
                 f"Iteration {str(i).rjust(len(str(max_iter)))} / {max_iter}"
-                f", in-sim time {t*UNIT_TIME/3600:.2f} hours / "
-                f"{max_duration*UNIT_TIME/3600:.2f} hours"
-                f"   (out-of-sim elapsed time: {format_seconds(sim_time)})"
+                f", in-sim time {format_time(t, format='years')} / "
+                f"{format_time(max_duration, format='years')}"
+                f"   (out-of-sim elapsed time: {format_time(sim_time)})"
             )
 
-        if i >= max_iter:
-            logging.info(
-                f"Max iter of {max_iter} reached (i={i}) "
-                f"at t = {t:.6f} ({t*UNIT_TIME/3600/24:.2f}/"
-                f"{max_duration*UNIT_TIME/3600/24:.2f} days ~ "
-                f"{t/max_duration:.3f} %)"
-            )
-            break
         if t >= max_duration:
             logging.info(
-                f"Max time of {max_duration:.6f} ({max_duration*UNIT_TIME/3600/24:.6f} "
-                f"days) reached at t = {t:.6f} ({t*UNIT_TIME/3600/24:.6f} days)"
+                f"Max time of {max_duration:.6f} "
+                f"({format_time(max_duration, format='years')}) "
+                f"reached at t = {t:.6f} ({format_time(t, format='years')})"
                 f" at iteration: {i}/{max_iter} ~ {i/max_iter*100:.3f} %"
             )
             break
-
-        i += 1
-        t += h
+        if i >= max_iter:
+            logging.info(
+                f"Max iter of {max_iter} reached (i={i}) "
+                f"at t = {format_time(t, format='years')}/"
+                f"{format_time(max_duration, format='years')} ~ "
+                f"{t/max_duration:.3f} %)"
+            )
+            break
 
     tf = time.time()
     total_time = tf - t0
-    logging.info(f"Simulation duration: {format_seconds(total_time)} (HH:MM:SS)")
+    logging.info(f"Simulation duration: {format_time(total_time)} (HH:MM:SS)")
 
     return (qs, ps, (t, i), ephemerides)
 
 
-def format_seconds(time):
+def format_time(time, format="seconds"):
+    if format == "years":
+        time = time * UNIT_TIME
+    elif format == "seconds":
+        pass
+    else:
+        raise ValueError("Input time must be either 'years' or 'seconds' (default)")
+
     hours = int(time // 3600)
     time %= 3600
     minutes = int(time // 60)
