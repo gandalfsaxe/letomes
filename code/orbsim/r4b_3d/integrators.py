@@ -23,7 +23,7 @@ from orbsim.r4b_3d.analyticals import get_Bdot
 # logger = logging.getLogger()
 
 # @njit
-def euler_step_symplectic(ephemerides_on_date, h, R, theta, phi, B_r, B_theta, B_phi):
+def euler_step_symplectic(ephemerides_on_day, h, R, theta, phi, B_r, B_theta, B_phi):
     """Takes a single time step of the symplectic Euler algorithm"""
     # Update q
     R = R + h * B_r
@@ -35,7 +35,7 @@ def euler_step_symplectic(ephemerides_on_date, h, R, theta, phi, B_r, B_theta, B
     theta_ks = []
     phi_ks = []
 
-    for _, eph in ephemerides_on_date.items():
+    for _, eph in ephemerides_on_day.items():
         R_ks.append(eph["r"])
         theta_ks.append(eph["theta"] * pi / 180)
         phi_ks.append(eph["phi"] * pi / 180)

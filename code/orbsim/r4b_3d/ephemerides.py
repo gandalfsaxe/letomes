@@ -5,7 +5,7 @@ various celestial bodies.
 """
 import logging
 import os
-from math import floor
+from math import floor, pi
 
 import pandas as pd
 
@@ -74,20 +74,20 @@ def get_ephemerides(
     return ephemerides
 
 
-def get_ephemerides_on_date(ephemerides, date=0):
+def get_ephemerides_on_day(ephemerides, day=0):
     """
     Get ephemerides of all bodies in input for specific input day (continuous).
     --INPUT--
     ephemerides (DICT("body": pandas.df)):  Dict of ephemerides, from get_ephemerides()
     date (int or float):                    Days since 2019-01-01 00:00:00
     """
-    day = date
+    day += 1  # Since day starts at -1, only used for velocity estimation.
 
     day_lower = floor(day)
     day_upper = day_lower + 1
     day_increment = day % 1
 
-    interpolated_dict = {}
+    eph_on_day = {}
 
     for body, eph in ephemerides.items():
 
@@ -103,9 +103,19 @@ def get_ephemerides_on_date(ephemerides, date=0):
             start_position_series + day_increment * diff_position_series
         )
 
-        interpolated_dict[body] = interpolated_position
+        eph_on_day[body] = interpolated_position
 
-    return interpolated_dict
+    sun = eph_on_day["earth"]
+    sun["r"] = 0
+    sun["theta"] = pi / 4
+    sun["phi"] = pi / 4
+    sun["x"] = 0
+    sun["y"] = 0
+    sun["z"] = 0
+
+    eph_on_day["sun"] = sun
+
+    return eph_on_day
 
 
 if __name__ == "__main__":
@@ -114,5 +124,5 @@ if __name__ == "__main__":
     logging.info(f"Ephemerides table:\n {test_eph}")
 
     test_date = 124.26
-    test_eph_on_date = get_ephemerides_on_date(test_eph, test_date)
+    test_eph_on_date = get_ephemerides_on_day(test_eph, test_date)
     logging.info(f"Ephemerides on date {test_date}:\n {test_eph_on_date}")

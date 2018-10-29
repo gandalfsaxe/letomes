@@ -321,7 +321,7 @@ def get_leo_position_and_velocity(ephemerides, day, altitude=160):
     earth_diff = earth_day - earth_daym1
 
     # Get positions of Earth at {day, day-1} in spherical and cartesian coordinates
-    earth_q0_spherical_AU = [earth_day["r"], earth_day["theta"], earth_day["phi"]]
+    earth_q0_spherical_AU_deg = [earth_day["r"], earth_day["theta"], earth_day["phi"]]
     earth_q0_cartesian_AU = [earth_day["x"], earth_day["y"], earth_day["z"]]
 
     earth_qm1_spherical_AU = [
@@ -383,7 +383,7 @@ def get_leo_position_and_velocity(ephemerides, day, altitude=160):
     )
 
     logging.debug(
-        f"Earth initial position at day {day} (spherical): {earth_q0_spherical_AU}"
+        f"Earth initial position at day {day} (spherical): {earth_q0_spherical_AU_deg}"
     )
     logging.debug(
         f"Earth initial position at day {day-1} (spherical): {earth_qm1_spherical_AU}"
@@ -416,14 +416,16 @@ def get_leo_position_and_velocity(ephemerides, day, altitude=160):
     # ---------- 3 Spacecraft initial position
 
     # Spacecraft geocentric position: perpendicular to earth velocity pointing outwards
-    q0_geocentric_cartesian_unit = np.cross(earth_q0_cartesian_AU, earth_orbital_plane)
+    q0_geocentric_cartesian_unit = np.cross(
+        earth_qdot0_cartesian_km_s, earth_orbital_plane
+    )
     q0_geocentric_cartesian_unit /= np.linalg.norm(q0_geocentric_cartesian_unit)
 
     q0_geocentric_cartesian_km = q0_geocentric_cartesian_unit * (
         EARTH_RADIUS + altitude
     )
-
     q0_geocentric_cartesian_AU = q0_geocentric_cartesian_km / UNIT_LENGTH
+
     q0_cartesian_AU = earth_q0_cartesian_AU + q0_geocentric_cartesian_AU
     q0_cartesian_km = q0_cartesian_AU * UNIT_LENGTH
 
@@ -547,6 +549,7 @@ if __name__ == "__main__":
     ephemerides = get_ephemerides()
 
     leo = get_leo_position_and_velocity(ephemerides, day=0)
+    x = 2
 
     # logging.info(f"LEO (position, velocity), cartesian, AU: {leo}")
 
@@ -562,8 +565,7 @@ if __name__ == "__main__":
     # t180p0 = get_unit_theta(theta=pi, phi=0)
     # print(f"t180p0: {t180p0}")
     # t180pm90 = get_unit_theta(theta=pi, phi=-pi / 2)
-    # print(f"t180pm90: {t180pm90}")
-    # t180p90 = get_unit_theta(theta=pi, phi=pi / 2)
+    # print(f"t180pm90: {t180pm90}"    # t180p90 = get_unit_theta(theta=pi, phi=pi / 2)
     # print(f"t180p90: {t180p90}")
     # t90p0 = get_unit_theta(theta=pi / 2, phi=0)
     # print(f"t90p0: {t90p0}")
