@@ -88,9 +88,6 @@ def simulate(
     ps = []
     q_p_list = []
 
-    print(max_duration)
-    print(max_duration * UNIT_TIME / 3600 / 24)
-
     logging.debug(
         f"Starting simulation with h = {h} ({h*UNIT_TIME} s)"
         f", max {max_iter} iterations and max {max_duration*UNIT_TIME/3600/24} days"
