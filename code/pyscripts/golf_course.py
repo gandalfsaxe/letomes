@@ -23,7 +23,7 @@ def golfcourse_row(pos, burns):
 
 
 if __name__ == "__main__":
-    sz = 50
+    sz = 10
     p = Pool(mp.cpu_count())
     poss = np.linspace(-tau / 2, -tau / 4, sz)
     burns = np.linspace(3.1, 4.0, sz)
