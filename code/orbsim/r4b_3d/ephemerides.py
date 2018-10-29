@@ -105,7 +105,7 @@ def get_ephemerides_on_day(ephemerides, day=0):
 
         eph_on_day[body] = interpolated_position
 
-    sun = eph_on_day["earth"]
+    sun = eph_on_day["earth"].copy()
     sun["r"] = 0
     sun["theta"] = pi / 4
     sun["phi"] = pi / 4
