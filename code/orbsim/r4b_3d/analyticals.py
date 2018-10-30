@@ -379,25 +379,31 @@ def get_leo_position_and_velocity(ephemerides, day, altitude=160):
 
     # Logs
     logging.debug(
-        f"Earth initial position at day {day} (cartesian): {earth_q0_cartesian_AU}"
+        f"Earth initial position at day {day} (cartesian, AU): "
+        f"{earth_q0_cartesian_AU}"
     )
     logging.debug(
-        f"Earth initial position at day {day-1} (cartesian): {earth_qm1_cartesian_AU}"
-    )
-
-    logging.debug(
-        f"Earth initial position at day {day} (spherical): {earth_q0_spherical_AU_deg}"
-    )
-    logging.debug(
-        f"Earth initial position at day {day-1} (spherical): {earth_qm1_spherical_AU}"
+        f"Earth initial position at day {day-1} (cartesian, AU): "
+        f"{earth_qm1_cartesian_AU}"
     )
 
     logging.debug(
-        f"Earth initial velocity (spherical, AU/d & deg/d): {earth_qdot0_spherical_au_day_deg}"
+        f"Earth initial position at day {day} (spherical, AU & deg): "
+        f"{earth_q0_spherical_AU_deg}"
     )
     logging.debug(
-        f"Earth initial velocity (spherical, km/s & rad/s): {earth_qdot0_spherical_km_s_rad}"
-        f" (speed: {earth_qdot0_spherical_km_s_rad_speed})"
+        f"Earth initial position at day {day-1} (spherical, AU & deg): "
+        f"{earth_qm1_spherical_AU}"
+    )
+
+    logging.debug(
+        f"Earth initial velocity (spherical, AU/d & deg/d): "
+        f"{earth_qdot0_spherical_au_day_deg}"
+    )
+    logging.debug(
+        f"Earth initial velocity (spherical, km/s & rad/s): "
+        f"{earth_qdot0_spherical_km_s_rad} "
+        f"(speed: {earth_qdot0_spherical_km_s_rad_speed})"
     )
 
     logging.debug(
