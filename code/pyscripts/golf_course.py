@@ -3,8 +3,12 @@ from orbsim.r3b_2d.simulators import run_sim
 
 from multiprocessing import Pool
 import multiprocessing as mp
+from numba import njit
+import datetime
 
-from numba import jit, njit
+import matplotlib as mpl
+
+mpl.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
 import numpy as np
@@ -23,10 +27,12 @@ def golfcourse_row(pos, burns):
 
 
 if __name__ == "__main__":
-    sz = 10
+    sz = 300
+    lbp, ubp = [0, tau]
+    lbb, ubb = [3.0, 3.4]
     p = Pool(mp.cpu_count())
-    poss = np.linspace(-tau / 2, -tau / 4, sz)
-    burns = np.linspace(3.1, 4.0, sz)
+    poss = np.linspace(lbp, ubp, sz)
+    burns = np.linspace(lbb, ubb, sz)
     result = np.array(
         p.starmap(golfcourse_row, [(poss[idx], burns) for idx in range(sz)])
     )
@@ -42,6 +48,17 @@ if __name__ == "__main__":
     colors[..., -1] = alphas
 
     fig, ax = plt.subplots()
-    ax.imshow(greys)
-    ax.imshow(colors, vmin=min(scores.flatten()), vmax=max(scores.flatten()))
-    plt.show()
+    plt.imshow(greys)
+    plt.imshow(
+        colors,
+        vmin=min(scores.flatten()),
+        vmax=max(scores.flatten()),
+        extent=[lbb, ubb, lbp, ubp],
+        interpolation=None,
+    )
+    plt.colorbar()
+    ax.set_xlabel("burnDv")
+    ax.set_ylabel("position")
+    ax.set_aspect((ubb - lbb) / (ubp - lbp))
+
+    plt.savefig(f"golf_course_2.png")
