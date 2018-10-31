@@ -54,7 +54,7 @@ if __name__ == "__main__":
         vmin=min(scores.flatten()),
         vmax=max(scores.flatten()),
         extent=[lbb, ubb, lbp, ubp],
-        interpolation=None,
+        interpolation='none',
     )
     plt.colorbar()
     ax.set_xlabel("burnDv")

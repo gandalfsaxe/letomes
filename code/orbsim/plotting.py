@@ -15,7 +15,7 @@ def orbitplot2d(completed_path, psi=None, filepath=".", title=None, multi_mode=F
     
     Plots a figure of the inputted orbit, with start point marked in green, and point marked in red, earth and moon/mars marked as well.
     """
-    score, path = completed_path  # [Dv,[x,y,px,py,h]]
+    score, _, path = completed_path  # [Dv,success?,[x,y,px,py,h]]
 
     xs, ys, pxs, pys, hs, ts = np.array(path).T
 
