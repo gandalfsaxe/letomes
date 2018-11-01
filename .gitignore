@@ -380,3 +380,4 @@ TSWLatexianTemp*
 # End of https://www.gitignore.io/api/latex
 /code/notebooks/Untitled.ipynb
 /code/logs/log.txt
+/code/.coverage
