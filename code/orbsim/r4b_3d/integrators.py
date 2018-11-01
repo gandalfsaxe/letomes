@@ -15,12 +15,10 @@ Implements symplectic integrators that integrates H-R4B system equations.
 # import time
 from math import pi, sin
 
-from orbsim.r4b_3d.analyticals import get_Bdot
+from orbsim.r4b_3d.equations_of_motion import get_Bdot
 
 # from numba import njit  # boolean, float64, jit
 
-
-# logger = logging.getLogger()
 
 # @njit
 def euler_step_symplectic(ephemerides_on_day, h, R, theta, phi, B_r, B_theta, B_phi):

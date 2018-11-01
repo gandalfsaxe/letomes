@@ -1,25 +1,25 @@
 """
-Equations of motion for R4B-3D system (Restricted 4-Body Problem in 3 Dimensions).
-Derived via Hamiltons's equations.
+All physics equations not related to Hamilton's equations (equations of motion).
 
-1. `analyticals.py`: set up the equations of motion.
-
-2. `integrators.py`: discretize the equations of motion and defines a single time step of the
-    chosen numerical algorithm.
-
-3. `simulators.py`: run the single steps from `integrators.py` repeatedly for some initial
-    conditions and stopping conditions.
+- Closed circular
+    - orbital speed
+    - period
+    - velocity vector, assuming LEO in ecliptic plane
 """
 
 import logging
-
-# import logging
-from math import acos, atan, cos, pi, sin, sqrt, tan, radians, degrees
+from math import degrees, pi, radians, sqrt
 
 import numpy as np
 
+from orbsim.r4b_3d.coordinate_system import (
+    get_position_spherical_from_cartesian,
+    get_speed_spherical,
+    get_velocity_spherical_from_cartesian,
+)
+from orbsim.r4b_3d.ephemerides import get_ephemerides, get_ephemerides_on_day
+from orbsim import EARTH_RADIUS
 from orbsim.r4b_3d import (
-    EARTH_RADIUS,
     ETA_EARTH,
     ETA_MARS,
     ETA_SUN,
@@ -28,214 +28,7 @@ from orbsim.r4b_3d import (
     UNIT_VELOCITY,
 )
 
-from orbsim.r4b_3d.ephemerides import get_ephemerides, get_ephemerides_on_day
-
-# from orbsim.r4b_3d.logging import logging_setup
-
 eta_ks = [ETA_SUN, ETA_EARTH, ETA_MARS]
-
-# from numba import njit
-
-
-# level = logging.INFO
-
-# logger = logging.getLogger()
-# logger.setLevel(level)
-
-# formatter = logging.Formatter("%(asctime)s - %(levelname)s (%(funcName)s): %(message)s")
-
-# fh = logging.FileHandler("log_filename.txt")
-# fh.setLevel(level)
-# fh.setFormatter(formatter)
-# logger.addHandler(fh)
-
-# ch = logging.StreamHandler()
-# ch.setLevel(level)
-# ch.setFormatter(formatter)
-# logger.addHandler(ch)
-
-# @njit
-def get_Rdot(B_r):
-    """Rdot(R, theta, phi, B_r, B_theta, B_phi) from Hamilton's equations"""
-    return B_r
-
-
-# @njit
-def get_thetadot(R, B_theta):
-    """thetadot(R, theta, phi, B_r, B_theta, B_phi) from Hamilton's equations"""
-    return B_theta / (R ** 2)
-
-
-# @njit
-def get_phidot(R, theta, B_phi):
-    """phidot(R, theta, phi, B_r, B_theta, B_phi) from Hamilton's equations"""
-    return B_phi / (R ** 2 * sin(theta) ** 2)
-
-
-# @njit
-def get_Bdot(R, theta, phi, B_theta, B_phi, R_ks, theta_ks, phi_ks):
-    """
-    All three Bdot from Hamilton's equations (Bdot_r, Bdot_theta and Bdot_phi)
-    """
-    # Initialize Bdot parts
-    Bdot_r1 = B_theta ** 2 / (R ** 3)
-    Bdot_r2 = B_phi ** 2 / (R ** 3 * sin(theta) ** 2)
-    Bdot_r3 = 0
-    Bdot_theta1 = B_phi ** 2 / (R ** 2 * sin(theta) ** 2 * tan(theta))
-    Bdot_theta2 = 0
-    Bdot_phi1 = 0
-    # Everything under the summation
-    for i, _ in enumerate(R_ks):
-        numerator_1, numerator_2, numerator_3 = Bdot_numerators(
-            R, theta, phi, R_ks[i], theta_ks[i], phi_ks[i]
-        )
-        denominator = Bdot_denominator(R, theta, phi, R_ks[i], theta_ks[i], phi_ks[i])
-        Bdot_r3 += eta_ks[i] * numerator_1 / denominator
-        Bdot_theta2 += eta_ks[i] * numerator_2 / denominator
-        Bdot_phi1 += eta_ks[i] * numerator_3 / denominator
-    # Add Bdot parts
-    Bdot_r = Bdot_r1 + Bdot_r2 + Bdot_r3
-    Bdot_theta = Bdot_theta1 + Bdot_theta2
-    Bdot_phi = Bdot_phi1
-    return Bdot_r, Bdot_theta, Bdot_phi
-
-
-# @njit
-def Bdot_denominator(R, theta, phi, R_k, theta_k, phi_k):
-    """fraction denominator for generalized momenta Bdot"""
-    base = (R - R_k) ** 2 * (
-        cos(theta) * cos(theta_k) + sin(theta) * sin(theta_k) * cos(phi - phi_k)
-    )
-
-    return base * sqrt(base)
-
-
-# @njit
-def Bdot_numerators(R, theta, phi, R_k, theta_k, phi_k):
-    """fraction numerators for generalized momenta Bdot"""
-    n1 = -(
-        R
-        - R_k
-        * (cos(theta) * cos(theta_k) + (sin(theta) * sin(theta_k * cos(phi - phi_k))))
-    )
-    n2 = (
-        R
-        * R_k
-        * (-sin(theta) * cos(theta_k) + cos(theta) * sin(theta_k) * cos(phi - phi_k))
-    )
-    n3 = -R * R_k * sin(theta) * sin(theta_k) * sin(phi - phi_k)
-    return (n1, n2, n3)
-
-
-# TODO: Region
-
-
-def get_B_r(Rdot):
-    return Rdot
-
-
-def get_B_theta(R, thetadot):
-    return R ** 2 * thetadot
-
-
-def get_B_phi(R, theta, phidot):
-    return R ** 2 * sin(theta) ** 2 * phidot
-
-
-def get_unit_R(theta, phi):
-    R_hat = (
-        sin(theta) * cos(phi) * np.array([1, 0, 0])
-        + sin(theta) * sin(phi) * np.array([0, 1, 0])
-        + cos(theta) * np.array([0, 0, 1])
-    )
-
-    return R_hat
-
-
-def get_unit_theta(theta, phi):
-    theta_hat = (
-        cos(theta) * cos(phi) * np.array([1, 0, 0])
-        + cos(theta) * sin(phi) * np.array([0, 1, 0])
-        - sin(theta) * np.array([0, 0, 1])
-    )
-
-    return theta_hat
-
-
-def get_unit_phi(phi):
-    phi_hat = -sin(phi) * np.array([1, 0, 0]) + cos(phi) * np.array([0, 1, 0])
-
-    return phi_hat
-
-
-# TODO: Region
-
-
-def get_position_cartesian(r, theta, phi):
-    """Get cartesian (x,y,z) coordinates from spherical (r, theta, phi) coordinates"""
-    x = r * sin(theta) * cos(phi)
-    y = r * sin(theta) * sin(phi)
-    z = r * cos(theta)
-
-    return x, y, z
-
-
-def get_position_spherical(x, y, z):
-    """Get spherical (r, theta, phi) coordinates from cartesian (x,y,z) coordinates"""
-    r = sqrt(x ** 2 + y ** 2 + z ** 2)
-    theta = acos(z / r)
-    if x >= 0:
-        phi = atan(y / x)
-    elif y >= 0:
-        phi = atan(y / x) + pi
-    else:
-        phi = atan(y / x) - pi
-
-    return r, theta, phi
-
-
-def get_distance_cartesian(x1, y1, z1, x2, y2, z2):
-    """Get distance between two sets of cartesian coordinates by Pythagoras."""
-    return sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2)
-
-
-def get_distance_spherical(r1, theta1, phi1, r2, theta2, phi2):
-    """Get distance between two sets of spherical coordinates."""
-    return sqrt(
-        r1 ** 2
-        + r2 ** 2
-        - 2
-        * r1
-        * r2
-        * (
-            cos(theta1) * cos(theta2)
-            + sin(theta1)
-            * sin(theta2)
-            * (cos(phi1) * cos(phi2) + sin(phi1) * sin(phi2))
-        )
-    )
-
-
-def get_velocity_spherical(x, y, z, xdot, ydot, zdot):
-
-    rdot = (x * xdot + y * ydot + z * zdot) / (sqrt(x ** 2 + y ** 2 + z ** 2))
-
-    thetadot = ((x * xdot + y * ydot) * z - (x ** 2 + y ** 2) * zdot) / (
-        (x ** 2 + y ** 2 + z ** 2) * sqrt(x ** 2 + y ** 2)
-    )
-
-    phidot = (x * ydot - xdot * y) / (x ** 2 + y ** 2)
-
-    return (rdot, thetadot, phidot)
-
-
-def get_speed_spherical(r, theta, rdot, thetadot, phidot):
-    """Get speed of body given in spherical coordinates."""
-    v = sqrt(
-        rdot ** 2 + r ** 2 * thetadot ** 2 + r ** 2 * sin(theta) ** 2 * phidot ** 2
-    )
-
-    return v
 
 
 def get_leo_speed(altitude=160):
@@ -438,7 +231,7 @@ def get_leo_position_and_velocity(ephemerides, day, altitude=160):
     q0_cartesian_AU = earth_q0_cartesian_AU + q0_geocentric_cartesian_AU
     q0_cartesian_km = q0_cartesian_AU * UNIT_LENGTH
 
-    q0_spherical_AU_rad = list(get_position_spherical(*q0_cartesian_AU))
+    q0_spherical_AU_rad = list(get_position_spherical_from_cartesian(*q0_cartesian_AU))
 
     q0_spherical_AU_deg = list(q0_spherical_AU_rad)  # copy, not reference
     q0_spherical_AU_deg[1] = degrees(q0_spherical_AU_deg[1])
@@ -490,7 +283,7 @@ def get_leo_position_and_velocity(ephemerides, day, altitude=160):
     qdot0_cartesian_km_s_speed = np.linalg.norm(qdot0_cartesian_km_s)
 
     # Get spherical velocity vector from cartesian velocity vector
-    qdot0_spherical_km_s_rad = get_velocity_spherical(
+    qdot0_spherical_km_s_rad = get_velocity_spherical_from_cartesian(
         *q0_cartesian_km, *qdot0_cartesian_km_s
     )
 
@@ -555,9 +348,9 @@ if __name__ == "__main__":
 
     # logging_setup("info")
 
-    ephemerides = get_ephemerides()
+    eph = get_ephemerides()
 
-    leo = get_leo_position_and_velocity(ephemerides, day=0)
+    leo = get_leo_position_and_velocity(eph, day=0)
     x = 2
 
     # logging.info(f"LEO (position, velocity), cartesian, AU: {leo}")

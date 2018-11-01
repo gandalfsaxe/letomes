@@ -13,30 +13,14 @@ conditions.
 
 # from typing import Callable, Iterable, Union, Optional, List
 
-# import time
-
 import logging
 import time
-from pprint import pprint
 
+from orbsim.r4b_3d.equations_of_physics import get_leo_position_and_velocity
 from orbsim.r4b_3d import UNIT_TIME
-from orbsim.r4b_3d.analyticals import (
-    get_B_phi,
-    get_B_r,
-    get_B_theta,
-    get_leo_position_and_velocity,
-)
 from orbsim.r4b_3d.ephemerides import get_ephemerides, get_ephemerides_on_day
+from orbsim.r4b_3d.equations_of_motion import get_B_phi, get_B_r, get_B_theta
 from orbsim.r4b_3d.integrators import euler_step_symplectic
-
-# from orbsim.r4b_3d.logging import logging_setup
-
-# from numba import njit
-
-
-# logging_setup()
-
-# logger = logging.getLogger()
 
 
 def simulate(
@@ -140,24 +124,24 @@ def simulate(
 
             logging.info(
                 f"Iteration {str(i).rjust(len(str(max_iter)))} / {max_iter}"
-                f", in-sim time {format_time(t, format='years')} / "
-                f"{format_time(max_duration, format='years')}"
+                f", in-sim time {format_time(t, time_unit='years')} / "
+                f"{format_time(max_duration, time_unit='years')}"
                 f"   (out-of-sim elapsed time: {format_time(sim_time)})"
             )
 
         if t >= max_duration:
             logging.info(
                 f"Max time of {max_duration:.6f} "
-                f"({format_time(max_duration, format='years')}) "
-                f"reached at t = {t:.6f} ({format_time(t, format='years')})"
+                f"({format_time(max_duration, time_unit='years')}) "
+                f"reached at t = {t:.6f} ({format_time(t, time_unit='years')})"
                 f" at iteration: {i}/{max_iter} ~ {i/max_iter*100:.3f} %"
             )
             break
         if i >= max_iter:
             logging.info(
                 f"Max iter of {max_iter} reached (i={i}) "
-                f"at t = {format_time(t, format='years')}/"
-                f"{format_time(max_duration, format='years')} ~ "
+                f"at t = {format_time(t, time_unit='years')}/"
+                f"{format_time(max_duration, time_unit='years')} ~ "
                 f"{t/max_duration:.3f} %)"
             )
             break
@@ -166,22 +150,37 @@ def simulate(
     total_time = tf - t0
     logging.info(f"Simulation duration: {format_time(total_time)} (HH:MM:SS)")
 
-    return (qs, ps, (t, i), ephemerides)
+    return (ts, qs, ps, (t, i), ephemerides)
 
 
-def format_time(time, format="seconds"):
-    if format == "years":
-        time = time * UNIT_TIME
-    elif format == "seconds":
+def format_time(time_value, time_unit="seconds"):
+    """Format time from a single unit (by default seconds) to a nice HH:MM:SS string
+
+    Arguments:
+        time {[float]} -- [Time value in some unit]
+
+    Keyword Arguments:
+        time_unit {str} -- [Time unit] (default: {"seconds"})
+
+    Raises:
+        ValueError -- [Unsupported input time unit]
+
+    Returns:
+        [str] -- [String of time formatted as HH:MM:SS]
+    """
+
+    if time_unit == "years":
+        time_value = time_value * UNIT_TIME
+    elif time_unit == "seconds":
         pass
     else:
         raise ValueError("Input time must be either 'years' or 'seconds' (default)")
 
-    hours = int(time // 3600)
-    time %= 3600
-    minutes = int(time // 60)
-    time %= 60
-    seconds = time
+    hours = int(time_value // 3600)
+    time_value %= 3600
+    minutes = int(time_value // 60)
+    time_value %= 60
+    seconds = time_value
     text = f"{hours:0>2d}:{minutes:0>2d}:{seconds:.2f}"
 
     return text

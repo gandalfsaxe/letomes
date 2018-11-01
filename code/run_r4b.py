@@ -16,10 +16,8 @@ logger = logging.getLogger()
 
 if __name__ == "__main__":
 
-    qs, ps, (t_final, i_final), ephemerides = simulate(
+    ts, qs, ps, (t_final, i_final), ephemerides = simulate(
         h=10 / UNIT_TIME, max_duration=1 * 3600 * 3 / UNIT_TIME, max_iter=1e6
     )
 
     r4b_plot(t_final, ephemerides, qs)
-
-    pass
