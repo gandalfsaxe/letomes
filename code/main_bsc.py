@@ -5,7 +5,6 @@ Testing the reduced 3-body problem solvers with different numerical algorithms.
 TODO: Add more description + how to use
 """
 import multiprocessing
-import os
 import pathlib
 import sys
 import time
@@ -60,7 +59,7 @@ def run_test():
     }
     MODE_NAME = mode_dict[MODE]
 
-    OUTPUT_DIR = "tests/" + MODE_NAME + "/"
+    OUTPUT_DIR = "tests/r3b_2d/simulation_output/" + MODE_NAME + "/"
 
     pathlib.Path(OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
 
@@ -70,11 +69,13 @@ def run_test():
     sys.stdout = log_file
 
     # Threads will typically be 8 on quadcore machines
-    threads = multiprocessing.cpu_count()  # If raises NotImplementedError, do this instead https://stackoverflow.com/a/14840102/2948823 
+    threads = (
+        multiprocessing.cpu_count()
+    )  # If raises NotImplementedError, do this instead https://stackoverflow.com/a/14840102/2948823
 
     runtime = time.time()
 
-    n = 1000000  # FIXME: What the duck is n doing here
+    n = 1000000  # TODO: What the duck is n doing here
 
     # Set coordinates
     if MODE == "leo":  # Low Earth Orbit, one closed orbit
