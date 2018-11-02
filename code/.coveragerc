@@ -1,0 +1,9 @@
+# .coveragerc to control coverage.py
+
+[run]
+omit =
+    */__init__.py
+    orbsim/__init__.py
+    orbsim/r3b_2d/*
+    orbsim/r4b_3d/logging.py
+    orbsim/r4b_3d/plotting.py

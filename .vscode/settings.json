@@ -155,6 +155,7 @@
     "chdir",
     "citecolor",
     "corotating",
+    "coveragerc",
     "daym",
     "dimensionalities",
     "discretize",
@@ -186,9 +187,12 @@
     "parallelizable",
     "parallelization",
     "parallelized",
+    "parametrize",
+    "pdir",
     "pdot",
     "performant",
     "pykep",
+    "pylint",
     "pyplot",
     "pytest",
     "qdot",
@@ -214,7 +218,8 @@
     "ymax",
     "ymin",
     "yscale",
-    "zdot"
+    "zdot",
+    "zlabel"
   ]
 }
 
