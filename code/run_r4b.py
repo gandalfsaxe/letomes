@@ -7,7 +7,7 @@ from orbsim.r4b_3d import UNIT_TIME
 # from orbsim.r4b_3d.logging import logging_setup
 from orbsim.r4b_3d.simulators import simulate
 
-from orbsim.r4b_3d.r4b_plotting import r4b_plot
+from orbsim.r4b_3d.plotting import r4b_plot
 
 # logging_setup()
 
