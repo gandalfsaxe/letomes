@@ -8,7 +8,7 @@ Equations related to the cartesian and spherical coordinate system.
 * Speed from position and velocity
 """
 
-from math import acos, atan, cos, pi, sin, sqrt
+from math import acos, atan2, cos, pi, sin, sqrt
 
 import numpy as np
 
@@ -73,7 +73,31 @@ def get_distance_spherical(r1, theta1, phi1, r2, theta2, phi2):
 
 # region Position Coordinate Conversions
 def get_position_cartesian_from_spherical(r, theta, phi):
-    """Get cartesian (x,y,z) coordinates from spherical (r, theta, phi) coordinates"""
+    """
+    Get cartesian (x,y,z) coordinates from spherical (r, theta, phi) coordinates,
+    in the standard range r > 0, 0 < theta < pi, -pi< phi <= pi.
+
+    Arguments:
+        r {float} -- Radial coordinate (length of position vector)
+        theta {float} -- Theta angle (rad), angle from z-axis to position vector.
+        phi {float} -- Phi angle (rad), angle from a-axis to point projected to x-y
+                       plane.
+
+    Raises:
+        ValueError -- r cannot be zero      (to ensure unique solution)
+        ValueError -- theta cannot be zero  (to ensure unique solution)
+
+    Returns:
+        List[float] -- Cartesian [x, y, z] coordinates corresponding to spherical input
+                       coordinates.
+    """
+    if r <= 0:
+        raise ValueError("r cannot be less than or equal to zero.")
+    elif theta <= 0 or theta >= pi:
+        raise ValueError("theta must be in range 0 < theta < pi.")
+    elif phi <= -pi or phi > pi:
+        raise ValueError("phi must be in range -pi < phi <= pi.")
+
     x = r * sin(theta) * cos(phi)
     y = r * sin(theta) * sin(phi)
     z = r * cos(theta)
@@ -83,14 +107,16 @@ def get_position_cartesian_from_spherical(r, theta, phi):
 
 def get_position_spherical_from_cartesian(x, y, z):
     """Get spherical (r, theta, phi) coordinates from cartesian (x,y,z) coordinates"""
+    if x == 0.0 and y == 0.0:
+        raise ValueError(
+            """
+        x=0 and y=0 encountered; cartesian coordinate along z-axis results in
+        indeterminate expression for (r,theta,phi).
+        """
+        )
     r = sqrt(x ** 2 + y ** 2 + z ** 2)
     theta = acos(z / r)
-    if x >= 0:
-        phi = atan(y / x)
-    elif y >= 0:
-        phi = atan(y / x) + pi
-    else:
-        phi = atan(y / x) - pi
+    phi = atan2(y, x)
 
     return r, theta, phi
 

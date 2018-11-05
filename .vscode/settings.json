@@ -208,6 +208,7 @@
     "verlet",
     "vhat",
     "xdot",
+    "xfail",
     "xlabel",
     "xlim",
     "xmax",
