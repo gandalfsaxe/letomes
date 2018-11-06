@@ -50,9 +50,12 @@ def get_ephemerides(
         raise ValueError("Invalid end year. Must be '2020', '2039' or '2262'.")
 
     # Change workdir, construct filenames
-    path_parts = os.path.realpath(__file__).split("/")[:-1]
+    relative_path = os.path.normcase(relative_path)
+    path_parts = os.path.realpath(__file__).split(os.path.normcase("/"))[:-1]
+    print(path_parts)
     path_parts.append(relative_path)
     abs_path = "/".join(path_parts)
+    print(abs_path)
 
     os.chdir(abs_path)
     logging.debug(f"Current working directory: {os.getcwd()}")
