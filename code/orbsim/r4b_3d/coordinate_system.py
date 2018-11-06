@@ -13,41 +13,12 @@ from math import acos, atan2, cos, pi, sin, sqrt
 import numpy as np
 
 
-# region Unit Vectors (Spherical)
-def get_unit_r_in_cartesian(theta, phi):
-    """Get spherical r unit vector in cartesian coordinates"""
-    R_hat = (
-        sin(theta) * cos(phi) * np.array([1, 0, 0])
-        + sin(theta) * sin(phi) * np.array([0, 1, 0])
-        + cos(theta) * np.array([0, 0, 1])
-    )
-
-    return R_hat
-
-
-def get_unit_theta_in_cartesian(theta, phi):
-    """Get spherical theta unit vector in cartesian coordinates"""
-    theta_hat = (
-        cos(theta) * cos(phi) * np.array([1, 0, 0])
-        + cos(theta) * sin(phi) * np.array([0, 1, 0])
-        - sin(theta) * np.array([0, 0, 1])
-    )
-
-    return theta_hat
-
-
-def get_unit_phi_in_cartesian(phi):
-    """Get spherical phi unit vector in cartesian coordinates"""
-    phi_hat = -sin(phi) * np.array([1, 0, 0]) + cos(phi) * np.array([0, 1, 0])
-
-    return phi_hat
-
-
-# endregion
-
 # region Distances
-def get_distance_cartesian(x1, y1, z1, x2, y2, z2):
+def get_distance_cartesian(u, v):
     """Get distance between two sets of cartesian coordinates by Pythagoras."""
+    x1, y1, z1 = u
+    x2, y2, z2 = v
+
     return sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2)
 
 
@@ -159,6 +130,40 @@ def get_speed_cartesian(xdot, ydot, zdot):
     v = sqrt(xdot ** 2 + ydot ** 2 + zdot ** 2)
 
     return v
+
+
+# endregion
+
+
+# region UNUSED AND UNTESTED
+# ---Unit Vectors (Spherical)
+# def get_unit_r_in_cartesian(theta, phi):
+#     """Get spherical r unit vector in cartesian coordinates"""
+#     R_hat = (
+#         sin(theta) * cos(phi) * np.array([1, 0, 0])
+#         + sin(theta) * sin(phi) * np.array([0, 1, 0])
+#         + cos(theta) * np.array([0, 0, 1])
+#     )
+
+#     return R_hat
+
+
+# def get_unit_theta_in_cartesian(theta, phi):
+#     """Get spherical theta unit vector in cartesian coordinates"""
+#     theta_hat = (
+#         cos(theta) * cos(phi) * np.array([1, 0, 0])
+#         + cos(theta) * sin(phi) * np.array([0, 1, 0])
+#         - sin(theta) * np.array([0, 0, 1])
+#     )
+
+#     return theta_hat
+
+
+# def get_unit_phi_in_cartesian(phi):
+#     """Get spherical phi unit vector in cartesian coordinates"""
+#     phi_hat = -sin(phi) * np.array([1, 0, 0]) + cos(phi) * np.array([0, 1, 0])
+
+#     return phi_hat
 
 
 # endregion

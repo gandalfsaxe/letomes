@@ -14,12 +14,14 @@ That's it!
 """
 import json
 import os
+from pprint import pprint
 
 import pytest
 
 from orbsim.r4b_3d.coordinate_system import (  # pylint: disable=W0611
     get_position_cartesian_from_spherical,
     get_position_spherical_from_cartesian,
+    get_distance_cartesian,
 )
 
 
@@ -42,7 +44,7 @@ def process_test_data(function_name, output_type="unchanged"):
     Keyword Arguments:
         output_type {str} -- Data in JSON will either be a single int/float or a list.
                              If 'tuple' is passed in, the list will be converted to a
-                             tuple instead. (default: {"unchanged"}).
+                             tuple instead of a list. (default: {"unchanged"}).
 
     Returns:
         List[Tuple(Str, Any)] -- List of 2-tuples of function calls with input as
@@ -56,7 +58,7 @@ def process_test_data(function_name, output_type="unchanged"):
         arg_str = ", ".join(map(str, arg))
         if not isinstance(output, str):
             # Make tuple list ("function(input)", output)
-            function_tests.append((f"{function_name}({arg_str})", tuple(output)))
+            function_tests.append((f"{function_name}({arg_str})", output))
         else:
             # Make pytest.param marked with xfail, e.g. pytest.param("6*9", 42, marks=pytest.mark.xfail)
             function_tests.append(
@@ -88,14 +90,16 @@ def test2(test_input, expected):
     assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
 
 
-# DELETE THIS--
-# test_dict = {"marks": eval("pytest.mark.xfail")}
+@pytest.mark.parametrize(
+    "test_input, expected",
+    process_test_data("get_distance_cartesian", output_type="tuple"),
+)
+def test3(test_input, expected):
+    """Test get_distance_cartesian"""
+    assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
 
 
-# @pytest.mark.parametrize(
-#     "test_input, expected",
-#     [("3+5", 8), ("2+4", 6), eval("pytest.param('6*9', 42, **test_dict)")],
-# )
-# def testX(test_input, expected):
-#     """Test get_position_cartesian_from_spherical"""
-#     assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
+if __name__ == "__main__":
+    func_name = "get_distance_cartesian"
+
+    pprint(process_test_data(func_name, output_type="unchanged"))
