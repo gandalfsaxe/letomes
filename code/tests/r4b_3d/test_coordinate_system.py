@@ -22,6 +22,10 @@ from orbsim.r4b_3d.coordinate_system import (  # pylint: disable=W0611
     get_position_cartesian_from_spherical,
     get_position_spherical_from_cartesian,
     get_distance_cartesian,
+    get_distance_spherical,
+    get_velocity_spherical_from_cartesian,
+    get_speed_cartesian,
+    get_speed_spherical,
 )
 
 
@@ -33,7 +37,7 @@ with open(testdata_file_path) as file:
     test_data = json.load(file)
 
 
-def process_test_data(function_name, output_type="unchanged"):
+def process_test_data(function_name, input_type="list"):
     """
     Reformats JSON data to format suitable for @pytest.mark.parametrize decorator
     For example see https://docs.pytest.org/en/latest/parametrize.html.
@@ -55,6 +59,8 @@ def process_test_data(function_name, output_type="unchanged"):
 
     function_tests = []
     for arg, output in tests:
+        if input_type == "scalar":
+            arg = tuple(arg)
         arg_str = ", ".join(map(str, arg))
         if not isinstance(output, str):
             # Make tuple list ("function(input)", output)
@@ -73,8 +79,7 @@ def process_test_data(function_name, output_type="unchanged"):
 
 
 @pytest.mark.parametrize(
-    "test_input, expected",
-    process_test_data("get_position_cartesian_from_spherical", output_type="tuple"),
+    "test_input, expected", process_test_data("get_position_cartesian_from_spherical")
 )
 def test1(test_input, expected):
     """Test get_position_cartesian_from_spherical"""
@@ -82,8 +87,7 @@ def test1(test_input, expected):
 
 
 @pytest.mark.parametrize(
-    "test_input, expected",
-    process_test_data("get_position_spherical_from_cartesian", output_type="tuple"),
+    "test_input, expected", process_test_data("get_position_spherical_from_cartesian")
 )
 def test2(test_input, expected):
     """Test get_position_spherical_from_cartesian"""
@@ -91,15 +95,54 @@ def test2(test_input, expected):
 
 
 @pytest.mark.parametrize(
-    "test_input, expected",
-    process_test_data("get_distance_cartesian", output_type="tuple"),
+    "test_input, expected", process_test_data("get_distance_cartesian")
 )
 def test3(test_input, expected):
     """Test get_distance_cartesian"""
     assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
 
 
-if __name__ == "__main__":
-    func_name = "get_distance_cartesian"
+@pytest.mark.parametrize(
+    "test_input, expected", process_test_data("get_distance_spherical")
+)
+def test4(test_input, expected):
+    """Test get_distance_spherical"""
+    assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
 
-    pprint(process_test_data(func_name, output_type="unchanged"))
+
+@pytest.mark.parametrize(
+    "test_input, expected", process_test_data("get_distance_spherical")
+)
+def test4(test_input, expected):
+    """Test get_distance_spherical"""
+    assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
+
+
+@pytest.mark.parametrize(
+    "test_input, expected", process_test_data("get_velocity_spherical_from_cartesian")
+)
+def test5(test_input, expected):
+    """Test get_velocity_spherical_from_cartesian"""
+    assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
+
+
+@pytest.mark.parametrize(
+    "test_input, expected", process_test_data("get_speed_cartesian")
+)
+def test6(test_input, expected):
+    """Test get_speed_cartesian"""
+    assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
+
+
+@pytest.mark.parametrize(
+    "test_input, expected", process_test_data("get_speed_spherical")
+)
+def test7(test_input, expected):
+    """Test get_speed_spherical"""
+    assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
+
+
+if __name__ == "__main__":
+    func_name = "get_speed_spherical"
+
+    pprint(process_test_data(func_name, input_type="scalar"))

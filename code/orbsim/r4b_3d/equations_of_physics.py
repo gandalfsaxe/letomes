@@ -284,7 +284,7 @@ def get_leo_position_and_velocity(ephemerides, day, altitude=160):
 
     # Get spherical velocity vector from cartesian velocity vector
     qdot0_spherical_km_s_rad = get_velocity_spherical_from_cartesian(
-        *q0_cartesian_km, *qdot0_cartesian_km_s
+        q0_cartesian_km, qdot0_cartesian_km_s
     )
 
     qdot0_spherical_km_s_rad_speed = get_speed_spherical(

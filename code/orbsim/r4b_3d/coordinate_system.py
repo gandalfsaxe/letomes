@@ -12,6 +12,8 @@ from math import acos, atan2, cos, pi, sin, sqrt
 
 import numpy as np
 
+from pprint import pprint
+
 
 # region Distances
 def get_distance_cartesian(u, v):
@@ -22,8 +24,11 @@ def get_distance_cartesian(u, v):
     return sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2)
 
 
-def get_distance_spherical(r1, theta1, phi1, r2, theta2, phi2):
+def get_distance_spherical(u, v):
     """Get distance between two sets of spherical coordinates."""
+    r1, theta1, phi1 = u
+    r2, theta2, phi2 = v
+
     return sqrt(
         r1 ** 2
         + r2 ** 2
@@ -96,11 +101,16 @@ def get_position_spherical_from_cartesian(x, y, z):
 
 
 # region Velocity Coordinate Conversions
-def get_velocity_spherical_from_cartesian(x, y, z, xdot, ydot, zdot):
+def get_velocity_spherical_from_cartesian(v, vdot):
     """
     Get velocity vector in spherical coordinates (rdot, thetadot, phidot)
     from cartesian coordinates.
     """
+    x, y, z = v
+    xdot, ydot, zdot = vdot
+
+    if x == 0 and y == 0:
+        raise ValueError("Position can't be on z-axis (x==0 and y==0).")
 
     rdot = (x * xdot + y * ydot + z * zdot) / (sqrt(x ** 2 + y ** 2 + z ** 2))
 
@@ -167,3 +177,10 @@ def get_speed_cartesian(xdot, ydot, zdot):
 
 
 # endregion
+
+if __name__ == "__main__":
+    # v = (1, 0, 0)
+    # vdot = (0, 1, 0)
+
+    # pprint(get_velocity_spherical_from_cartesian(v, vdot))
+    pass
