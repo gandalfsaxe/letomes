@@ -97,16 +97,11 @@ and
     \theta &= \arccos{\frac{z}{r}}, \label{eq:theta(x,y,z)}\\
     % \arctan{\frac{y}{x}}, \qquad \theta  \in [0, 2\pi]
     \phi &= 
-    \begin{cases}
-    \arctan{\frac{y}{x}} & \text{if \(x \geq 0\) \qquad \qquad \ \ \ (Q1, Q4),}
-    \\
-    \arctan{\frac{y}{x}}+\pi & \text{if \(x \leq 0,\ y \geq 0\) \qquad (Q2),}
-    \\
-    \arctan{\frac{y}{x}}-\pi & \text{if \(x \leq 0,\ y \leq 0\) \qquad (Q3).}
-    \end{cases} \label{eq:phi(x,y,z)}
+    \arctantwo{(y/x)} \\
+    \label{eq:phi(x,y,z)}
 \end{align}
 
-where \(r \in [0, \infty]\), \(\theta \in [0, \pi]\) and \(\phi \in [0, 2\pi]\).
+where \(r \in [0, \infty]\), \(\theta \in [0, \pi]\) and \(\phi \in [0, 2\pi]\) and \(\arctan2\) denotes the two-argument version of \(\arctan\) function \footnote{\(\arctan{(a)} \in (-\frac{\pi}{2}, \frac{\pi}{2})\) just takes a slope as input and give an angle in quadrant 1 and 4 only, whereas \(\arctantwo{(y,x)} \in (-\pi, \pi]\) takes both \(x\) and \(y\) which also gives the correct quadrant 1–4.}\cite{WikiAtan2}.
 
 For the calculation of kinetic in the next section we will need the position vector, unit vectors in spherical coordinates, and the Jacobians.
 
@@ -203,7 +198,7 @@ We can now rewrite \(L\) to make it independent of \(\dot{q}\) by substituting t
     &= \frac{p_r^2}{2 m_s} + \frac{p_\theta^2}{2 m_s r^2} + \frac{p_\phi^2}{2 m_s r^2 \sin^2{\theta}} \\
 \end{align}
 
-So we have
+So using \(L = T - V\) we have
 
 \begin{align}
     L = \frac{p_r^2}{2 m_s} + \frac{p_\theta^2}{2 m_s r^2} + \frac{p_\phi^2}{2 m_s r^2 \sin^2{\theta}} + G m_s \sum\limits_{k} \frac{M_k}{\left| \vec{r} - \vec{r_k} \right|}
@@ -261,7 +256,7 @@ Now adding all three \cref{eq:x-dist-squared,eq:y-dist-squared,eq:z-dist-squared
                 \(\cos{\phi}\cos{\phi_k} + \sin{\phi}\sin{\phi_k}\)}}
         ))
     } \\
-    &= \sqrt{(r - r_k)^2(\cos{\theta}\cos{\theta_k}+\sin{\theta}\sin{\theta_k}(\cos{\phi - \phi_k}))},
+    &= \sqrt{r^2 + r_k^2 - 2 r r_k(\cos{\theta}\cos{\theta_k}+\sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k}))},
 \end{align}
 where the blue factor was simplified using the sum rule \cite{WeissteinTrig}: \\
 \(\cos{\alpha}\cos{\beta} + \sin{\alpha}\sin{\beta} = cos{\alpha-\beta}\).
@@ -270,7 +265,7 @@ So we can finally express \(H\) as
 \begin{equation}
     \begin{aligned}
         H &= \frac{p_r^2}{2 m_s} + \frac{p_\theta^2}{2 m_s r^2} + \frac{p_\phi^2}{2 m_s r^2 \sin^2{\theta}} \\
-        &- G m_s \sum\limits_{k} \frac{M_k}{\sqrt{(r - r_k)^2\left[\cos{\theta}\cos{\theta_k}+\sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k})\right]}}
+        &- G m_s \sum\limits_{k} \frac{M_k}{\sqrt{r^2 + r_k - 2 r r_k \left[\cos{\theta}\cos{\theta_k}+\sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k})\right]}}
     \end{aligned}
 \end{equation}
 
@@ -281,14 +276,14 @@ So we can finally express \(H\) as
     \dot{\phi} = \pd{H}{p_\phi} &= \frac{p_\phi}{m_s r^2 \sin^2{\theta}} \label{eq:phidot}  \\[0.3cm]
     \begin{split}
         \dot{p}_r = -\pd{H}{r} &= \frac{p_\theta^2}{m_s r^3} + \frac{p_\phi^2}{m_s r^3 \sin^2{\theta} } \\
-        &+ G m_s \sum\limits_{k} M_k \frac{-\left[r - r_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right) \right]}{\left[(r - r_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \label{eq:prdot}
+        &+ G m_s \sum\limits_{k} M_k \frac{-r + r_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right)}{\left[r^2 + r_k^2 - 2 r r_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \label{eq:prdot}
     \end{split} \\[0.3cm]
     \begin{split}
         \dot{p}_\theta = -\pd{H}{\theta} &= \frac{p_\phi^2}{m_s r^2 \sin^2{\theta} \tan{\theta}} \\
-        &+ G m_s \sum\limits_{k} M_k \frac{r r_k \left[-\sin{\theta}\cos{\theta_k} + \cos{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right]}{\left[(r - r_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \label{eq:pthetadot}
+        &+ G m_s \sum\limits_{k} M_k \frac{r r_k \left[-\sin{\theta}\cos{\theta_k} + \cos{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right]}{\left[r^2 + r_k^2 - 2 r r_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \label{eq:pthetadot}
     \end{split} \\[0.3cm]
     \begin{split}
-        \dot{p}_\phi = -\pd{H}{\phi} &= G m_s \sum\limits_{k} M_k \frac{- r r_k \sin{\theta}\sin{\theta_k}\sin{(\phi - \phi_k)}}{\left[(r - r_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \label{eq:pphidot}
+        \dot{p}_\phi = -\pd{H}{\phi} &= G m_s \sum\limits_{k} M_k \frac{- r r_k \sin{\theta}\sin{\theta_k}\sin{(\phi - \phi_k)}}{\left[r^2 + r_k^2 - 2 r r_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \label{eq:pphidot}
     \end{split}
 \end{align}
 
@@ -380,20 +375,25 @@ so we get
     \dot{\phi} = \frac{B_\phi}{R^2 \sin^2{\theta}}
 \end{empheq}
 
-For the \(p_j\), \cref{eq:prdot,eq:pthetadot,eq:pphidot} , we first divide by \(m_s\) then set \(b_j = \frac{p_j}{m_s}\) (\blue{relevant terms marked in blue}) and \(\mu_k = G M_k\), and finally nondimensionalize:
+For the \(p_j\), \cref{eq:prdot,eq:pthetadot,eq:pphidot} , we first divide by \(m_s\) then set \(b_j = \frac{p_j}{m_s}\) (\blue{relevant terms marked in blue}) and \(\mu_k = G M_k\):
 
 \begin{align}
     \begin{split}
         \od{\blue{p_r}}{t} = -\pd{H}{q_r} &= \frac{\blue{p_\theta^2}}{\blue{m_s} r^3} + \frac{\blue{p_\phi^2}}{\blue{m_s} r^3 \sin^2{\theta} } \\
-        &+ G \blue{m_s} \sum\limits_{k} M_k \frac{-\left[r - r_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right) \right]}{\left[(r - r_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}}
+        &+ G \blue{m_s} \\
+        &\sum\limits_{k} M_k \frac{-r + r_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right)}{\left[r^2 + r_k^2 - 2 r r_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}},
     \end{split} \\[0.3cm]
     \begin{split}
         \Leftrightarrow \od{\blue{b_r}}{t} &= \frac{\blue{b_\theta^2}}{r^3} + \frac{\blue{b_\phi^2}}{r^3 \sin^2{\theta} } \\
-        &+ \sum\limits_{k} \mu_k \frac{-\left[r - r_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right) \right]}{\left[(r - r_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}}
-    \end{split} \\[0.3cm]
+        &+ \sum\limits_{k} \mu_k \frac{-r + r_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right)}{\left[r^2 + r_k^2 - 2 r r_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}}.
+    \end{split}
+\end{align}
+And finally we nondimensionalize:
+\begin{align}
     \begin{split}
         \Leftrightarrow \teal{\frac{k_{br}}{k_t}} \od{B_r}{T} &= \orange{\frac{k_{b\theta}^2}{k_r^3}} \frac{B_\theta^2}{R^3} + \orange{\frac{k_{b\phi}^2}{k_r^3}} \frac{B_\phi^2}{R^3 \sin^2{\theta} } \\
-        &+ \red{\frac{k_r^3}{k_t^2}\frac{1}{k_r^2}} \sum\limits_{k} \eta_k \frac{-\left[R - R_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right) \right]}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}}
+        &+ \red{\frac{k_r^3}{k_t^2}\frac{1}{k_r^2}} \\
+        & \sum\limits_{k} \eta_k \frac{-R + R_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right)}{\left[R^2 + R_k^2 - 2 R R_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}},
     \end{split}
 \end{align}
 
@@ -404,7 +404,7 @@ where the characteristic units are colored teal, orange and red, \([\mu] = [G] [
     = &\frac{k_t^2}{k_r} \frac{k_r^4}{k_t^2 k_r^3}\\
     = &1,
 \end{align}
-and equivalent same for the second orange since \(k_\theta\) and \(k_\phi\) have the same units. And the red terms:
+and equivalently same for the second orange since \(k_\theta\) and \(k_\phi\) have the same units. And the red terms:
 
 \begin{align}
     & \teal{\frac{k_t}{k_{br}}} \red{\frac{k_r^3}{k_t^2}\frac{1}{k_r^2}} \\
@@ -416,7 +416,7 @@ and we are left with the nondimensionalized equation:
 \begin{empheq}[box=\widefbox]{align}
     \label{eq:Brdot}
     \dot{B}_r = &\frac{B_\theta^2}{R^3} + \frac{B_\phi^2}{R^3 \sin^2{\theta}} \\
-    & + \sum\limits_{k} \eta_k \frac{-\left[R - R_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right) \right]}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \notag
+    & + \sum\limits_{k} \eta_k \frac{-R + R_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right)}{\left[R^2 + R_k^2 - 2 R R_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \notag
 \end{empheq}
 
 The exact same procedure for \(\dot{p_\theta}\) and \(\dot{p}_\phi\) gives us:
@@ -424,12 +424,12 @@ The exact same procedure for \(\dot{p_\theta}\) and \(\dot{p}_\phi\) gives us:
 \begin{empheq}[box=\widefbox]{align}
     \label{eq:Bthetadot}
     \dot{B}_\theta = &\frac{B_\phi^2}{R^2 \sin^2{\theta} \tan{\theta}} \\
-    &+ \sum\limits_{k} \eta_k \frac{R R_k \left[-\sin{\theta}\cos{\theta_k} + \cos{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right]}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \notag
+    &+ \sum\limits_{k} \eta_k \frac{R R_k \left[-\sin{\theta}\cos{\theta_k} + \cos{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right]}{\left[R^2 + R_k^2 - 2 R R_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}} \notag
 \end{empheq}
 
 \begin{empheq}[box=\widefbox]{align}
     \label{eq:Bphidot}
-    \dot{B}_\phi = &\sum\limits_{k} \eta_k \frac{- R R_k \sin{\theta}\sin{\theta_k}\sin{(\phi - \phi_k)}}{\left[(R - R_k)^2 \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}}
+    \dot{B}_\phi = &\sum\limits_{k} \eta_k \frac{- R R_k \sin{\theta}\sin{\theta_k}\sin{(\phi - \phi_k)}}{\left[R^2 + R_k^2 - 2 R R_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}}
 \end{empheq}
 
 As an overview, \cref{apx:hr4b-overview} shows all six nondimensionalized equations of motion one a single page.

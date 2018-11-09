@@ -67,8 +67,13 @@ def get_Bdot(R, theta, phi, B_theta, B_phi, R_ks, theta_ks, phi_ks):
 
 def Bdot_denominator(R, theta, phi, R_k, theta_k, phi_k):
     """fraction denominator for generalized momenta Bdot"""
-    base = (R - R_k) ** 2 * (
-        cos(theta) * cos(theta_k) + sin(theta) * sin(theta_k) * cos(phi - phi_k)
+    base = (
+        R ** 2
+        + R_k ** 2
+        - 2
+        * R
+        * R_k
+        * (cos(theta) * cos(theta_k) + sin(theta) * sin(theta_k) * cos(phi - phi_k))
     )
 
     return base * sqrt(base)
@@ -76,10 +81,8 @@ def Bdot_denominator(R, theta, phi, R_k, theta_k, phi_k):
 
 def Bdot_numerators(R, theta, phi, R_k, theta_k, phi_k):
     """fraction numerators for generalized momenta Bdot"""
-    n1 = -(
-        R
-        - R_k
-        * (cos(theta) * cos(theta_k) + (sin(theta) * sin(theta_k * cos(phi - phi_k))))
+    n1 = -R + R_k * (
+        cos(theta) * cos(theta_k) + (sin(theta) * sin(theta_k * cos(phi - phi_k)))
     )
     n2 = (
         R
