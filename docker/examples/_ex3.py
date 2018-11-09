@@ -26,9 +26,9 @@ class mga_lt_EVMe(object):
         self.__Vinf_arr = Vinf_arr * 1000
         self.__leg1 = pk.sims_flanagan.leg()
         self.__leg2 = pk.sims_flanagan.leg()
-        self.__leg1.set_mu(pk.MU_SUN)
+        self.__leg1.set_mu(pk.SUN_MU)
         self.__leg1.set_spacecraft(self.__sc)
-        self.__leg2.set_mu(pk.MU_SUN)
+        self.__leg2.set_mu(pk.SUN_MU)
         self.__leg2.set_spacecraft(self.__sc)
         self.__nseg1 = nseg1
         self.__nseg2 = nseg2

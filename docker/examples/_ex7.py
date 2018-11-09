@@ -48,7 +48,7 @@ def run_example7(solver="snopt7"):
         freetime=True,
         alpha=0,
         bound=True,
-        mu=pk.MU_SUN),
+        mu=pk.SUN_MU),
         with_grad=False)
 
     prob = pg.problem(udp)

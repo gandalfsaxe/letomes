@@ -56,13 +56,13 @@ Cell[BoxData[
   RowBox[{
    RowBox[{
     SubscriptBox["\[Eta]", "1"], "=", 
-    RowBox[{"constants", "[", "\"\<ETA_SUN\>\"", "]"}]}], ",", 
+    RowBox[{"constants", "[", "\"\<SUN_ETA\>\"", "]"}]}], ",", 
    RowBox[{
     SubscriptBox["\[Eta]", "2"], "=", 
-    RowBox[{"constants", "[", "\"\<ETA_EARTH\>\"", "]"}]}], ",", 
+    RowBox[{"constants", "[", "\"\<EARTH_ETA\>\"", "]"}]}], ",", 
    RowBox[{
     SubscriptBox["\[Eta]", "3"], "=", 
-    RowBox[{"constants", "[", "\"\<ETA_MARS\>\"", "]"}]}]}], "}"}]], "Input",
+    RowBox[{"constants", "[", "\"\<MARS_ETA\>\"", "]"}]}]}], "}"}]], "Input",
  CellChangeTimes->{{3.745035252570665*^9, 3.745035262361268*^9}, 
    3.745035302740597*^9, {3.745035411721187*^9, 3.745035450471024*^9}, {
    3.7450355406477633`*^9, 3.7450355757654037`*^9}, {3.745035641089954*^9, 
@@ -128,7 +128,7 @@ Cell[BoxData[
     RowBox[{"constants", "[", "\"\<R_SUN\>\"", "]"}]}], ",", 
    RowBox[{
     SubscriptBox["\[Theta]", "1"], "=", 
-    RowBox[{"constants", "[", "\"\<THETA_SUN\>\"", "]"}]}], ",", 
+    RowBox[{"constants", "[", "\"\<THSUN_ETA\>\"", "]"}]}], ",", 
    RowBox[{
     SubscriptBox["\[Phi]", "1"], "=", 
     RowBox[{"constants", "[", "\"\<PHI_SUN\>\"", "]"}]}]}], "}"}]], "Input",

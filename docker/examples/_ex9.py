@@ -20,7 +20,7 @@ def run_example9():
         pf="mars",
         thrust=0.1,
         isp=3000,
-        mu=pk.MU_SUN,
+        mu=pk.SUN_MU,
         tof=[600, 720],
         alpha=0,    # quadratic control
         bound=True),
@@ -49,7 +49,7 @@ def run_example9():
             pf="mars",
             thrust=0.1,
             isp=3000,
-            mu=pk.MU_SUN,
+            mu=pk.SUN_MU,
             tof=[600, 720],
             alpha=alpha,    # quadratic control
             bound=True),

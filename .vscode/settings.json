@@ -175,6 +175,7 @@
     "linkcolor",
     "mkdir",
     "mplot",
+    "mplotting",
     "nargs",
     "njit",
     "nondim",
@@ -222,7 +223,8 @@
     "yscale",
     "zdot",
     "zlabel"
-  ]
+  ],
+  "python.linting.pylintEnabled": true
 }
 
 

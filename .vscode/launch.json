@@ -42,6 +42,7 @@
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
+            "cwd": "${workspaceFolder}/code",
             "program": "${file}",
             
         },

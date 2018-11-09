@@ -13,9 +13,9 @@ All non-dimensionalized and scaled with mass of spacecraft (see derivations in r
 
 from math import cos, sin, sqrt, tan
 
-from orbsim.r4b_3d import ETA_EARTH, ETA_MARS, ETA_SUN
+from orbsim.r4b_3d import EARTH_ETA, MARS_ETA, SUN_ETA
 
-eta_ks = [ETA_SUN, ETA_EARTH, ETA_MARS]
+eta_ks = [SUN_ETA, EARTH_ETA, MARS_ETA]
 
 
 # region Coodinate Derivatives: Qdot(Q, B)

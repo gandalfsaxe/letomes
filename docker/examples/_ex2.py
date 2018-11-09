@@ -3,7 +3,7 @@ def run_example2():
     from mpl_toolkits.mplot3d import Axes3D
 
     import matplotlib.pyplot as plt
-    from pykep import epoch, DAY2SEC, AU, MU_SUN, lambert_problem
+    from pykep import epoch, DAY2SEC, AU, SUN_MU, lambert_problem
     from pykep.planet import jpl_lp
     from pykep.orbit_plots import plot_planet, plot_lambert
 
@@ -28,7 +28,7 @@ def run_example2():
         pl, t0=t2, color=(0.8, 0.8, 1), legend=True, units=AU, ax=axis)
     rM, vM = pl.eph(t2)
 
-    l = lambert_problem(rE, rM, dt, MU_SUN)
+    l = lambert_problem(rE, rM, dt, SUN_MU)
     plot_lambert(l, color='b', legend=True, units=AU, ax=axis)
     plot_lambert(l, sol=1, color='g', legend=True, units=AU, ax=axis)
     plot_lambert(l, sol=2, color='g', legend=True, units=AU, ax=axis)

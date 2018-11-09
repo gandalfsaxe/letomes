@@ -18,14 +18,9 @@ from pprint import pprint
 
 import pytest
 
-from orbsim.r4b_3d.coordinate_system import (  # pylint: disable=W0611
-    get_position_cartesian_from_spherical,
-    get_position_spherical_from_cartesian,
-    get_distance_cartesian,
-    get_distance_spherical,
-    get_velocity_spherical_from_cartesian,
-    get_speed_cartesian,
-    get_speed_spherical,
+from orbsim.r4b_3d.equations_of_physics import (  # pylint: disable=W0611
+    get_circular_orbit_speed,
+    get_circular_orbit_period,
 )
 
 
@@ -61,7 +56,7 @@ def process_test_data(function_name, input_type="list"):
     for arg, output in tests:
         if input_type == "scalar":
             arg = tuple(arg)
-        arg_str = ", ".join(map(str, arg))
+        arg_str = str(arg)[1:-1]
         if not isinstance(output, str):
             # Make tuple list ("function(input)", output)
             function_tests.append((f"{function_name}({arg_str})", output))
@@ -79,70 +74,22 @@ def process_test_data(function_name, input_type="list"):
 
 
 @pytest.mark.parametrize(
-    "test_input, expected", process_test_data("get_position_cartesian_from_spherical")
+    "test_input, expected", process_test_data("get_circular_orbit_speed")
 )
 def test1(test_input, expected):
-    """Test get_position_cartesian_from_spherical"""
+    """Test get_circular_orbit_speed"""
     assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
 
 
 @pytest.mark.parametrize(
-    "test_input, expected", process_test_data("get_position_spherical_from_cartesian")
+    "test_input, expected", process_test_data("get_circular_orbit_period")
 )
 def test2(test_input, expected):
-    """Test get_position_spherical_from_cartesian"""
-    assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
-
-
-@pytest.mark.parametrize(
-    "test_input, expected", process_test_data("get_distance_cartesian")
-)
-def test3(test_input, expected):
-    """Test get_distance_cartesian"""
-    assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
-
-
-@pytest.mark.parametrize(
-    "test_input, expected", process_test_data("get_distance_spherical")
-)
-def test4(test_input, expected):
-    """Test get_distance_spherical"""
-    assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
-
-
-@pytest.mark.parametrize(
-    "test_input, expected", process_test_data("get_distance_spherical")
-)
-def test4(test_input, expected):
-    """Test get_distance_spherical"""
-    assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
-
-
-@pytest.mark.parametrize(
-    "test_input, expected", process_test_data("get_velocity_spherical_from_cartesian")
-)
-def test5(test_input, expected):
-    """Test get_velocity_spherical_from_cartesian"""
-    assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
-
-
-@pytest.mark.parametrize(
-    "test_input, expected", process_test_data("get_speed_cartesian")
-)
-def test6(test_input, expected):
-    """Test get_speed_cartesian"""
-    assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
-
-
-@pytest.mark.parametrize(
-    "test_input, expected", process_test_data("get_speed_spherical")
-)
-def test7(test_input, expected):
-    """Test get_speed_spherical"""
+    """Test get_circular_orbit_period"""
     assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
 
 
 if __name__ == "__main__":
-    func_name = "get_speed_spherical"
+    func_name = "get_circular_orbit_speed"
 
-    pprint(process_test_data(func_name, input_type="scalar"))
+    pprint(process_test_data(func_name, input_type="list"))

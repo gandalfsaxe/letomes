@@ -9,84 +9,108 @@ All physics equations not related to Hamilton's equations (equations of motion).
 
 import logging
 from math import degrees, pi, radians, sqrt
+from pprint import pprint
 
 import numpy as np
 
+from orbsim import EARTH_RADIUS, MARS_RADIUS, SUN_RADIUS
+from orbsim.r4b_3d import (
+    EARTH_MU,
+    MARS_MU,
+    SUN_MU,
+    UNIT_LENGTH,
+    UNIT_TIME,
+    UNIT_VELOCITY,
+)
 from orbsim.r4b_3d.coordinate_system import (
     get_position_spherical_from_cartesian,
     get_speed_spherical,
     get_velocity_spherical_from_cartesian,
 )
-from orbsim.r4b_3d.ephemerides import get_ephemerides, get_ephemerides_on_day
-from orbsim import EARTH_RADIUS
-from orbsim.r4b_3d import (
-    ETA_EARTH,
-    ETA_MARS,
-    ETA_SUN,
-    UNIT_LENGTH,
-    UNIT_TIME,
-    UNIT_VELOCITY,
-)
+from orbsim.r4b_3d.ephemerides import get_ephemerides_on_day
 
-eta_ks = [ETA_SUN, ETA_EARTH, ETA_MARS]
-
-
-def get_leo_speed(altitude=160):
+# region Circular Orbit
+def get_circular_orbit_speed(body="Earth", altitude=160):
     """ Get speed of LEO (Low Earth Orbit) at designated altitude.
 
     Keyword Arguments:
-        altitude {int} -- distance above Earth surface in km (default: {100})
+        altitude {int} -- distance above Earth surface in km (default: {160})
 
     Returns:
         [int] -- speed in km/s.
     """
 
-    v = sqrt(ETA_EARTH / ((EARTH_RADIUS + altitude) / UNIT_LENGTH))
+    if body == "Sun":
+        mu = SUN_MU
+        radius = SUN_RADIUS
+    elif body == "Earth":
+        mu = EARTH_MU
+        radius = EARTH_RADIUS
+    elif body == "Mars":
+        mu = MARS_MU
+        radius = MARS_RADIUS
 
-    v_kmps = v * UNIT_LENGTH / UNIT_TIME
+    v = sqrt(mu / (radius + altitude))
+
+    v_au_y = v / (UNIT_LENGTH / UNIT_TIME)
 
     logging.debug(
-        f"Initial LEO orbital speed at {altitude} km altitude (geocentric, AU/y): {v}"
-        f" (Expected: 1.6468 au/y (via Wolfram Alpha))"
+        f"Circular orbital speed around {body} at {altitude} km altitude (km/s): {v}"
+        f" (Initial 160 km LEO expected speed: 7.812 km/s (via Wolfram Alpha))"
         # https://www.wolframalpha.com/input/?i=7.812+km%2Fs+in+au%2Fy
     )
     logging.debug(
-        f"Initial LEO orbital speed at {altitude} km altitude (geocentric, km/s): "
-        f"{v_kmps}"
-        f" (Expected: 7.812 km/s (via Wolfram Alpha))"
+        f"Circular orbital speed around {body} at {altitude} km altitude (AU/y):"
+        f" {v_au_y}"
+        f" (Initial 160 km LEO expected speed: 1.6468 au/y (via Wolfram Alpha))"
         # https://www.wolframalpha.com/input/?i=circular+orbital+speed+earth+altitude+160km
     )
 
-    return v_kmps
+    return v
 
 
-def get_leo_period(altitude=160):
+def get_circular_orbit_period(body="Earth", altitude=160):
     """ Get period of LEO (Low Earth Orbit) at designated altitude.
 
     Keyword Arguments:
-        altitude {int} -- distance above Earth surface in km (default: {100})
+        altitude {int} -- distance above Earth surface in km (default: {160})
 
     Returns:
-        [int] -- time in s.
+        [int] -- period in s.
     """
 
-    T = 2 * pi * sqrt((EARTH_RADIUS + altitude) ** 3 / ETA_EARTH)
+    if body == "Sun":
+        mu = SUN_MU
+        radius = SUN_RADIUS
+    elif body == "Earth":
+        mu = EARTH_MU
+        radius = EARTH_RADIUS
+    elif body == "Mars":
+        mu = MARS_MU
+        radius = MARS_RADIUS
+
+    T = 2 * pi * sqrt((radius + altitude) ** 3 / (mu))
+
+    T_y = T * UNIT_TIME
 
     logging.debug(
-        f"Initial LEO orbital period at {altitude} km altitude (s): {T}"
-        f"(Expected: 5261 s (via Wolfram Alpha)"
+        f"Circular orbital period around {body} at {altitude} km altitude (s): {T}"
+        f" (Initial 160 km LEO expected period: 5261 s (via Wolfram Alpha)"
     )
     # https://www.wolframalpha.com/input/?i=circular+orbital+period+earth+altitude+160km
 
     logging.debug(
-        f"Initial LEO orbital period at {altitude} km altitude (hours): {T/3600}"
-        f"(Expected: 1.461 h  (Via Wolfram Alpha)"
+        f"Circular orbital period around {body} at {altitude} km altitude (h): {T_y}"
+        f" (Initial 160 km LEO expected period: 1.461 h  (Via Wolfram Alpha)"
     )
     # https://www.wolframalpha.com/input/?i=circular+orbital+period+earth+altitude+160km
 
     return T
 
 
+# endregion
+
+# region Initial Conditions
 def get_leo_position_and_velocity(ephemerides, day, altitude=160):
     """Calculate direction of initial velocity vector.
     Assumes ephemerides are given with 1 day interval. With a series of cross products,
@@ -274,7 +298,7 @@ def get_leo_position_and_velocity(ephemerides, day, altitude=160):
     # ---------- 4 Spacecraft initial velocity
     # Spacecraft velocity = Earth velocity + leo speed (same direction as Earth)
 
-    leo_speed = get_leo_speed(altitude)
+    leo_speed = get_circular_orbit_speed("Earth", altitude)
 
     qdot0_cartesian_unit = list(earth_qdot0_cartesian_km_s)
     qdot0_cartesian_unit /= np.linalg.norm(qdot0_cartesian_unit)
@@ -344,41 +368,8 @@ def get_leo_position_and_velocity(ephemerides, day, altitude=160):
     return q0_spherical_AU_rad, qdot0_spherical_AU_rad_year
 
 
+# endregion
+
 if __name__ == "__main__":
 
-    # logging_setup("info")
-
-    eph = get_ephemerides()
-
-    leo = get_leo_position_and_velocity(eph, day=0)
-    x = 2
-
-    # logging.info(f"LEO (position, velocity), cartesian, AU: {leo}")
-
-    # t90p0 = get_unit_R(theta=pi / 2, phi=0)
-    # print(f"t90p0: {t90p0}")
-    # t90p90 = get_unit_R(theta=pi / 2, phi=pi / 2)
-    # print(f"t90p90: {t90p90}")
-    # t0p0 = get_unit_R(theta=0, phi=0)
-    # print(f"t0p0: {t0p0}")
-
-    # t0p0 = get_unit_theta(theta=0, phi=0)
-    # print(f"t0p0: {t0p0}")
-    # t180p0 = get_unit_theta(theta=pi, phi=0)
-    # print(f"t180p0: {t180p0}")
-    # t180pm90 = get_unit_theta(theta=pi, phi=-pi / 2)
-    # print(f"t180pm90: {t180pm90}"    # t180p90 = get_unit_theta(theta=pi, phi=pi / 2)
-    # print(f"t180p90: {t180p90}")
-    # t90p0 = get_unit_theta(theta=pi / 2, phi=0)
-    # print(f"t90p0: {t90p0}")
-
-    # t90pm90 = get_unit_phi(theta=pi / 2, phi=-pi / 2)
-    # print(f"t90pm90: {t90pm90}")
-    # t90p90 = get_unit_phi(theta=pi / 2, phi=pi / 2)
-    # print(f"t90p90: {t90p90}")
-    # t90p0 = get_unit_phi(theta=pi / 2, phi=0)
-    # print(f"t90p0: {t90p0}")
-    # t90p180 = get_unit_phi(theta=pi / 2, phi=pi)
-    # print(f"t90p180: {t90p180}")
-
-    # pass
+    pprint(get_circular_orbit_period("Earth", 100.0))

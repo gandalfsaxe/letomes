@@ -20,7 +20,7 @@ class mga_lt_earth_mars_sundmann(object):
         # (r/10AU)^1.5 s
         self.__leg = pk.sims_flanagan.leg_s(
             nseg, 1.0 / (100 * pk.AU) ** 1.0, 1.0)
-        self.__leg.set_mu(pk.MU_SUN)
+        self.__leg.set_mu(pk.SUN_MU)
         self.__leg.set_spacecraft(self.__sc)
         # This is needed to use the plotting function plot_sf_leg
         self.__leg.high_fidelity = False

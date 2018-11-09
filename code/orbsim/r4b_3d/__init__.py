@@ -22,9 +22,9 @@ from orbsim import (
     LUNAR_RADIUS,
     a_EARTH,
     T_EARTH,
-    MU_SUN,
-    MU_EARTH,
-    MU_MARS,
+    SUN_MU,
+    EARTH_MU,
+    MARS_MU,
 )
 
 ############### SIMULATION CONSTANTS ###############
@@ -43,7 +43,7 @@ STEP_ERROR_TOLERANCE = 1e-9  # dimless time
 
 ############### CHARACTERISTIC UNITS ###############
 
-UNIT_LENGTH = 149597870.700  # km/AU
+UNIT_LENGTH = a_EARTH  # km/AU
 # (This is the precise definition, see https://en.wikipedia.org/wiki/Astronomical_unit)
 UNIT_TIME = T_EARTH  # 1 year in s/year
 UNIT_VELOCITY = 4.7403885  # km/s (or 1 AU/y in km/s)
@@ -61,9 +61,9 @@ LLO_RADIUS = LUNAR_RADIUS + LUNAR_ALTITUDE  # km
 LLO_VELOCITY = sqrt(G * LUNAR_MASS / (LLO_RADIUS))  # km/s
 
 # Stationary Sun
-R_SUN = 0
-THETA_SUN = pi / 4
-PHI_SUN = 0
+SUN_R = 0
+get_circular_orbit_period = pi / 4
+SUN_PHI = 0
 
 ############### NONDIMENSIONALIZATION ###############
 
@@ -72,9 +72,9 @@ LEO_RADIUS_NONDIM = LEO_RADIUS / UNIT_LENGTH  # dimless
 LEO_VELOCITY_NONDIM = LEO_VELOCITY / UNIT_VELOCITY  # dimless
 
 # Nondimensionalized standard gravitational parameters
-ETA_SUN = UNIT_TIME ** 2 / UNIT_LENGTH ** 3 * MU_SUN
-ETA_EARTH = UNIT_TIME ** 2 / UNIT_LENGTH ** 3 * MU_EARTH
-ETA_MARS = UNIT_TIME ** 2 / UNIT_LENGTH ** 3 * MU_MARS
+SUN_ETA = UNIT_TIME ** 2 / UNIT_LENGTH ** 3 * SUN_MU
+EARTH_ETA = UNIT_TIME ** 2 / UNIT_LENGTH ** 3 * EARTH_MU
+MARS_ETA = UNIT_TIME ** 2 / UNIT_LENGTH ** 3 * MARS_MU
 
 
 def update_constants_json():
@@ -99,15 +99,15 @@ def update_constants_json():
         "LEO_VELOCITY": LEO_VELOCITY,
         "LLO_RADIUS": LLO_RADIUS,
         "LLO_VELOCITY": LLO_VELOCITY,
-        "R_SUN": R_SUN,
-        "THETA_SUN": THETA_SUN,
-        "PHI_SUN": PHI_SUN,
+        "SUN_R": SUN_R,
+        "get_circular_orbit_period": get_circular_orbit_period,
+        "SUN_PHI": SUN_PHI,
         ############### NONDIMENSIONALIZATION ###############
         "LEO_RADIUS_NONDIM": LEO_RADIUS_NONDIM,
         "LEO_VELOCITY_NONDIM": LEO_VELOCITY_NONDIM,
-        "ETA_SUN": ETA_SUN,
-        "ETA_EARTH": ETA_EARTH,
-        "ETA_MARS": ETA_MARS,
+        "SUN_ETA": SUN_ETA,
+        "EARTH_ETA": EARTH_ETA,
+        "MARS_ETA": MARS_ETA,
     }
 
     orbsim_path = os.path.dirname(os.path.abspath(__file__))

@@ -13,6 +13,7 @@ from pathlib import Path
 
 
 FILE_PATH = "orbsim/r4b_3d/ephemerides/"
+# FILE_PATH = "code/orbsim/r4b_3d/ephemerides/"
 
 # FILENAME_EARTH = "earth_2019-2020.csv"
 FILENAME_EARTH = "earth_2019-2039.csv"
@@ -81,7 +82,7 @@ def animate_r4b_orbitplot(qs, fig, ax):
     )  # Turn off blitting if you want to rotate the plot. Turn it on if you wanna go fast
     plt.rcParams[
         "animation.convert_path"
-    ] = "C:\Program Files\ImageMagick-7.0.8-Q16\magick.exe"
+    ] = "C:\Program Files\ImageMagick-7.0.8-Q16\magick.exe"  # "/usr/local/bin/magick"
     writer = ImageMagickFileWriter()
     ani.save(f"{str(Path.home())}/animation.mp4", writer=writer)
     plt.show()

@@ -13,18 +13,20 @@ import os
 # See physical_constants_and_units.nb, but can be looked up in any table / Wikipedia
 
 # Physical constants
-G = 6.67384e-11 / 1000 ** 3  # kg^-1 km^3 s^-2
+# G = 6.67384e-11 / 1000 ** 3  # kg^-1 km^3 s^-2
+G = 6.674080000000000335154563053e-11 / 1000 ** 3  # kg^-1 km^3 s^-2
 DAY = 24.0 * 3600.0  # s
 
 # Solar system quantities
-a_EARTH = 1.49597887e8  # km (semi major axis of Earth's orbit)
-T_EARTH = 3.1558149e7  # s (orbital period of Earth)
+a_EARTH = 1.495978871467657760097664981e8  # km (semi major axis of Earth's orbit)
+T_EARTH = 3.15581491022399999996634126e7  # s (orbital period of Earth)
 
 # Sun constants
 SUN_MASS = 1.988435e30  # kg
+SUN_RADIUS = 6.95700e5  # km
 
 # Earth constants
-EARTH_RADIUS = 6367.4447  # km
+EARTH_RADIUS = 6378.1  # km (equatorial)
 EARTH_MASS = 5.9721986e24  # kg
 
 # Lunar quantities
@@ -34,14 +36,14 @@ EARTH_MOON_DISTANCE = 384400.0  # km
 LUNAR_ORBITAL_DURATION = 27.322  # days
 
 # Mars quantities
-MARS_RADIUS = 3389.5  # km
+MARS_RADIUS = 3396.2  # km (equatorial)
 MARS_MASS = 6.41693e23  # kg
 
 
 ############### DERIVED CONSTANTS ###############
-MU_SUN = G * SUN_MASS  # km^-3 s^2
-MU_EARTH = G * EARTH_MASS  # km^-3 s^2
-MU_MARS = G * MARS_MASS  # km^-3 s^2
+SUN_MU = G * SUN_MASS  # km^-3 s^2
+EARTH_MU = G * EARTH_MASS  # km^-3 s^2
+MARS_MU = G * MARS_MASS  # km^-3 s^2
 
 
 def update_constants_json():
@@ -64,9 +66,9 @@ def update_constants_json():
         "MARS_RADIUS": MARS_RADIUS,
         "MARS_MASS": MARS_MASS,
         ############### DERIVED CONSTANTS ###############
-        "MU_SUN": MU_SUN,
-        "MU_EARTH": MU_EARTH,
-        "MU_MARS": MU_MARS,
+        "SUN_MU": SUN_MU,
+        "EARTH_MU": EARTH_MU,
+        "MARS_MU": MARS_MU,
     }
 
     orbsim_path = os.path.dirname(os.path.abspath(__file__))

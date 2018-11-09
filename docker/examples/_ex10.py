@@ -20,7 +20,7 @@ def run_example10():
             24917.707565772216, -1235.74045124602, -638.05209482866155, 905.47894037275546],
         thrust=0.1,
         isp=3000,
-        mu=pk.MU_SUN,
+        mu=pk.SUN_MU,
         tof=[616.77087591237546, 616.77087591237546],
         freetime=False,
         alpha=0,    # quadratic control
@@ -51,7 +51,7 @@ def run_example10():
                 24917.707565772216, -1235.74045124602, -638.05209482866155, 905.47894037275546],
             thrust=0.1,
             isp=3000,
-            mu=pk.MU_SUN,
+            mu=pk.SUN_MU,
             tof=[616.77087591237546, 616.77087591237546],
             freetime=False,
             alpha=alpha,    # quadratic control
