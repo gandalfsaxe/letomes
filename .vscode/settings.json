@@ -1,6 +1,6 @@
 {
   // TERMINAL
-  "terminal.integrated.cwd": "code/",
+  // "terminal.integrated.cwd": "code/",
 
   // PYTHON
   "python.formatting.provider": "black",
@@ -21,7 +21,8 @@
 ],
   // PYTHON UNIT TEST
   "python.unitTest.pyTestEnabled": true,
-  "python.unitTest.pyTestArgs": ["code"], // only looks for unit tests in ./code/
+  // Place your settings in this file to overwrite default and user settings.
+  "python.unitTest.cwd": "code/", // otherwise logging.py gives error on path"logs/log.txt"
 
   // LATEX WORKSHOP
   "latex-workshop.latex.autoBuild.onSave.enabled": true,
