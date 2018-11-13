@@ -11,7 +11,10 @@ Includes at least:
 All non-dimensionalized and scaled with mass of spacecraft (see derivations in report)
 """
 
-from math import cos, sin, sqrt, tan
+from math import pi
+
+import numpy as np
+from numpy import cos, sin, sqrt, tan
 
 from orbsim.r4b_3d import EARTH_ETA, MARS_ETA, SUN_ETA
 
@@ -19,86 +22,181 @@ eta_ks = [SUN_ETA, EARTH_ETA, MARS_ETA]
 
 
 # region Coodinate Derivatives: Qdot(Q, B)
-def get_Rdot(B_r):
-    """Rdot(R, theta, phi, B_r, B_theta, B_phi) from Hamilton's equations"""
-    return B_r
+def get_Rdot(B_R):
+    """Rdot(R, theta, phi, B_R, B_theta, B_phi) from Hamilton's equations"""
+    return B_R
 
 
 def get_thetadot(R, B_theta):
-    """thetadot(R, theta, phi, B_r, B_theta, B_phi) from Hamilton's equations"""
+    """thetadot(R, theta, phi, B_R, B_theta, B_phi) from Hamilton's equations"""
+    if R <= 0:
+        raise ValueError("R must be positive.")
     return B_theta / (R ** 2)
 
 
 def get_phidot(R, theta, B_phi):
-    """phidot(R, theta, phi, B_r, B_theta, B_phi) from Hamilton's equations"""
+    """phidot(R, theta, phi, B_R, B_theta, B_phi) from Hamilton's equations"""
+
+    if R <= 0:
+        raise ValueError("R cannot be less than or equal to zero.")
+    elif theta <= 0 or theta >= pi:
+        raise ValueError("theta must be in range 0 < theta < pi.")
+
     return B_phi / (R ** 2 * sin(theta) ** 2)
 
 
 # endregion
 
+# region Momentum Derivatives: Bdot(Q, B, Qk)
+def get_Bdot_R(R, theta, phi, B_theta, B_phi, R_ks, theta_ks, phi_ks):
 
-# region Momentum Derivatives: Bdot(Q, B, eph)
-def get_Bdot(R, theta, phi, B_theta, B_phi, R_ks, theta_ks, phi_ks):
-    """
-    All three Bdot from Hamilton's equations (Bdot_r, Bdot_theta and Bdot_phi)
-    """
-    # Initialize Bdot parts
-    Bdot_r1 = B_theta ** 2 / (R ** 3)
-    Bdot_r2 = B_phi ** 2 / (R ** 3 * sin(theta) ** 2)
-    Bdot_r3 = 0
-    Bdot_theta1 = B_phi ** 2 / (R ** 2 * sin(theta) ** 2 * tan(theta))
-    Bdot_theta2 = 0
-    Bdot_phi1 = 0
-    # Everything under the summation
-    for i, _ in enumerate(R_ks):
-        numerator_1, numerator_2, numerator_3 = Bdot_numerators(
-            R, theta, phi, R_ks[i], theta_ks[i], phi_ks[i]
-        )
-        denominator = Bdot_denominator(R, theta, phi, R_ks[i], theta_ks[i], phi_ks[i])
-        Bdot_r3 += eta_ks[i] * numerator_1 / denominator
-        Bdot_theta2 += eta_ks[i] * numerator_2 / denominator
-        Bdot_phi1 += eta_ks[i] * numerator_3 / denominator
-    # Add Bdot parts
-    Bdot_r = Bdot_r1 + Bdot_r2 + Bdot_r3
-    Bdot_theta = Bdot_theta1 + Bdot_theta2
-    Bdot_phi = Bdot_phi1
-    return Bdot_r, Bdot_theta, Bdot_phi
+    if R <= 0:
+        raise ValueError("R cannot be less than or equal to zero.")
+    if theta <= 0 or theta >= pi:
+        raise ValueError("theta must be in range 0 < theta < pi.")
+    if phi <= -pi or phi > pi:
+        raise ValueError("phi must be in range -pi < phi <= pi.")
 
+    for R_k in R_ks:
+        if R_k < 0:
+            raise ValueError("All R_k must zero or be positive (allow for SUN_R = 0)")
+    for theta_k in theta_ks:
+        if theta_k <= 0 or theta_k >= pi:
+            raise ValueError("theta_k must be in range 0 < theta_k < pi.")
+    for phi_k in phi_ks:
+        if phi_k <= -pi or phi_k > pi:
+            raise ValueError("phi_k must be in range -pi < phi_k <= pi.")
 
-def Bdot_denominator(R, theta, phi, R_k, theta_k, phi_k):
-    """fraction denominator for generalized momenta Bdot"""
-    base = (
+    R_ks = np.array(R_ks)
+    theta_ks = np.array(theta_ks)
+    phi_ks = np.array(phi_ks)
+
+    numerators = eta_ks * (
+        -R
+        + R_ks
+        * (cos(theta) * cos(theta_ks) + sin(theta) * sin(theta_ks) * cos(phi - phi_ks))
+    )
+
+    denominators_base = (
         R ** 2
-        + R_k ** 2
+        + R_ks ** 2
         - 2
         * R
-        * R_k
-        * (cos(theta) * cos(theta_k) + sin(theta) * sin(theta_k) * cos(phi - phi_k))
+        * R_ks
+        * (cos(theta) * cos(theta_ks) + sin(theta) * sin(theta_ks) * cos(phi - phi_ks))
     )
 
-    return base * sqrt(base)
+    denominators = denominators_base * sqrt(denominators_base)
+
+    summation = np.sum(numerators / denominators)
+
+    Bdot_R1 = B_theta ** 2 / (R ** 3)
+    Bdot_R2 = B_phi ** 2 / (R ** 3 * sin(theta) ** 2)
+    Bdot_R3 = summation
+
+    Bdot_R = Bdot_R1 + Bdot_R2 + Bdot_R3
+
+    return Bdot_R
 
 
-def Bdot_numerators(R, theta, phi, R_k, theta_k, phi_k):
-    """fraction numerators for generalized momenta Bdot"""
-    n1 = -R + R_k * (
-        cos(theta) * cos(theta_k) + (sin(theta) * sin(theta_k * cos(phi - phi_k)))
-    )
-    n2 = (
+def get_Bdot_theta(R, theta, phi, B_phi, R_ks, theta_ks, phi_ks):
+
+    if R <= 0:
+        raise ValueError("R cannot be less than or equal to zero.")
+    if theta <= 0 or theta >= pi:
+        raise ValueError("theta must be in range 0 < theta < pi.")
+    if phi <= -pi or phi > pi:
+        raise ValueError("phi must be in range -pi < phi <= pi.")
+
+    for R_k in R_ks:
+        if R_k < 0:
+            raise ValueError("All R_k must zero or be positive (allow for SUN_R = 0)")
+    for theta_k in theta_ks:
+        if theta_k <= 0 or theta_k >= pi:
+            raise ValueError("theta_k must be in range 0 < theta_k < pi.")
+    for phi_k in phi_ks:
+        if phi_k <= -pi or phi_k > pi:
+            raise ValueError("phi_k must be in range -pi < phi_k <= pi.")
+
+    R_ks = np.array(R_ks)
+    theta_ks = np.array(theta_ks)
+    phi_ks = np.array(phi_ks)
+
+    numerators = eta_ks * (
         R
-        * R_k
-        * (-sin(theta) * cos(theta_k) + cos(theta) * sin(theta_k) * cos(phi - phi_k))
+        * R_ks
+        * (-sin(theta) * cos(theta_ks) + cos(theta) * sin(theta_ks) * cos(phi - phi_ks))
     )
-    n3 = -R * R_k * sin(theta) * sin(theta_k) * sin(phi - phi_k)
-    return (n1, n2, n3)
+
+    denominators_base = (
+        R ** 2
+        + R_ks ** 2
+        - 2
+        * R
+        * R_ks
+        * (cos(theta) * cos(theta_ks) + sin(theta) * sin(theta_ks) * cos(phi - phi_ks))
+    )
+
+    denominators = denominators_base * sqrt(denominators_base)
+
+    summation = np.sum(numerators / denominators)
+
+    Bdot_theta1 = B_phi ** 2 / (R ** 2 * sin(theta) ** 2 * tan(theta))
+    Bdot_theta2 = summation
+
+    Bdot_theta = Bdot_theta1 + Bdot_theta2
+
+    return Bdot_theta
+
+
+def get_Bdot_phi(R, theta, phi, R_ks, theta_ks, phi_ks):
+
+    if R <= 0:
+        raise ValueError("R cannot be less than or equal to zero.")
+    if theta <= 0 or theta >= pi:
+        raise ValueError("theta must be in range 0 < theta < pi.")
+    if phi <= -pi or phi > pi:
+        raise ValueError("phi must be in range -pi < phi <= pi.")
+
+    for R_k in R_ks:
+        if R_k < 0:
+            raise ValueError("All R_k must zero or be positive (allow for SUN_R = 0)")
+    for theta_k in theta_ks:
+        if theta_k <= 0 or theta_k >= pi:
+            raise ValueError("theta_k must be in range 0 < theta_k < pi.")
+    for phi_k in phi_ks:
+        if phi_k <= -pi or phi_k > pi:
+            raise ValueError("phi_k must be in range -pi < phi_k <= pi.")
+
+    R_ks = np.array(R_ks)
+    theta_ks = np.array(theta_ks)
+    phi_ks = np.array(phi_ks)
+
+    numerators = eta_ks * (-R * R_ks * sin(theta) * sin(theta_ks) * sin(phi - phi_ks))
+
+    denominators_base = (
+        R ** 2
+        + R_ks ** 2
+        - 2
+        * R
+        * R_ks
+        * (cos(theta) * cos(theta_ks) + sin(theta) * sin(theta_ks) * cos(phi - phi_ks))
+    )
+
+    denominators = denominators_base * sqrt(denominators_base)
+
+    summation = np.sum(numerators / denominators)
+
+    Bdot_phi = summation
+
+    return Bdot_phi
 
 
 # endregion
 
-
 # region Momenta B(Q, Qdot) - Derived from Qdot(Q, B)
-def get_B_r(Rdot):
-    """Get B_r from Q, Qdot"""
+def get_B_R(Rdot):
+    """Get B_R from Q, Qdot"""
 
     return Rdot
 
@@ -114,3 +212,22 @@ def get_B_phi(R, theta, phidot):
 
 
 # endregion
+
+
+# if __name__ == "__main__":
+
+#     from pprint import pprint
+
+#     pprint(
+#         get_Bdot_R(
+#             1.1,
+#             3.1315926535897933,
+#             3.141592653589793,
+#             0.2,
+#             -0.1,
+#             [0.0, 0.983580560001, 1.470582878522],
+#             [0.013707783890401887, 1.1997429598510756, 1.264411333882953],
+#             [0.0, 2.0274978713480216, 6.283185307179586],
+#         )
+#     )
+

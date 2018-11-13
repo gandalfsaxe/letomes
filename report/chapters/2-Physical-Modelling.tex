@@ -344,12 +344,12 @@ For the \(q_j\), \cref{eq:rdot,eq:thetadot,eq:phidot}, we set \(b_j = \frac{p_j}
 \begin{align}
     \od{r}{t} &= \frac{\blue{p_r}}{\blue{p_r}} \\[0.2cm]
     \Leftrightarrow \od{r}{t} &= \blue{b_r} \\[0.2cm]
-    \Leftrightarrow \frac{k_r}{k_t} \od{R}{T} &= k_{br} B_r,
+    \Leftrightarrow \frac{k_r}{k_t} \od{R}{T} &= k_{br} B_R,
 \end{align}
 so we get
 \begin{empheq}[box=\widefbox]{align}
     \label{eq:Rdot}
-    \dot{R} = B_r
+    \dot{R} = B_R
 \end{empheq}
 
 \begin{align}
@@ -391,7 +391,7 @@ For the \(p_j\), \cref{eq:prdot,eq:pthetadot,eq:pphidot} , we first divide by \(
 And finally we nondimensionalize:
 \begin{align}
     \begin{split}
-        \Leftrightarrow \teal{\frac{k_{br}}{k_t}} \od{B_r}{T} &= \orange{\frac{k_{b\theta}^2}{k_r^3}} \frac{B_\theta^2}{R^3} + \orange{\frac{k_{b\phi}^2}{k_r^3}} \frac{B_\phi^2}{R^3 \sin^2{\theta} } \\
+        \Leftrightarrow \teal{\frac{k_{br}}{k_t}} \od{B_R}{T} &= \orange{\frac{k_{b\theta}^2}{k_r^3}} \frac{B_\theta^2}{R^3} + \orange{\frac{k_{b\phi}^2}{k_r^3}} \frac{B_\phi^2}{R^3 \sin^2{\theta} } \\
         &+ \red{\frac{k_r^3}{k_t^2}\frac{1}{k_r^2}} \\
         & \sum\limits_{k} \eta_k \frac{-R + R_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)}\right)}{\left[R^2 + R_k^2 - 2 R R_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}},
     \end{split}

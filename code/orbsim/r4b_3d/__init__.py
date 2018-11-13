@@ -62,7 +62,7 @@ LLO_VELOCITY = sqrt(G * LUNAR_MASS / (LLO_RADIUS))  # km/s
 
 # Stationary Sun
 SUN_R = 0
-get_circular_orbit_period = pi / 4
+SUN_THETA = pi / 4
 SUN_PHI = 0
 
 ############### NONDIMENSIONALIZATION ###############
@@ -100,7 +100,7 @@ def update_constants_json():
         "LLO_RADIUS": LLO_RADIUS,
         "LLO_VELOCITY": LLO_VELOCITY,
         "SUN_R": SUN_R,
-        "get_circular_orbit_period": get_circular_orbit_period,
+        "SUN_THETA": SUN_THETA,
         "SUN_PHI": SUN_PHI,
         ############### NONDIMENSIONALIZATION ###############
         "LEO_RADIUS_NONDIM": LEO_RADIUS_NONDIM,

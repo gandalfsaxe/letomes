@@ -11,15 +11,13 @@ conditions.
     conditions and stopping conditions.
 """
 
-# from typing import Callable, Iterable, Union, Optional, List
-
 import logging
 import time
 
 from orbsim.r4b_3d.equations_of_physics import get_leo_position_and_velocity
 from orbsim.r4b_3d import UNIT_TIME
 from orbsim.r4b_3d.ephemerides import get_ephemerides, get_ephemerides_on_day
-from orbsim.r4b_3d.equations_of_motion import get_B_phi, get_B_r, get_B_theta
+from orbsim.r4b_3d.equations_of_motion import get_B_phi, get_B_R, get_B_theta
 from orbsim.r4b_3d.integrators import euler_step_symplectic
 
 
@@ -64,7 +62,7 @@ def simulate(
 
     # Initial momenta (p)
     Rdot, thetadot, phidot = leo_velocity_spherical
-    B_r = get_B_r(Rdot)
+    B_R = get_B_R(Rdot)
     B_theta = get_B_theta(R, thetadot)
     B_phi = get_B_phi(R, theta, phidot)
 
@@ -87,7 +85,7 @@ def simulate(
     ts.append(t)
     days.append(day)
     qs.append([R, theta, phi])
-    ps.append([B_r, B_theta, B_phi])
+    ps.append([B_R, B_theta, B_phi])
     q_p_list.append((qs[0], ps[0]))
     t1 = time.time()
     sim_time = t1 - t0
@@ -106,11 +104,11 @@ def simulate(
 
         eph_on_date = get_ephemerides_on_day(ephemerides, day)
 
-        R, theta, phi, B_r, B_theta, B_phi = euler_step_symplectic(
-            eph_on_date, h, R, theta, phi, B_r, B_theta, B_phi
+        R, theta, phi, B_R, B_theta, B_phi = euler_step_symplectic(
+            eph_on_date, h, R, theta, phi, B_R, B_theta, B_phi
         )
         q = [R, theta, phi]
-        p = [B_r, B_theta, B_phi]
+        p = [B_R, B_theta, B_phi]
 
         ts.append(t)
         days.append(day)

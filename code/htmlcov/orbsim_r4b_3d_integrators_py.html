@@ -30,9 +30,9 @@
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
 
         <h2 class="stats">
-            18 statements &nbsp;
+            17 statements &nbsp;
             <span class="run hide_run shortkey_r button_toggle_run">0 run</span>
-            <span class="mis shortkey_m button_toggle_mis">18 missing</span>
+            <span class="mis shortkey_m button_toggle_mis">17 missing</span>
             <span class="exc shortkey_x button_toggle_exc">0 excluded</span>
 
             
@@ -84,7 +84,7 @@
 <p id="n15" class="pln"><a href="#n15">15</a></p>
 <p id="n16" class="stm mis"><a href="#n16">16</a></p>
 <p id="n17" class="pln"><a href="#n17">17</a></p>
-<p id="n18" class="stm mis"><a href="#n18">18</a></p>
+<p id="n18" class="pln"><a href="#n18">18</a></p>
 <p id="n19" class="pln"><a href="#n19">19</a></p>
 <p id="n20" class="pln"><a href="#n20">20</a></p>
 <p id="n21" class="pln"><a href="#n21">21</a></p>
@@ -171,16 +171,16 @@
 <p id="t15" class="pln"><span class="com"># import time</span><span class="strut">&nbsp;</span></p>
 <p id="t16" class="stm mis"><span class="key">from</span> <span class="nam">math</span> <span class="key">import</span> <span class="nam">pi</span><span class="op">,</span> <span class="nam">sin</span><span class="strut">&nbsp;</span></p>
 <p id="t17" class="pln"><span class="strut">&nbsp;</span></p>
-<p id="t18" class="stm mis"><span class="key">from</span> <span class="nam">orbsim</span><span class="op">.</span><span class="nam">r4b_3d</span><span class="op">.</span><span class="nam">equations_of_motion</span> <span class="key">import</span> <span class="nam">get_Bdot</span><span class="strut">&nbsp;</span></p>
+<p id="t18" class="pln"><span class="com"># from orbsim.r4b_3d.equations_of_motion import get</span><span class="strut">&nbsp;</span></p>
 <p id="t19" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t20" class="pln"><span class="com"># from numba import njit  # boolean, float64, jit</span><span class="strut">&nbsp;</span></p>
 <p id="t21" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t22" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t23" class="pln"><span class="com"># @njit</span><span class="strut">&nbsp;</span></p>
-<p id="t24" class="stm mis"><span class="key">def</span> <span class="nam">euler_step_symplectic</span><span class="op">(</span><span class="nam">ephemerides_on_day</span><span class="op">,</span> <span class="nam">h</span><span class="op">,</span> <span class="nam">R</span><span class="op">,</span> <span class="nam">theta</span><span class="op">,</span> <span class="nam">phi</span><span class="op">,</span> <span class="nam">B_r</span><span class="op">,</span> <span class="nam">B_theta</span><span class="op">,</span> <span class="nam">B_phi</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
+<p id="t24" class="stm mis"><span class="key">def</span> <span class="nam">euler_step_symplectic</span><span class="op">(</span><span class="nam">ephemerides_on_day</span><span class="op">,</span> <span class="nam">h</span><span class="op">,</span> <span class="nam">R</span><span class="op">,</span> <span class="nam">theta</span><span class="op">,</span> <span class="nam">phi</span><span class="op">,</span> <span class="nam">B_R</span><span class="op">,</span> <span class="nam">B_theta</span><span class="op">,</span> <span class="nam">B_phi</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t25" class="pln">    <span class="str">"""Takes a single time step of the symplectic Euler algorithm"""</span><span class="strut">&nbsp;</span></p>
 <p id="t26" class="pln">    <span class="com"># Update q</span><span class="strut">&nbsp;</span></p>
-<p id="t27" class="stm mis">    <span class="nam">R</span> <span class="op">=</span> <span class="nam">R</span> <span class="op">+</span> <span class="nam">h</span> <span class="op">*</span> <span class="nam">B_r</span><span class="strut">&nbsp;</span></p>
+<p id="t27" class="stm mis">    <span class="nam">R</span> <span class="op">=</span> <span class="nam">R</span> <span class="op">+</span> <span class="nam">h</span> <span class="op">*</span> <span class="nam">B_R</span><span class="strut">&nbsp;</span></p>
 <p id="t28" class="stm mis">    <span class="nam">theta</span> <span class="op">=</span> <span class="nam">theta</span> <span class="op">+</span> <span class="nam">h</span> <span class="op">*</span> <span class="nam">B_theta</span> <span class="op">/</span> <span class="nam">R</span> <span class="op">**</span> <span class="num">2</span><span class="strut">&nbsp;</span></p>
 <p id="t29" class="stm mis">    <span class="nam">phi</span> <span class="op">=</span> <span class="nam">phi</span> <span class="op">+</span> <span class="nam">h</span> <span class="op">*</span> <span class="nam">B_phi</span> <span class="op">/</span> <span class="op">(</span><span class="nam">R</span> <span class="op">**</span> <span class="num">2</span> <span class="op">+</span> <span class="nam">sin</span><span class="op">(</span><span class="nam">theta</span><span class="op">)</span> <span class="op">**</span> <span class="num">2</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t30" class="pln"><span class="strut">&nbsp;</span></p>
@@ -194,16 +194,16 @@
 <p id="t38" class="stm mis">        <span class="nam">theta_ks</span><span class="op">.</span><span class="nam">append</span><span class="op">(</span><span class="nam">eph</span><span class="op">[</span><span class="str">"theta"</span><span class="op">]</span> <span class="op">*</span> <span class="nam">pi</span> <span class="op">/</span> <span class="num">180</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t39" class="stm mis">        <span class="nam">phi_ks</span><span class="op">.</span><span class="nam">append</span><span class="op">(</span><span class="nam">eph</span><span class="op">[</span><span class="str">"phi"</span><span class="op">]</span> <span class="op">*</span> <span class="nam">pi</span> <span class="op">/</span> <span class="num">180</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t40" class="pln"><span class="strut">&nbsp;</span></p>
-<p id="t41" class="stm mis">    <span class="nam">Bdot_r</span><span class="op">,</span> <span class="nam">Bdot_theta</span><span class="op">,</span> <span class="nam">Bdot_phi</span> <span class="op">=</span> <span class="nam">get_Bdot</span><span class="op">(</span><span class="strut">&nbsp;</span></p>
+<p id="t41" class="stm mis">    <span class="nam">Bdot_R</span><span class="op">,</span> <span class="nam">Bdot_theta</span><span class="op">,</span> <span class="nam">Bdot_phi</span> <span class="op">=</span> <span class="nam">get_Bdot</span><span class="op">(</span><span class="strut">&nbsp;</span></p>
 <p id="t42" class="pln">        <span class="nam">R</span><span class="op">,</span> <span class="nam">theta</span><span class="op">,</span> <span class="nam">phi</span><span class="op">,</span> <span class="nam">B_theta</span><span class="op">,</span> <span class="nam">B_phi</span><span class="op">,</span> <span class="nam">R_ks</span><span class="op">,</span> <span class="nam">theta_ks</span><span class="op">,</span> <span class="nam">phi_ks</span><span class="strut">&nbsp;</span></p>
 <p id="t43" class="pln">    <span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t44" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t45" class="pln">    <span class="com"># Update p</span><span class="strut">&nbsp;</span></p>
-<p id="t46" class="stm mis">    <span class="nam">B_r</span> <span class="op">=</span> <span class="nam">B_r</span> <span class="op">+</span> <span class="nam">h</span> <span class="op">*</span> <span class="nam">Bdot_r</span><span class="strut">&nbsp;</span></p>
+<p id="t46" class="stm mis">    <span class="nam">B_R</span> <span class="op">=</span> <span class="nam">B_R</span> <span class="op">+</span> <span class="nam">h</span> <span class="op">*</span> <span class="nam">Bdot_R</span><span class="strut">&nbsp;</span></p>
 <p id="t47" class="stm mis">    <span class="nam">B_theta</span> <span class="op">=</span> <span class="nam">B_theta</span> <span class="op">+</span> <span class="nam">h</span> <span class="op">*</span> <span class="nam">Bdot_theta</span><span class="strut">&nbsp;</span></p>
 <p id="t48" class="stm mis">    <span class="nam">B_phi</span> <span class="op">=</span> <span class="nam">B_phi</span> <span class="op">+</span> <span class="nam">h</span> <span class="op">*</span> <span class="nam">Bdot_phi</span><span class="strut">&nbsp;</span></p>
 <p id="t49" class="pln"><span class="strut">&nbsp;</span></p>
-<p id="t50" class="stm mis">    <span class="key">return</span> <span class="nam">R</span><span class="op">,</span> <span class="nam">theta</span><span class="op">,</span> <span class="nam">phi</span><span class="op">,</span> <span class="nam">B_r</span><span class="op">,</span> <span class="nam">B_theta</span><span class="op">,</span> <span class="nam">B_phi</span><span class="strut">&nbsp;</span></p>
+<p id="t50" class="stm mis">    <span class="key">return</span> <span class="nam">R</span><span class="op">,</span> <span class="nam">theta</span><span class="op">,</span> <span class="nam">phi</span><span class="op">,</span> <span class="nam">B_R</span><span class="op">,</span> <span class="nam">B_theta</span><span class="op">,</span> <span class="nam">B_phi</span><span class="strut">&nbsp;</span></p>
 <p id="t51" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t52" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t53" class="pln"><span class="com"># @njit</span><span class="strut">&nbsp;</span></p>
@@ -248,7 +248,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.5.1</a>,
-            created at 2018-11-09 15:54
+            created at 2018-11-12 16:29
         </p>
     </div>
 </div>

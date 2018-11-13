@@ -15,16 +15,16 @@ Implements symplectic integrators that integrates H-R4B system equations.
 # import time
 from math import pi, sin
 
-from orbsim.r4b_3d.equations_of_motion import get_Bdot
+# from orbsim.r4b_3d.equations_of_motion import get
 
 # from numba import njit  # boolean, float64, jit
 
 
 # @njit
-def euler_step_symplectic(ephemerides_on_day, h, R, theta, phi, B_r, B_theta, B_phi):
+def euler_step_symplectic(ephemerides_on_day, h, R, theta, phi, B_R, B_theta, B_phi):
     """Takes a single time step of the symplectic Euler algorithm"""
     # Update q
-    R = R + h * B_r
+    R = R + h * B_R
     theta = theta + h * B_theta / R ** 2
     phi = phi + h * B_phi / (R ** 2 + sin(theta) ** 2)
 
@@ -38,16 +38,16 @@ def euler_step_symplectic(ephemerides_on_day, h, R, theta, phi, B_r, B_theta, B_
         theta_ks.append(eph["theta"] * pi / 180)
         phi_ks.append(eph["phi"] * pi / 180)
 
-    Bdot_r, Bdot_theta, Bdot_phi = get_Bdot(
+    Bdot_R, Bdot_theta, Bdot_phi = get_Bdot(
         R, theta, phi, B_theta, B_phi, R_ks, theta_ks, phi_ks
     )
 
     # Update p
-    B_r = B_r + h * Bdot_r
+    B_R = B_R + h * Bdot_R
     B_theta = B_theta + h * Bdot_theta
     B_phi = B_phi + h * Bdot_phi
 
-    return R, theta, phi, B_r, B_theta, B_phi
+    return R, theta, phi, B_R, B_theta, B_phi
 
 
 # @njit

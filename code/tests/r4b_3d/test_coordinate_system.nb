@@ -157,13 +157,13 @@ Cell[BoxData[
   RowBox[{
    RowBox[{
     SubscriptBox["R", "1"], "=", 
-    RowBox[{"constants", "[", "\"\<R_SUN\>\"", "]"}]}], ",", 
+    RowBox[{"constants", "[", "\"\<SUN_R\>\"", "]"}]}], ",", 
    RowBox[{
     SubscriptBox["\[Theta]", "1"], "=", 
-    RowBox[{"constants", "[", "\"\<THSUN_ETA\>\"", "]"}]}], ",", 
+    RowBox[{"constants", "[", "\"\<SUN_THETA\>\"", "]"}]}], ",", 
    RowBox[{
     SubscriptBox["\[Phi]", "1"], "=", 
-    RowBox[{"constants", "[", "\"\<PHI_SUN\>\"", "]"}]}]}], "}"}]], "Input",
+    RowBox[{"constants", "[", "\"\<SUN_PHI\>\"", "]"}]}]}], "}"}]], "Input",
  CellChangeTimes->{{3.745038032538776*^9, 3.745038127370768*^9}, {
   3.745051484954543*^9, 3.745051513576042*^9}, {3.7450522364813023`*^9, 
   3.7450522408148108`*^9}, {3.745052458787376*^9, 3.745052462905892*^9}, {

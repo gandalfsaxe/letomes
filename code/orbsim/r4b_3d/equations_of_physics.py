@@ -9,7 +9,6 @@ All physics equations not related to Hamilton's equations (equations of motion).
 
 import logging
 from math import degrees, pi, radians, sqrt
-from pprint import pprint
 
 import numpy as np
 
@@ -370,6 +369,8 @@ def get_leo_position_and_velocity(ephemerides, day, altitude=160):
 
 # endregion
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    pprint(get_circular_orbit_period("Earth", 100.0))
+#     from pprint import pprint
+
+#     pprint(get_circular_orbit_period("Earth", 100.0))
