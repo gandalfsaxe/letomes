@@ -203,11 +203,19 @@ def get_B_R(Rdot):
 
 def get_B_theta(R, thetadot):
     """Get B_theta from Q, Qdot"""
+    if R <= 0:
+        raise ValueError("R cannot be less than or equal to zero.")
+
     return R ** 2 * thetadot
 
 
 def get_B_phi(R, theta, phidot):
     """Get B_phi from Q, Qdot"""
+    if R <= 0:
+        raise ValueError("R cannot be less than or equal to zero.")
+    if theta <= 0 or theta >= pi:
+        raise ValueError("theta must be in range 0 < theta < pi.")
+
     return R ** 2 * sin(theta) ** 2 * phidot
 
 

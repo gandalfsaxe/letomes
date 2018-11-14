@@ -24,6 +24,9 @@ from orbsim.r4b_3d.equations_of_motion import (  # pylint: disable=W0611
     get_Bdot_R,
     get_Bdot_theta,
     get_Bdot_phi,
+    get_B_R,
+    get_B_theta,
+    get_B_phi,
 )
 
 
@@ -109,4 +112,22 @@ def test5(test_input, expected):
 @pytest.mark.parametrize("test_input, expected", process_test_data("get_Bdot_phi"))
 def test6(test_input, expected):
     """Test get_Bdot_phi"""
+    assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
+
+
+@pytest.mark.parametrize("test_input, expected", process_test_data("get_B_R"))
+def test7(test_input, expected):
+    """Test get_B_R"""
+    assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
+
+
+@pytest.mark.parametrize("test_input, expected", process_test_data("get_B_theta"))
+def test8(test_input, expected):
+    """Test get_B_theta"""
+    assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
+
+
+@pytest.mark.parametrize("test_input, expected", process_test_data("get_B_phi"))
+def test9(test_input, expected):
+    """Test get_B_phi"""
     assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123

@@ -8,7 +8,8 @@ from orbsim.r4b_3d.coordinate_system import get_position_cartesian_from_spherica
 import matplotlib.pyplot as plt
 import numpy as np
 import os
-import msvcrt as m
+
+# import msvcrt as m
 from pathlib import Path
 
 

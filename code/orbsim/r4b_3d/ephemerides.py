@@ -5,11 +5,12 @@ various celestial bodies.
 """
 import logging
 import os
-from math import floor, pi
+from math import floor
 
 import pandas as pd
 
 from orbsim.r4b_3d.logging import logging_setup
+from orbsim.r4b_3d import SUN_R, SUN_PHI, SUN_THETA
 
 logging_setup()
 
@@ -55,7 +56,6 @@ def get_ephemerides(
     print(path_parts)
     path_parts.append(relative_path)
     abs_path = "/".join(path_parts)
-    print(abs_path)
 
     os.chdir(abs_path)
     logging.debug(f"Current working directory: {os.getcwd()}")
@@ -77,14 +77,21 @@ def get_ephemerides(
     return ephemerides
 
 
-def get_ephemerides_on_day(ephemerides, day=0):
+def get_ephemerides_on_day(ephemerides, day_index=0):
     """
     Get ephemerides of all bodies in input for specific input day (continuous).
     --INPUT--
     ephemerides (DICT("body": pandas.df)):  Dict of ephemerides, from get_ephemerides()
     date (int or float):                    Days since 2019-01-01 00:00:00
     """
-    day += 1  # Since day starts at -1, only used for velocity estimation.
+
+    # Check for day out of bounds with respect to the imported ephemerides
+    max_day_index = len(ephemerides["earth"]) - 2
+
+    if day_index < -1 or day_index > max_day_index:  # +2 due to starting on day=-1
+        raise ValueError(f"Day out of bounds, must be in interval [-1,{max_day_index}]")
+
+    day = day_index + 1  # Since day starts at -1, only used for velocity estimation
 
     day_lower = floor(day)
     day_upper = day_lower + 1
@@ -109,9 +116,9 @@ def get_ephemerides_on_day(ephemerides, day=0):
         eph_on_day[body] = interpolated_position
 
     sun = eph_on_day["earth"].copy()
-    sun["r"] = 0
-    sun["theta"] = pi / 4
-    sun["phi"] = pi / 4
+    sun["r"] = SUN_R
+    sun["theta"] = SUN_PHI
+    sun["phi"] = SUN_THETA
     sun["x"] = 0
     sun["y"] = 0
     sun["z"] = 0
@@ -121,11 +128,15 @@ def get_ephemerides_on_day(ephemerides, day=0):
     return eph_on_day
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    test_eph = get_ephemerides()
-    logging.info(f"Ephemerides table:\n {test_eph}")
+#     from pprint import pprint
 
-    test_date = 124.26
-    test_eph_on_date = get_ephemerides_on_day(test_eph, test_date)
-    logging.info(f"Ephemerides on date {test_date}:\n {test_eph_on_date}")
+#     test_eph = get_ephemerides()
+
+#     test_date = 124.26
+#     # test_date = 400
+#     test_eph_on_date = get_ephemerides_on_day(test_eph, test_date)
+
+#     logging.info(f"Ephemerides on date {test_date}:\n {test_eph_on_date}")
+

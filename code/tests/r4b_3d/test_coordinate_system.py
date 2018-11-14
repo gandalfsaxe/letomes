@@ -52,24 +52,25 @@ def process_test_data(function_name, input_type="list"):
 
     Returns:
         List[Tuple(Str, Any)] -- List of 2-tuples of function calls with input as
-                                 strings and the expected output.
+                                 strings and the expected test_output.
     """
 
     tests = test_data[function_name]
 
     function_tests = []
-    for arg, output in tests:
+    for test_input, test_output in tests:
         if input_type == "scalar":
-            arg = tuple(arg)
-        arg_str = ", ".join(map(str, arg))
-        if not isinstance(output, str):
-            # Make tuple list ("function(input)", output)
-            function_tests.append((f"{function_name}({arg_str})", output))
+            test_input = tuple(test_input)  # should this be str(test_input) ?
+        input_str = ", ".join(map(str, test_input))
+        if not isinstance(test_output, str):
+            # Expect success -> make tuple list ("function(input)", test_output)
+            function_tests.append((f"{function_name}({input_str})", test_output))
         else:
-            # Make pytest.param marked with xfail, e.g. pytest.param("6*9", 42, marks=pytest.mark.xfail)
+            # Expect fail --> Make pytest.param marked with xfai
+            # e.g. pytest.param("6*9", 42, marks=pytest.mark.xfail)
             function_tests.append(
                 pytest.param(
-                    f"{function_name}({arg_str})",
+                    f"{function_name}({input_str})",
                     None,
                     marks=pytest.mark.xfail(raises=ValueError),
                 )
@@ -113,7 +114,7 @@ def test4(test_input, expected):
 @pytest.mark.parametrize(
     "test_input, expected", process_test_data("get_distance_spherical")
 )
-def test4(test_input, expected):
+def test5(test_input, expected):
     """Test get_distance_spherical"""
     assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
 
@@ -121,7 +122,7 @@ def test4(test_input, expected):
 @pytest.mark.parametrize(
     "test_input, expected", process_test_data("get_velocity_spherical_from_cartesian")
 )
-def test5(test_input, expected):
+def test6(test_input, expected):
     """Test get_velocity_spherical_from_cartesian"""
     assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
 
@@ -129,7 +130,7 @@ def test5(test_input, expected):
 @pytest.mark.parametrize(
     "test_input, expected", process_test_data("get_speed_cartesian")
 )
-def test6(test_input, expected):
+def test7(test_input, expected):
     """Test get_speed_cartesian"""
     assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
 
@@ -137,7 +138,7 @@ def test6(test_input, expected):
 @pytest.mark.parametrize(
     "test_input, expected", process_test_data("get_speed_spherical")
 )
-def test7(test_input, expected):
+def test8(test_input, expected):
     """Test get_speed_spherical"""
     assert eval(test_input) == pytest.approx(expected)  # pylint: disable=W0123
 
