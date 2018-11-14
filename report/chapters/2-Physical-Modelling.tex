@@ -432,6 +432,31 @@ The exact same procedure for \(\dot{p_\theta}\) and \(\dot{p}_\phi\) gives us:
     \dot{B}_\phi = &\sum\limits_{k} \eta_k \frac{- R R_k \sin{\theta}\sin{\theta_k}\sin{(\phi - \phi_k)}}{\left[R^2 + R_k^2 - 2 R R_k \left(\cos{\theta}\cos{\theta_k} + \sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k)} \right) \right]^{3/2}}
 \end{empheq}
 
+Finally we can get the nondimensionalize \(H\) by the same method. Again we first divide by \(m_s\) to obtain ``Hamiltonian per spacecraft mass'', \(H/m_s = H_m\):
+
+\begin{equation*}
+    \begin{aligned}
+        H &= \frac{p_r^2}{2 m_s} + \frac{p_\theta^2}{2 m_s r^2} + \frac{p_\phi^2}{2 m_s r^2 \sin^2{\theta}} \\
+        &- G m_s \sum\limits_{k} \frac{M_k}{\sqrt{r^2 + r_k^2 - 2 r r_k \left[\cos{\theta}\cos{\theta_k}+\sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k})\right]}},
+    \end{aligned}
+\end{equation*}
+
+\begin{equation}
+    \begin{aligned}
+        \Leftrightarrow H_m &= \frac{b_r^2}{2} + \frac{b_\theta^2}{2 r^2} + \frac{b_\phi^2}{2 r^2 \sin^2{\theta}} \\
+        &- \sum\limits_{k} \mu_k \frac{1}{\sqrt{r^2 + r_k^2 - 2 r r_k \left[\cos{\theta}\cos{\theta_k}+\sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k})\right]}},
+    \end{aligned}
+\end{equation}
+
+and then use our characteristic units to get \(\mathcal{H}_m\):
+
+\begin{equation}
+    \begin{aligned}
+        \Leftrightarrow \mathcal{H}_m &= \frac{B_r^2}{2} + \frac{B_\theta^2}{2 R^2} + \frac{B_\phi^2}{2 R^2 \sin^2{\theta}} \\
+        &- \sum\limits_{k} \eta_k \frac{1}{\sqrt{R^2 + R_k^2 - 2 R R_k \left[\cos{\theta}\cos{\theta_k}+\sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k})\right]}}.
+    \end{aligned}
+\end{equation}
+
 As an overview, \cref{apx:hr4b-overview} shows all six nondimensionalized equations of motion one a single page.
 
 \subsection{H-R4B Numerical Integration Algorithm}
