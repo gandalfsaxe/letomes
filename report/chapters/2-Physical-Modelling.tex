@@ -453,7 +453,7 @@ and then use our characteristic units to get \(\mathcal{H}_m\):
 \begin{equation}
     \begin{aligned}
         \Leftrightarrow \mathcal{H}_m &= \frac{B_r^2}{2} + \frac{B_\theta^2}{2 R^2} + \frac{B_\phi^2}{2 R^2 \sin^2{\theta}} \\
-        &- \sum\limits_{k} \eta_k \frac{1}{\sqrt{R^2 + R_k^2 - 2 R R_k \left[\cos{\theta}\cos{\theta_k}+\sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k})\right]}}.
+        &- \sum\limits_{k} \eta_k \frac{1}{\sqrt{R^2 + R_k^2 - 2 R R_k \left[\cos{\theta}\cos{\theta_k}+\sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k})\right]}}. \label{eq:HH_m}
     \end{aligned}
 \end{equation}
 
@@ -468,7 +468,7 @@ The symplectic Euler is mixture between explicit and implicit Euler \cite{Hairer
 
 \begin{equation}
     \begin{split} \label{eq:symplectic-euler1}
-        \vec{q}_{i+1} = \vec{p}_i + h \pd{H}{\vec{p}}(q_i, p_{i+1}) \\
+        \vec{q}_{i+1} = \vec{q}_i + h \pd{H}{\vec{p}}(q_i, p_{i+1}) \\
         \vec{p}_{i+1} = \vec{p}_i - h \pd{H}{\vec{q}}(q_i, p_{i+1})
     \end{split}
 \end{equation}
@@ -477,12 +477,12 @@ or
 
 \begin{equation}
     \begin{split} \label{eq:symplectic-euler2}
-        \vec{q}_{i+1} = \vec{p}_i + h \pd{H}{\vec{p}}(q_{i+1}, p_i) \\
+        \vec{q}_{i+1} = \vec{q}_i + h \pd{H}{\vec{p}}(q_{i+1}, p_i) \\
         \vec{p}_{i+1} = \vec{p}_i - h \pd{H}{\vec{q}}(q_{i+1}, p_i)
     \end{split}
 \end{equation}
 
-One can choose whichever is easier to solve for the equations at hand. We choose \cref{eq:symplectic-euler2} so we get
+One can choose whichever is easier to solve for the equations at hand. We choose the latter form \cref{eq:symplectic-euler2} so with our Hamiltonian \cref{eq:HH_m} we get
 \begin{align}
     R_{i+1} &= R_i + h B_{r,i} \label{eq:symplectic-euler-R_i+1}, \\[0.4cm]
     \theta_{i+1} &= \theta_i + h \frac{B_{\theta,i}}{R_{i+1}^2}, \label{eq:symplectic-euler-theta_i+1} \\[0.4cm]
@@ -491,15 +491,15 @@ One can choose whichever is easier to solve for the equations at hand. We choose
 \begin{align}    
     \begin{aligned}
         B_{r,i+1} = & B_{r,i} + h \left[ \frac{B_{\theta,i}^2}{R_{i+1}^3} + \frac{B_{\phi,i}^2}{R_{i+1}^3 \sin^2{\theta_{i+1}}} \right. \\
-        & \hspace{-22.0pt} + \left. \sum\limits_{k} \eta_k \frac{-\left[R_{i+1} - R_{k,i} \left(\cos{\theta_{i+1}}\cos{\theta_{k,i}} + \sin{\theta_{i+1}}\sin{\theta_{k,i}}\cos{(\phi_{i+1} - \phi_{k,i})}\right) \right]}{\left[(R_{i+1} - R_{k,i})^2 \left(\cos{\theta_{i+1}}\cos{\theta_{k,i}} + \sin{\theta_{i+1}}\sin{\theta_{k,i}}\cos{(\phi_{i+1} - \phi_{k,i})} \right) \right]}^{3/2} \right] , \label{eq:symplectic-euler-Br_i+1}
+        & \hspace{-22.0pt} + \left. \sum\limits_{k} \eta_k \frac{-R_{i+1} + R_{k,i+1} \left(\cos{\theta_{i+1}}\cos{\theta_{k,i+1}} + \sin{\theta_{i+1}}\sin{\theta_{k,i+1}}\cos{(\phi_{i+1} - \phi_{k,i+1})}\right)}{\left[R_{i+1}^2 + R_{k,i+1}^2 -2 R_{i+1} R_{k,i+1}^2 \left(\cos{\theta_{i+1}}\cos{\theta_{k,+1i}} + \sin{\theta_{i+1}}\sin{\theta_{k,i+1}}\cos{(\phi_{i+1} - \phi_{k,i+1})} \right) \right]^{3/2}} \right] , \label{eq:symplectic-euler-Br_i+1}
     \end{aligned} \\[0.4cm]
     \begin{aligned}
         B_{\theta,i+1} = & B_{\theta,i} + h \left[ \frac{B_{\phi,i}^2}{R_{i+1}^2 \sin^2{\theta_{i+1}} \tan{\theta_{i+1}}} \right. \\
-        & \hspace{-22.0pt} + \left. \sum\limits_{k} \eta_k \frac{R_{i+1} R_{k,i} \left[-\sin{\theta_{i+1}}\cos{\theta_{k,i}} + \cos{\theta_{i+1}}\sin{\theta_{k,i}}\cos{(\phi_{i+1} - \phi_{k,i})} \right]}{\left[(R_{i+1} - R_{k,i})^2 \left(\cos{\theta_{i+1}}\cos{\theta_{k,i}} + \sin{\theta_{i+1}}\sin{\theta_{k,i}}\cos{(\phi_{i+1} - \phi_{k,i})} \right) \right]^{3/2}} \right], \label{eq:symplectic-euler-Btheta_i+1}
+        & \hspace{-22.0pt} + \left. \sum\limits_{k} \eta_k \frac{R_{i+1} R_{k,i+1} \left[-\sin{\theta_{i+1}}\cos{\theta_{k,i+1}} + \cos{\theta_{i+1}}\sin{\theta_{k,i+1}}\cos{(\phi_{i+1} - \phi_{k,i+1})} \right]}{\left[R_{i+1}^2 + R_{k,i+1}^2 -2 R_{i+1} R_{k,i+1}^2 \left(\cos{\theta_{i+1}}\cos{\theta_{k,+1i}} + \sin{\theta_{i+1}}\sin{\theta_{k,i+1}}\cos{(\phi_{i+1} - \phi_{k,i+1})} \right) \right]^{3/2}} \right], \label{eq:symplectic-euler-Btheta_i+1}
     \end{aligned} \\[0.4cm]
     \begin{aligned}
         B_{\phi,i+1} = & B_{\phi,i} + h \left[ \vphantom{\frac12} \right.\\
-        & \hspace{-22.0pt} \hphantom{+} \left. \sum\limits_{k} \eta_k \frac{- R_{i+1} R_{k,i} \sin{\theta_{i+1}}\sin{\theta_{k,i}}\sin{(\phi_{i+1} - \phi_{k,i})}}{\left[(R_{i+1} - R_{k,i})^2 \left(\cos{\theta_{i+1}}\cos{\theta_{k,i}} + \sin{\theta_{i+1}}\sin{\theta_{k,i}}\cos{(\phi_{i+1} - \phi_{k,i})} \right) \right]^{3/2}} \right]. \label{eq:symplectic-euler-Bphi_i+1}
+        & \hspace{-22.0pt} \hphantom{+} \left. \sum\limits_{k} \eta_k \frac{- R_{i+1} R_{k,i+1} \sin{\theta_{i+1}}\sin{\theta_{k,i+1}}\sin{(\phi_{i+1} - \phi_{k,i+1})}}{\left[R_{i+1}^2 + R_{k,i+1}^2 -2 R_{i+1} R_{k,i+1}^2 \left(\cos{\theta_{i+1}}\cos{\theta_{k,+1i}} + \sin{\theta_{i+1}}\sin{\theta_{k,i+1}}\cos{(\phi_{i+1} - \phi_{k,i+1})} \right) \right]^{3/2}} \right]. \label{eq:symplectic-euler-Bphi_i+1}
     \end{aligned}
 \end{align}
 As we can see, we are lucky with this Hamiltonian since we can simply run all steps in the order above, \cref{eq:symplectic-euler-R_i+1,eq:symplectic-euler-theta_i+1,eq:symplectic-euler-phi_i+1,eq:symplectic-euler-Br_i+1,eq:symplectic-euler-Btheta_i+1,eq:symplectic-euler-Bphi_i+1} without needing to solve any implicit equations.
