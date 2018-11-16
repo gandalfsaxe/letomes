@@ -26,7 +26,7 @@ from orbsim.r4b_3d.coordinate_system import (
     get_speed_spherical,
     get_velocity_spherical_from_cartesian,
 )
-from orbsim.r4b_3d.ephemerides import get_ephemerides_on_day
+from orbsim.r4b_3d.ephemerides import get_ephemerides, get_ephemerides_on_day
 
 # region Circular Orbit
 def get_circular_orbit_speed(body="Earth", altitude=160):
@@ -110,7 +110,7 @@ def get_circular_orbit_period(body="Earth", altitude=160):
 # endregion
 
 # region Initial Conditions
-def get_leo_position_and_velocity(ephemerides, day, altitude=160):
+def get_leo_position_and_velocity(day, altitude=160, end_year="2020"):
     """Calculate direction of initial velocity vector.
     Assumes ephemerides are given with 1 day interval. With a series of cross products,
     calculate a LEO position perpendicular and velocity parallel to Earth's velocity
@@ -132,6 +132,7 @@ def get_leo_position_and_velocity(ephemerides, day, altitude=160):
 
     # Earth velocity at day = dr/dt ≈ Δr/Δt, where Δt = 1 day
     # i.e. Earth velocity estimated by difference of position vector 1 day apart / 1 day
+    ephemerides = get_ephemerides(end_year=end_year)
     eph_day = get_ephemerides_on_day(ephemerides, day)
     eph_daym1 = get_ephemerides_on_day(ephemerides, day - 1)
 
@@ -371,6 +372,6 @@ def get_leo_position_and_velocity(ephemerides, day, altitude=160):
 
 # if __name__ == "__main__":
 
-#     from pprint import pprint
+#     # from pprint import pprint
 
-#     pprint(get_circular_orbit_period("Earth", 100.0))
+#     get_leo_position_and_velocity(0)

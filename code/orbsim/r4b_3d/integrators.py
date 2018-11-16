@@ -15,39 +15,44 @@ Implements symplectic integrators that integrates H-R4B system equations.
 # import time
 from math import pi, sin
 
-# from orbsim.r4b_3d.equations_of_motion import get
+from orbsim.r4b_3d.equations_of_motion import (
+    get_Rdot,
+    get_thetadot,
+    get_phidot,
+    get_Bdot_R,
+    get_Bdot_theta,
+    get_Bdot_phi,
+)
 
 # from numba import njit  # boolean, float64, jit
 
 
 # @njit
-def euler_step_symplectic(ephemerides_on_day, h, R, theta, phi, B_R, B_theta, B_phi):
+def euler_step_symplectic(h, Q, B, eph_coords):
     """Takes a single time step of the symplectic Euler algorithm"""
+    # Unpack Q, B and eph_coords
+    R, theta, phi = Q
+    B_R, B_theta, B_phi = B
+    R_ks, theta_ks, phi_ks = eph_coords
+
     # Update q
-    R = R + h * B_R
-    theta = theta + h * B_theta / R ** 2
-    phi = phi + h * B_phi / (R ** 2 + sin(theta) ** 2)
+    R = R + h * get_Rdot(B_R)
+    theta = theta + h * get_thetadot(R, B_theta)
+    phi = phi + h * get_phidot(R, theta, B_phi)
 
-    # Get ephemeris and Bdots
-    R_ks = []
-    theta_ks = []
-    phi_ks = []
-
-    for _, eph in ephemerides_on_day.items():
-        R_ks.append(eph["r"])
-        theta_ks.append(eph["theta"] * pi / 180)
-        phi_ks.append(eph["phi"] * pi / 180)
-
-    Bdot_R, Bdot_theta, Bdot_phi = get_Bdot(
-        R, theta, phi, B_theta, B_phi, R_ks, theta_ks, phi_ks
-    )
-
-    # Update p
+    # Update B_R
+    Bdot_R = get_Bdot_R(R, theta, phi, B_theta, B_phi, R_ks, theta_ks, phi_ks)
     B_R = B_R + h * Bdot_R
+
+    # Update B_theta
+    Bdot_theta = get_Bdot_theta(R, theta, phi, B_phi, R_ks, theta_ks, phi_ks)
     B_theta = B_theta + h * Bdot_theta
+
+    # Update B_phi
+    Bdot_phi = get_Bdot_phi(R, theta, phi, R_ks, theta_ks, phi_ks)
     B_phi = B_phi + h * Bdot_phi
 
-    return R, theta, phi, B_R, B_theta, B_phi
+    return ((R, theta, phi), (B_R, B_theta, B_phi))
 
 
 # @njit
@@ -82,3 +87,20 @@ def euler_step_symplectic(ephemerides_on_day, h, R, theta, phi, B_R, B_theta, B_
 #     x1, y1 = vec1
 #     x2, y2 = vec2
 #     return sqrt(((x2 - x1) ** 2 + (y2 - y1) ** 2) / (x2 ** 2 + y2 ** 2))
+
+if __name__ == "__main__":
+
+    from pprint import pprint
+
+    test = euler_step_symplectic(
+        3.1687536450894706e-08,
+        [0.9833550575288669, 1.1683216354741335, 1.7605747565734895],
+        [0.06619397691044351, 0.6131467542061076, 8.857580619176503],
+        [
+            [0.0, 0.983311354517, 1.45349465364],
+            [0.7853981633974483, 1.1683216629370692, 1.3089386258001088],
+            [0.0, 1.7605751533054472, 0.681572830178241],
+        ],
+    )
+
+    pass

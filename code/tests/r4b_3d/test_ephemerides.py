@@ -6,7 +6,11 @@ import os
 
 import pytest
 
-from orbsim.r4b_3d.ephemerides import get_ephemerides, get_ephemerides_on_day
+from orbsim.r4b_3d.ephemerides import (
+    get_ephemerides,
+    get_ephemerides_on_day,
+    get_coordinates_on_day_rad,
+)
 
 
 def import_expected(function: str):
@@ -46,19 +50,42 @@ def filter_expected(function_name: str, data):
         else:
             # Expect success -> make tuple list ("function(input)", test_output)
             eph = get_ephemerides_on_day(get_ephemerides(), test_input)
+            sun = list(eph["sun"])
             earth = list(eph["earth"])
             mars = list(eph["mars"])
 
+            del sun[2]
             del earth[2]
             del mars[2]
 
-            xsuccess.append(([earth, mars], test_output))
+            xsuccess.append(([sun, earth, mars], test_output))
 
     return xsuccess, xfail
 
 
+def process_ephemerides_for_coordinate_function(function_name: str, data):
+    coords = []
+
+    for test_input, expected in data:
+        # Expect success -> make tuple list ("function(input)", test_output)
+        output = list(
+            get_coordinates_on_day_rad(
+                get_ephemerides_on_day(get_ephemerides(), test_input)
+            )
+        )
+
+        coords.append((output, expected))
+
+    return coords
+
+
 test_data_list = import_expected("get_ephemerides_on_day")
 xsuccess, xfail = filter_expected("get_ephemerides_on_day", test_data_list)
+
+test_data_list2 = import_expected("get_coordinates_on_day_rad")
+coords = process_ephemerides_for_coordinate_function(
+    "get_coordinates_on_day_rad", test_data_list2
+)
 
 
 @pytest.mark.parametrize("test_input, expected", xfail)
@@ -105,10 +132,25 @@ def test_invalid_end_year():
     get_ephemerides(end_year="2042")
 
 
+@pytest.mark.parametrize("test_input, expected", coords)
+def test_coords_only_valid(test_input, expected):
+    """
+    Tests of get_coordinates_on_day_rad (ONLY VALID),
+    validity ensured by previous function
+    """
+
+    for i, test_input_part in enumerate(test_input):
+        assert test_input_part == pytest.approx(expected[i])
+
+
 # if __name__ == "__main__":
 
-#     imported_data = import_expected("get_ephemerides_on_day")
-#     xs, xf = filter_expected("get_ephemerides_on_day", imported_data)
+#     # imported_data = import_expected("get_ephemerides_on_day")
+#     # xs, xf = filter_expected("get_ephemerides_on_day", imported_data)
+
+#     coords = process_ephemerides_for_coordinate_function(
+#         "get_coordinates_on_day_rad", test_data_list
+#     )
 
 #     x = 2
 

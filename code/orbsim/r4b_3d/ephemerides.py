@@ -5,7 +5,7 @@ various celestial bodies.
 """
 import logging
 import os
-from math import floor
+from math import floor, pi
 
 import pandas as pd
 
@@ -53,12 +53,11 @@ def get_ephemerides(
     # Change workdir, construct filenames
     relative_path = os.path.normcase(relative_path)
     path_parts = os.path.realpath(__file__).split(os.path.normcase("/"))[:-1]
-    print(path_parts)
     path_parts.append(relative_path)
     abs_path = "/".join(path_parts)
 
     os.chdir(abs_path)
-    logging.debug(f"Current working directory: {os.getcwd()}")
+    # logging.debug(f"Current working directory: {os.getcwd()}")
 
     ephemerides_filename_dict = {}
 
@@ -117,8 +116,8 @@ def get_ephemerides_on_day(ephemerides, day_index=0):
 
     sun = eph_on_day["earth"].copy()
     sun["r"] = SUN_R
-    sun["theta"] = SUN_PHI
-    sun["phi"] = SUN_THETA
+    sun["theta"] = SUN_THETA
+    sun["phi"] = SUN_PHI
     sun["x"] = 0
     sun["y"] = 0
     sun["z"] = 0
@@ -128,15 +127,31 @@ def get_ephemerides_on_day(ephemerides, day_index=0):
     return eph_on_day
 
 
+def get_coordinates_on_day_rad(ephemerides_on_day):
+    R_ks = []
+    theta_ks = []
+    phi_ks = []
+
+    for body in ["sun", "earth", "mars"]:
+        R_ks.append(ephemerides_on_day[body]["r"])
+        theta_ks.append(ephemerides_on_day[body]["theta"] * pi / 180)
+        phi_ks.append(ephemerides_on_day[body]["phi"] * pi / 180)
+
+    return R_ks, theta_ks, phi_ks
+
+
 # if __name__ == "__main__":
 
 #     from pprint import pprint
 
-#     test_eph = get_ephemerides()
+#     test = get_coordinates_on_day_rad(get_ephemerides_on_day(get_ephemerides(), 0))
 
-#     test_date = 124.26
-#     # test_date = 400
-#     test_eph_on_date = get_ephemerides_on_day(test_eph, test_date)
+#     pprint(test)
 
-#     logging.info(f"Ephemerides on date {test_date}:\n {test_eph_on_date}")
+#     pass
 
+#     # # test_date = 124.26
+#     # test_day = 0
+#     # test_eph_on_day = get_ephemerides_on_day(test_eph, test_day)
+
+#     # logging.info(f"Ephemerides on day {test_day}:\n {test_eph_on_day}")
