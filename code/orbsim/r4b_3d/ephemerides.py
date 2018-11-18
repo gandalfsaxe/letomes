@@ -12,8 +12,6 @@ import pandas as pd
 from orbsim.r4b_3d.logging import logging_setup
 from orbsim.r4b_3d import SUN_R, SUN_PHI, SUN_THETA
 
-logging_setup()
-
 logger = logging.getLogger()
 
 
@@ -128,6 +126,19 @@ def get_ephemerides_on_day(ephemerides, day_index=0):
 
 
 def get_coordinates_on_day_rad(ephemerides_on_day):
+    """Take in ephemerides object in form af a Pandas.Series and extract just the
+    coordinates, both cartesian and spherical.
+
+    Arguments:
+        ephemerides_on_day {Pandas.Series} -- Ephemerides table output from function
+                                              ephemerides_on_day().
+
+    Returns:
+        Tuple(List(float)) -- Coordinates in both cartesian and spherical format in list
+                              [r,theta,phi,x,y,z] in a coordinate tuple
+                              (sun, earth, mars)
+    """
+
     R_ks = []
     theta_ks = []
     phi_ks = []

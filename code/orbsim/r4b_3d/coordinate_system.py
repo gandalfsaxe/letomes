@@ -10,10 +10,6 @@ Equations related to the cartesian and spherical coordinate system.
 
 from math import acos, atan2, cos, pi, sin, sqrt
 
-import numpy as np
-
-from pprint import pprint
-
 
 # region Distances
 def get_distance_cartesian(u, v):

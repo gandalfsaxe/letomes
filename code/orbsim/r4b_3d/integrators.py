@@ -13,7 +13,6 @@ Implements symplectic integrators that integrates H-R4B system equations.
 #  import logging
 
 # import time
-from math import pi, sin
 
 from orbsim.r4b_3d.equations_of_motion import (
     get_Rdot,
@@ -88,19 +87,19 @@ def euler_step_symplectic(h, Q, B, eph_coords):
 #     x2, y2 = vec2
 #     return sqrt(((x2 - x1) ** 2 + (y2 - y1) ** 2) / (x2 ** 2 + y2 ** 2))
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    from pprint import pprint
+#     from pprint import pprint
 
-    test = euler_step_symplectic(
-        3.1687536450894706e-08,
-        [0.9833550575288669, 1.1683216354741335, 1.7605747565734895],
-        [0.06619397691044351, 0.6131467542061076, 8.857580619176503],
-        [
-            [0.0, 0.983311354517, 1.45349465364],
-            [0.7853981633974483, 1.1683216629370692, 1.3089386258001088],
-            [0.0, 1.7605751533054472, 0.681572830178241],
-        ],
-    )
+#     test = euler_step_symplectic(
+#         3.1687536450894706e-08,
+#         [0.9833550575288669, 1.1683216354741335, 1.7605747565734895],
+#         [0.06619397691044351, 0.6131467542061076, 8.857580619176503],
+#         [
+#             [0.0, 0.983311354517, 1.45349465364],
+#             [0.7853981633974483, 1.1683216629370692, 1.3089386258001088],
+#             [0.0, 1.7605751533054472, 0.681572830178241],
+#         ],
+#     )
 
-    pass
+#     pass

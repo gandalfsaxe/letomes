@@ -14,10 +14,14 @@ conditions.
 import logging
 import time
 
-from orbsim.r4b_3d.equations_of_physics import get_leo_position_and_velocity
 from orbsim.r4b_3d import UNIT_TIME
-from orbsim.r4b_3d.ephemerides import get_ephemerides, get_ephemerides_on_day
+from orbsim.r4b_3d.ephemerides import (
+    get_coordinates_on_day_rad,
+    get_ephemerides,
+    get_ephemerides_on_day,
+)
 from orbsim.r4b_3d.equations_of_motion import get_B_phi, get_B_R, get_B_theta
+from orbsim.r4b_3d.equations_of_physics import get_leo_position_and_velocity
 from orbsim.r4b_3d.integrators import euler_step_symplectic
 
 
@@ -54,17 +58,22 @@ def simulate(
 
     # Initial spacecraft position and velocity (spherical)
     leo_position_spherical, leo_velocity_spherical = get_leo_position_and_velocity(
-        ephemerides, day=day
+        day=day
     )
 
     # Initial position (q)
     R, theta, phi = leo_position_spherical
+    Q = leo_position_spherical
+
+    # Initial velocity
+    Rdot, thetadot, phidot = leo_velocity_spherical
 
     # Initial momenta (p)
-    Rdot, thetadot, phidot = leo_velocity_spherical
     B_R = get_B_R(Rdot)
     B_theta = get_B_theta(R, thetadot)
     B_phi = get_B_phi(R, theta, phidot)
+
+    B = [B_R, B_theta, B_phi]
 
     logging.debug(
         f"Starting simulation at time {t} ({day} days) with step size h = {h} "
@@ -72,21 +81,21 @@ def simulate(
         f", max {max_iter} iterations and max {max_duration*UNIT_TIME/3600/24} days"
     )
 
-    # Iteration initialization
+    # List initialization
     i = 0
 
     ts = []
     days = []
-    qs = []
-    ps = []
+    Qs = []
+    Bs = []
     q_p_list = []
 
-    # Iteration 0
+    # Run iteration 0 manually
     ts.append(t)
     days.append(day)
-    qs.append([R, theta, phi])
-    ps.append([B_R, B_theta, B_phi])
-    q_p_list.append((qs[0], ps[0]))
+    Qs.append([R, theta, phi])
+    Bs.append([B_R, B_theta, B_phi])
+    q_p_list.append((Qs[0], Bs[0]))
     t1 = time.time()
     sim_time = t1 - t0
     logging.info(
@@ -102,20 +111,18 @@ def simulate(
         t += h
         day = t * UNIT_TIME / (3600 * 24)
 
-        eph_on_date = get_ephemerides_on_day(ephemerides, day)
+        eph_on_day = get_ephemerides_on_day(ephemerides, day)
+        eph_coords = get_coordinates_on_day_rad(eph_on_day)
 
-        R, theta, phi, B_R, B_theta, B_phi = euler_step_symplectic(
-            eph_on_date, h, R, theta, phi, B_R, B_theta, B_phi
-        )
-        q = [R, theta, phi]
-        p = [B_R, B_theta, B_phi]
+        Q, B = euler_step_symplectic(h, Q, B, eph_coords)
 
         ts.append(t)
         days.append(day)
-        qs.append(q)
-        ps.append(p)
-        q_p_list.append((q, p))
+        Qs.append(Q)
+        Bs.append(B)
+        q_p_list.append((Q, B))
 
+        # Log status every 1000 iterations.
         if i % 1000 == 0:
             t1 = time.time()
             sim_time = t1 - t0
@@ -127,6 +134,7 @@ def simulate(
                 f"   (out-of-sim elapsed time: {format_time(sim_time)})"
             )
 
+        # Stop simulation of max duration reached
         if t >= max_duration:
             logging.info(
                 f"Max time of {max_duration:.6f} "
@@ -135,6 +143,8 @@ def simulate(
                 f" at iteration: {i}/{max_iter} ~ {i/max_iter*100:.3f} %"
             )
             break
+
+        # Stop simulation of max iterations reached
         if i >= max_iter:
             logging.info(
                 f"Max iter of {max_iter} reached (i={i}) "
@@ -148,7 +158,7 @@ def simulate(
     total_time = tf - t0
     logging.info(f"Simulation duration: {format_time(total_time)} (HH:MM:SS)")
 
-    return (ts, qs, ps, (t, i), ephemerides)
+    return (ts, Qs, Bs, (t, i), ephemerides)
 
 
 def format_time(time_value, time_unit="seconds"):

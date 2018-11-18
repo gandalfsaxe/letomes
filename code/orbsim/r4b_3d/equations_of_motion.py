@@ -49,6 +49,26 @@ def get_phidot(R, theta, B_phi):
 
 # region Momentum Derivatives: Bdot(Q, B, Qk)
 def get_Bdot_R(R, theta, phi, B_theta, B_phi, R_ks, theta_ks, phi_ks):
+    """
+    Gives Bdot_R, i.e. the time derivative of the generalized momentum in R direction,
+    per unit mass and in chosen characteristic units.
+
+    Arguments:
+        R {float} -- R coordinate (AU)
+        theta {float} -- theta coordinate (rad)
+        phi {float} -- phi coordinate (rad)
+        B_theta {float} -- B_theta momentum (linear velocity in R direction, AU/y)
+        B_phi {float} -- B_theta (angular theta momentum per mass, AU^2/y)
+        R_ks {List(float)} -- Coordinates [R_sun, R_earth, R_mars], AU
+        theta_ks {List(float)} -- Coordinates [theta_sun, theta_earth, theta_mars], rad
+        phi_ks {List(float)} -- Coordinates [phi_sun, phi_earth, phi_mars], rad
+
+    Raises:
+        ValueError -- Out of range coordinates.
+
+    Returns:
+        float -- Bdot_R
+    """
 
     if R <= 0:
         raise ValueError("R cannot be less than or equal to zero.")
@@ -100,6 +120,25 @@ def get_Bdot_R(R, theta, phi, B_theta, B_phi, R_ks, theta_ks, phi_ks):
 
 
 def get_Bdot_theta(R, theta, phi, B_phi, R_ks, theta_ks, phi_ks):
+    """
+    Gives Bdot_theta, i.e. the time derivative of the generalized momentum in theta
+    direction, per unit mass and in chosen characteristic units.
+
+    Arguments:
+        R {float} -- R coordinate (AU)
+        theta {float} -- theta coordinate (rad)
+        phi {float} -- phi coordinate (rad)
+        B_phi {float} -- B_theta (angular theta momentum per mass, AU^2/y)
+        R_ks {List(float)} -- Coordinates [R_sun, R_earth, R_mars], AU
+        theta_ks {List(float)} -- Coordinates [theta_sun, theta_earth, theta_mars], rad
+        phi_ks {List(float)} -- Coordinates [phi_sun, phi_earth, phi_mars], rad
+
+    Raises:
+        ValueError -- Out of range coordinates.
+
+    Returns:
+        float -- Bdot_theta
+    """
 
     if R <= 0:
         raise ValueError("R cannot be less than or equal to zero.")
@@ -150,6 +189,24 @@ def get_Bdot_theta(R, theta, phi, B_phi, R_ks, theta_ks, phi_ks):
 
 
 def get_Bdot_phi(R, theta, phi, R_ks, theta_ks, phi_ks):
+    """
+    Gives Bdot_phi, i.e. the time derivative of the generalized momentum in theta
+    direction, per unit mass and in chosen characteristic units.
+
+    Arguments:
+        R {float} -- R coordinate (AU)
+        theta {float} -- theta coordinate (rad)
+        phi {float} -- phi coordinate (rad)
+        R_ks {List(float)} -- Coordinates [R_sun, R_earth, R_mars], AU
+        theta_ks {List(float)} -- Coordinates [theta_sun, theta_earth, theta_mars], rad
+        phi_ks {List(float)} -- Coordinates [phi_sun, phi_earth, phi_mars], rad
+
+    Raises:
+        ValueError -- Out of range coordinates.
+
+    Returns:
+        float -- Bdot_phi
+    """
 
     if R <= 0:
         raise ValueError("R cannot be less than or equal to zero.")
@@ -238,4 +295,3 @@ def get_B_phi(R, theta, phidot):
 #             [0.0, 2.0274978713480216, 6.283185307179586],
 #         )
 #     )
-
