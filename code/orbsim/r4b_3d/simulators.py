@@ -13,6 +13,7 @@ conditions.
 
 import logging
 import time
+from decimal import Decimal
 
 from orbsim.r4b_3d import UNIT_TIME
 from orbsim.r4b_3d.ephemerides import (
@@ -21,7 +22,7 @@ from orbsim.r4b_3d.ephemerides import (
     get_ephemerides_on_day,
 )
 from orbsim.r4b_3d.equations_of_motion import get_B_phi, get_B_R, get_B_theta
-from orbsim.r4b_3d.equations_of_physics import get_leo_position_and_velocity
+from orbsim.r4b_3d.initial_conditions import get_leo_position_and_velocity
 from orbsim.r4b_3d.integrators import euler_step_symplectic
 
 
@@ -45,7 +46,7 @@ def simulate(
     Returns:
         [type] -- [description]
     """
-    logging.info("Starting simple simulation.")
+    logging.info("STARTING: Simple simulation.")
     t0 = time.time()
 
     max_iter = int(max_iter)
@@ -100,8 +101,8 @@ def simulate(
     sim_time = t1 - t0
     logging.info(
         f"Iteration {str(i).rjust(len(str(max_iter)))} / {max_iter}"
-        f", in-sim time {t*UNIT_TIME/3600:.2f} hours / "
-        f"{max_duration*UNIT_TIME/3600:.2f} hours"
+        f", in-sim time {format_time(t, time_unit='years')} / "
+        f"{format_time(max_duration, time_unit='years')}"
         f"   (out-of-sim elapsed time: {format_time(sim_time)})"
     )
 
@@ -137,7 +138,7 @@ def simulate(
         # Stop simulation of max duration reached
         if t >= max_duration:
             logging.info(
-                f"Max time of {max_duration:.6f} "
+                f"STOP: Max time of {max_duration:.6f} "
                 f"({format_time(max_duration, time_unit='years')}) "
                 f"reached at t = {t:.6f} ({format_time(t, time_unit='years')})"
                 f" at iteration: {i}/{max_iter} ~ {i/max_iter*100:.3f} %"
@@ -147,16 +148,35 @@ def simulate(
         # Stop simulation of max iterations reached
         if i >= max_iter:
             logging.info(
-                f"Max iter of {max_iter} reached (i={i}) "
+                f"STOP: Max iter of {max_iter} reached (i={i}) "
                 f"at t = {format_time(t, time_unit='years')}/"
                 f"{format_time(max_duration, time_unit='years')} ~ "
                 f"{t/max_duration:.3f} %)"
             )
             break
 
+    t_s = t * UNIT_TIME  # final in-sim time in seconds
     tf = time.time()
-    total_time = tf - t0
-    logging.info(f"Simulation duration: {format_time(total_time)} (HH:MM:SS)")
+    T = tf - t0  # final out-of-sim time in seconds
+
+    # Post simulator run logging
+    logging.info(
+        f"SIMULATOR PERFORMANCE: Sim/Real time ratio:    "
+        f"{Decimal(t_s / T):.2E} ({(t_s / T):.2f})"
+    )
+    logging.info(
+        f"SIMULATOR PERFORMANCE: 1 second can simulate:  "
+        f"{format_time(t_s / T)} (HH:MM:SS)"
+    )
+    logging.info(
+        f"SIMULATOR PERFORMANCE: Time to simulate 1 day: "
+        f"{format_time(T / t_s * 3600 * 24)} (HH:MM:SS)"
+    )
+    logging.info(
+        f"TIME ELAPSED: In-sim time duration:     {format_time(t,time_unit='years')} "
+        f"(HH:MM:SS)"
+    )
+    logging.info(f"TIME ELAPSED: Out-of-sim time duration: {format_time(T)} (HH:MM:SS)")
 
     return (ts, Qs, Bs, (t, i), ephemerides)
 
@@ -189,7 +209,7 @@ def format_time(time_value, time_unit="seconds"):
     minutes = int(time_value // 60)
     time_value %= 60
     seconds = time_value
-    text = f"{hours:0>2d}:{minutes:0>2d}:{seconds:.2f}"
+    text = f"{hours:0>2d}:{minutes:0>2d}:{seconds:0>5.2f}"
 
     return text
 

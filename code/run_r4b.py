@@ -2,7 +2,7 @@
 
 import logging
 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 from orbsim.r4b_3d import UNIT_TIME
 
@@ -22,11 +22,12 @@ if __name__ == "__main__":
         h=10 / UNIT_TIME, max_duration=1 * 3600 * 3 / UNIT_TIME, max_iter=1e6
     )
 
-    fig = plt.figure()
-    ax = fig.add_subplot("111", projection="3d")
-    animate_r4b_orbitplot(Qs, fig, ax)
+    x = 2
+    # fig = plt.figure()
+    # ax = fig.add_subplot("111", projection="3d")
+    # animate_r4b_orbitplot(Qs, fig, ax)
 
-    fig = plt.figure()
-    ax = fig.add_subplot("111", projection="3d")
-    r4b_orbitplot(Qs, ax)
-    plt.show()
+    # fig = plt.figure()
+    # ax = fig.add_subplot("111", projection="3d")
+    # r4b_orbitplot(Qs, ax)
+    # plt.show()
