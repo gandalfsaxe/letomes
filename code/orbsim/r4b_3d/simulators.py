@@ -22,12 +22,11 @@ from orbsim.r4b_3d.ephemerides import (
     get_ephemerides_on_day,
 )
 from orbsim.r4b_3d.equations_of_motion import get_B_phi, get_B_R, get_B_theta
-from orbsim.r4b_3d.initial_conditions import get_leo_position_and_velocity
 from orbsim.r4b_3d.integrators import euler_step_symplectic
 
 
 def simulate(
-    psi=(0, None),
+    psi,
     max_year="2020",
     h=1 / UNIT_TIME,
     max_duration=1 * 3600 * 24 / UNIT_TIME,
@@ -36,7 +35,7 @@ def simulate(
     """Simple simulator that will run a LEO until duration or max_iter is reached.
 
     Keyword Arguments:
-        psi {list} -- Initial conditions: [day] (default: {[0]})
+        psi {tuple} -- Initial conditions: (day, Q0, B0, burn)
         max_year {string} -- Max year for ephemerides table (default: "2020")
         h {float} -- Initial time step size (default: 1/UNIT_LENGTH = 1 second in years)
         max_duration {int} -- Max duration of simulation (in years) (default: {1 day})
@@ -48,35 +47,27 @@ def simulate(
     """
     logging.info("STARTING: Simple simulation.")
     t0 = time.time()
-
     max_iter = int(max_iter)
+
+    # Unpack psi
     t = psi[0]
+    Q = psi[1]
+    B = psi[2]
+    burn = psi[3]
+
     day = t * UNIT_TIME / (3600 * 24)
 
     # Read ephemerides
     logging.debug("Getting ephemerides tables")
     ephemerides = get_ephemerides(end_year=max_year)
 
-    # Initial spacecraft position and velocity (spherical)
-    leo_position_spherical, leo_velocity_spherical = get_leo_position_and_velocity(
-        day=day
-    )
+    # Unpack initial position (Q) and momenta (B)
+    R, theta, phi = Q
+    B_R, B_theta, B_phi = B
 
-    # Initial position (q)
-    R, theta, phi = leo_position_spherical
-    Q = leo_position_spherical
+    logging.info(f"Initial momenta: B = {B}")
 
-    # Initial velocity
-    Rdot, thetadot, phidot = leo_velocity_spherical
-
-    # Initial momenta (p)
-    B_R = get_B_R(Rdot)
-    B_theta = get_B_theta(R, thetadot)
-    B_phi = get_B_phi(R, theta, phidot)
-
-    B = [B_R, B_theta, B_phi]
-
-    logging.debug(
+    logging.info(
         f"Starting simulation at time {t} ({day} days) with step size h = {h} "
         f"({h*UNIT_TIME} s)"
         f", max {max_iter} iterations and max {max_duration*UNIT_TIME/3600/24} days"
@@ -214,5 +205,5 @@ def format_time(time_value, time_unit="seconds"):
     return text
 
 
-if __name__ == "__main__":
-    simulate()
+# if __name__ == "__main__":
+#     simulate()

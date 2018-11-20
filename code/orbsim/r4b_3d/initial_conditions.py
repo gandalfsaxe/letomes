@@ -5,7 +5,7 @@ from math import degrees, radians
 
 import numpy as np
 
-from orbsim import EARTH_RADIUS
+from orbsim import EARTH_RADIUS, SUN_RADIUS
 from orbsim.r4b_3d import UNIT_LENGTH, UNIT_TIME, UNIT_VELOCITY
 from orbsim.r4b_3d.coordinate_system import (
     get_position_spherical_from_cartesian,
@@ -15,8 +15,10 @@ from orbsim.r4b_3d.coordinate_system import (
 from orbsim.r4b_3d.ephemerides import get_ephemerides, get_ephemerides_on_day
 from orbsim.r4b_3d.equations_of_physics import get_circular_orbit_speed
 
+from orbsim.r4b_3d.equations_of_motion import get_B_R, get_B_theta, get_B_phi
 
-def get_leo_position_and_velocity(day, altitude=160, end_year="2020"):
+
+def get_leo_position_and_velocity(day=0, altitude=160, end_year="2020"):
     """Calculate direction of initial velocity vector.
     Assumes ephemerides are given with 1 day interval. With a series of cross products,
     calculate a LEO position perpendicular and velocity parallel to Earth's velocity
@@ -148,6 +150,8 @@ def get_leo_position_and_velocity(day, altitude=160, end_year="2020"):
     # ---------- 3 Spacecraft initial position
 
     # Spacecraft geocentric position: perpendicular to earth velocity pointing outwards
+    # (i.e. chosen such that it's the one pointing outwards from elliptical orbit)
+    # (note this means spacecraft speed != earth speed (helio) + spacecraft speed (geo))
     q0_geocentric_cartesian_unit = np.cross(
         earth_qdot0_cartesian_km_s, earth_orbital_plane
     )
@@ -255,27 +259,62 @@ def get_leo_position_and_velocity(day, altitude=160, end_year="2020"):
     )
 
     logging.debug(
-        f"Spacecraft initial velocity vector (spherical, AU/y & rad/y (dimless)): "
+        f"Spacecraft initial velocity vector (spherical, AU/y & rad/y): "
         f"{qdot0_spherical_AU_rad_year}"
         f" (speed: {qdot0_spherical_AU_rad_year_speed})"
     )
 
-    # Repeat logging but as info instead of debug
+    # FINAL OUTPUT: Initial coordinates (Q)
+    Q0 = q0_spherical_AU_rad
+
+    # FINAL OUTPUT: Initial momenta per mass (B)
+    R, theta, _ = Q0
+    Rdot, thetadot, phidot = qdot0_spherical_AU_rad_year
+
+    B_R = get_B_R(Rdot)
+    B_theta = get_B_theta(R, thetadot)
+    B_phi = get_B_phi(R, theta, phidot)
+
+    B0 = [B_R, B_theta, B_phi]
+
+    # Info log output
     logging.info(
-        f"Spacecraft initial position vector (spherical, AU & rad (dimless)): "
-        f"{q0_spherical_AU_rad}"
+        f"Spacecraft initial position vector, Q0 (spherical, AU & rad): " f"{Q0}"
     )
     logging.info(
-        f"Spacecraft initial velocity vector (spherical, AU/y & rad/y (dimless)): "
-        f"{qdot0_spherical_AU_rad_year}"
-        f" (speed: {qdot0_spherical_AU_rad_year_speed})"
+        f"Spacecraft initial momentum per mass vector, B0 (AU/y & rad/y): {B0}"
     )
 
-    return q0_spherical_AU_rad, qdot0_spherical_AU_rad_year
+    return Q0, B0
+
+
+def get_circular_sun_orbit_position_and_velocity(altitude=UNIT_LENGTH - SUN_RADIUS):
+    """Get orbit speed for circular orbit around the at altitude.
+
+    Keyword Arguments:
+        altitude {float} -- Altitude above Sun surface (km)
+                            (default: {UNIT_LENGTH-SUN_RADIUS})
+
+    Returns:
+        float -- Required orbit speed for circular orbit around sun (km/s)
+    """
+
+    sun_orbital_speed = get_circular_orbit_speed(body="Sun", altitude=altitude)
+
+    logging.debug(
+        f"Required orbital speed at altitude {altitude:.2f} km above Sun: "
+        f"{sun_orbital_speed} km/s"
+    )
+
+    return sun_orbital_speed
 
 
 # if __name__ == "__main__":
 
-#     # from pprint import pprint
+#     from orbsim.r4b_3d.logging import logging_setup
 
-#     get_leo_position_and_velocity(0)
+#     logging_setup()
+
+#     # get_leo_position_and_velocity()
+
+#     get_circular_sun_orbit_position_and_velocity()

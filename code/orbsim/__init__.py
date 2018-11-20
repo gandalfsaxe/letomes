@@ -28,6 +28,7 @@ SUN_RADIUS = 6.95700e5  # km
 # Earth constants
 EARTH_RADIUS = 6378.1  # km (equatorial)
 EARTH_MASS = 5.9721986e24  # kg
+# EARTH_MASS = 0
 
 # Lunar quantities
 LUNAR_RADIUS = 1737.1  # km
@@ -38,6 +39,7 @@ LUNAR_ORBITAL_DURATION = 27.322  # days
 # Mars quantities
 MARS_RADIUS = 3396.2  # km (equatorial)
 MARS_MASS = 6.41693e23  # kg
+# MARS_MASS = 0
 
 
 ############### DERIVED CONSTANTS ###############
