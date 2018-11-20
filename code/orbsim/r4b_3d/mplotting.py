@@ -76,8 +76,10 @@ def r4b_orbitplot(qs, ax):
     ax.set_zlabel("Z")
 
 
-def animate_r4b_orbitplot(qs, fig, ax):
-    r4b_orbit = R4bOrbit(qs, ax)
+def animate_r4b_orbitplot(qs, t_final, fig, ax):
+    r4b_orbit = R4bOrbit(qs, t_final, ax)
+    r4b_orbit.zoom_orbit()
+    exit(0)
     ani = animation.FuncAnimation(
         fig, r4b_orbit.update, range(len(qs)), interval=0.1, blit=True
     )  # Turn off blitting if you want to rotate the plot. Turn it on if you wanna go fast
@@ -90,13 +92,14 @@ def animate_r4b_orbitplot(qs, fig, ax):
 
 
 class R4bOrbit(object):
-    def __init__(self, qs, ax):
+    def __init__(self, qs, t_final, ax):
         # ts, qs, ps, _, _ = traj
         qs = [get_position_cartesian_from_spherical(x, y, z) for x, y, z in qs]
         self.xs, self.ys, self.zs = np.array(
             qs
         ).T  # get individual coordinate sets for plotting
 
+        self.t_final = t_final
         self.ax = ax
 
         self.xs_earth = earth["x"]
@@ -161,3 +164,22 @@ class R4bOrbit(object):
         self.mars_line.set_3d_properties(zs=self.mars_zdata)
         return self.traj_line, self.earth_line, self.mars_line
 
+    def zoom_orbit(self):
+        """orbit without sun and mars, so we can see earth and spaceship trajectory as they move through space together."""
+        earth_zoomline = Line3D(
+            list(self.xs_earth[0:2]),
+            list(self.ys_earth[0:2]),
+            list(self.zs_earth[0:2]),
+            color="deepskyblue",
+        )
+        traj_zoomline = Line3D(self.xs, self.ys, self.zs, color="black")
+        fig = plt.figure()
+        ax = fig.add_subplot("111", projection="3d")
+        ax.add_line(earth_zoomline)
+        ax.add_line(traj_zoomline)
+        ax.set_xlim(min(self.xs),max(self.xs))
+        ax.set_ylim(min(self.ys),max(self.ys))
+        ax.set_zlim(min(self.zs),max(self.zs))
+        
+        fig.suptitle('derp')
+        plt.show()
