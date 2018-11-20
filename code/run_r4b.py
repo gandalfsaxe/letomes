@@ -6,6 +6,8 @@ import sys
 
 import matplotlib.pyplot as plt
 
+import matplotlib.pyplot as plt
+
 from orbsim.r4b_3d import UNIT_TIME
 from orbsim.r4b_3d.initial_conditions import (
     get_leo_position_and_velocity,
