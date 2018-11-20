@@ -1,50 +1,20 @@
-import pandas as pd
-
-from mpl_toolkits.mplot3d import Axes3D
-from mpl_toolkits.mplot3d.art3d import Line3D
-from matplotlib import animation, rc
-from matplotlib.animation import ImageMagickFileWriter
-from orbsim.r4b_3d.coordinate_system import get_position_cartesian_from_spherical
-import matplotlib.pyplot as plt
-import numpy as np
-import os
-
-# import msvcrt as m
 from pathlib import Path
 
+import matplotlib.pyplot as plt
+from matplotlib import animation
+from matplotlib.animation import ImageMagickFileWriter
+import numpy as np
+from mpl_toolkits.mplot3d.art3d import Line3D
 
-FILE_PATH = "orbsim/r4b_3d/ephemerides/"
-# FILE_PATH = "code/orbsim/r4b_3d/ephemerides/"
-
-# FILENAME_EARTH = "earth_2019-2020.csv"
-FILENAME_EARTH = "earth_2019-2039.csv"
-# FILENAME_EARTH = "earth_2019-2262.csv"
-
-# FILENAME_MARS = "mars_2019-2020.csv"
-FILENAME_MARS = "mars_2019-2039.csv"
-# FILENAME_MARS = "mars_2019-2262.csv"
-
-# Change CWD if necessary
-cwd = os.getcwd()
-in_correct_cwd = (
-    "code" + FILE_PATH[2:-1] == cwd[-30:]
-)  # Check if last part of cwd is '/code/orbsim/r4b_3d'
-
-if not in_correct_cwd:
-    os.chdir(FILE_PATH)
-    cwd = os.getcwd()
-
-print(cwd)
-
-# Read CSV files
-
-earth = pd.read_csv(FILENAME_EARTH, parse_dates=["date"], index_col="day")
-mars = pd.read_csv(FILENAME_MARS, parse_dates=["date"], index_col="day")
-
-pd.set_option("max_row", 20)
+from orbsim.r4b_3d.coordinate_system import get_position_cartesian_from_spherical
+from orbsim.r4b_3d.ephemerides import get_ephemerides
 
 
 def r4b_orbitplot(qs, ax):
+    eph = get_ephemerides()
+    earth = eph["earth"]
+    mars = eph["mars"]
+
     qs = [get_position_cartesian_from_spherical(x, y, z) for x, y, z in qs]
     xs, ys, zs = np.array(qs).T  # get individual coordinate sets for plotting
 
@@ -93,6 +63,10 @@ def animate_r4b_orbitplot(qs, t_final, fig, ax):
 
 class R4bOrbit(object):
     def __init__(self, qs, t_final, ax):
+        eph = get_ephemerides()
+        earth = eph["earth"]
+        mars = eph["mars"]
+
         # ts, qs, ps, _, _ = traj
         qs = [get_position_cartesian_from_spherical(x, y, z) for x, y, z in qs]
         self.xs, self.ys, self.zs = np.array(
@@ -177,9 +151,9 @@ class R4bOrbit(object):
         ax = fig.add_subplot("111", projection="3d")
         ax.add_line(earth_zoomline)
         ax.add_line(traj_zoomline)
-        ax.set_xlim(min(self.xs),max(self.xs))
-        ax.set_ylim(min(self.ys),max(self.ys))
-        ax.set_zlim(min(self.zs),max(self.zs))
-        
-        fig.suptitle('derp')
+        ax.set_xlim(min(self.xs), max(self.xs))
+        ax.set_ylim(min(self.ys), max(self.ys))
+        ax.set_zlim(min(self.zs), max(self.zs))
+
+        fig.suptitle("derp")
         plt.show()

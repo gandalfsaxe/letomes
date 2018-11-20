@@ -2,16 +2,14 @@
 
 import logging
 
+import matplotlib.pyplot as plt
+
 from orbsim.r4b_3d import UNIT_TIME
 from orbsim.r4b_3d.initial_conditions import get_leo_position_and_velocity
 from orbsim.r4b_3d.logging import logging_setup
-from orbsim.r4b_3d.simulators import simulate
-
-import matplotlib.pyplot as plt
-
 
 from orbsim.r4b_3d.mplotting import animate_r4b_orbitplot, r4b_orbitplot
-
+from orbsim.r4b_3d.simulators import simulate
 
 logging_setup()
 
