@@ -105,10 +105,16 @@ def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSte
                 scores[i] += 10
                 scores[i] *= 10
 
+        """transform scores -- ranking"""
         scores = scores.reshape(nIndividuals, nJitter)
         ranked_scores = np.array(
             [rankdata(sig_eps, method="ordinal") for sig_eps in scores]
         )
+        for idx, rscores in ranked_scores:
+            mean = rscores.mean()
+            rscores = [
+                max(mean, rscore) for rscore in rscores
+            ]  # neutralize negative influence by making very poor fitnesses equal to the mean fitness
         ranked_scores = -ranked_scores
 
         steps = np.zeros([nIndividuals, 3])
@@ -120,6 +126,7 @@ def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSte
             ]
         )
 
+        """report winners"""
         points = points.reshape(nIndividuals, nJitter, 3)
         scores = scores.reshape(nIndividuals, nJitter)
         successes = successes.reshape(nIndividuals, nJitter)
