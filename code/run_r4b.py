@@ -1,13 +1,17 @@
 """Run the R4B simulator"""
 
 import logging
+import pathlib
+import sys
 
 import matplotlib.pyplot as plt
 
 from orbsim.r4b_3d import UNIT_TIME
-from orbsim.r4b_3d.initial_conditions import get_leo_position_and_velocity
+from orbsim.r4b_3d.initial_conditions import (
+    get_leo_position_and_velocity,
+    get_circular_sun_orbit_position_and_velocity,
+)
 from orbsim.r4b_3d.logging import logging_setup
-
 from orbsim.r4b_3d.mplotting import animate_r4b_orbitplot, r4b_orbitplot
 from orbsim.r4b_3d.simulators import simulate
 
@@ -18,16 +22,54 @@ logger = logging.getLogger()
 
 if __name__ == "__main__":
 
-    # Simple LEO without burn
-    Q0, B0 = get_leo_position_and_velocity(day=0, altitude=160, end_year="2020")
-    psi_leo = (0, Q0, B0, None)
-    ts, Qs, Bs, (t_final, i_final), ephemerides = simulate(
-        psi=psi_leo,
-        h=10 / UNIT_TIME,
-        max_duration=1 * 3600 * 3 / UNIT_TIME,
-        max_iter=1e6,
-    )
+    try:
+        MODE = sys.argv[1]
+    except IndexError:
+        MODE = "leo"
 
+    mode_dict = {
+        # Keys: Possible input arguments (argv)
+        # Values: Output folder name of associated log/figs of run
+        # Simple simulation without burn
+        "leo": "demo_leo",
+        "sun": "demo_circular_sun_orbit",
+    }
+
+    MODE_NAME = mode_dict[MODE]
+    OUTPUT_DIR = "runs/r4b_3d/" + MODE_NAME + "/"
+    pathlib.Path(OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
+
+    # Run simulate() with some initial conditions
+    if MODE_NAME == "demo_leo":
+        # Simple LEO without burn
+        day = 0
+        Q0, B0 = get_leo_position_and_velocity(day=day, altitude=160, end_year="2020")
+        psi = (day, Q0, B0, None)
+
+        ts, Qs, Bs, (t_final, i_final), ephemerides = simulate(
+            psi=psi,
+            max_year="2020",
+            h=10 / UNIT_TIME,
+            max_duration=1 * 3600 * 3 / UNIT_TIME,
+            max_iter=1e6,
+        )
+
+    elif MODE_NAME == "demo_circular_sun_orbit":
+
+        # Simple LEO without burn
+        day = 0
+        Q0, B0 = get_circular_sun_orbit_position_and_velocity()
+        psi = (day, Q0, B0, None)
+
+        ts, Qs, Bs, (t_final, i_final), ephemerides = simulate(
+            psi=psi,
+            max_year="2039",
+            h=3600 * 24 / UNIT_TIME,
+            max_duration=1,
+            max_iter=1e6,
+        )
+
+    # PLOT THINGS
     fig = plt.figure()
     ax = fig.add_subplot("111", projection="3d")
     animate_r4b_orbitplot(Qs, t_final, fig, ax)

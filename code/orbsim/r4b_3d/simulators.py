@@ -21,13 +21,12 @@ from orbsim.r4b_3d.ephemerides import (
     get_ephemerides,
     get_ephemerides_on_day,
 )
-from orbsim.r4b_3d.equations_of_motion import get_B_phi, get_B_R, get_B_theta
 from orbsim.r4b_3d.integrators import euler_step_symplectic
 
 
 def simulate(
     psi,
-    max_year="2020",
+    max_year="2039",
     h=1 / UNIT_TIME,
     max_duration=1 * 3600 * 24 / UNIT_TIME,
     max_iter=int(1e6),
@@ -53,7 +52,7 @@ def simulate(
     t = psi[0]
     Q = psi[1]
     B = psi[2]
-    burn = psi[3]
+    # burn = psi[3]
 
     day = t * UNIT_TIME / (3600 * 24)
 
@@ -65,7 +64,8 @@ def simulate(
     R, theta, phi = Q
     B_R, B_theta, B_phi = B
 
-    logging.info(f"Initial momenta: B = {B}")
+    logging.info(f"Initial coordinates: Q = {B} (R, theta, phi)")
+    logging.info(f"Initial momenta: B = {B} (B_R, B_theta, B_phi")
 
     logging.info(
         f"Starting simulation at time {t} ({day} days) with step size h = {h} "
@@ -157,23 +157,25 @@ def simulate(
     )
     logging.info(
         f"SIMULATOR PERFORMANCE: 1 second can simulate:  "
-        f"{format_time(t_s / T)} (HH:MM:SS)"
+        f"{format_time(t_s / T)} (DDD:HH:MM:SS)"
     )
     logging.info(
         f"SIMULATOR PERFORMANCE: Time to simulate 1 day: "
-        f"{format_time(T / t_s * 3600 * 24)} (HH:MM:SS)"
+        f"{format_time(T / t_s * 3600 * 24)} (DDD:HH:MM:SS)"
     )
     logging.info(
         f"TIME ELAPSED: In-sim time duration:     {format_time(t,time_unit='years')} "
-        f"(HH:MM:SS)"
+        f"(DDD:HH:MM:SS)"
     )
-    logging.info(f"TIME ELAPSED: Out-of-sim time duration: {format_time(T)} (HH:MM:SS)")
+    logging.info(
+        f"TIME ELAPSED: Out-of-sim time duration: {format_time(T)} (DDD:HH:MM:SS)"
+    )
 
     return (ts, Qs, Bs, (t, i), ephemerides)
 
 
 def format_time(time_value, time_unit="seconds"):
-    """Format time from a single unit (by default seconds) to a nice HH:MM:SS string
+    """Format time from a single unit (by default seconds) to a DDD:HH:MM:SS string
 
     Arguments:
         time {[float]} -- [Time value in some unit]
@@ -185,7 +187,7 @@ def format_time(time_value, time_unit="seconds"):
         ValueError -- [Unsupported input time unit]
 
     Returns:
-        [str] -- [String of time formatted as HH:MM:SS]
+        [str] -- [String of time formatted as DDD:HH:MM:SS]
     """
 
     if time_unit == "years":
@@ -195,12 +197,14 @@ def format_time(time_value, time_unit="seconds"):
     else:
         raise ValueError("Input time must be either 'years' or 'seconds' (default)")
 
+    days = int(time_value // (3600 * 24))
+    time_value %= 3600 * 24
     hours = int(time_value // 3600)
     time_value %= 3600
     minutes = int(time_value // 60)
     time_value %= 60
     seconds = time_value
-    text = f"{hours:0>2d}:{minutes:0>2d}:{seconds:0>5.2f}"
+    text = f"{days:0>3d}:{hours:0>2d}:{minutes:0>2d}:{seconds:0>5.2f}"
 
     return text
 

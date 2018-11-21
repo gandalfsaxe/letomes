@@ -10,9 +10,7 @@ Implements symplectic integrators that integrates H-R4B system equations.
     conditions and stopping conditions.
 """
 
-#  import logging
-
-# import time
+from math import pi
 
 from orbsim.r4b_3d.equations_of_motion import (
     get_Rdot,
@@ -21,6 +19,11 @@ from orbsim.r4b_3d.equations_of_motion import (
     get_Bdot_R,
     get_Bdot_theta,
     get_Bdot_phi,
+)
+
+from orbsim.r4b_3d.coordinate_system import (
+    keep_theta_in_interval_zero_to_pi,
+    keep_phi_in_interval_npi_to_pi,
 )
 
 # from numba import njit  # boolean, float64, jit
@@ -38,6 +41,11 @@ def euler_step_symplectic(h, Q, B, eph_coords):
     R = R + h * get_Rdot(B_R)
     theta = theta + h * get_thetadot(R, B_theta)
     phi = phi + h * get_phidot(R, theta, B_phi)
+
+    if theta <= 0 or theta >= pi:
+        theta = keep_theta_in_interval_zero_to_pi(theta)
+    if phi <= -pi or phi > pi:
+        phi = keep_phi_in_interval_npi_to_pi(phi)
 
     # Update B_R
     Bdot_R = get_Bdot_R(R, theta, phi, B_theta, B_phi, R_ks, theta_ks, phi_ks)

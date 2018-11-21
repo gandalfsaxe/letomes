@@ -229,7 +229,7 @@ def get_leo_position_and_velocity(day=0, altitude=160, end_year="2020"):
         qdot0_spherical_km_s_rad[2],  # phidot
     )
 
-    qdot0_spherical_AU_rad_year = [
+    qdot0_spherical_AU_rad_y = [
         qdot0_spherical_km_s_rad[0] / UNIT_VELOCITY,  # AU/y
         qdot0_spherical_km_s_rad[1] * UNIT_TIME,  # rad/y
         qdot0_spherical_km_s_rad[2] * UNIT_TIME,  # rad/y
@@ -238,9 +238,9 @@ def get_leo_position_and_velocity(day=0, altitude=160, end_year="2020"):
     qdot0_spherical_AU_rad_year_speed = get_speed_spherical(
         r_average_AU,
         theta_average_rad,
-        qdot0_spherical_AU_rad_year[0],  # rdot
-        qdot0_spherical_AU_rad_year[1],  # thetadot
-        qdot0_spherical_AU_rad_year[2],  # phidot
+        qdot0_spherical_AU_rad_y[0],  # rdot
+        qdot0_spherical_AU_rad_y[1],  # thetadot
+        qdot0_spherical_AU_rad_y[2],  # phidot
     )
 
     logging.debug(
@@ -260,7 +260,7 @@ def get_leo_position_and_velocity(day=0, altitude=160, end_year="2020"):
 
     logging.debug(
         f"Spacecraft initial velocity vector (spherical, AU/y & rad/y): "
-        f"{qdot0_spherical_AU_rad_year}"
+        f"{qdot0_spherical_AU_rad_y}"
         f" (speed: {qdot0_spherical_AU_rad_year_speed})"
     )
 
@@ -269,7 +269,7 @@ def get_leo_position_and_velocity(day=0, altitude=160, end_year="2020"):
 
     # FINAL OUTPUT: Initial momenta per mass (B)
     R, theta, _ = Q0
-    Rdot, thetadot, phidot = qdot0_spherical_AU_rad_year
+    Rdot, thetadot, phidot = qdot0_spherical_AU_rad_y
 
     B_R = get_B_R(Rdot)
     B_theta = get_B_theta(R, thetadot)
@@ -306,15 +306,58 @@ def get_circular_sun_orbit_position_and_velocity(altitude=UNIT_LENGTH - SUN_RADI
         f"{sun_orbital_speed} km/s"
     )
 
-    return sun_orbital_speed
+    # Position
+    q0_cartesian_AU = [1, 0, 0]
+    q0_cartesian_km = [q * UNIT_LENGTH for q in q0_cartesian_AU]
+    q0_spherical_AU_rad = get_position_spherical_from_cartesian(*q0_cartesian_AU)
+
+    logging.debug(f"Position (heliocentric, cartesian, AU: {q0_cartesian_AU}")
+    logging.debug(f"Position (heliocentric, cartesian, km: {q0_cartesian_km}")
+    logging.debug(f"Position (heliocentric, spherical, AU & rad: {q0_spherical_AU_rad}")
+
+    # Velocity
+    qdot0_cartesian_km_s = [0, sun_orbital_speed, 0]
+    qdot0_cartesian_AU_y = [v_i / UNIT_VELOCITY for v_i in qdot0_cartesian_km_s]
+    qdot0_spherical_AU_rad_y = get_velocity_spherical_from_cartesian(
+        q0_cartesian_AU, qdot0_cartesian_AU_y
+    )
+
+    logging.debug(f"Velocity (heliocentric, cartesian, km/s: {qdot0_cartesian_km_s}")
+    logging.debug(f"Velocity (heliocentric, cartesian, AU/y: {qdot0_cartesian_AU_y}")
+    logging.debug(
+        f"Velocity (heliocentric, spherical, AU/y & rad/y: {qdot0_spherical_AU_rad_y}"
+    )
+
+    # FINAL OUTPUT: Initial coordinates (Q)
+    Q0 = q0_spherical_AU_rad
+
+    # FINAL OUTPUT: Initial momenta per mass (B)
+    R, theta, _ = Q0
+    Rdot, thetadot, phidot = qdot0_spherical_AU_rad_y
+
+    B_R = get_B_R(Rdot)
+    B_theta = get_B_theta(R, thetadot)
+    B_phi = get_B_phi(R, theta, phidot)
+
+    B0 = [B_R, B_theta, B_phi]
+
+    # Info log output
+    logging.info(
+        f"Spacecraft initial position vector, Q0 (spherical, AU & rad): " f"{Q0}"
+    )
+    logging.info(
+        f"Spacecraft initial momentum per mass vector, B0 (AU/y & rad/y): {B0}"
+    )
+
+    return Q0, B0
 
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
 
-#     from orbsim.r4b_3d.logging import logging_setup
+    from orbsim.r4b_3d.logging import logging_setup
 
-#     logging_setup()
+    logging_setup()
 
-#     # get_leo_position_and_velocity()
+    #     # get_leo_position_and_velocity()
 
-#     get_circular_sun_orbit_position_and_velocity()
+    get_circular_sun_orbit_position_and_velocity()

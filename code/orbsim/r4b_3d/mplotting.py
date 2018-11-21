@@ -48,16 +48,16 @@ def r4b_orbitplot(qs, ax):
 
 def animate_r4b_orbitplot(qs, t_final, fig, ax):
     r4b_orbit = R4bOrbit(qs, t_final, ax)
-    r4b_orbit.zoom_orbit()
-    exit(0)
+    # r4b_orbit.zoom_orbit()
+    # exit(0)
     ani = animation.FuncAnimation(
-        fig, r4b_orbit.update, range(len(qs)), interval=0.1, blit=True
+        fig, r4b_orbit.update, range(len(qs)), interval=10, blit=True
     )  # Turn off blitting if you want to rotate the plot. Turn it on if you wanna go fast
-    plt.rcParams[
-        "animation.convert_path"
-    ] = "C:\Program Files\ImageMagick-7.0.8-Q16\magick.exe"  # "/usr/local/bin/magick"
-    writer = ImageMagickFileWriter()
-    ani.save(f"{str(Path.home())}/animation.mp4", writer=writer)
+    # plt.rcParams[
+    #     "animation.convert_path"
+    # ] = "C:\Program Files\ImageMagick-7.0.8-Q16\magick.exe"  # "/usr/local/bin/magick"
+    # writer = ImageMagickFileWriter()
+    # ani.save(f"{str(Path.home())}/animation.mp4", writer=writer)
     plt.show()
 
 
@@ -84,12 +84,6 @@ class R4bOrbit(object):
         self.ys_mars = mars["y"]
         self.zs_mars = mars["z"]
 
-        self.xdata = [self.xs[0]]
-        self.ydata = [self.ys[0]]
-        self.zdata = [self.zs[0]]
-        self.traj_line = Line3D(self.xdata, self.ydata, self.zdata, color="black")
-        self.ax.add_line(self.traj_line)
-
         self.earth_xdata = [self.xs_earth[0]]
         self.earth_ydata = [self.ys_earth[0]]
         self.earth_zdata = [self.zs_earth[0]]
@@ -106,6 +100,11 @@ class R4bOrbit(object):
         )
         self.ax.add_line(self.mars_line)
 
+        self.xdata = [self.xs[0]]
+        self.ydata = [self.ys[0]]
+        self.zdata = [self.zs[0]]
+        self.traj_line = Line3D(self.xdata, self.ydata, self.zdata, color="black")
+        self.ax.add_line(self.traj_line)
         # -- SUN --
         ax.scatter(0, 0, 0, c="gold", marker="o")
 
@@ -139,16 +138,17 @@ class R4bOrbit(object):
         return self.traj_line, self.earth_line, self.mars_line
 
     def zoom_orbit(self):
-        """orbit without sun and mars, so we can see earth and spaceship trajectory as they move through space together."""
+        """orbit without mars, so we can see earth and spaceship trajectory as they move through space together."""
         earth_zoomline = Line3D(
-            list(self.xs_earth[0:2]),
-            list(self.ys_earth[0:2]),
-            list(self.zs_earth[0:2]),
+            list(self.xs_earth[0 : self.t_final]),
+            list(self.ys_earth[0 : self.t_final]),
+            list(self.zs_earth[0 : self.t_final]),
             color="deepskyblue",
         )
         traj_zoomline = Line3D(self.xs, self.ys, self.zs, color="black")
         fig = plt.figure()
         ax = fig.add_subplot("111", projection="3d")
+        ax.scatter(0, 0, 0, c="gold", marker="o")  # Sun
         ax.add_line(earth_zoomline)
         ax.add_line(traj_zoomline)
         ax.set_xlim(min(self.xs), max(self.xs))

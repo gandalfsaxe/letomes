@@ -10,6 +10,29 @@ Equations related to the cartesian and spherical coordinate system.
 
 from math import acos, atan2, cos, pi, sin, sqrt
 
+# region Keeping Angles in Intervals
+
+
+def keep_theta_in_interval_zero_to_pi(v):
+    v = v % (2 * pi)
+
+    if v > pi:
+        v = 2 * pi - v
+
+    return v
+
+
+def keep_phi_in_interval_npi_to_pi(v):
+    v = v % (2 * pi)
+
+    if v > pi:
+        v = v - 2 * pi
+
+    return v
+
+
+# endregion
+
 
 # region Distances
 def get_distance_cartesian(u, v):
@@ -174,9 +197,42 @@ def get_speed_cartesian(xdot, ydot, zdot):
 
 # endregion
 
-if __name__ == "__main__":
-    # v = (1, 0, 0)
-    # vdot = (0, 1, 0)
+# if __name__ == "__main__":
 
-    # pprint(get_velocity_spherical_from_cartesian(v, vdot))
-    pass
+#     vs = [
+#         0,
+#         45,
+#         90,
+#         179,
+#         180,
+#         181,
+#         541,
+#         901,
+#         270,
+#         359,
+#         360,
+#         361,
+#         0,
+#         -45,
+#         -90,
+#         -179,
+#         -180,
+#         -181,
+#         -541,
+#         -901,
+#         -270,
+#         -359,
+#         -360,
+#         -361,
+#     ]
+
+#     vs = [x * pi / 180 for x in vs]
+
+#     test = list(map(keep_phi_in_interval_npi_to_pi, vs))
+#     test2 = list(map(keep_theta_in_interval_zero_to_pi, vs))
+
+#     from pprint import pprint
+
+#     pprint(test)
+#     pprint(test2)
+

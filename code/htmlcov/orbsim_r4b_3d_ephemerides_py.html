@@ -249,8 +249,8 @@
 <p id="t9" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t10" class="stm run hide_run"><span class="key">import</span> <span class="nam">pandas</span> <span class="key">as</span> <span class="nam">pd</span><span class="strut">&nbsp;</span></p>
 <p id="t11" class="pln"><span class="strut">&nbsp;</span></p>
-<p id="t12" class="stm run hide_run"><span class="key">from</span> <span class="nam">orbsim</span><span class="op">.</span><span class="nam">r4b_3d</span><span class="op">.</span><span class="nam">logging</span> <span class="key">import</span> <span class="nam">logging_setup</span><span class="strut">&nbsp;</span></p>
-<p id="t13" class="stm run hide_run"><span class="key">from</span> <span class="nam">orbsim</span><span class="op">.</span><span class="nam">r4b_3d</span> <span class="key">import</span> <span class="nam">SUN_R</span><span class="op">,</span> <span class="nam">SUN_PHI</span><span class="op">,</span> <span class="nam">SUN_THETA</span><span class="strut">&nbsp;</span></p>
+<p id="t12" class="stm run hide_run"><span class="key">from</span> <span class="nam">orbsim</span><span class="op">.</span><span class="nam">r4b_3d</span><span class="op">.</span><span class="nam">coordinate_system</span> <span class="key">import</span> <span class="nam">radians_in_domain</span><span class="strut">&nbsp;</span></p>
+<p id="t13" class="stm run hide_run"><span class="key">from</span> <span class="nam">orbsim</span><span class="op">.</span><span class="nam">r4b_3d</span> <span class="key">import</span> <span class="nam">SUN_PHI</span><span class="op">,</span> <span class="nam">SUN_R</span><span class="op">,</span> <span class="nam">SUN_THETA</span><span class="strut">&nbsp;</span></p>
 <p id="t14" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t15" class="stm run hide_run"><span class="nam">logger</span> <span class="op">=</span> <span class="nam">logging</span><span class="op">.</span><span class="nam">getLogger</span><span class="op">(</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t16" class="pln"><span class="strut">&nbsp;</span></p>
@@ -385,8 +385,8 @@
 <p id="t145" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t146" class="stm run hide_run">    <span class="key">for</span> <span class="nam">body</span> <span class="key">in</span> <span class="op">[</span><span class="str">"sun"</span><span class="op">,</span> <span class="str">"earth"</span><span class="op">,</span> <span class="str">"mars"</span><span class="op">]</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t147" class="stm run hide_run">        <span class="nam">R_ks</span><span class="op">.</span><span class="nam">append</span><span class="op">(</span><span class="nam">ephemerides_on_day</span><span class="op">[</span><span class="nam">body</span><span class="op">]</span><span class="op">[</span><span class="str">"r"</span><span class="op">]</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t148" class="stm run hide_run">        <span class="nam">theta_ks</span><span class="op">.</span><span class="nam">append</span><span class="op">(</span><span class="nam">ephemerides_on_day</span><span class="op">[</span><span class="nam">body</span><span class="op">]</span><span class="op">[</span><span class="str">"theta"</span><span class="op">]</span> <span class="op">*</span> <span class="nam">pi</span> <span class="op">/</span> <span class="num">180</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
-<p id="t149" class="stm run hide_run">        <span class="nam">phi_ks</span><span class="op">.</span><span class="nam">append</span><span class="op">(</span><span class="nam">ephemerides_on_day</span><span class="op">[</span><span class="nam">body</span><span class="op">]</span><span class="op">[</span><span class="str">"phi"</span><span class="op">]</span> <span class="op">*</span> <span class="nam">pi</span> <span class="op">/</span> <span class="num">180</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t148" class="stm run hide_run">        <span class="nam">theta_ks</span><span class="op">.</span><span class="nam">append</span><span class="op">(</span><span class="nam">radians_in_domain</span><span class="op">(</span><span class="nam">ephemerides_on_day</span><span class="op">[</span><span class="nam">body</span><span class="op">]</span><span class="op">[</span><span class="str">"theta"</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t149" class="stm run hide_run">        <span class="nam">phi_ks</span><span class="op">.</span><span class="nam">append</span><span class="op">(</span><span class="nam">radians_in_domain</span><span class="op">(</span><span class="nam">ephemerides_on_day</span><span class="op">[</span><span class="nam">body</span><span class="op">]</span><span class="op">[</span><span class="str">"phi"</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t150" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t151" class="stm run hide_run">    <span class="key">return</span> <span class="nam">R_ks</span><span class="op">,</span> <span class="nam">theta_ks</span><span class="op">,</span> <span class="nam">phi_ks</span><span class="strut">&nbsp;</span></p>
 <p id="t152" class="pln"><span class="strut">&nbsp;</span></p>
@@ -416,7 +416,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.5.1</a>,
-            created at 2018-11-18 18:11
+            created at 2018-11-20 20:29
         </p>
     </div>
 </div>

@@ -9,8 +9,11 @@ from math import floor, pi
 
 import pandas as pd
 
-from orbsim.r4b_3d.logging import logging_setup
-from orbsim.r4b_3d import SUN_R, SUN_PHI, SUN_THETA
+from orbsim.r4b_3d.coordinate_system import (
+    keep_phi_in_interval_npi_to_pi,
+    keep_theta_in_interval_zero_to_pi,
+)
+from orbsim.r4b_3d import SUN_PHI, SUN_R, SUN_THETA
 
 logger = logging.getLogger()
 
@@ -145,8 +148,14 @@ def get_coordinates_on_day_rad(ephemerides_on_day):
 
     for body in ["sun", "earth", "mars"]:
         R_ks.append(ephemerides_on_day[body]["r"])
-        theta_ks.append(ephemerides_on_day[body]["theta"] * pi / 180)
-        phi_ks.append(ephemerides_on_day[body]["phi"] * pi / 180)
+        theta_ks.append(
+            keep_theta_in_interval_zero_to_pi(
+                ephemerides_on_day[body]["theta"] * pi / 180
+            )
+        )
+        phi_ks.append(
+            keep_phi_in_interval_npi_to_pi(ephemerides_on_day[body]["phi"] * pi / 180)
+        )
 
     return R_ks, theta_ks, phi_ks
 
