@@ -14,7 +14,7 @@ from orbsim.r4b_3d.initial_conditions import (
     get_circular_sun_orbit_position_and_velocity,
 )
 from orbsim.r4b_3d.logging import logging_setup
-from orbsim.r4b_3d.mplotting import animate_r4b_orbitplot, r4b_orbitplot
+from orbsim.r4b_3d.mplotting import animate_r4b_orbitplot
 from orbsim.r4b_3d.simulators import simulate
 
 logging_setup()
@@ -66,17 +66,12 @@ if __name__ == "__main__":
         ts, Qs, Bs, (t_final, i_final), ephemerides = simulate(
             psi=psi,
             max_year="2039",
-            h=3600 * 24 / UNIT_TIME,
+            h=3600 * 18 / UNIT_TIME,
             max_duration=1,
             max_iter=1e6,
         )
 
     # PLOT THINGS
     fig = plt.figure()
-    ax = fig.add_subplot("111", projection="3d")
-    animate_r4b_orbitplot(Qs, t_final, fig, ax)
+    animate_r4b_orbitplot(Qs, ts, t_final, fig)
 
-    fig = plt.figure()
-    ax = fig.add_subplot("111", projection="3d")
-    r4b_orbitplot(Qs, ax)
-    plt.show()
