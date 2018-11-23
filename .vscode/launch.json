@@ -34,7 +34,7 @@
             "cwd": "${workspaceFolder}/code",
             "program": "${workspaceFolder}/code/run_r4b.py",
             "args": [
-                "sh"
+                "leo"
             ],
             "stopOnEntry": false
         },

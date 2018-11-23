@@ -4,7 +4,7 @@
 
   // PYTHON
   "python.formatting.provider": "black",
-  "editor.rulers": [88], // default for python formatter black
+  // "editor.rulers": [88], // default for python formatter black
   "[python]": {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
