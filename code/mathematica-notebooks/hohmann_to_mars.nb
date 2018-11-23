@@ -1,0 +1,2044 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     79721,       2036]
+NotebookOptionsPosition[     67343,       1805]
+NotebookOutlinePosition[     68386,       1839]
+CellTagsIndexPosition[     68230,       1831]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Hohmann Transfer to Mars", "Title",
+ CellChangeTimes->{{3.751886388015956*^9, 
+  3.751886395150024*^9}},ExpressionUUID->"f2697c88-40d9-4b62-a4c5-\
+92e76067f592"],
+
+Cell[BoxData[
+ RowBox[{"Clear", "[", "\"\<`*\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.592181527302184*^9, 3.5921815298599715`*^9}},
+ CellLabel->
+  "In[6524]:=",ExpressionUUID->"ededc2bc-0ff9-48df-992d-132048fc5173"],
+
+Cell[CellGroupData[{
+
+Cell["Constants ", "Subsection",
+ CellChangeTimes->{{3.751957748692754*^9, 3.7519577551177673`*^9}, {
+   3.751957929002033*^9, 3.7519579298341017`*^9}, 
+   3.7519584466861563`*^9},ExpressionUUID->"803dd002-6e41-460e-8e6b-\
+c8625835259b"],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "Standard gravitational parameters, ",
+ Cell[BoxData[
+  FormBox["\[Mu]", TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "f77f4d78-fa58-4ea9-8443-960b8221bbc1"]
+}], "Subsubsection",
+ CellChangeTimes->{{3.7519579327524776`*^9, 
+  3.751957970484125*^9}},ExpressionUUID->"1f54bcc5-5ba8-4ea3-bf0e-\
+c1eaee6d99f3"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[Mu]Sun", "=", 
+  RowBox[{"UnitConvert", "[", 
+   RowBox[{
+    TemplateBox[{InterpretationBox["\[InvisibleSpace]", 1],RowBox[{
+        SubscriptBox[
+         StyleBox["\"M\"", Italic, StripOnInput -> False], "\"\[Sun]\""], 
+        "\[ThinSpace]", 
+        StyleBox["\"G\"", Italic, StripOnInput -> False]}],
+      "solar mass Newtonian gravitational constants",
+      RowBox[{"\"GravitationalConstant\"", " ", "\"SolarMass\""}]},
+     "Quantity"], ",", "\"\<km^3/s^2\>\""}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.751957758661469*^9, 3.751957800902445*^9}, {
+  3.751958789239046*^9, 3.7519588184182587`*^9}},
+ CellLabel->
+  "In[6525]:=",ExpressionUUID->"311696f8-edbc-4a9a-a946-a175614f5916"],
+
+Cell[BoxData[
+ TemplateBox[{"1.32709742648000006664`4.031532467441943*^11",RowBox[{
+     SuperscriptBox["\"km\"", "3"], "\[NegativeMediumSpace]", "\"/\"", 
+     "\[InvisibleSpace]", 
+     SuperscriptBox["\"s\"", "2"]}],"kilometers cubed per second squared",
+   FractionBox[
+    SuperscriptBox["\"Kilometers\"", "3"], 
+    SuperscriptBox["\"Seconds\"", "2"]]},
+  "Quantity"]], "Output",
+ CellChangeTimes->{{3.751957792110436*^9, 3.751957802040832*^9}, 
+   3.751958531792611*^9, {3.751958757465742*^9, 3.751958849627818*^9}, 
+   3.7519590591520452`*^9, 3.751960524550802*^9, 3.75197555768919*^9, 
+   3.751975679205085*^9, {3.751976087185193*^9, 3.751976091353388*^9}, 
+   3.751976680716166*^9, 3.7519768322566757`*^9},
+ CellLabel->
+  "Out[6525]=",ExpressionUUID->"b5b5cfbb-4c85-4a43-bf0a-9ea8cd5ec254"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[Mu]Earth", "=", 
+  RowBox[{"UnitConvert", "[", 
+   RowBox[{
+    TemplateBox[{InterpretationBox["\[InvisibleSpace]", 1],RowBox[{
+        SubscriptBox[
+         StyleBox["\"M\"", Italic, StripOnInput -> False], "\"\[Earth]\""], 
+        "\[ThinSpace]", 
+        StyleBox["\"G\"", Italic, StripOnInput -> False]}],
+      "Earth mass Newtonian gravitational constants",
+      RowBox[{"\"EarthMass\"", " ", "\"GravitationalConstant\""}]},
+     "Quantity"], ",", "\"\<km^3/s^2\>\""}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.751957815546997*^9, 3.751957821519031*^9}, {
+  3.7519588434987173`*^9, 3.751958844626144*^9}},
+ CellLabel->
+  "In[6526]:=",ExpressionUUID->"ef2fbe2f-136a-42da-9cd5-eb99aff5163d"],
+
+Cell[BoxData[
+ TemplateBox[{"398589.31232288`4.031952970852852",RowBox[{
+     SuperscriptBox["\"km\"", "3"], "\[NegativeMediumSpace]", "\"/\"", 
+     "\[InvisibleSpace]", 
+     SuperscriptBox["\"s\"", "2"]}],"kilometers cubed per second squared",
+   FractionBox[
+    SuperscriptBox["\"Kilometers\"", "3"], 
+    SuperscriptBox["\"Seconds\"", "2"]]},
+  "Quantity"]], "Output",
+ CellChangeTimes->{
+  3.7519578317825203`*^9, 3.75195875757824*^9, {3.7519588280040827`*^9, 
+   3.7519588497485523`*^9}, 3.75195905927742*^9, 3.751960524622643*^9, 
+   3.751975557769492*^9, 3.7519756792853127`*^9, {3.751976087264056*^9, 
+   3.751976091432016*^9}, 3.751976680812739*^9, 3.751976832334358*^9},
+ CellLabel->
+  "Out[6526]=",ExpressionUUID->"576de079-be4c-4d1e-a189-2a8019a42bec"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[Mu]Mars", "=", 
+  RowBox[{"UnitConvert", "[", 
+   RowBox[{
+    TemplateBox[{InterpretationBox["\[InvisibleSpace]", 1],RowBox[{
+        SubscriptBox[
+         StyleBox["\"M\"", Italic, StripOnInput -> False], "\"\[Mars]\""], 
+        "\[ThinSpace]", 
+        StyleBox["\"G\"", Italic, StripOnInput -> False]}],
+      "Mars mass Newtonian gravitational constants",
+      RowBox[{"\"GravitationalConstant\"", " ", "\"MarsMass\""}]},
+     "Quantity"], ",", "\"\<km^3/s^2\>\""}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.751957815546997*^9, 3.751957848251134*^9}},
+ CellLabel->
+  "In[6527]:=",ExpressionUUID->"723242da-8ff6-4e3b-95c3-8ebb12695d46"],
+
+Cell[BoxData[
+ TemplateBox[{"42827.1041744000021506634`4.027349675970021",RowBox[{
+     SuperscriptBox["\"km\"", "3"], "\[NegativeMediumSpace]", "\"/\"", 
+     "\[InvisibleSpace]", 
+     SuperscriptBox["\"s\"", "2"]}],"kilometers cubed per second squared",
+   FractionBox[
+    SuperscriptBox["\"Kilometers\"", "3"], 
+    SuperscriptBox["\"Seconds\"", "2"]]},
+  "Quantity"]], "Output",
+ CellChangeTimes->{
+  3.7519578570111837`*^9, 3.751958757681089*^9, {3.751958828105467*^9, 
+   3.751958849857793*^9}, 3.751959059389089*^9, 3.751960524705127*^9, 
+   3.7519755578378153`*^9, 3.751975679351284*^9, {3.751976087348493*^9, 
+   3.751976091505019*^9}, 3.7519766809125023`*^9, 3.75197683241605*^9},
+ CellLabel->
+  "Out[6527]=",ExpressionUUID->"a2d8c043-af5e-4ebd-b2bb-2fc797c440cc"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "Planet radii, ",
+ Cell[BoxData[
+  FormBox["R", TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "ef7c8b65-34a9-4439-8772-992a44759b44"]
+}], "Subsubsection",
+ CellChangeTimes->{{3.751957977556491*^9, 
+  3.7519579841962843`*^9}},ExpressionUUID->"008a3a0a-264a-4cad-9de3-\
+c83af1dfcae3"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"REarth", "=", 
+  RowBox[{
+   TemplateBox[{"\"Earth\"",RowBox[{"Entity", "[", 
+       RowBox[{"\"Planet\"", ",", "\"Earth\""}], "]"}],
+     "\"Entity[\\\"Planet\\\", \\\"Earth\\\"]\"","\"planet\""},
+    "Entity"], "[", 
+   TemplateBox[{"\"average radius\"",RowBox[{"EntityProperty", "[", 
+       RowBox[{"\"Planet\"", ",", "\"Radius\""}], "]"}],
+     "\"EntityProperty[\\\"Planet\\\", \\\"Radius\\\"]\""},
+    "EntityProperty"], "]"}]}]], "Input",
+ CellChangeTimes->{{3.751957866070019*^9, 3.7519578914974823`*^9}},
+ CellLabel->
+  "In[6528]:=",ExpressionUUID->"dd14f31e-0a23-42c7-a93c-8a799288f8ab"],
+
+Cell[BoxData[
+ TemplateBox[{"6371.008`7.","\"km\"","kilometers","\"Kilometers\""},
+  "Quantity"]], "Output",
+ CellChangeTimes->{
+  3.751957898541957*^9, 3.751958757830029*^9, {3.751958828205859*^9, 
+   3.751958849957324*^9}, 3.7519590594866*^9, 3.751960524832199*^9, 
+   3.751975559475383*^9, 3.751975679435309*^9, {3.7519760874401007`*^9, 
+   3.751976091572324*^9}, 3.7519766810154753`*^9, 3.7519768325008087`*^9},
+ CellLabel->
+  "Out[6528]=",ExpressionUUID->"dec5f89b-236c-4065-836d-388431d49fdc"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"RMars", "=", 
+  RowBox[{
+   TemplateBox[{"\"Mars\"",RowBox[{"Entity", "[", 
+       RowBox[{"\"Planet\"", ",", "\"Mars\""}], "]"}],
+     "\"Entity[\\\"Planet\\\", \\\"Mars\\\"]\"","\"planet\""},
+    "Entity"], "[", 
+   TemplateBox[{"\"average radius\"",RowBox[{"EntityProperty", "[", 
+       RowBox[{"\"Planet\"", ",", "\"Radius\""}], "]"}],
+     "\"EntityProperty[\\\"Planet\\\", \\\"Radius\\\"]\""},
+    "EntityProperty"], "]"}]}]], "Input",
+ CellChangeTimes->{{3.7519579060033207`*^9, 3.751957916898828*^9}},
+ CellLabel->
+  "In[6529]:=",ExpressionUUID->"c08444bb-31e9-43aa-be58-11deed80ea4d"],
+
+Cell[BoxData[
+ TemplateBox[{"3389.5`5.","\"km\"","kilometers","\"Kilometers\""},
+  "Quantity"]], "Output",
+ CellChangeTimes->{
+  3.751957924628883*^9, 3.751958242927052*^9, 3.7519587579481697`*^9, {
+   3.75195882830472*^9, 3.75195885005739*^9}, 3.751959059648178*^9, 
+   3.751960525005238*^9, 3.751975559683778*^9, 3.7519756795176373`*^9, {
+   3.7519760875321493`*^9, 3.751976091639805*^9}, 3.7519766811183577`*^9, 
+   3.751976832581904*^9},
+ CellLabel->
+  "Out[6529]=",ExpressionUUID->"69a395be-0d33-46c7-8a1c-5189c85a22ff"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Orbital distances", "Subsubsection",
+ CellChangeTimes->{{3.751958012645398*^9, 3.751958014203972*^9}, {
+  3.751958214270789*^9, 
+  3.751958216709119*^9}},ExpressionUUID->"cb750e86-4776-484c-98c6-\
+e4fdd4d12218"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"aEarth", "=", 
+  RowBox[{"UnitConvert", "[", 
+   RowBox[{
+    RowBox[{
+     TemplateBox[{"\"Earth\"",RowBox[{"Entity", "[", 
+         RowBox[{"\"Planet\"", ",", "\"Earth\""}], "]"}],
+       "\"Entity[\\\"Planet\\\", \\\"Earth\\\"]\"","\"planet\""},
+      "Entity"], "[", 
+     TemplateBox[{"\"semimajor axis\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"Planet\"", ",", "\"SemimajorAxis\""}], "]"}],
+       "\"EntityProperty[\\\"Planet\\\", \\\"SemimajorAxis\\\"]\""},
+      "EntityProperty"], "]"}], ",", "\"\<km\>\""}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.751958159182908*^9, 3.7519581692396517`*^9}, {
+  3.7519590106787767`*^9, 3.751959014050435*^9}},
+ CellLabel->
+  "In[6530]:=",ExpressionUUID->"84f3e6d4-31d3-4a97-9be6-4fb4586485a9"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "1.495978871467657760097664981`8.99956592252068*^8","\"km\"","kilometers",
+   "\"Kilometers\""},
+  "Quantity"]], "Output",
+ CellChangeTimes->{
+  3.7519581739375153`*^9, 3.7519587580875063`*^9, {3.751958828404326*^9, 
+   3.751958850158592*^9}, 3.751959014411792*^9, 3.751959059936665*^9, 
+   3.751960525091659*^9, 3.751975559770385*^9, 3.7519756796029243`*^9, {
+   3.7519760876104097`*^9, 3.751976091716465*^9}, 3.751976681214424*^9, 
+   3.751976832665971*^9},
+ CellLabel->
+  "Out[6530]=",ExpressionUUID->"5360bf49-1f9b-4408-8fdb-159e84f5b3f9"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"aMars", "=", 
+  RowBox[{"UnitConvert", "[", 
+   RowBox[{
+    RowBox[{
+     TemplateBox[{"\"Mars\"",RowBox[{"Entity", "[", 
+         RowBox[{"\"Planet\"", ",", "\"Mars\""}], "]"}],
+       "\"Entity[\\\"Planet\\\", \\\"Mars\\\"]\"","\"planet\""},
+      "Entity"], "[", 
+     TemplateBox[{"\"semimajor axis\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"Planet\"", ",", "\"SemimajorAxis\""}], "]"}],
+       "\"EntityProperty[\\\"Planet\\\", \\\"SemimajorAxis\\\"]\""},
+      "EntityProperty"], "]"}], ",", "\"\<km\>\""}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.7519581753532124`*^9, 3.751958179875642*^9}, {
+  3.751959032842641*^9, 3.751959037667109*^9}},
+ CellLabel->
+  "In[6531]:=",ExpressionUUID->"51bb7b9b-36d6-4f3a-80b3-a8ba8c05d943"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "2.279366372281303562103139574`8.99956592252068*^8","\"km\"","kilometers",
+   "\"Kilometers\""},
+  "Quantity"]], "Output",
+ CellChangeTimes->{
+  3.751958187885646*^9, 3.751958758197907*^9, {3.751958828503916*^9, 
+   3.751958850243881*^9}, {3.751959038276822*^9, 3.7519590602229137`*^9}, 
+   3.751960525163261*^9, 3.751975559852313*^9, 3.751975679688402*^9, {
+   3.7519760876982193`*^9, 3.751976091782345*^9}, 3.7519766813158903`*^9, 
+   3.751976832750968*^9},
+ CellLabel->
+  "Out[6531]=",ExpressionUUID->"a00b78a2-e1ab-45bb-8f9c-3a5821338cec"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"aHohmann", "=", 
+  RowBox[{"UnitConvert", "[", 
+   RowBox[{
+    FractionBox[
+     RowBox[{"aEarth", "+", "aMars"}], "2"], ",", "\"\<km\>\""}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.75195822000486*^9, 3.7519582297163773`*^9}, {
+  3.7519590436837053`*^9, 3.75195904744236*^9}},
+ CellLabel->
+  "In[6532]:=",ExpressionUUID->"f6cf1238-8ef9-4218-b852-49fe60f74aa7"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "1.887672621874480661100402277`8.999565922520683*^8","\"km\"","kilometers",
+   "\"Kilometers\""},
+  "Quantity"]], "Output",
+ CellChangeTimes->{
+  3.751958230286274*^9, 3.751958758297799*^9, {3.751958828603538*^9, 
+   3.751958850344351*^9}, {3.751959047839291*^9, 3.751959060587493*^9}, 
+   3.7519605252386837`*^9, 3.751975559936491*^9, 3.75197567977355*^9, {
+   3.75197608778756*^9, 3.7519760918479137`*^9}, 3.7519766814143267`*^9, 
+   3.751976832833727*^9},
+ CellLabel->
+  "Out[6532]=",ExpressionUUID->"3eb7791b-1c2e-4ecc-a755-10bb6c234646"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"rPark", "=", 
+  RowBox[{"REarth", "+", 
+   TemplateBox[{"160","\"km\"","kilometers","\"Kilometers\""},
+    "Quantity"]}]}]], "Input",
+ CellChangeTimes->{{3.751958286227977*^9, 3.7519582869472113`*^9}, {
+  3.751958337840639*^9, 3.751958384376017*^9}, {3.751960372158751*^9, 
+  3.7519603722322807`*^9}, {3.75197665435774*^9, 3.751976655274898*^9}},
+ CellLabel->
+  "In[6533]:=",ExpressionUUID->"8fe3ec0a-6452-45ea-b1d6-58e4a4287613"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "6531.008`7.010772065318713","\"km\"","kilometers","\"Kilometers\""},
+  "Quantity"]], "Output",
+ CellChangeTimes->{
+  3.7519583888692913`*^9, 3.751958758398389*^9, {3.751958828703813*^9, 
+   3.751958850424708*^9}, 3.751959060684507*^9, {3.751960365120504*^9, 
+   3.751960372966023*^9}, 3.751960525313284*^9, 3.751975560035309*^9, 
+   3.7519756798705873`*^9, {3.751976087924508*^9, 3.751976091915576*^9}, 
+   3.7519766815317917`*^9, 3.751976832916132*^9},
+ CellLabel->
+  "Out[6533]=",ExpressionUUID->"ce6f9534-da7a-4d46-b31c-390839ae3631"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"rArrival", "=", 
+  RowBox[{"RMars", "+", 
+   TemplateBox[{"125","\"km\"","kilometers","\"Kilometers\""},
+    "Quantity"]}]}]], "Input",
+ CellChangeTimes->{{3.75195839123946*^9, 3.751958409695425*^9}, {
+  3.751960376616528*^9, 3.751960376714271*^9}},
+ CellLabel->
+  "In[6534]:=",ExpressionUUID->"88641b61-9ede-4539-9c27-d141dd5e2071"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "3514.5`5.015727909407185","\"km\"","kilometers","\"Kilometers\""},
+  "Quantity"]], "Output",
+ CellChangeTimes->{{3.751958406805153*^9, 3.7519584306975393`*^9}, 
+   3.751958758495973*^9, {3.75195882880579*^9, 3.751958850527973*^9}, 
+   3.7519590607816267`*^9, 3.7519603784266872`*^9, 3.751960525378799*^9, 
+   3.751975560119397*^9, 3.751975679952927*^9, {3.751976088065229*^9, 
+   3.751976091990437*^9}, 3.751976681652342*^9, 3.751976832999378*^9},
+ CellLabel->
+  "Out[6534]=",ExpressionUUID->"0b7533ae-7c62-4509-b6d8-442ac4868720"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Transfer time to Mars", "Section",
+ CellChangeTimes->{{3.7518854660658712`*^9, 
+  3.751885468635247*^9}},ExpressionUUID->"d8901407-6ac2-4b69-8b72-\
+56c5e598b7ac"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"UnitConvert", "[", 
+  RowBox[{
+   RowBox[{"\[Pi]", 
+    SqrtBox[
+     FractionBox[
+      RowBox[{"aHohmann", "^", "3"}], "\[Mu]Sun"]]}], ",", "\"\<days\>\""}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.751875772832218*^9, 3.751875867485962*^9}, {
+  3.7519584614627943`*^9, 3.751958546370982*^9}, {3.751959063323769*^9, 
+  3.751959065024826*^9}},
+ CellLabel->
+  "In[6535]:=",ExpressionUUID->"c98305ed-8399-4225-b1cc-8d5048a60df3"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "258.8658385918090941678`4.3325484393256355","\"days\"","days","\"Days\""},
+  "Quantity"]], "Output",
+ CellChangeTimes->{{3.751875841530632*^9, 3.751875886843058*^9}, 
+   3.751885962439638*^9, {3.751886252548946*^9, 3.751886261563677*^9}, 
+   3.751957501261361*^9, {3.7519575451296053`*^9, 3.751957552296156*^9}, {
+   3.751958487830616*^9, 3.75195854721041*^9}, {3.751958760964878*^9, 
+   3.751958770953145*^9}, {3.751958822363612*^9, 3.751958850627801*^9}, 
+   3.751959069243071*^9, 3.751960525446023*^9, 3.751975560201454*^9, 
+   3.751975680052855*^9, {3.7519760882443132`*^9, 3.751976092055531*^9}, 
+   3.751976681865947*^9, 3.751976833084691*^9},
+ CellLabel->
+  "Out[6535]=",ExpressionUUID->"7431858f-47dc-4fc6-b8a6-9e47541733b4"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"UnitConvert", "[", 
+  RowBox[{"%", ",", "\"\<months\>\""}], "]"}]], "Input",
+ CellChangeTimes->{{3.751875869622612*^9, 3.751875882850582*^9}},
+ CellLabel->
+  "In[6536]:=",ExpressionUUID->"e7287104-e9e4-4f3c-bd2b-abdb5ffe05f1"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "8.5106577071279702192`4.3325484393256355","\"mo\"","months","\"Months\""},
+  "Quantity"]], "Output",
+ CellChangeTimes->{{3.7518758778341837`*^9, 3.751875886911141*^9}, 
+   3.751885962493393*^9, {3.751886252693122*^9, 3.751886261647088*^9}, 
+   3.75195750136141*^9, {3.7519575452095423`*^9, 3.751957552396371*^9}, 
+   3.75195855543517*^9, 3.751958850726536*^9, 3.75196052551266*^9, 
+   3.75197556028458*^9, 3.751975680135696*^9, {3.751976088314776*^9, 
+   3.75197609212276*^9}, 3.751976681953075*^9, 3.751976833166285*^9},
+ CellLabel->
+  "Out[6536]=",ExpressionUUID->"37d83fae-0e1c-44c9-aa38-a2ea4a3385aa"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Departure speed on Hohmann-transfer", "Section",
+ CellChangeTimes->{{3.751886374063244*^9, 
+  3.7518864047493687`*^9}},ExpressionUUID->"226ed0b4-f78e-4e63-9426-\
+e8d41db93821"],
+
+Cell[CellGroupData[{
+
+Cell["Departure on Hohmann-transfer", "Subsection",
+ CellChangeTimes->{
+  3.751975653774873*^9},ExpressionUUID->"94135388-244d-48a0-b915-\
+10dd8034194c"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+v needed at periapsis of Hohmann transfer orbit with respect to sun\
+\>", "Subsubsection",
+ CellChangeTimes->{{3.592181584788711*^9, 3.5921816197100163`*^9}, {
+  3.5922630875542264`*^9, 3.592263115677538*^9}, {3.592275387747753*^9, 
+  3.5922754095474863`*^9}, {3.592275540487015*^9, 3.5922755405961227`*^9}, {
+  3.5922756865575485`*^9, 3.592275697977796*^9}, {3.592275963560564*^9, 
+  3.5922759653808784`*^9}},ExpressionUUID->"a69a6a5c-b614-4ab6-887d-\
+998f700fb46c"],
+
+Cell["Insert in Vis Viva equation:", "Text",
+ CellChangeTimes->{{3.751959119153041*^9, 3.751959123663015*^9}, {
+  3.751959475686377*^9, 
+  3.75195947586896*^9}},ExpressionUUID->"bc45f288-7023-4f45-88f0-\
+7558d054086c"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"vHohmannP", "=", 
+  SqrtBox[
+   RowBox[{"\[Mu]Sun", 
+    RowBox[{"(", 
+     RowBox[{
+      FractionBox["2", "aEarth"], "-", 
+      FractionBox["1", "aHohmann"]}], ")"}]}]]}]], "Input",
+ CellChangeTimes->{{3.592180801173758*^9, 3.592180843111166*^9}, {
+   3.592181006273218*^9, 3.5921810495134335`*^9}, {3.5921812656648874`*^9, 
+   3.5921812679995146`*^9}, {3.5921813468575635`*^9, 
+   3.5921813705036716`*^9}, {3.5921814743217845`*^9, 3.592181474697121*^9}, {
+   3.592275970510589*^9, 3.5922759707298098`*^9}, 3.751886248126088*^9, {
+   3.7519575374524183`*^9, 3.751957551174366*^9}, {3.751958729201099*^9, 
+   3.75195873255628*^9}, {3.7519588725477753`*^9, 3.751958896893652*^9}, {
+   3.751959076520322*^9, 3.751959078744317*^9}},
+ CellLabel->
+  "In[6537]:=",ExpressionUUID->"8cf54957-8f9e-41c2-b39c-494896256f8b"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "32.7289749337138854561`4.332551652475159",
+   RowBox[{"\"km\"", "\[InvisibleSpace]", "\"/\"", "\[InvisibleSpace]", 
+     "\"s\""}],"kilometers per second",FractionBox[
+   "\"Kilometers\"", "\"Seconds\""]},
+  "Quantity"]], "Output",
+ CellChangeTimes->{{3.751886253165802*^9, 3.751886261982664*^9}, 
+   3.751957501595842*^9, {3.7519575454004507`*^9, 3.751957552595748*^9}, {
+   3.751958641982724*^9, 3.751958644515233*^9}, {3.751958867186928*^9, 
+   3.751958897244082*^9}, 3.751959079105296*^9, 3.751959479322235*^9, 
+   3.751960525655054*^9, 3.751975560452816*^9, 3.751975680303143*^9, {
+   3.7519760883745613`*^9, 3.751976092188929*^9}, 3.751976682046001*^9, 
+   3.7519768333179073`*^9},
+ CellLabel->
+  "Out[6537]=",ExpressionUUID->"2ccf7b51-bbab-4386-a3e0-ee5081175251"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ Cell[BoxData[
+  FormBox[
+   SubsuperscriptBox["V", "\[Infinity]", "+"], TraditionalForm]],
+  ExpressionUUID->"ed07b603-7e27-40b5-9ec6-673bd347b0c4"],
+ ": Hyperbolic excess velocity (velocity in addition to earth escape \
+velocity, plus sign because it\[CloseCurlyQuote]s a speed increase) in the \
+geocentric frame not considering earth-sat interaction - which equivalently \
+is the speed of the satellite after it\[CloseCurlyQuote]s outside of earth\
+\[CloseCurlyQuote]s sphere of influence on the Hohmann transfer orbit in the \
+heliocentric frame."
+}], "Subsubsection",
+ CellChangeTimes->{{3.5921815986357565`*^9, 3.5921816171091347`*^9}, {
+   3.5921860156224747`*^9, 3.5921860184675474`*^9}, {3.592186051294298*^9, 
+   3.5921860627004986`*^9}, {3.592232747554824*^9, 3.5922327518999796`*^9}, {
+   3.592232824892675*^9, 3.592232846685422*^9}, {3.592232877540702*^9, 
+   3.5922328920332203`*^9}, {3.5922754203302774`*^9, 3.59227552098293*^9}, {
+   3.5922755730575905`*^9, 3.5922756122288237`*^9}, {3.5922757223624196`*^9, 
+   3.592275761920935*^9}, {3.592275806774371*^9, 3.5922758076439695`*^9}, {
+   3.593036544155233*^9, 3.5930365513989725`*^9}, {3.5930366693524537`*^9, 
+   3.593036725818486*^9}, {3.593038403769912*^9, 3.5930384087840304`*^9}, 
+   3.5930384551817904`*^9, {3.5930384893726063`*^9, 3.5930385101378946`*^9}, {
+   3.751975856362554*^9, 3.7519758645199537`*^9}, {3.751975894551248*^9, 
+   3.7519758958106413`*^9}},ExpressionUUID->"5f2426ee-05e2-4e43-a15c-\
+e797ae511ab3"],
+
+Cell[TextData[{
+ "In other words, ",
+ Cell[BoxData[
+  FormBox[
+   SubsuperscriptBox["V", "\[Infinity]", "+"], TraditionalForm]],
+  ExpressionUUID->"c5406a47-391e-4c85-b146-3c10f7793432"],
+ " is the speed that is missing heliocentrially at perihelion of the Hohmann \
+transfer orbit, which we will set equal to the speed in excess of an outgoing \
+hyperbolic geocentric orbit."
+}], "Text",
+ CellChangeTimes->{{3.751975943583591*^9, 3.75197594886908*^9}, {
+  3.7519759808193073`*^9, 
+  3.751976035220715*^9}},ExpressionUUID->"941b33cb-dfb6-44bc-8efe-\
+15dd1a0a982a"],
+
+Cell["Earth speed with respect to the sun:", "Text",
+ CellChangeTimes->{{3.7519594726946697`*^9, 
+  3.751959474038868*^9}},ExpressionUUID->"2f057ac3-352a-4cf7-b8cc-\
+20a9cbe3d0cf"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"vEarth", "=", 
+  SqrtBox[
+   FractionBox["\[Mu]Sun", "aEarth"]]}]], "Input",
+ CellChangeTimes->{{3.5921810705026875`*^9, 3.592181081662762*^9}, {
+  3.5921811964587493`*^9, 3.5921812006738677`*^9}, {3.592181416007635*^9, 
+  3.59218143207222*^9}, {3.751958980978112*^9, 3.7519589817890377`*^9}, {
+  3.751959465063321*^9, 3.751959471430764*^9}},
+ CellLabel->
+  "In[6538]:=",ExpressionUUID->"6f9d75fc-f430-42bd-832c-2d288c27183b"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "29.7843875071433811394`4.332557788462179",
+   RowBox[{"\"km\"", "\[InvisibleSpace]", "\"/\"", "\[InvisibleSpace]", 
+     "\"s\""}],"kilometers per second",FractionBox[
+   "\"Kilometers\"", "\"Seconds\""]},
+  "Quantity"]], "Output",
+ CellChangeTimes->{
+  3.592181168866789*^9, 3.592181201156148*^9, 3.592181351712123*^9, {
+   3.592181524338025*^9, 3.592181531389073*^9}, 3.592181757096424*^9, {
+   3.592181854928154*^9, 3.592181864131847*^9}, 3.5921841567695465`*^9, 
+   3.592184382015582*^9, 3.5921844573890996`*^9, 3.5921850548052797`*^9, 
+   3.5921851214765167`*^9, 3.593063551436434*^9, 3.751885962818976*^9, {
+   3.7518862533411207`*^9, 3.751886262068466*^9}, 3.7519575016923847`*^9, {
+   3.7519575454822397`*^9, 3.751957552679119*^9}, {3.75195899143407*^9, 
+   3.751959019200967*^9}, 3.75195908213365*^9, 3.751959480474*^9, 
+   3.7519599817859364`*^9, 3.751960315411613*^9, 3.751960525721559*^9, 
+   3.751975560586195*^9, 3.7519756803847857`*^9, {3.751976088450753*^9, 
+   3.751976092255498*^9}, 3.7519766821469717`*^9, 3.7519768334006987`*^9},
+ CellLabel->
+  "Out[6538]=",ExpressionUUID->"d055d29c-5cc7-45f7-b471-6ee27d05d876"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"vInfPlus", "=", 
+  RowBox[{"vHohmannP", "-", "vEarth"}]}]], "Input",
+ CellChangeTimes->{{3.592181219201273*^9, 3.592181285653281*^9}, {
+   3.592181478688944*^9, 3.592181522422587*^9}, 3.592184453745415*^9, 
+   3.5922320813556767`*^9, {3.5922322272910757`*^9, 3.5922322275352573`*^9}, {
+   3.592232277219139*^9, 3.592232311807122*^9}, {3.5922323485847416`*^9, 
+   3.5922323531110096`*^9}, {3.592233582865101*^9, 3.5922335832894073`*^9}, {
+   3.5922336599027395`*^9, 3.592233660084937*^9}, {3.592233746271122*^9, 
+   3.592233746632377*^9}, {3.5922757822786617`*^9, 3.592275783266403*^9}, {
+   3.751959448075512*^9, 3.7519594606460743`*^9}, {3.7519713799798717`*^9, 
+   3.751971403742484*^9}},
+ CellLabel->
+  "In[6539]:=",ExpressionUUID->"97065a1a-5d26-4954-a371-bf8c33cb989f"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "2.9445874265705043167`3.0056061700875145",
+   RowBox[{"\"km\"", "\[InvisibleSpace]", "\"/\"", "\[InvisibleSpace]", 
+     "\"s\""}],"kilometers per second",FractionBox[
+   "\"Kilometers\"", "\"Seconds\""]},
+  "Quantity"]], "Output",
+ CellChangeTimes->{
+  3.59218124084896*^9, 3.592181353356331*^9, 3.5921814394825783`*^9, {
+   3.5921815243790007`*^9, 3.592181531435125*^9}, 3.592181757144439*^9, {
+   3.5921818549762173`*^9, 3.5921818641738443`*^9}, 3.5921841568215847`*^9, 
+   3.59218438205254*^9, 3.592184457440084*^9, 3.592185054863321*^9, 
+   3.592185121517615*^9, 3.593063551460451*^9, 3.75188596291509*^9, {
+   3.751886253406749*^9, 3.751886262150009*^9}, 3.75195750179324*^9, {
+   3.751957545565089*^9, 3.751957552765945*^9}, 3.7519594504730377`*^9, 
+   3.7519594821911373`*^9, 3.7519603180011053`*^9, 3.751960525780181*^9, 
+   3.751975560718296*^9, 3.751975680468651*^9, {3.751976088540846*^9, 
+   3.751976092373611*^9}, 3.7519766822447863`*^9, 3.7519768335005207`*^9},
+ CellLabel->
+  "Out[6539]=",ExpressionUUID->"b6d99da3-2adc-4035-88a7-4936d9b9cd58"]
+}, Open  ]],
+
+Cell[TextData[{
+ "This is the speed that is needed at ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"r", "=", "\[Infinity]"}], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "4eae1c91-52df-4438-bd3e-024ceae6fed3"],
+ " when modelled as a hyperbolic trajectory in the Earth system. In the \
+following we will call it ",
+ Cell[BoxData[Cell[TextData[Cell[BoxData[
+   FormBox[
+    SubsuperscriptBox["v", 
+     RowBox[{"\[Infinity]", ",", "\[Earth]"}], "+"], TraditionalForm]],
+   ExpressionUUID->"7a10d48c-da51-43ee-9af1-fd86cce89bf5"]],ExpressionUUID->
+   "78b2182f-b707-430f-8c06-9d35a76504d3"]], "Input",ExpressionUUID->
+  "ed1c43bc-9668-414d-99df-0b68560fc3f4"],
+ "or ",
+ Cell[BoxData[
+  FormBox[
+   SubsuperscriptBox["v", 
+    RowBox[{"\[Infinity]", ",", "\[Earth]"}], "2"], TraditionalForm]],
+  ExpressionUUID->"20c4a63a-6c15-49c5-9853-50a378cf293c"],
+ " when it\[CloseCurlyQuote]s squared."
+}], "Text",
+ CellChangeTimes->{{3.751970503129912*^9, 3.751970555616407*^9}, {
+  3.751971375965658*^9, 3.7519713776383944`*^9}, {3.75197141202043*^9, 
+  3.751971457595663*^9}},ExpressionUUID->"1005e868-6d68-4f28-984b-\
+a065c9be73eb"],
+
+Cell[TextData[{
+ "We first use the Vis Viva equation in the geocentric system on a hyperbolic \
+trajectory, i.e. ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["a", "hyp"], "<", "0"}], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "8f2d8894-e096-4e97-9532-8e6ad9766bc9"],
+ ", which gives us the square speed ",
+ Cell[BoxData[
+  FormBox[
+   SubsuperscriptBox["v", 
+    RowBox[{"r", ",", "\[Earth]"}], "2"], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "fb581adc-da5e-4163-99a2-030397d88be9"],
+ " at an arbitrary r:"
+}], "Text",
+ CellChangeTimes->{{3.751970557046392*^9, 3.7519705782461777`*^9}, {
+  3.751970647384715*^9, 3.75197065535443*^9}, {3.751970761217492*^9, 
+  3.75197082349541*^9}, {3.7519708657060127`*^9, 
+  3.7519708692760677`*^9}},ExpressionUUID->"05b1b31c-da4c-4c33-a171-\
+ad2eeaeab929"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[Cell[TextData[Cell[BoxData[
+  FormBox[
+   RowBox[{"\n", 
+    RowBox[{
+     SubsuperscriptBox["v", 
+      RowBox[{"r", ",", "\[Earth]"}], "2"], "=", 
+     RowBox[{
+      SubscriptBox["\[Mu]", "\[Earth]"], "(", 
+      RowBox[{
+       FractionBox["2", "r"], "-", 
+       FractionBox["1", 
+        SubscriptBox["a", "hyp"]]}], ")"}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "6f7fd41a-595e-4f42-8087-228047371c83"]],ExpressionUUID->
+  "144aea88-4da5-4210-a8f8-c266be08c7bf"]], "Input",
+ CellChangeTimes->{{3.751970657562883*^9, 3.751970753670445*^9}, {
+  3.751970856897851*^9, 3.7519708579969883`*^9}, {3.751970893802573*^9, 
+  3.751970894695465*^9}},
+ CellLabel->
+  "In[6540]:=",ExpressionUUID->"e8ef9fba-0214-49f7-a517-69d90e5467e0"],
+
+Cell[BoxData[
+ InterpretationBox[Cell[BoxData[Cell[BoxData[
+    FormBox[
+     RowBox[{"\n", 
+      RowBox[{
+       SubsuperscriptBox["v", 
+        RowBox[{"r", ",", "\[Earth]"}], "2"], "=", 
+       RowBox[{
+        SubscriptBox["\[Mu]", "\[Earth]"], "(", 
+        RowBox[{
+         FractionBox["2", "r"], "-", 
+         FractionBox["1", 
+          SubscriptBox["a", "hyp"]]}], ")"}]}]}], TraditionalForm]],
+    ExpressionUUID->"82a235e5-50a2-4673-ba2b-423cd36705dd"]],ExpressionUUID->
+   "170757ce-0261-4155-823b-93f1185cb0c8"],
+  TextCell[
+   RawBoxes[
+    Cell[
+     BoxData[
+      FormBox[
+       RowBox[{"\n", 
+         RowBox[{
+           SubsuperscriptBox["v", 
+            RowBox[{"r", ",", "\[Earth]"}], "2"], "=", 
+           RowBox[{
+             SubscriptBox["\[Mu]", "\[Earth]"], "(", 
+             RowBox[{
+               FractionBox["2", "r"], "-", 
+               FractionBox["1", 
+                SubscriptBox["a", "hyp"]]}], ")"}]}]}], TraditionalForm]], 
+     FormatType -> "TraditionalForm"]]]]], "Output",
+ CellChangeTimes->{
+  3.751975560805379*^9, 3.751975680553589*^9, {3.7519760886095743`*^9, 
+   3.7519760924305*^9}, 3.751976682345869*^9, 3.7519768335838213`*^9},
+ CellLabel->
+  "Out[6540]=",ExpressionUUID->"6913033e-db6e-42db-bab6-a533969caa30"]
+}, Open  ]],
+
+Cell[TextData[{
+ "We are interested in finding the necessary speed of the hyperbolic \
+trajectory at the perihelion distance ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["R", "\[Earth]"], "+", "h"}], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "19d918d2-88cb-48d1-9cff-c4753c4c40b8"],
+ " :"
+}], "Text",
+ CellChangeTimes->{{3.751970877980233*^9, 3.7519708803319674`*^9}, {
+  3.751971002185439*^9, 3.751971008217739*^9}, {3.751971076583263*^9, 
+  3.7519711309478607`*^9}},ExpressionUUID->"a8f8a83f-ba1c-4152-a84d-\
+786724603dfe"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[Cell[TextData[Cell[BoxData[
+  FormBox[
+   RowBox[{"\n", 
+    RowBox[{
+     SubsuperscriptBox["v", 
+      RowBox[{"p", ",", "\[Earth]"}], "2"], "=", 
+     RowBox[{
+      SubscriptBox["\[Mu]", "\[Earth]"], "(", 
+      RowBox[{
+       FractionBox["2", 
+        RowBox[{
+         SubscriptBox["R", "\[Earth]"], "+", "h"}]], "-", 
+       FractionBox["1", 
+        SubscriptBox["a", "hyp"]]}], ")"}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "0ba4f4a1-848a-40a2-a06c-07a6373dac4a"]],ExpressionUUID->
+  "8ff3e6ae-fc37-4698-9551-e8af5c449dcd"]], "Input",
+ CellChangeTimes->{{3.751970657562883*^9, 3.751970753670445*^9}, {
+  3.751970856897851*^9, 3.751970897671774*^9}, {3.751971136559807*^9, 
+  3.751971142714075*^9}},
+ CellLabel->
+  "In[6541]:=",ExpressionUUID->"6679a22d-5a7c-45ba-a24b-49483713ba72"],
+
+Cell[BoxData[
+ InterpretationBox[Cell[BoxData[Cell[BoxData[
+    FormBox[
+     RowBox[{"\n", 
+      RowBox[{
+       SubsuperscriptBox["v", 
+        RowBox[{"p", ",", "\[Earth]"}], "2"], "=", 
+       RowBox[{
+        SubscriptBox["\[Mu]", "\[Earth]"], "(", 
+        RowBox[{
+         FractionBox["2", 
+          RowBox[{
+           SubscriptBox["R", "\[Earth]"], "+", "h"}]], "-", 
+         FractionBox["1", 
+          SubscriptBox["a", "hyp"]]}], ")"}]}]}], TraditionalForm]],
+    ExpressionUUID->"2b13bd78-0ea8-4229-a1f9-9fd2098cc078"]],ExpressionUUID->
+   "c3797357-4ca6-46cf-8fd5-87d2e9bc6cc0"],
+  TextCell[
+   RawBoxes[
+    Cell[
+     BoxData[
+      FormBox[
+       RowBox[{"\n", 
+         RowBox[{
+           SubsuperscriptBox["v", 
+            RowBox[{"p", ",", "\[Earth]"}], "2"], "=", 
+           RowBox[{
+             SubscriptBox["\[Mu]", "\[Earth]"], "(", 
+             RowBox[{
+               FractionBox["2", 
+                RowBox[{
+                  SubscriptBox["R", "\[Earth]"], "+", "h"}]], "-", 
+               FractionBox["1", 
+                SubscriptBox["a", "hyp"]]}], ")"}]}]}], TraditionalForm]], 
+     FormatType -> "TraditionalForm"]]]]], "Output",
+ CellChangeTimes->{
+  3.751975560905217*^9, 3.751975680636935*^9, {3.751976088688961*^9, 
+   3.751976092506331*^9}, 3.7519766825008383`*^9, 3.751976833665118*^9},
+ CellLabel->
+  "Out[6541]=",ExpressionUUID->"12293e47-ef07-4ddd-a98d-f9b6286574cb"]
+}, Open  ]],
+
+Cell[TextData[{
+ "The last term can be determined by setting ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"r", "=", "\[Infinity]"}], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "0f2f6e84-5ec1-4610-9484-6ca7a0840c02"],
+ " which gives us the hyperbolic excess velocity (velocity in addition to \
+escape velocity infinitely far away):"
+}], "Text",
+ CellChangeTimes->{{3.751971150708302*^9, 3.7519712180985193`*^9}, {
+  3.7519714982779913`*^9, 
+  3.75197150786563*^9}},ExpressionUUID->"d9628172-359c-4b81-9f71-\
+59b19e874c7c"],
+
+Cell[TextData[Cell[BoxData[Cell[TextData[Cell[BoxData[
+  FormBox[
+   RowBox[{"\n", 
+    RowBox[{
+     SubsuperscriptBox["v", 
+      RowBox[{"\[Infinity]", ",", "\[Earth]"}], "2"], "=", 
+     RowBox[{
+      RowBox[{
+       SubscriptBox["\[Mu]", "\[Earth]"], "(", 
+       RowBox[{
+        FractionBox["2", "\[Infinity]"], "-", 
+        FractionBox["1", 
+         SubscriptBox["a", "hyp"]]}], ")"}], "=", 
+      RowBox[{"-", 
+       FractionBox[
+        SubscriptBox["\[Mu]", "\[Earth]"], 
+        SubscriptBox["a", "hyp"]]}]}]}]}], TraditionalForm]],ExpressionUUID->
+  "01e3fa7d-915f-4e81-9aaf-7b6b9c808d43"]],ExpressionUUID->
+  "5a8b92e8-568e-4bfd-a95a-f06042f6c203"]], "Input",
+ CellChangeTimes->{{3.751970657562883*^9, 3.751970753670445*^9}, {
+  3.751970856897851*^9, 3.7519708579969883`*^9}, {3.751970893802573*^9, 
+  3.751970894695465*^9}},ExpressionUUID->"9d3ebff0-5e38-4827-a965-\
+c6c559c38de4"]], "Text",
+ CellChangeTimes->{{3.751970738245551*^9, 3.751970739412109*^9}, {
+  3.7519712477136927`*^9, 3.751971267438242*^9}, {3.751971305644086*^9, 
+  3.751971332060421*^9}},ExpressionUUID->"41325255-f5cb-4fdb-be6a-\
+3f92d5ad3a71"],
+
+Cell[TextData[{
+ "We know ",
+ Cell[BoxData[
+  FormBox[
+   SubsuperscriptBox["v", 
+    RowBox[{"\[Infinity]", ",", "\[Earth]"}], "2"], TraditionalForm]],
+  ExpressionUUID->"5e9022f5-5ba1-46de-97ce-bc502565f4d3"],
+ " since we just calculated this as ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["v", 
+     RowBox[{"Hohmann", ",", "p"}]], "-", 
+    SubscriptBox["v", 
+     RowBox[{"\[Earth]", "/", "\[Sun]"}]]}], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "b899eae5-5d9b-4ff8-8898-ba8201122dff"],
+ " as ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"2.94", " ", 
+    RowBox[{"km", "/", "s"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "eb1355e8-db66-42cc-a8ae-7fc31631da36"],
+ ". Inserted back into ",
+ Cell[BoxData[
+  FormBox[
+   SubsuperscriptBox["v", 
+    RowBox[{"p", ",", "\[Earth]"}], "2"], TraditionalForm]],ExpressionUUID->
+  "cef60d06-ba8c-4685-a49a-e6fdf2183ca7"],
+ " we get:"
+}], "Text",
+ CellChangeTimes->{{3.751971467266778*^9, 
+  3.751971566447637*^9}},ExpressionUUID->"f685f96b-f207-4aa8-981a-\
+4cdebfa7601c"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[Cell[TextData[Cell[BoxData[
+  FormBox[
+   RowBox[{"\n", 
+    RowBox[{
+     SubsuperscriptBox["v", 
+      RowBox[{"p", ",", "\[Earth]"}], "2"], "=", 
+     RowBox[{
+      RowBox[{"2", 
+       FractionBox[
+        SubscriptBox["\[Mu]", "\[Earth]"], 
+        RowBox[{
+         SubscriptBox["R", "\[Earth]"], "+", "h"}]]}], "+", 
+      SubsuperscriptBox["v", 
+       RowBox[{"\[Infinity]", ",", "\[Earth]"}], "2"]}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "9dc68643-3ec5-4034-a882-16cfbeb64ffd"]],ExpressionUUID->
+  "25e36bde-f99a-46fa-8009-a78115c5f7a0"]], "Input",
+ CellChangeTimes->{{3.751971601535151*^9, 3.7519716015352*^9}, {
+  3.751971657564908*^9, 3.751971667661406*^9}, {3.7519717884552794`*^9, 
+  3.751971788708507*^9}},
+ CellLabel->
+  "In[6542]:=",ExpressionUUID->"b668cf21-a2d5-48ba-a3af-f67d1e508fb1"],
+
+Cell[BoxData[
+ InterpretationBox[Cell[BoxData[Cell[BoxData[
+    FormBox[
+     RowBox[{"\n", 
+      RowBox[{
+       SubsuperscriptBox["v", 
+        RowBox[{"p", ",", "\[Earth]"}], "2"], "=", 
+       RowBox[{
+        RowBox[{"2", 
+         FractionBox[
+          SubscriptBox["\[Mu]", "\[Earth]"], 
+          RowBox[{
+           SubscriptBox["R", "\[Earth]"], "+", "h"}]]}], "+", 
+        SubsuperscriptBox["v", 
+         RowBox[{"\[Infinity]", ",", "\[Earth]"}], "2"]}]}]}], 
+     TraditionalForm]],ExpressionUUID->
+    "aee98731-179f-403b-8dfd-9f3ef3873e59"]],ExpressionUUID->
+   "a7690b01-5392-4058-a8f8-456f9424bddf"],
+  TextCell[
+   RawBoxes[
+    Cell[
+     BoxData[
+      FormBox[
+       RowBox[{"\n", 
+         RowBox[{
+           SubsuperscriptBox["v", 
+            RowBox[{"p", ",", "\[Earth]"}], "2"], "=", 
+           RowBox[{
+             RowBox[{"2", 
+               FractionBox[
+                SubscriptBox["\[Mu]", "\[Earth]"], 
+                RowBox[{
+                  SubscriptBox["R", "\[Earth]"], "+", "h"}]]}], "+", 
+             SubsuperscriptBox["v", 
+              RowBox[{"\[Infinity]", ",", "\[Earth]"}], "2"]}]}]}], 
+       TraditionalForm]], FormatType -> "TraditionalForm"]]]]], "Output",
+ CellChangeTimes->{
+  3.751975560987669*^9, 3.751975680718442*^9, {3.751976088764701*^9, 
+   3.751976092571941*^9}, 3.751976682700006*^9, 3.751976833749997*^9},
+ CellLabel->
+  "Out[6542]=",ExpressionUUID->"a07313ac-b409-45b9-aa79-e6f2717e06f4"]
+}, Open  ]],
+
+Cell[TextData[{
+ "We recognize the first term as the squared escape velocity  from Earth at \
+altitude ",
+ Cell[BoxData[
+  FormBox["h", TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "688e6d1e-16b0-491a-ac1f-23dca076ea7c"],
+ " so we can also write:"
+}], "Text",
+ CellChangeTimes->{{3.751971823997707*^9, 3.751971833239109*^9}, {
+  3.7519718876172047`*^9, 
+  3.751971941803872*^9}},ExpressionUUID->"fe610b46-fc23-4050-bedc-\
+13dc5cf98610"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[Cell[TextData[Cell[BoxData[
+  FormBox[
+   RowBox[{"\n", 
+    RowBox[{
+     SubsuperscriptBox["v", 
+      RowBox[{"p", ",", "\[Earth]"}], "2"], "=", 
+     RowBox[{
+      SubsuperscriptBox["v", "esc", "2"], "+", 
+      SubsuperscriptBox["v", 
+       RowBox[{"\[Infinity]", ",", "\[Earth]"}], "2"]}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "89aa2169-1a48-4c0e-9aa9-96780d19b365"]],ExpressionUUID->
+  "19b31a17-ccf5-4579-aa80-a3bc42887fab"]], "Input",
+ CellChangeTimes->{{3.751971947209566*^9, 3.751971952711323*^9}},
+ CellLabel->
+  "In[6543]:=",ExpressionUUID->"91364ffd-49a9-4497-9bb3-097c0024a564"],
+
+Cell[BoxData[
+ InterpretationBox[Cell[BoxData[Cell[BoxData[
+    FormBox[
+     RowBox[{"\n", 
+      RowBox[{
+       SubsuperscriptBox["v", 
+        RowBox[{"p", ",", "\[Earth]"}], "2"], "=", 
+       RowBox[{
+        SubsuperscriptBox["v", "esc", "2"], "+", 
+        SubsuperscriptBox["v", 
+         RowBox[{"\[Infinity]", ",", "\[Earth]"}], "2"]}]}]}], 
+     TraditionalForm]],ExpressionUUID->
+    "de4044a8-f5f2-4448-a068-c3cfbb0426db"]],ExpressionUUID->
+   "fbd7d730-9f19-450d-88b3-977f1e54eca8"],
+  TextCell[
+   RawBoxes[
+    Cell[
+     BoxData[
+      FormBox[
+       RowBox[{"\n", 
+         RowBox[{
+           SubsuperscriptBox["v", 
+            RowBox[{"p", ",", "\[Earth]"}], "2"], "=", 
+           RowBox[{
+             SubsuperscriptBox["v", "esc", "2"], "+", 
+             SubsuperscriptBox["v", 
+              RowBox[{"\[Infinity]", ",", "\[Earth]"}], "2"]}]}]}], 
+       TraditionalForm]], FormatType -> "TraditionalForm"]]]]], "Output",
+ CellChangeTimes->{
+  3.751975561082239*^9, 3.75197568080191*^9, {3.751976088838249*^9, 
+   3.7519760926467743`*^9}, 3.7519766828123217`*^9, 3.751976833834292*^9},
+ CellLabel->
+  "Out[6543]=",ExpressionUUID->"5283a654-1374-48d9-91d4-575db0eca03b"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["V", 
+    RowBox[{"P", "/", "Earth"}]], TraditionalForm]],ExpressionUUID->
+  "e96287a0-e255-4b71-bb73-7c3a3292c692"],
+ ": speed needed to escape Earth on a hyperbolic trajectory seen from Earth, \
+resulting in the correct speed for the Hohmann transfer orbit at perihelion \
+far away from Earth (i.e. we now also consider escape velocity needed from \
+parking orbit)"
+}], "Subsubsection",
+ CellChangeTimes->{
+  3.592275480041356*^9, {3.5922755261567044`*^9, 3.592275526358876*^9}, {
+   3.5922756283044696`*^9, 3.592275678589795*^9}, {3.593036755703161*^9, 
+   3.5930367902691307`*^9}, {3.7519719930422363`*^9, 
+   3.751972105758583*^9}},ExpressionUUID->"58e2a451-d0ca-4398-a79e-\
+5b7f3521cc41"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"vPEarth", "=", 
+  SqrtBox[
+   RowBox[{
+    FractionBox[
+     RowBox[{"2", "*", "\[Mu]Earth"}], "rPark"], "+", 
+    RowBox[{"vInfPlus", "^", "2"}]}]]}]], "Input",
+ CellChangeTimes->{
+  3.7518862593788958`*^9, {3.75197181825408*^9, 3.7519718201766653`*^9}, 
+   3.751971978275386*^9},
+ CellLabel->
+  "In[6544]:=",ExpressionUUID->"a33c10d7-a00f-45f8-a8e2-ba1f54c6aef5"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "11.4337734427637416159`3.9630075149939303",
+   RowBox[{"\"km\"", "\[InvisibleSpace]", "\"/\"", "\[InvisibleSpace]", 
+     "\"s\""}],"kilometers per second",FractionBox[
+   "\"Kilometers\"", "\"Seconds\""]},
+  "Quantity"]], "Output",
+ CellChangeTimes->{
+  3.751886262346404*^9, 3.751957501979484*^9, {3.751957545648759*^9, 
+   3.751957552846137*^9}, {3.751960361787344*^9, 3.7519603813105288`*^9}, 
+   3.751960525845333*^9, 3.751971917862739*^9, {3.751971975044265*^9, 
+   3.7519719786465797`*^9}, 3.751975561168199*^9, 3.7519756808858633`*^9, {
+   3.751976088923284*^9, 3.7519760927142887`*^9}, 3.751976682897017*^9, 
+   3.751976833905683*^9},
+ CellLabel->
+  "Out[6544]=",ExpressionUUID->"167f8f52-c146-45f4-b2b0-60bb709c234d"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "vDepart: same as ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["V", 
+    RowBox[{"P", "/", "Earth"}]], TraditionalForm]],ExpressionUUID->
+  "0d765057-3086-411c-83b2-a63cf2f04e2f"],
+ " except we now subtract the speed we already have from the  parking orbit \
+(i.e. \[CapitalDelta]v to leave Earth on the hyperbolic orbit, resulting in \
+the correct speed far away for a Hohmann transfer orbit at perihelion, from a \
+circular earth orbit of radius rPark with respect to the circular satellite \
+orbit reference frame)"
+}], "Subsubsection",
+ CellChangeTimes->{{3.5921825996279545`*^9, 3.5921826239916296`*^9}, {
+  3.592186169722926*^9, 3.592186174918727*^9}, {3.5922327304824944`*^9, 
+  3.5922327354691334`*^9}, {3.5922758933918867`*^9, 3.5922759076132126`*^9}, {
+  3.5922759938975163`*^9, 3.592276083400117*^9}, {3.5930368001829977`*^9, 
+  3.5930368265217743`*^9}, {3.751972272186212*^9, 
+  3.751972336229248*^9}},ExpressionUUID->"a14d951d-190c-489b-ad18-\
+b92870f04473"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"vSatInitial", "=", 
+  SqrtBox[
+   FractionBox["\[Mu]Earth", "rPark"]], 
+  RowBox[{"(*", 
+   RowBox[{"km", "/", "s"}], "*)"}]}]], "Input",
+ CellChangeTimes->{{3.5921826276552258`*^9, 3.592182666496396*^9}, 
+   3.592185050338065*^9},
+ CellLabel->
+  "In[6545]:=",ExpressionUUID->"3462a391-0f4c-4365-81ba-fa15fcb3ac17"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "7.8121885546795502131`4.3325272053521",
+   RowBox[{"\"km\"", "\[InvisibleSpace]", "\"/\"", "\[InvisibleSpace]", 
+     "\"s\""}],"kilometers per second",FractionBox[
+   "\"Kilometers\"", "\"Seconds\""]},
+  "Quantity"]], "Output",
+ CellChangeTimes->{{3.5921826513303547`*^9, 3.592182667085797*^9}, 
+   3.5921841569226575`*^9, 3.592184382142673*^9, 3.592184457559169*^9, 
+   3.5921850549764633`*^9, 3.592185121601674*^9, 3.593063551737708*^9, 
+   3.751885963007742*^9, {3.751886253487856*^9, 3.751886262424876*^9}, 
+   3.7519575020743427`*^9, {3.751957545730331*^9, 3.75195755292805*^9}, 
+   3.7519605259121647`*^9, 3.751975561254797*^9, 3.751975680968155*^9, {
+   3.751976089002714*^9, 3.751976092782049*^9}, 3.751976682979045*^9, 
+   3.7519768339873047`*^9},
+ CellLabel->
+  "Out[6545]=",ExpressionUUID->"42d72c30-a3b7-4ade-80cf-5bf69da42306"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[CapitalDelta]vDepart", "=", 
+  RowBox[{"vPEarth", "-", "vSatInitial", 
+   RowBox[{"(*", 
+    RowBox[{"km", "/", "s"}], "*)"}], " "}]}]], "Input",
+ CellChangeTimes->{{3.592182938392111*^9, 3.5921830226079817`*^9}, {
+  3.592183088220484*^9, 3.5921830905161176`*^9}, {3.5922338487231774`*^9, 
+  3.5922338712573833`*^9}, {3.592275928624333*^9, 3.592275933681035*^9}, {
+  3.592276067035364*^9, 3.5922760679859896`*^9}, {3.751975546530158*^9, 
+  3.751975551275214*^9}},
+ CellLabel->
+  "In[6546]:=",ExpressionUUID->"aa061931-3e06-42ed-be74-77890d056c4e"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "3.6215848880841914027`3.3525262556231024",
+   RowBox[{"\"km\"", "\[InvisibleSpace]", "\"/\"", "\[InvisibleSpace]", 
+     "\"s\""}],"kilometers per second",FractionBox[
+   "\"Kilometers\"", "\"Seconds\""]},
+  "Quantity"]], "Output",
+ CellChangeTimes->{
+  3.5921829676972475`*^9, 3.5921841569707317`*^9, 3.592184382182728*^9, 
+   3.592184457611271*^9, 3.5921850550304413`*^9, 3.592185121642703*^9, 
+   3.5930635517627296`*^9, 3.751885963098714*^9, {3.7518862535674257`*^9, 
+   3.751886262495041*^9}, 3.75195750217614*^9, {3.7519575458136997`*^9, 
+   3.751957553012991*^9}, 3.751960525998115*^9, {3.751975553402012*^9, 
+   3.7519755613375483`*^9}, 3.751975681053426*^9, {3.751976089074984*^9, 
+   3.7519760928495617`*^9}, 3.7519766830622883`*^9, 3.751976834069087*^9},
+ CellLabel->
+  "Out[6546]=",ExpressionUUID->"50808bde-c1f7-456c-a757-65cb8e571f53"]
+}, Open  ]],
+
+Cell[TextData[{
+ StyleBox["So  hyperbolic excess velocity",
+  FontWeight->"Bold"],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{" ", 
+    RowBox[{
+     SubsuperscriptBox["V", "\[Infinity]", "+"], "=", 
+     RowBox[{"2.94", " ", 
+      RowBox[{"km", "/", 
+       RowBox[{"s", "."}]}]}]}]}], TraditionalForm]],
+  FontWeight->"Bold",ExpressionUUID->"2515bbf1-834f-4528-9d99-2562ef84eb56"],
+ " (extra speed needed heliocentrically)"
+}], "Text",
+ CellChangeTimes->{{3.5921832638355103`*^9, 3.5921832748815403`*^9}, {
+  3.5922330291541986`*^9, 3.5922331528975716`*^9}, {3.5922332113368177`*^9, 
+  3.592233219128408*^9}, {3.751972985647524*^9, 3.751972987598242*^9}, {
+  3.7519754391557426`*^9, 
+  3.751975445434186*^9}},ExpressionUUID->"cea23df0-c4bb-4440-8de1-\
+c6aba928452e"],
+
+Cell[TextData[{
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["V", 
+     RowBox[{"P", "/", "Earth"}]], "=", 
+    RowBox[{"11.43", " ", 
+     RowBox[{"km", "/", "s"}]}]}], TraditionalForm]],
+  FontWeight->"Bold",ExpressionUUID->"cadf0359-bb91-4798-9bd4-1d758138dfcc"],
+ StyleBox[" needed to depart earth. ",
+  FontWeight->"Bold"],
+ "(extra speed needed geocentrically)"
+}], "Text",
+ CellChangeTimes->{
+  3.592233128252775*^9, 3.592233199300084*^9, {3.751975447347122*^9, 
+   3.75197545705791*^9}, {3.751976843830405*^9, 
+   3.7519768440773287`*^9}},ExpressionUUID->"d6d5b14f-f952-4f10-a5f1-\
+c98ab8a0bc3a"],
+
+Cell[TextData[{
+ StyleBox["3.62 km/s needed to depart earth from orbit. ",
+  FontWeight->"Bold"],
+ "(extra speed needed parking-orbit-centrically)"
+}], "Text",
+ CellChangeTimes->{{3.5922331812490478`*^9, 3.5922331962668943`*^9}, {
+   3.751975459434355*^9, 3.751975469721835*^9}, 
+   3.7519768478255653`*^9},ExpressionUUID->"8fe39cfa-6a9b-478f-835f-\
+10e80afb7ac2"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Arrival from Hohmann transfer orbit", "Subsection",
+ CellChangeTimes->{{3.5921836762889166`*^9, 3.592183679519253*^9}, {
+   3.5921853366381855`*^9, 3.592185349405427*^9}, {3.5922329555150137`*^9, 
+   3.5922329587703648`*^9}, {3.592276103432626*^9, 3.592276156218792*^9}, {
+   3.5922761944773445`*^9, 3.5922762017646046`*^9}, 
+   3.751975658408461*^9},ExpressionUUID->"811d1601-faaf-48f8-a804-\
+a311f45e20c9"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+vHohmannA: Velocity at the end of Hohmann transfer orbit with respect to sun\
+\>", "Subsubsection",
+ CellChangeTimes->{{3.5922762334184656`*^9, 3.5922762530296288`*^9}, {
+  3.751976079757905*^9, 
+  3.7519760811098003`*^9}},ExpressionUUID->"95cf13f1-2e41-4336-82ec-\
+43aecb183097"],
+
+Cell["\<\
+Velocity at the end of Hohmann-transfer with respect to the sun:\
+\>", "Text",
+ CellChangeTimes->{{3.751975805431576*^9, 
+  3.751975806297082*^9}},ExpressionUUID->"2a4b3891-b1c0-4c9b-9248-\
+6ba2285e0674"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"vHohmannA", "=", 
+  SqrtBox[
+   RowBox[{
+    FractionBox[
+     RowBox[{"2", "\[Mu]Sun"}], "aMars"], "-", 
+    FractionBox["\[Mu]Sun", "aHohmann"]}]]}]], "Input",
+ CellChangeTimes->{{3.592183688427768*^9, 3.592183756171713*^9}, {
+   3.75197566790874*^9, 3.751975674292006*^9}, {3.751975800279274*^9, 
+   3.751975804392585*^9}, 3.751976084244779*^9},
+ CellLabel->
+  "In[6547]:=",ExpressionUUID->"fe72479d-39fb-4924-9801-9a21ee01009d"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "21.4804673706873593038`3.725389785589142",
+   RowBox[{"\"km\"", "\[InvisibleSpace]", "\"/\"", "\[InvisibleSpace]", 
+     "\"s\""}],"kilometers per second",FractionBox[
+   "\"Kilometers\"", "\"Seconds\""]},
+  "Quantity"]], "Output",
+ CellChangeTimes->{{3.592183752705219*^9, 3.5921837572054605`*^9}, 
+   3.592184157020728*^9, 3.592184382223729*^9, 3.592184457664279*^9, 
+   3.592185055082481*^9, 3.592185121685667*^9, 3.5930635518387794`*^9, 
+   3.751885963413651*^9, {3.751886253811722*^9, 3.751886262720611*^9}, 
+   3.751957502476289*^9, {3.751957546151639*^9, 3.751957553346562*^9}, 
+   3.7519605262164516`*^9, 3.751975561421154*^9, 3.7519756811471863`*^9, 
+   3.751975813742931*^9, {3.7519760891510067`*^9, 3.7519760929250097`*^9}, 
+   3.751976683146654*^9, 3.7519768341503553`*^9},
+ CellLabel->
+  "Out[6547]=",ExpressionUUID->"21923bd7-de94-4798-a35d-e07c6c673247"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"vMars", "=", 
+  SqrtBox[
+   FractionBox["\[Mu]Sun", "aMars"]]}]], "Input",
+ CellChangeTimes->{{3.5921838572298937`*^9, 3.5921838582665787`*^9}, {
+  3.592184216512777*^9, 3.592184219853188*^9}, {3.5921843769279013`*^9, 
+  3.592184393893176*^9}, {3.7519758198134613`*^9, 3.7519758301711273`*^9}},
+ CellLabel->
+  "In[6548]:=",ExpressionUUID->"85fe47cd-eecb-42a7-98cf-207214d62155"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "24.1292784455197697274`4.332557788462179",
+   RowBox[{"\"km\"", "\[InvisibleSpace]", "\"/\"", "\[InvisibleSpace]", 
+     "\"s\""}],"kilometers per second",FractionBox[
+   "\"Kilometers\"", "\"Seconds\""]},
+  "Quantity"]], "Output",
+ CellChangeTimes->{
+  3.592184382266697*^9, 3.592184457713281*^9, 3.59218505513752*^9, 
+   3.5921851217277393`*^9, 3.5930635518627996`*^9, 3.7518859635055532`*^9, {
+   3.751886253937195*^9, 3.751886262796027*^9}, 3.751957502585977*^9, {
+   3.751957546245788*^9, 3.751957553430191*^9}, 3.751960526283196*^9, 
+   3.7519755615047283`*^9, 3.7519756812353086`*^9, 3.75197583187569*^9, {
+   3.7519760893024406`*^9, 3.751976092985413*^9}, 3.751976683228291*^9, 
+   3.751976834232956*^9},
+ CellLabel->
+  "Out[6548]=",ExpressionUUID->"438b8978-e7e1-4ce0-b826-2e81576e8137"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ Cell[BoxData[
+  FormBox[
+   SubsuperscriptBox["V", "\[Infinity]", "-"], TraditionalForm]],
+  ExpressionUUID->"4cb49698-13d0-4159-bca3-2cc21ef3b263"],
+ ": \[CapitalDelta]v change in velocity needed to stay with mars in it\
+\[CloseCurlyQuote]s orbit with respect to sun (minus sign because it\
+\[CloseCurlyQuote]s a decrease in speed) - i.e. incoming speed with respect \
+to mars not considering mars-satellite interaction"
+}], "Subsubsection",
+ CellChangeTimes->{{3.592184561555458*^9, 3.592184571367513*^9}, {
+  3.592185261416763*^9, 3.59218526661658*^9}, {3.592185329291871*^9, 
+  3.5921853555579185`*^9}, {3.592232766742719*^9, 3.592232772968174*^9}, {
+  3.592232908816324*^9, 3.5922329218757334`*^9}, {3.5922333168739944`*^9, 
+  3.592233319126646*^9}, {3.5922334301378593`*^9, 3.5922334801069345`*^9}, {
+  3.5922768128679523`*^9, 3.5922768220696306`*^9}, {3.593063491076989*^9, 
+  3.593063510116884*^9}, {3.751975874070084*^9, 3.751975890473359*^9}, {
+  3.7519761097943993`*^9, 
+  3.7519761157471457`*^9}},ExpressionUUID->"0da70207-ebc2-4dc0-aead-\
+f075b7bbcce2"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"vInfMinus", "=", 
+  RowBox[{"vMars", "-", "vHohmannA"}]}]], "Input",
+ CellChangeTimes->{{3.592184509019401*^9, 3.5921845350562444`*^9}, {
+   3.592185271110854*^9, 3.5921852966233034`*^9}, {3.5922339901632595`*^9, 
+   3.59223399877448*^9}, {3.5922768018130302`*^9, 3.592276803431138*^9}, 
+   3.751976090587631*^9, 3.75197613379397*^9},
+ CellLabel->
+  "In[6549]:=",ExpressionUUID->"4506a4e3-eadc-4b11-ad90-04c611d82a67"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "2.6488110748324104237`2.710021010346912",
+   RowBox[{"\"km\"", "\[InvisibleSpace]", "\"/\"", "\[InvisibleSpace]", 
+     "\"s\""}],"kilometers per second",FractionBox[
+   "\"Kilometers\"", "\"Seconds\""]},
+  "Quantity"]], "Output",
+ CellChangeTimes->{
+  3.5921852969325027`*^9, 3.5930635518888164`*^9, 3.751885963596591*^9, {
+   3.7518862541769533`*^9, 3.751886262879717*^9}, 3.751957502692441*^9, {
+   3.751957546329381*^9, 3.751957553511035*^9}, 3.751960526358077*^9, 
+   3.7519755615845203`*^9, 3.751975681365678*^9, {3.751976089410701*^9, 
+   3.751976093058914*^9}, 3.751976134265008*^9, 3.751976683349057*^9, 
+   3.75197683440095*^9},
+ CellLabel->
+  "Out[6549]=",ExpressionUUID->"79f10a95-d908-4128-bdfa-fc2757bc8607"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["V", 
+    RowBox[{"P", "/", "Mars"}]], TraditionalForm]],ExpressionUUID->
+  "b2716172-53ef-46d5-8de5-07b32f8e41e2"],
+ ": incoming v with respect to mars coming in a hyperbolic orbit to arrival \
+altitude, considering mars-satellite interaction"
+}], "Subsubsection",
+ CellChangeTimes->{{3.5921846058414927`*^9, 3.5921846214257307`*^9}, {
+  3.592185368645385*^9, 3.5921853721529064`*^9}, {3.592232798138358*^9, 
+  3.5922328004260473`*^9}, {3.5922329287947164`*^9, 3.592232934650014*^9}, {
+  3.592276826495804*^9, 3.5922768375318146`*^9}, {3.5930635169660206`*^9, 
+  3.593063527972085*^9}, {3.7519761565611362`*^9, 
+  3.751976207889225*^9}},ExpressionUUID->"32472a07-a600-4c42-b6d8-\
+ce615b065ed3"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"vPMars", "=", 
+  SqrtBox[
+   RowBox[{
+    FractionBox[
+     RowBox[{"2", "*", "\[Mu]Mars"}], "rArrival"], "+", 
+    RowBox[{"vInfMinus", "^", "2"}]}]]}]], "Input",
+ CellChangeTimes->{{3.5921846423599377`*^9, 3.592184659854531*^9}, {
+  3.5921847086548443`*^9, 3.592184713440361*^9}, {3.5921850595727286`*^9, 
+  3.592185059822917*^9}, {3.592185105164715*^9, 3.5921851192729883`*^9}, {
+  3.592185180057966*^9, 3.592185183642558*^9}, {3.5930634739014177`*^9, 
+  3.593063476593975*^9}, {3.751976218412244*^9, 3.751976225080258*^9}},
+ CellLabel->
+  "In[6550]:=",ExpressionUUID->"bb020e0d-c9c1-4d7d-9a23-2daccc17a7d8"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "5.6024871932296986798`3.322365464747179",
+   RowBox[{"\"km\"", "\[InvisibleSpace]", "\"/\"", "\[InvisibleSpace]", 
+     "\"s\""}],"kilometers per second",FractionBox[
+   "\"Kilometers\"", "\"Seconds\""]},
+  "Quantity"]], "Output",
+ CellChangeTimes->{
+  3.592184702579442*^9, 3.592185055238592*^9, {3.5921851090995617`*^9, 
+   3.5921851218127656`*^9}, 3.5921851844020433`*^9, 3.59306355191587*^9, 
+   3.7518859636830606`*^9, {3.751886254593031*^9, 3.751886262969955*^9}, 
+   3.7519575028455753`*^9, {3.751957546427895*^9, 3.751957553595912*^9}, 
+   3.751960526432292*^9, 3.751975561801956*^9, 3.7519756814364357`*^9, {
+   3.751976089505653*^9, 3.751976093150669*^9}, {3.751976221244425*^9, 
+   3.751976225614092*^9}, 3.751976683512619*^9, 3.75197683449995*^9},
+ CellLabel->
+  "Out[6550]=",ExpressionUUID->"77faff8a-90ab-4f20-b390-4bf6534ca269"]
+}, Open  ]],
+
+Cell[TextData[{
+ "The first term is the velocity gained from the Mars-satellite interaction, \
+i.e. the escape velocity from ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"r", "=", "rArrival"}], TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "1e6c96ef-d4e4-4b4f-99e7-8f5db7a85650"],
+ " but in reverse, and ",
+ Cell[BoxData[
+  FormBox["vInfMinus", TraditionalForm]],
+  FormatType->"TraditionalForm",ExpressionUUID->
+  "cf6ce362-f7c9-4a30-956d-976ea2108672"],
+ " is the excess hyperbolic velocity, i.e. the velocity in excess to the \
+escape velocity, identical to the difference of incoming speed of the \
+elliptical Hohmann transfer orbit seen from Mars."
+}], "Text",
+ CellChangeTimes->{{3.751976286112585*^9, 
+  3.751976410656049*^9}},ExpressionUUID->"9bf69f79-1351-49e7-a777-\
+466d2135fa02"],
+
+Cell["\<\
+Note that it doesn\[CloseCurlyQuote]t matter if you come with extra or not \
+enough speed compared to mars in it\[CloseCurlyQuote]s orbit with respect to \
+the sun, the difference gets squared, which makes sense.\
+\>", "Text",
+ CellChangeTimes->{{3.592276846436198*^9, 
+  3.5922768707847853`*^9}},ExpressionUUID->"76c74d5f-eb25-4d92-8517-\
+51fca638c62a"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+v needed with respect to mars to be in circular orbit of radius rArrival\
+\>", "Subsubsection",
+ CellChangeTimes->{{3.5921854081479673`*^9, 3.5921854136319313`*^9}, {
+  3.592232806640499*^9, 3.5922328072950134`*^9}, {3.5922768736508684`*^9, 
+  3.5922768887837915`*^9}},ExpressionUUID->"bdfee56f-5397-4a30-9095-\
+b7dbb7512559"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"vSatFinal", "=", 
+  SqrtBox[
+   FractionBox["\[Mu]Mars", "rArrival"]]}]], "Input",
+ CellChangeTimes->{{3.5921851410907598`*^9, 3.59218517827461*^9}, 
+   3.7519764314170732`*^9},
+ CellLabel->
+  "In[6551]:=",ExpressionUUID->"a0398067-fb2b-4025-9502-e8094c7839b0"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "3.4908210094580871892`4.2859175168374914",
+   RowBox[{"\"km\"", "\[InvisibleSpace]", "\"/\"", "\[InvisibleSpace]", 
+     "\"s\""}],"kilometers per second",FractionBox[
+   "\"Kilometers\"", "\"Seconds\""]},
+  "Quantity"]], "Output",
+ CellChangeTimes->{{3.5921851709993467`*^9, 3.5921851852647333`*^9}, 
+   3.593063551947813*^9, 3.7518859638279133`*^9, {3.751886254666954*^9, 
+   3.7518862630551167`*^9}, 3.75195750325707*^9, {3.7519575465124693`*^9, 
+   3.751957553679714*^9}, 3.751960526496605*^9, 3.7519755618851967`*^9, 
+   3.751975681519966*^9, {3.7519760895932083`*^9, 3.751976093223091*^9}, 
+   3.751976431769238*^9, 3.751976683612512*^9, 3.751976834571501*^9},
+ CellLabel->
+  "Out[6551]=",ExpressionUUID->"a2bbf7b9-8e13-40a8-b67d-998e192b8ab1"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+vArrive: \[CapitalDelta]v needed to arrive in circular orbit around mars with \
+respect to spacecraft reference frame\
+\>", "Subsubsection",
+ CellChangeTimes->{{3.5921854176908317`*^9, 3.5921854386630077`*^9}, {
+  3.592232812121452*^9, 3.592232812895054*^9}, {3.592276272031348*^9, 
+  3.592276277192128*^9}, {3.5922768927846775`*^9, 
+  3.5922769181720057`*^9}},ExpressionUUID->"8bf9f080-6197-435a-a829-\
+fef52f0b1e6f"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"vArrive", "=", 
+  RowBox[{"vSatFinal", "-", "vPMars"}]}]], "Input",
+ CellChangeTimes->{{3.59218544210249*^9, 3.592185482204504*^9}, 
+   3.751976471571351*^9},
+ CellLabel->
+  "In[6552]:=",ExpressionUUID->"280461fb-7320-4178-94c9-b8de3a48a8d1"],
+
+Cell[BoxData[
+ TemplateBox[{
+  RowBox[{"-", "2.1116661837716114905`2.87013486088111"}],
+   RowBox[{"\"km\"", "\[InvisibleSpace]", "\"/\"", "\[InvisibleSpace]", 
+     "\"s\""}],"kilometers per second",FractionBox[
+   "\"Kilometers\"", "\"Seconds\""]},
+  "Quantity"]], "Output",
+ CellChangeTimes->{{3.592185478939208*^9, 3.592185484073927*^9}, 
+   3.593063551973879*^9, 3.751885963977563*^9, {3.751886254741722*^9, 
+   3.751886263153363*^9}, 3.751957503342845*^9, {3.7519575466129713`*^9, 
+   3.751957553764778*^9}, 3.7519605265643177`*^9, 3.751975561969537*^9, 
+   3.7519756816018257`*^9, {3.751976089696612*^9, 3.75197609329792*^9}, 
+   3.751976471877524*^9, 3.751976683678494*^9, 3.751976834649432*^9},
+ CellLabel->
+  "Out[6552]=",ExpressionUUID->"c8db98ee-155b-4249-bab9-5713760a6a96"]
+}, Open  ]],
+
+Cell["So we have to slow down a bit when we get to mars.", "Text",
+ CellChangeTimes->{{3.592276920506692*^9, 
+  3.5922769271985245`*^9}},ExpressionUUID->"5f36572c-de6f-4a2a-9865-\
+cf6576c8ef76"],
+
+Cell[TextData[{
+ StyleBox["So ",
+  FontWeight->"Bold"],
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubsuperscriptBox["V", "\[Infinity]", "-"], "=", 
+    RowBox[{"2.65", 
+     RowBox[{"km", "/", "s"}]}]}], TraditionalForm]],
+  FontWeight->"Bold",ExpressionUUID->"c8ce3040-ae27-454d-8941-12203979a3fb"],
+ StyleBox[".",
+  FontWeight->"Bold"]
+}], "Text",
+ CellChangeTimes->{{3.5922332469095125`*^9, 3.592233282651326*^9}, {
+  3.5922343911228456`*^9, 3.5922343929381647`*^9}, {3.592234429994916*^9, 
+  3.592234431153757*^9}},ExpressionUUID->"ea33e641-e820-49b0-bb5c-\
+cca8e9c87502"],
+
+Cell[TextData[{
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["V", 
+     RowBox[{"P", "/", "Mars"}]], "=", 
+    RowBox[{"5.60", 
+     RowBox[{"km", "/", "s"}]}]}], TraditionalForm]],
+  FontWeight->"Bold",ExpressionUUID->"12467ac4-d421-4daa-ad3c-b3959ed6f9be"],
+ StyleBox[".",
+  FontWeight->"Bold"]
+}], "Text",
+ CellChangeTimes->{{3.5922344064179287`*^9, 3.592234428661008*^9}, {
+  3.5930635686894045`*^9, 
+  3.5930635705520363`*^9}},ExpressionUUID->"686095d7-b578-466f-a123-\
+807013cd9ad2"],
+
+Cell[TextData[{
+ StyleBox["A ",
+  FontWeight->"Bold"],
+ Cell[BoxData[
+  FormBox["\[CapitalDelta]v", TraditionalForm]],
+  FontWeight->"Bold",ExpressionUUID->"07bf32fa-57e1-49e6-aec0-4f0e9af4d4ee"],
+ StyleBox[" of ",
+  FontWeight->"Bold"],
+ Cell[BoxData[
+  FormBox[
+   StyleBox[
+    RowBox[{"-", "2.11"}],
+    FontWeight->"Bold"], TraditionalForm]],ExpressionUUID->
+  "f853c8f2-d425-4c58-bfb7-47d1b22d0012"],
+ StyleBox[" km/s needed to arrive at Mars.",
+  FontWeight->"Bold"]
+}], "Text",
+ CellChangeTimes->{{3.5921854940321026`*^9, 3.592185518481757*^9}, {
+  3.592243898978241*^9, 3.5922439208650475`*^9}, {3.593063577252658*^9, 
+  3.5930636016900992`*^9}},ExpressionUUID->"78c453d7-0bf1-4208-bf49-\
+0aef91425695"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Interplanetary Superhighway", "Section",
+ CellChangeTimes->{{3.592241542105109*^9, 3.5922415498156266`*^9}, 
+   3.7519766374587593`*^9},ExpressionUUID->"163723c9-6f08-4577-b129-\
+c0ba073f7958"],
+
+Cell[TextData[{
+ "Interplanetary Superhighway (IPS) (also called \
+\[OpenCurlyDoubleQuote]Interplanetary Transport Network\
+\[CloseCurlyDoubleQuote] ITN) is a collection of pathways through the solar \
+system that connects Lagrange points of various bodies throughout the solar \
+system",
+ ButtonBox[Cell[TextData[StyleBox[ButtonBox["3"],
+  FontVariations->{"CompatibilityType"->"Superscript"}]], "Citation",
+  Editable->False,
+  TaggingRules->{NoteData -> RowBox[{
+       RowBox[{"http", ":"}], "//", 
+       RowBox[{
+         RowBox[{
+           RowBox[{
+             RowBox[{"en", ".", "wikipedia", ".", "org"}], "/", "wiki"}], "/",
+            "Interplanetary_Transport"}], "_Network"}]}]},ExpressionUUID->
+  "cea224cf-6442-4862-93b6-a3360e838bc1"],
+  BaseStyle->"Hyperlink",
+  ButtonData->"00003749"],
+ ".\n\nEvery 3 body gravitational system has at least three Lagrange points, \
+often times five. L1-L3 are unstable, while there exists two stable Lagrange \
+points L4-L5, given that mass ratios of the two biggest masses is greater \
+than 24.96",
+ ButtonBox[Cell[TextData[StyleBox[ButtonBox["4"],
+  FontVariations->{"CompatibilityType"->"Superscript"}]], "Citation",
+  Editable->False,
+  TaggingRules->{NoteData -> RowBox[{
+       RowBox[{"http", ":"}], "//", 
+       RowBox[{
+         RowBox[{
+           RowBox[{
+             RowBox[{"en", ".", "wikipedia", ".", "org"}], "/", "wiki"}], "/",
+            "Interplanetary_Transport"}], "_Network", "#", 
+         "Further_explanation"}]}]},ExpressionUUID->
+  "dde67042-2364-4d4c-a516-c7f1814ac24a"],
+  BaseStyle->"Hyperlink",
+  ButtonData->"0000406E"],
+ ". It turns out that there exists low-energy transfer orbits that connects \
+various Lagrange points in the solar system to each other. The delta-v \
+required for transferring between the Lagrange points appear to be the lowest \
+possible, even lower than Hohmann-transfer orbits. A small amount of energy \
+will always be necessary to make corrections to the trajectory to stay within \
+the IPS or change between intersecting IPS tubes.\n\nThus the solar system \
+are connected by ultra-low-energy \[OpenCurlyDoubleQuote]tubes\
+\[CloseCurlyDoubleQuote] for which the energy cost of going from one place to \
+the other in the solar system is very low. The catch of using IPS transfer \
+orbits is that they are relatively slow; less energy necessary at the cost of \
+higher transfer time. Obviously certain types of mission will favor one, \
+other types will favor the other. Orbit transfer time will be of greater \
+importance in manned missions, whereas energy and cost can be kept down on \
+automated probes."
+}], "Text",
+ CellChangeTimes->{{3.592243779228754*^9, 3.5922438505422955`*^9}, {
+  3.5922446767339525`*^9, 3.5922446802645035`*^9}, {3.592244759422675*^9, 
+  3.5922447595077353`*^9}, {3.751976567749626*^9, 
+  3.7519765766872*^9}},ExpressionUUID->"5ebca9f7-7e73-49f2-bb0c-e219ad804de2"],
+
+Cell[TextData[{
+ "\t",
+ StyleBox["1",
+  FontVariations->{"CompatibilityType"->"Superscript"}],
+ "\t",
+ "http",
+ ":",
+ "//",
+ "www",
+ ".",
+ "astronomycafe",
+ ".",
+ "net",
+ "/",
+ "qadir",
+ "/",
+ "q2811",
+ ".",
+ "html"
+}], "Reference",
+ Editable->False,
+ TaggingRules->{ReferenceNoteData -> ""},
+ CellTags->"00003064",ExpressionUUID->"3c713aba-0ac5-4cfd-9929-f0c454a9d9c1"],
+
+Cell[TextData[{
+ "\t",
+ StyleBox["2",
+  FontVariations->{"CompatibilityType"->"Superscript"}],
+ "\t",
+ "http",
+ ":",
+ "//",
+ "www",
+ ".",
+ "phy6",
+ ".",
+ "org",
+ "/",
+ "stargaze",
+ "/",
+ "Smars1",
+ ".",
+ "htm"
+}], "Reference",
+ Editable->False,
+ TaggingRules->{ReferenceNoteData -> ""},
+ CellTags->"00002E4F",ExpressionUUID->"e02b795f-2738-4a51-b6ec-98b91fc92080"],
+
+Cell[TextData[{
+ "\t",
+ StyleBox["3",
+  FontVariations->{"CompatibilityType"->"Superscript"}],
+ "\t",
+ "http",
+ ":",
+ "//",
+ "en",
+ ".",
+ "wikipedia",
+ ".",
+ "org",
+ "/",
+ "wiki",
+ "/",
+ "Interplanetary_Transport",
+ "_Network"
+}], "Reference",
+ Editable->False,
+ TaggingRules->{ReferenceNoteData -> ""},
+ CellTags->"00003749",ExpressionUUID->"af469869-fff6-4b6f-ae3e-d5f5985cda7c"],
+
+Cell[TextData[{
+ "\t",
+ StyleBox["4",
+  FontVariations->{"CompatibilityType"->"Superscript"}],
+ "\t",
+ "http",
+ ":",
+ "//",
+ "en",
+ ".",
+ "wikipedia",
+ ".",
+ "org",
+ "/",
+ "wiki",
+ "/",
+ "Interplanetary_Transport",
+ "_Network",
+ "#",
+ "Further_explanation"
+}], "Reference",
+ Editable->False,
+ TaggingRules->{ReferenceNoteData -> ""},
+ CellTags->"0000406E",ExpressionUUID->"48c03943-16e4-4f97-9687-fd7558c9816b"]
+}, Open  ]]
+}, Open  ]],
+
+Cell["", "Title",ExpressionUUID->"7981f5a7-d888-40b1-8bba-5182c0967c36"]
+},
+WindowSize->{720, 878},
+WindowMargins->{{Automatic, 226}, {-900, Automatic}},
+FrontEndVersion->"11.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (March 5, \
+2018)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "00003064"->{
+  Cell[65705, 1705, 370, 22, 26, "Reference",ExpressionUUID->"3c713aba-0ac5-4cfd-9929-f0c454a9d9c1",
+   CellTags->"00003064"]},
+ "00002E4F"->{
+  Cell[66078, 1729, 364, 22, 26, "Reference",ExpressionUUID->"e02b795f-2738-4a51-b6ec-98b91fc92080",
+   CellTags->"00002E4F"]},
+ "00003749"->{
+  Cell[66445, 1753, 381, 21, 26, "Reference",ExpressionUUID->"af469869-fff6-4b6f-ae3e-d5f5985cda7c",
+   CellTags->"00003749"]},
+ "0000406E"->{
+  Cell[66829, 1776, 411, 23, 26, "Reference",ExpressionUUID->"48c03943-16e4-4f97-9687-fd7558c9816b",
+   CellTags->"0000406E"]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"00003064", 67650, 1816},
+ {"00002E4F", 67793, 1819},
+ {"00003749", 67936, 1822},
+ {"0000406E", 68079, 1825}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 167, 3, 98, "Title",ExpressionUUID->"f2697c88-40d9-4b62-a4c5-92e76067f592"],
+Cell[749, 27, 219, 4, 30, "Input",ExpressionUUID->"ededc2bc-0ff9-48df-992d-132048fc5173"],
+Cell[CellGroupData[{
+Cell[993, 35, 237, 4, 54, "Subsection",ExpressionUUID->"803dd002-6e41-460e-8e6b-c8625835259b"],
+Cell[CellGroupData[{
+Cell[1255, 43, 348, 9, 45, "Subsubsection",ExpressionUUID->"1f54bcc5-5ba8-4ea3-bf0e-c1eaee6d99f3"],
+Cell[CellGroupData[{
+Cell[1628, 56, 720, 15, 34, "Input",ExpressionUUID->"311696f8-edbc-4a9a-a946-a175614f5916"],
+Cell[2351, 73, 800, 15, 38, "Output",ExpressionUUID->"b5b5cfbb-4c85-4a43-bf0a-9ea8cd5ec254"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3188, 93, 724, 15, 34, "Input",ExpressionUUID->"ef2fbe2f-136a-42da-9cd5-eb99aff5163d"],
+Cell[3915, 110, 767, 15, 38, "Output",ExpressionUUID->"576de079-be4c-4d1e-a189-2a8019a42bec"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4719, 130, 669, 14, 34, "Input",ExpressionUUID->"723242da-8ff6-4e3b-95c3-8ebb12695d46"],
+Cell[5391, 146, 776, 15, 38, "Output",ExpressionUUID->"a2d8c043-af5e-4ebd-b2bb-2fc797c440cc"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6216, 167, 323, 9, 45, "Subsubsection",ExpressionUUID->"008a3a0a-264a-4cad-9de3-c83af1dfcae3"],
+Cell[CellGroupData[{
+Cell[6564, 180, 622, 13, 40, "Input",ExpressionUUID->"dd14f31e-0a23-42c7-a93c-8a799288f8ab"],
+Cell[7189, 195, 499, 9, 36, "Output",ExpressionUUID->"dec5f89b-236c-4065-836d-388431d49fdc"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7725, 209, 618, 13, 40, "Input",ExpressionUUID->"c08444bb-31e9-43aa-be58-11deed80ea4d"],
+Cell[8346, 224, 525, 10, 36, "Output",ExpressionUUID->"69a395be-0d33-46c7-8a1c-5189c85a22ff"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8920, 240, 217, 4, 45, "Subsubsection",ExpressionUUID->"cb750e86-4776-484c-98c6-e4fdd4d12218"],
+Cell[CellGroupData[{
+Cell[9162, 248, 776, 16, 40, "Input",ExpressionUUID->"84f3e6d4-31d3-4a97-9be6-4fb4586485a9"],
+Cell[9941, 266, 574, 12, 38, "Output",ExpressionUUID->"5360bf49-1f9b-4408-8fdb-159e84f5b3f9"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[10552, 283, 770, 16, 40, "Input",ExpressionUUID->"51bb7b9b-36d6-4f3a-80b3-a8ba8c05d943"],
+Cell[11325, 301, 574, 12, 38, "Output",ExpressionUUID->"a00b78a2-e1ab-45bb-8f9c-3a5821338cec"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11936, 318, 390, 10, 48, "Input",ExpressionUUID->"f6cf1238-8ef9-4218-b852-49fe60f74aa7"],
+Cell[12329, 330, 573, 12, 38, "Output",ExpressionUUID->"3eb7791b-1c2e-4ecc-a755-10bb6c234646"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12939, 347, 454, 9, 32, "Input",ExpressionUUID->"8fe3ec0a-6452-45ea-b1d6-58e4a4287613"],
+Cell[13396, 358, 569, 11, 36, "Output",ExpressionUUID->"ce6f9534-da7a-4d46-b31c-390839ae3631"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14002, 374, 357, 8, 32, "Input",ExpressionUUID->"88641b61-9ede-4539-9c27-d141dd5e2071"],
+Cell[14362, 384, 563, 10, 36, "Output",ExpressionUUID->"0b7533ae-7c62-4509-b6d8-442ac4868720"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14986, 401, 168, 3, 67, "Section",ExpressionUUID->"d8901407-6ac2-4b69-8b72-56c5e598b7ac"],
+Cell[CellGroupData[{
+Cell[15179, 408, 453, 12, 68, "Input",ExpressionUUID->"c98305ed-8399-4225-b1cc-8d5048a60df3"],
+Cell[15635, 422, 765, 13, 38, "Output",ExpressionUUID->"7431858f-47dc-4fc6-b8a6-9e47541733b4"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[16437, 440, 250, 5, 30, "Input",ExpressionUUID->"e7287104-e9e4-4f3c-bd2b-abdb5ffe05f1"],
+Cell[16690, 447, 637, 11, 36, "Output",ExpressionUUID->"37d83fae-0e1c-44c9-aa38-a2ea4a3385aa"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[17376, 464, 182, 3, 67, "Section",ExpressionUUID->"226ed0b4-f78e-4e63-9426-e8d41db93821"],
+Cell[CellGroupData[{
+Cell[17583, 471, 153, 3, 54, "Subsection",ExpressionUUID->"94135388-244d-48a0-b915-10dd8034194c"],
+Cell[CellGroupData[{
+Cell[17761, 478, 477, 8, 45, "Subsubsection",ExpressionUUID->"a69a6a5c-b614-4ab6-887d-998f700fb46c"],
+Cell[18241, 488, 218, 4, 35, "Text",ExpressionUUID->"bc45f288-7023-4f45-88f0-7558d054086c"],
+Cell[CellGroupData[{
+Cell[18484, 496, 839, 17, 68, "Input",ExpressionUUID->"8cf54957-8f9e-41c2-b39c-494896256f8b"],
+Cell[19326, 515, 803, 15, 36, "Output",ExpressionUUID->"2ccf7b51-bbab-4386-a3e0-ee5081175251"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[20178, 536, 1507, 24, 149, "Subsubsection",ExpressionUUID->"5f2426ee-05e2-4e43-a15c-e797ae511ab3"],
+Cell[21688, 562, 564, 13, 81, "Text",ExpressionUUID->"941b33cb-dfb6-44bc-8efe-15dd1a0a982a"],
+Cell[22255, 577, 180, 3, 35, "Text",ExpressionUUID->"2f057ac3-352a-4cf7-b8cc-20a9cbe3d0cf"],
+Cell[CellGroupData[{
+Cell[22460, 584, 450, 9, 68, "Input",ExpressionUUID->"6f9d75fc-f430-42bd-832c-2d288c27183b"],
+Cell[22913, 595, 1165, 20, 36, "Output",ExpressionUUID->"d055d29c-5cc7-45f7-b471-6ee27d05d876"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[24115, 620, 798, 13, 30, "Input",ExpressionUUID->"97065a1a-5d26-4954-a371-bf8c33cb989f"],
+Cell[24916, 635, 1092, 19, 36, "Output",ExpressionUUID->"b6d99da3-2adc-4035-88a7-4936d9b9cd58"]
+}, Open  ]],
+Cell[26023, 657, 1143, 27, 62, "Text",ExpressionUUID->"1005e868-6d68-4f28-984b-a065c9be73eb"],
+Cell[27169, 686, 860, 22, 61, "Text",ExpressionUUID->"05b1b31c-da4c-4c33-a171-ad2eeaeab929"],
+Cell[CellGroupData[{
+Cell[28054, 712, 777, 19, 71, "Input",ExpressionUUID->"e8ef9fba-0214-49f7-a517-69d90e5467e0"],
+Cell[28834, 733, 1272, 35, 77, "Output",ExpressionUUID->"6913033e-db6e-42db-bab6-a533969caa30"]
+}, Open  ]],
+Cell[30121, 771, 566, 14, 58, "Text",ExpressionUUID->"a8f8a83f-ba1c-4152-a84d-786724603dfe"],
+Cell[CellGroupData[{
+Cell[30712, 789, 840, 21, 71, "Input",ExpressionUUID->"6679a22d-5a7c-45ba-a24b-49483713ba72"],
+Cell[31555, 812, 1423, 39, 77, "Output",ExpressionUUID->"12293e47-ef07-4ddd-a98d-f9b6286574cb"]
+}, Open  ]],
+Cell[32993, 854, 543, 13, 58, "Text",ExpressionUUID->"d9628172-359c-4b81-9f71-59b19e874c7c"],
+Cell[33539, 869, 1133, 26, 73, "Text",ExpressionUUID->"41325255-f5cb-4fdb-be6a-3f92d5ad3a71"],
+Cell[34675, 897, 1085, 34, 65, "Text",ExpressionUUID->"f685f96b-f207-4aa8-981a-4cdebfa7601c"],
+Cell[CellGroupData[{
+Cell[35785, 935, 857, 21, 62, "Input",ExpressionUUID->"b668cf21-a2d5-48ba-a3af-f67d1e508fb1"],
+Cell[36645, 958, 1462, 40, 68, "Output",ExpressionUUID->"a07313ac-b409-45b9-aa79-e6f2717e06f4"]
+}, Open  ]],
+Cell[38122, 1001, 461, 12, 58, "Text",ExpressionUUID->"fe610b46-fc23-4050-bedc-13dc5cf98610"],
+Cell[CellGroupData[{
+Cell[38608, 1017, 645, 15, 57, "Input",ExpressionUUID->"91364ffd-49a9-4497-9bb3-097c0024a564"],
+Cell[39256, 1034, 1196, 32, 63, "Output",ExpressionUUID->"5283a654-1374-48d9-91d4-575db0eca03b"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[40501, 1072, 752, 16, 127, "Subsubsection",ExpressionUUID->"58e2a451-d0ca-4398-a79e-5b7f3521cc41"],
+Cell[CellGroupData[{
+Cell[41278, 1092, 389, 11, 68, "Input",ExpressionUUID->"a33c10d7-a00f-45f8-a8e2-ba1f54c6aef5"],
+Cell[41670, 1105, 759, 15, 36, "Output",ExpressionUUID->"167f8f52-c146-45f4-b2b0-60bb709c234d"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[42478, 1126, 988, 19, 153, "Subsubsection",ExpressionUUID->"a14d951d-190c-489b-ad18-b92870f04473"],
+Cell[CellGroupData[{
+Cell[43491, 1149, 339, 9, 68, "Input",ExpressionUUID->"3462a391-0f4c-4365-81ba-fa15fcb3ac17"],
+Cell[43833, 1160, 873, 16, 36, "Output",ExpressionUUID->"42d72c30-a3b7-4ade-80cf-5bf69da42306"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[44743, 1181, 573, 11, 30, "Input",ExpressionUUID->"aa061931-3e06-42ed-be74-77890d056c4e"],
+Cell[45319, 1194, 881, 16, 36, "Output",ExpressionUUID->"50808bde-c1f7-456c-a757-65cb8e571f53"]
+}, Open  ]],
+Cell[46215, 1213, 763, 19, 35, "Text",ExpressionUUID->"cea23df0-c4bb-4440-8de1-c6aba928452e"],
+Cell[46981, 1234, 614, 17, 35, "Text",ExpressionUUID->"d6d5b14f-f952-4f10-a5f1-c98ab8a0bc3a"],
+Cell[47598, 1253, 364, 8, 35, "Text",ExpressionUUID->"8fe39cfa-6a9b-478f-835f-10e80afb7ac2"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[48011, 1267, 414, 6, 54, "Subsection",ExpressionUUID->"811d1601-faaf-48f8-a804-a311f45e20c9"],
+Cell[CellGroupData[{
+Cell[48450, 1277, 290, 6, 71, "Subsubsection",ExpressionUUID->"95cf13f1-2e41-4336-82ec-43aecb183097"],
+Cell[48743, 1285, 214, 5, 35, "Text",ExpressionUUID->"2a4b3891-b1c0-4c9b-9248-6ba2285e0674"],
+Cell[CellGroupData[{
+Cell[48982, 1294, 456, 11, 68, "Input",ExpressionUUID->"fe72479d-39fb-4924-9801-9a21ee01009d"],
+Cell[49441, 1307, 901, 16, 36, "Output",ExpressionUUID->"21923bd7-de94-4798-a35d-e07c6c673247"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[50379, 1328, 402, 8, 68, "Input",ExpressionUUID->"85fe47cd-eecb-42a7-98cf-207214d62155"],
+Cell[50784, 1338, 828, 16, 36, "Output",ExpressionUUID->"438b8978-e7e1-4ce0-b826-2e81576e8137"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[51661, 1360, 1083, 19, 97, "Subsubsection",ExpressionUUID->"0da70207-ebc2-4dc0-aead-f075b7bbcce2"],
+Cell[CellGroupData[{
+Cell[52769, 1383, 442, 8, 30, "Input",ExpressionUUID->"4506a4e3-eadc-4b11-ad90-04c611d82a67"],
+Cell[53214, 1393, 754, 15, 36, "Output",ExpressionUUID->"79f10a95-d908-4128-bdfa-fc2757bc8607"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[54017, 1414, 753, 15, 71, "Subsubsection",ExpressionUUID->"32472a07-a600-4c42-b6d8-ce615b065ed3"],
+Cell[CellGroupData[{
+Cell[54795, 1433, 635, 13, 68, "Input",ExpressionUUID->"bb020e0d-c9c1-4d7d-9a23-2daccc17a7d8"],
+Cell[55433, 1448, 875, 16, 36, "Output",ExpressionUUID->"77faff8a-90ab-4f20-b390-4bf6534ca269"]
+}, Open  ]],
+Cell[56323, 1467, 810, 19, 104, "Text",ExpressionUUID->"9bf69f79-1351-49e7-a777-466d2135fa02"],
+Cell[57136, 1488, 364, 7, 58, "Text",ExpressionUUID->"76c74d5f-eb25-4d92-8517-51fca638c62a"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[57537, 1500, 336, 6, 45, "Subsubsection",ExpressionUUID->"bdfee56f-5397-4a30-9095-b7dbb7512559"],
+Cell[CellGroupData[{
+Cell[57898, 1510, 285, 7, 68, "Input",ExpressionUUID->"a0398067-fb2b-4025-9502-e8094c7839b0"],
+Cell[58186, 1519, 782, 14, 36, "Output",ExpressionUUID->"a2bbf7b9-8e13-40a8-b67d-998e192b8ab1"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[59017, 1539, 428, 8, 71, "Subsubsection",ExpressionUUID->"8bf9f080-6197-435a-a829-fef52f0b1e6f"],
+Cell[CellGroupData[{
+Cell[59470, 1551, 266, 6, 30, "Input",ExpressionUUID->"280461fb-7320-4178-94c9-b8de3a48a8d1"],
+Cell[59739, 1559, 787, 14, 36, "Output",ExpressionUUID->"c8db98ee-155b-4249-bab9-5713760a6a96"]
+}, Open  ]],
+Cell[60541, 1576, 194, 3, 35, "Text",ExpressionUUID->"5f36572c-de6f-4a2a-9865-cf6576c8ef76"],
+Cell[60738, 1581, 576, 16, 35, "Text",ExpressionUUID->"ea33e641-e820-49b0-bb5c-cca8e9c87502"],
+Cell[61317, 1599, 499, 15, 35, "Text",ExpressionUUID->"686095d7-b578-466f-a123-807013cd9ad2"],
+Cell[61819, 1616, 712, 20, 35, "Text",ExpressionUUID->"78c453d7-0bf1-4208-bf49-0aef91425695"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[62592, 1643, 199, 3, 67, "Section",ExpressionUUID->"163723c9-6f08-4577-b129-c0ba073f7958"],
+Cell[62794, 1648, 2908, 55, 446, "Text",ExpressionUUID->"5ebca9f7-7e73-49f2-bb0c-e219ad804de2"],
+Cell[65705, 1705, 370, 22, 26, "Reference",ExpressionUUID->"3c713aba-0ac5-4cfd-9929-f0c454a9d9c1",
+ CellTags->"00003064"],
+Cell[66078, 1729, 364, 22, 26, "Reference",ExpressionUUID->"e02b795f-2738-4a51-b6ec-98b91fc92080",
+ CellTags->"00002E4F"],
+Cell[66445, 1753, 381, 21, 26, "Reference",ExpressionUUID->"af469869-fff6-4b6f-ae3e-d5f5985cda7c",
+ CellTags->"00003749"],
+Cell[66829, 1776, 411, 23, 26, "Reference",ExpressionUUID->"48c03943-16e4-4f97-9687-fd7558c9816b",
+ CellTags->"0000406E"]
+}, Open  ]]
+}, Open  ]],
+Cell[67267, 1803, 72, 0, 98, "Title",ExpressionUUID->"7981f5a7-d888-40b1-8bba-5182c0967c36"]
+}
+]
+*)
+
