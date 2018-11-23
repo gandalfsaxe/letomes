@@ -6,8 +6,6 @@ import sys
 
 import matplotlib.pyplot as plt
 
-import matplotlib.pyplot as plt
-
 from orbsim.r4b_3d import UNIT_TIME
 from orbsim.r4b_3d.initial_conditions import (
     get_leo_position_and_velocity,
@@ -47,13 +45,9 @@ if __name__ == "__main__":
         day = 0
         Q0, B0 = get_leo_position_and_velocity(day=day, altitude=160, end_year="2020")
         psi = (day, Q0, B0, None)
-
+        h = 60 / UNIT_TIME  # step size
         ts, Qs, Bs, (t_final, i_final), ephemerides = simulate(
-            psi=psi,
-            max_year="2020",
-            h=10 / UNIT_TIME,
-            max_duration=1 * 3600 * 3 / UNIT_TIME,
-            max_iter=1e6,
+            psi=psi, max_year="2020", h=h, max_duration=0.003, max_iter=1e6
         )
 
     elif MODE_NAME == "demo_circular_sun_orbit":
@@ -62,13 +56,10 @@ if __name__ == "__main__":
         day = 0
         Q0, B0 = get_circular_sun_orbit_position_and_velocity()
         psi = (day, Q0, B0, None)
+        h = 3600 * 12 / UNIT_TIME  # step size
 
         ts, Qs, Bs, (t_final, i_final), ephemerides = simulate(
-            psi=psi,
-            max_year="2039",
-            h=3600 * 18 / UNIT_TIME,
-            max_duration=1,
-            max_iter=1e6,
+            psi=psi, max_year="2039", h=h, max_duration=1, max_iter=1e6
         )
 
     # PLOT THINGS
