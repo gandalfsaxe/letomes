@@ -64,6 +64,34 @@ inline double get_phidot(double R, double theta, double B_phi):
     return B_phi / (R * R * sin(theta) * sin(theta));
 }
 
+double * get_ephemerides_on_day(double * ephemerides, int ephsize, double day_idx){
+    /*  input:
+            per-day ephemerides for a given body, 
+            the size of the coordinate set (column count, basically),
+            and the non-integer day you want to interpolate on.
+        output: 
+            a list of interpolated coordinates for the given day
+    */ 
+    double day = day_idx + 1;
+
+    int day_lb = int(floor(day));
+    int day_ub = int(ceil(day));
+    double day_diff = day % 1;
+
+    double * lowerbound_eph = ephemerides[day_lb*ephsize]; // maybe needs sizeof(double) in the index??
+    double * upperbound_eph = ephemerides[day_ub*ephsize]; // maybe needs sizeof(double) in the index??
+    double result[ephsize] = 
+    for(int i = 0; i < ephsize; i++){
+        double lb_val = lowerbound_eph[i];
+        double ub_val = upperbound_eph[i];
+
+        double diff_val = ub_val - lb_val;
+        result[i] = lb_val + diff_val * day_diff;
+    }   
+    return result;
+}
+
+// ----------------- MAIN ALGORITHM ----------------------------
 // explicit euler algorithm for 4-body case
 // All values are with nondimensionalized units
 __device__

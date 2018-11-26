@@ -13,14 +13,16 @@ extern "C" {
     void kernel(int nTrajectories,
                 psitype* psis,
                 bool* successes,
-                double* scores)
+                double* scores,
+                int max_duration,
+                int max_iter)
     {
         const int trajIdx = blockIdx.x * blockDim.x + threadIdx.x;
         
         if trajIdx < nTrajectories //for each path
         {
             psitype* thisPsi = psis[sizeof(psitype) * trajIdx];
-            simulate(thisPsi, &successes[trajIdx], &scores[trajIdx]);
+            simulate(thisPsi, &successes[trajIdx], &scores[trajIdx], max_duration, max_iter);
         }
     }
 
