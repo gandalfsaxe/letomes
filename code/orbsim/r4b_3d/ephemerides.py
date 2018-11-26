@@ -19,7 +19,7 @@ logger = logging.getLogger()
 
 
 def get_ephemerides(
-    relative_path="ephemerides/", planets=("earth", "mars"), end_year="2020"
+    relative_path="ephemerides/", planets=("earth", "mars"), max_year="2020"
 ):
     """ Get table of ephemerides for all specified bodies from 2019-01-01 00:00:00 until
     01-01 00:00:00 of the end year.
@@ -32,7 +32,7 @@ def get_ephemerides(
     --INPUT--
     relative_path (str):            relative path of ephemerides files (to this script)
     planets TUP(str):               list of planets to include
-    end_year (str):                 end_year-01-01 will be last date in ephemerides.
+    max_year (str):                 max_year-01-01 will be last date in ephemerides.
 
     --OUTOUT--:
     ephemerides (DICT("body": pandas.df))
@@ -48,8 +48,8 @@ def get_ephemerides(
                 "Planets contain invalid planets (valid: 'earth' and 'mars')"
             )
 
-    if end_year not in VALID_END_YEARS:
-        raise ValueError("Invalid end year. Must be '2020', '2039' or '2262'.")
+    if max_year not in VALID_END_YEARS:
+        raise ValueError("Invalid max year. Must be '2020', '2039' or '2262'.")
 
     # Change workdir, construct filenames
     relative_path = os.path.normcase(relative_path)
@@ -63,7 +63,7 @@ def get_ephemerides(
     ephemerides_filename_dict = {}
 
     for planet in planets:
-        ephemerides_filename_dict[planet] = f"{planet}_2019-{end_year}.csv"
+        ephemerides_filename_dict[planet] = f"{planet}_2019-{max_year}.csv"
 
     # Read CSV files into dict
     ephemerides = {}

@@ -58,7 +58,7 @@ def simulate(
 
     # Read ephemerides
     logging.debug("Getting ephemerides tables")
-    ephemerides = get_ephemerides(end_year=max_year)
+    ephemerides = get_ephemerides(max_year=max_year)
 
     # Unpack initial position (Q) and momenta (B)
     R, theta, phi = Q

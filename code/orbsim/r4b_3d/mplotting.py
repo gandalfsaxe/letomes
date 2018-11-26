@@ -11,15 +11,15 @@ from orbsim.r4b_3d.coordinate_system import get_position_cartesian_from_spherica
 from orbsim.r4b_3d.ephemerides import get_ephemerides, get_ephemerides_on_day
 
 
-def animate_r4b_orbitplot(qs, ts, t_final, fig):
+def all_plots_r4b_orbitplot(qs, ts, t_final, max_year, fig):
     ax1 = fig.add_subplot("221", projection="3d")
     ax2 = fig.add_subplot("222", projection="3d")
     ax3 = fig.add_subplot("223", projection="3d")
-    for ax in [ax1,ax2,ax3]:
+    for ax in [ax1, ax2, ax3]:
         ax.set_xlabel("x")
         ax.set_ylabel("y")
         ax.set_zlabel("z")
-    r4b_orbit = R4bOrbit(qs, ts, t_final, ax1)
+    r4b_orbit = R4bOrbit(qs, ts, t_final, max_year, ax1)
     r4b_orbit.zoom_orbit(ax2)
     r4b_orbit.r4b_orbitplot(ax3)
     # exit(0)
@@ -35,37 +35,37 @@ def animate_r4b_orbitplot(qs, ts, t_final, fig):
 
 
 class R4bOrbit(object):
-    def __init__(self, qs, ts, t_final, ax):
-        eph = get_ephemerides()
+    def __init__(self, qs, ts, t_final, max_year, ax):
+        eph = get_ephemerides(max_year=max_year)
         earth = eph["earth"]
         mars = eph["mars"]
         # ts is in years, and is as such very small. we scale it to days, to fit with eph
         days_ts = [(t * UNIT_TIME) / 3600 / 24 for t in ts]
-        
+
         qs = [get_position_cartesian_from_spherical(x, y, z) for x, y, z in qs]
         self.xs, self.ys, self.zs = np.array(
             qs
         ).T  # get individual coordinate sets for plotting
 
         self.t_final = t_final
-        ax.set_title('animation')
+        ax.set_title("animation")
 
         self.ani_ax = ax
 
-        xs_earth=[]
-        ys_earth=[]
-        zs_earth=[]
-        xs_mars=[]
-        ys_mars=[]
-        zs_mars=[]
+        xs_earth = []
+        ys_earth = []
+        zs_earth = []
+        xs_mars = []
+        ys_mars = []
+        zs_mars = []
         for t in days_ts:
-            t_eph = get_ephemerides_on_day(eph,day_index=t)
-            xs_earth.append(t_eph['earth']['x'])
-            ys_earth.append(t_eph['earth']['y'])
-            zs_earth.append(t_eph['earth']['z'])
-            xs_mars.append(t_eph['mars']['x'])
-            ys_mars.append(t_eph['mars']['y'])
-            zs_mars.append(t_eph['mars']['z'])
+            t_eph = get_ephemerides_on_day(eph, day_index=t)
+            xs_earth.append(t_eph["earth"]["x"])
+            ys_earth.append(t_eph["earth"]["y"])
+            zs_earth.append(t_eph["earth"]["z"])
+            xs_mars.append(t_eph["mars"]["x"])
+            ys_mars.append(t_eph["mars"]["y"])
+            zs_mars.append(t_eph["mars"]["z"])
 
         self.xs_earth = xs_earth
         self.ys_earth = ys_earth
@@ -110,9 +110,16 @@ class R4bOrbit(object):
             return self.traj_line, self.earth_line, self.mars_line
         if i == len(self.xs) - 1:
             self.ani_ax.set_title("animation... DONE")
-            self.ani_ax.scatter(self.xs[-1], self.ys[-1], self.zs[-1], color='black')
-            self.ani_ax.scatter(self.xs_earth[-1], self.ys_earth[-1], self.zs_earth[-1], color='deepskyblue')
-            self.ani_ax.scatter(self.xs_mars[-1], self.ys_mars[-1], self.zs_mars[-1], color='orange')
+            self.ani_ax.scatter(self.xs[-1], self.ys[-1], self.zs[-1], color="black")
+            self.ani_ax.scatter(
+                self.xs_earth[-1],
+                self.ys_earth[-1],
+                self.zs_earth[-1],
+                color="deepskyblue",
+            )
+            self.ani_ax.scatter(
+                self.xs_mars[-1], self.ys_mars[-1], self.zs_mars[-1], color="orange"
+            )
             self.ani_terminate = True
         #     plt.close()
         x = self.xs[i]
@@ -138,30 +145,26 @@ class R4bOrbit(object):
         return self.traj_line, self.earth_line, self.mars_line
 
     def r4b_orbitplot(self, ax):
-        
-        ax.set_title('static holistic plot')
 
-        ax.plot(self.xs,
-                self.ys,
-                self.zs, color="black")
+        ax.set_title("static holistic plot")
+
+        ax.plot(self.xs, self.ys, self.zs, color="black")
 
         # -- EARTH --
-        ax.plot(self.xs_earth,
-                self.ys_earth,
-                self.zs_earth,
-                color="deepskyblue")  # plot lines
+        ax.plot(
+            self.xs_earth, self.ys_earth, self.zs_earth, color="deepskyblue"
+        )  # plot lines
 
         # -- MARS --
-        ax.plot(self.xs_mars,
-                self.ys_mars,
-                self.zs_mars,
-                color="orange")  # plot lines
+        ax.plot(self.xs_mars, self.ys_mars, self.zs_mars, color="orange")  # plot lines
 
         # -- SUN --
 
-        ax.scatter(self.xs[-1], self.ys[-1], self.zs[-1], color='black')
-        ax.scatter(self.xs_earth[-1], self.ys_earth[-1], self.zs_earth[-1], color='deepskyblue')
-        ax.scatter(self.xs_mars[-1], self.ys_mars[-1], self.zs_mars[-1], color='orange')
+        ax.scatter(self.xs[-1], self.ys[-1], self.zs[-1], color="black")
+        ax.scatter(
+            self.xs_earth[-1], self.ys_earth[-1], self.zs_earth[-1], color="deepskyblue"
+        )
+        ax.scatter(self.xs_mars[-1], self.ys_mars[-1], self.zs_mars[-1], color="orange")
         ax.scatter(0, 0, 0, c="gold", marker="o")
 
     def zoom_orbit(self, ax):
