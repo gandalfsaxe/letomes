@@ -4,7 +4,8 @@ import multiprocessing as mp
 
 import numpy as np
 import pygmo as pg
-from orbsim.plotting import orbitplot2d, orbitplot_non_inertial
+
+# from orbsim.plotting import orbitplot2d, orbitplot_non_inertial
 from numba import njit  # , njit
 from math import pi
 
@@ -32,17 +33,17 @@ def evolve(psis):
             epsis = psi + sigma * noise  # the point cloud around psi
 
             """calculate the reward in the cloud"""
-            psi_reward = -run_sim(psi, duration=10, max_iter=1e7)[0]
+            psi_reward = run_sim(psi, duration=10, max_iter=1e7)[0]
             reward = np.zeros(len(epsis))
             for jdx in range(len(epsis)):
                 epsi = epsis[jdx]
-                reward[jdx] = -run_sim(epsi, duration=10, max_iter=1e5)[
+                reward[jdx] = run_sim(epsi, duration=10, max_iter=1e5)[
                     0
                 ]  # launch a simulation for each point
             reward -= reward.mean()
             reward /= reward.std()
 
-            step_norm = np.dot(reward, noise)
+            step_norm = np.dot(-1 * reward, noise)
             step = alpha * step_norm
             print("new individual = ")
             print(psi + step)
@@ -84,8 +85,8 @@ def scale_result(success, res):
 
 @njit
 def fitness(psi):
-    res, _ = run_sim(psi, duration=50, max_iter=1e7)
-    return [-res]
+    score, success, _ = run_sim(psi, duration=50, max_iter=1e7)
+    return [score, success]
 
 
 @njit

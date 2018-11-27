@@ -4,7 +4,8 @@ from math import sqrt
 from numba import njit, jit, float64, boolean
 
 from . import *
-from ..planets import celestials
+
+# from ..planets import celestials
 from .analyticals import get_pdot_x, get_pdot_y, get_xdot, get_ydot
 
 

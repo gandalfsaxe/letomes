@@ -61,5 +61,5 @@ def run_sim(psi, duration=3, max_iter=1e7):
         final_score = (1 + score[0]) * 10
         # print("score = ", final_score)
 
-    return final_score, success[0], path
+    return score[0], success[0], path
 
