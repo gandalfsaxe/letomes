@@ -62,7 +62,7 @@ if __name__ == "__main__":
         # Simple circular orbit around sun, pos (1,0,0) AU, unit vel (0,1,0)
         day = 0
         max_year = "2039"
-        h = 3600 / UNIT_TIME
+        h = 3600 * 24 / UNIT_TIME
         max_duration = 1
         max_iter = 1e6
 
