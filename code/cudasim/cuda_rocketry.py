@@ -3,12 +3,14 @@ from multiprocessing import Pool
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pygmo as pg
-from pygmo import algorithm
+
+# import pygmo as pg
+# from pygmo import algorithm
 import os
 import sys
 from orbsim.r3b_2d.simulators import run_sim
-from orbsim.plotting import orbitplot2d, orbitplot_non_inertial
+
+# from orbsim.plotting import orbitplot2d, orbitplot_non_inertial
 from orbsim.r3b_2d.analyticals import (
     ensure_bounds,
     random_disjoint_intervals,
@@ -100,7 +102,7 @@ def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSte
         print("successes=", successes.sum())
         points = points.reshape(nIndividuals * nJitter, 3)
         for i, _ in enumerate(scores):
-            scores[i] += points[i][2]
+            scores[i] += points[i][2]  # add burn dv
             if not successes[i]:
                 scores[i] += 10
                 scores[i] *= 10
@@ -115,7 +117,7 @@ def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSte
             rscores = [
                 max(mean, rscore) for rscore in rscores
             ]  # neutralize negative influence by making very poor fitnesses equal to the mean fitness
-        ranked_scores = -ranked_scores
+        ranked_scores = -1 * ranked_scores
 
         steps = np.zeros([nIndividuals, 3])
         jitter = jitter.transpose(1, 0, 2)
@@ -171,5 +173,5 @@ if __name__ == "__main__":
     # pop.set_x(1, [-0.138042744751570, -0.144259374836607, 3.127288444444444])
     # pop.set_x(2, [-2.086814820119193, -0.000122173047640, 3.111181716545691])
     # print(pop)
-    psis[0] = [4.005530633326986, 0.047996554429844, 3.810000000000000]
+    psis[0] = [4.005_530_633_326_986, 0.047_996_554_429_844, 3.810_000_000_000_000]
     evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSteps)
