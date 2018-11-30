@@ -28,8 +28,8 @@ def golfcourse_row(pos, burns):
 
 if __name__ == "__main__":
     sz = 300
-    lbp, ubp = [0, tau]
-    lbb, ubb = [3.0, 3.4]
+    lbp, ubp = [3.8, 5.0]
+    lbb, ubb = [3.1, 3.15]
     p = Pool(mp.cpu_count())
     poss = np.linspace(lbp, ubp, sz)
     burns = np.linspace(lbb, ubb, sz)
@@ -54,11 +54,11 @@ if __name__ == "__main__":
         vmin=min(scores.flatten()),
         vmax=max(scores.flatten()),
         extent=[lbb, ubb, lbp, ubp],
-        interpolation='none',
+        interpolation="none",
     )
     plt.colorbar()
     ax.set_xlabel("burnDv")
     ax.set_ylabel("position")
     ax.set_aspect((ubb - lbb) / (ubp - lbp))
 
-    plt.savefig(f"golf_course_2.png")
+    plt.savefig(f"golf_course_zoom_p38-50_b31-315.png")
