@@ -141,7 +141,7 @@ def symplectic(
         target_distance_x = x - target_position_x
         target_distance_y = y - target_position_y
         target_distance = sqrt(target_distance_x ** 2 + target_distance_y ** 2)
-        if target_distance > 1e8 / UNIT_LENGTH:
+        if target_distance > 2.3:
             # print("we are way too far away, stranded in space!")
             score[0] = smallest_distance
             return path_storage

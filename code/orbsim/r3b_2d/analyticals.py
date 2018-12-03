@@ -12,7 +12,7 @@ from numba import njit
 from orbsim.r3b_2d import k
 
 
-# @njit
+@njit
 def get_pdot_x(x, y, p_y):
     """generalized momentum p_x (nondimensionalized) from position and momentum vectors"""
     denominator_1, denominator_2 = pdot_denominators(x, y)
