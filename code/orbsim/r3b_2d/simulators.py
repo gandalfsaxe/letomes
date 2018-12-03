@@ -52,14 +52,14 @@ def run_sim(psi, duration=3, max_iter=1e7):
     path = symplectic(
         x0, y0, p0_x, p0_y, score, success, duration=duration, max_iter=int(max_iter)
     )
-    # return success[0], score[0], path
-    if success[0] == 1:
-        # print("SUCCESS")
-        final_score = score[0] + burnDv
-        # print("score = ", final_score)
-    else:
-        final_score = (1 + score[0]) * 10
-        # print("score = ", final_score)
-
     return score[0], success[0], path
+    # if success[0] == 1:
+    #     # print("SUCCESS")
+    #     final_score = score[0] + burnDv
+    #     # print("score = ", final_score)
+    # else:
+    #     final_score = (1 + score[0]) * 10
+    #     # print("score = ", final_score)
+
+    # return score[0], success[0], path
 

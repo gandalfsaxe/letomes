@@ -12,17 +12,27 @@ mpl.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
 import numpy as np
-from math import pi
+from math import pi, log
 
 tau = 2 * pi
+
+filename = "golf_course_zoom_2"
+
+
+@njit
+def run_with_scaled_score(psi):
+    score, success, _ = run_sim(psi, duration=200, max_iter=1e7)
+    if not success:
+        score += 1
+        score *= 10
+    score += psi[2]
+    score = log(score)
+    return score, success
 
 
 @njit
 def golfcourse_row(pos, burns):
-    result = [
-        run_sim([pos, 0.023901745288554, burn], duration=7, max_iter=1e7)[:2]
-        for burn in burns
-    ]
+    result = [run_with_scaled_score([pos, 0.023901745288554, burn]) for burn in burns]
     return result
 
 
@@ -39,6 +49,11 @@ if __name__ == "__main__":
 
     cmap = plt.cm.jet
     scores, successes = result.transpose(2, 0, 1)
+
+    with open(f"{filename}.matrix", "w") as matfile:
+        smatrix = scores.reshape(sz, sz)
+        np.savetxt(matfile, smatrix, fmt="%.4f")
+
     greys = np.empty(scores.shape + (3,), dtype=np.uint8)
     greys.fill(70)
     colors = Normalize(min(scores.flatten()), max(scores.flatten()))(scores)
@@ -61,4 +76,4 @@ if __name__ == "__main__":
     ax.set_ylabel("position")
     ax.set_aspect((ubb - lbb) / (ubp - lbp))
 
-    plt.savefig(f"golf_course_zoom_p38-50_b31-315.png")
+    plt.savefig(f"{filename}.png")
