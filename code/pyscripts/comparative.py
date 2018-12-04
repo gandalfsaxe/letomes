@@ -1,18 +1,14 @@
-from orbsim.r3b_2d.simulators import run_sim
 
+from matplotlib.colors import Normalize
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 import numpy as np
-
-# from orbsim.plotting import orbitplot2d, orbitplot_non_inertial
-# from numba import njit
 from math import pi
 
-from orbsim.r3b_2d.analyticals import (
-    ensure_bounds,
-    random_disjoint_intervals,
-    collapse_intervals,
-)
+pspace = np.loadtxt("golf_course_zoom.txt")
+print(pspace)
+dims = pspace.shape
 
 tau = pi * 2
 bounds = {
@@ -22,25 +18,59 @@ bounds = {
 }
 
 eval_budget = 1000
-best_run = {"score": 100.0, "success": False}
+best_run = {"score": 100.0, "coords": [0, 0]}
 timeline = []
-for i in range(eval_budget):
-    psi = [random_disjoint_intervals(bound) for bound in bounds.values()]
-    score, success, _ = run_sim(psi, duration=1, max_iter=1e7)
-    score += psi[2]
-    if not success:
-        score = (score + 1) * 10
+x_timeline = []
+y_timeline = []
+for _ in range(eval_budget):
+    psi = [np.random.randint(low=0, high=dim) for dim in dims]
+    score = pspace[psi[0]][psi[1]]
 
     if score < best_run["score"]:
         best_run["score"] = score
-        best_run["success"] = success
+        best_run["coords"] = psi
 
-    timeline.append(best_run["score"])
+    timeline.append(best_run.copy())
+    x_timeline.append(psi[0])
+    y_timeline.append(psi[1])
 
 fig = plt.figure()
-axrand = fig.add_subplot("121")
-axevos = fig.add_subplot("122")
-axrand.plot(timeline, color="black")
+axrand = fig.add_subplot("221")
+axevos = fig.add_subplot("222")
+axpspace = fig.add_subplot("223")
+axrand.plot([best["score"] for best in timeline], color="black")
 axevos.plot(range(len(timeline)), color="red")
+
+cmap = plt.cm.jet
+colors = Normalize(min(pspace.flatten()), max(pspace.flatten()))(pspace)
+colors = cmap(colors)
+im = axpspace.imshow(
+    colors,
+    vmin=min(pspace.flatten()),
+    vmax=max(pspace.flatten()),
+    extent=[0, dims[0], 0, dims[1]],
+    interpolation="none",
+)
+plt.colorbar(mappable=im, ax=axpspace)
+bestcoords = np.array([best["coords"] for best in timeline]).T
+axpspace.scatter(bestcoords[0], bestcoords[1], color="lime", s=3)
+axpspace.scatter(x_timeline, y_timeline, color="black", s=0.2)
 plt.show()
+
+
+def evolve(startpsi, iterations):
+    sigma = 3
+    alpha = 0.03
+    psi = startpsi
+    for i in range(iterations):
+        noise = np.random.randn(25, 2)
+        x, y = psi
+        epsi = [min(dims[0], max(0, x)), min(dims[1], max(0, y))] + sigma * noise
+
+        R = np.array([pspace[x][y] for x, y in epsi])
+        R -= R.mean()
+        R /= R.std()
+        step_norm = np.dot(R, noise)
+        step = alpha * step_norm
+        psi += step
 
