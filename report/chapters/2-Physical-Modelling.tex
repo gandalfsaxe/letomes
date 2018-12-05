@@ -9,7 +9,7 @@ The center-of-mass-centered 3-body system (C-R3B) with the Earth and Moon was ex
 \begin{figure}[ht!]
     \centering
     \includegraphics[scale=0.75]{fig/r3b.pdf}
-    \caption{Restricted three-body problem. Two coordinate systems both with center of mass as origin: $(\mathscr{X},\mathscr{Y})$ is a stationary inertial frame, $(x,y)$ is a co-rotating non-inertial frame that rotates with the moon at angular frequency $\omega$. $M =$ mass of Earth, $m =$ mass of Moon, $\vec{R} =$ vector from CM to earth, $\vec{r} =$ vector from CM to Moon, $m_s =$ mass of spacecraft, $r_{S,E} =$ distance from spacecraft to Earth, $r_{S,M} =$ distance from spacecraft to Moon. In the dimensionless variables we introduce later, unit distance is $R+r$, which makes the dimensionless constant $k = \text{the CM-Earth distance} = \dfrac{R}{R+r} = $ and $1-k = \text{the CM-Moon distance} = \dfrac{r}{R+r}$ (Source: \cite{Saxe2015}).}
+    \caption{Restricted three-body problem. Two coordinate systems both with center of mass as origin: $(\mathscr{X},\mathscr{Y})$ is a stationary inertial frame, $(x,y)$ is a co-rotating non-inertial frame that rotates with the moon at angular frequency $\omega$. $M =$ mass of Earth, $m =$ mass of Moon, $\vec{R} =$ vector from CM to earth, $\vec{r} =$ vector from CM to Moon, $m_s =$ mass of spacecraft, $r_{S,E} =$ distance from spacecraft to Earth, $r_{S,M} =$ distance from spacecraft to Moon. In the dimensionless variables we introduce later, unit distance is $R+r$, which makes the dimensionless constant $k = \text{the CM-Earth distance} = \dfrac{R}{R+r} = $ and $1-k = \text{the CM-Moon distance} = \dfrac{r}{R+r}$ (Image: \cite{Saxe2015}).}
     \label{fig:r3b}
 \end{figure}
 
@@ -506,3 +506,119 @@ As we can see, we are lucky with this Hamiltonian since we can simply run all st
 
 \section{Interplanetary Transfer Orbits}
 
+\subsection{The Challenges of a Mars Transfer Orbit}
+
+\subsection{Transfer Orbit to Mars: 2D Patched Conic Approximation} \label{sec:2d-patched-conic}
+For now we want to do away with many of the complexities described in the previous section, and make an approximation, which will give us a sense of the key numbers of getting to Mars:
+\begin{enumerate}
+	\item Delta-v for Mars Orbit Insertion (MOI) at Earth.
+	\item Delta-v for arrival into circular orbit at Mars.
+	\item Relative positions of Earth and Mars for optimal Hohmann trajectory.
+	\item Travel time for optimal Hohmann trajectory.
+\end{enumerate}
+
+Knowing this we have a first good guess on initial conditions to put into the interplanetary 3D simulator, for which we can search for optimal parameters nearby for some good low-delta-v trajectories to mars. To approximate these numbers we can use the \emph{patched conic approximation}.
+
+First we recall that there are four possible orbit types in a two-body system that are all conic sections: circular, elliptic, parabolic and hyperbolic (and the circular is actually a special case of the elliptic), see \cref{fig:conics-and-orbits}.
+
+\begin{figure}[ht]
+    \centering
+    \subfloat[Conic sections. The parabola is created from an intersecting plane parallel to the cone (Image: \cite{MagisterMathematicae} (modified)).]{
+        \includegraphics[width=0.47\linewidth]{fig/Conic_Sections2.pdf}
+        \label{fig:conic-sections}
+    }
+    \hfill
+    \subfloat[Examples of the four orbit types of a two-body system and their eccentricities (Image: \cite{Seahen} (modified)).]{
+        \includegraphics[width=0.47\linewidth]{fig/Eccentricity.pdf}
+        \label{fig:orbit-types}
+    }
+    \caption{The four types of conic sections, corresponding to the four kinds of orbits for a two-body gravitational system. Some authors count three types, with the circle being a special case of the ellipse.}
+    \label{fig:conics-and-orbits}
+\end{figure}
+
+These four orbit types are characterized by the orbit specific energy (mechanical energy per mass) or equivalently by the ranges of eccentricity, see table in \cref{fig:orbit-type-properties}. As the table shows, a negative mechanical energy corresponds to a closed orbit (either circular or elliptical), zero energy corresponds to a parabolic orbit, i.e. an escape velocity orbit that occurs when a satellite is moving with \emph{just} enough speed with respect to a central body that it's speed goes towards zero at infinity. Finally, positive mechanical energy gives hyperbolic orbits.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.80\linewidth]{fig/orbit-type-properties.jpg}
+    \caption{Properties of the four orbit types, characterized by their specific energy and eccentricity (Image: \cite{RaianoMichele}).}
+    \label{fig:orbit-type-properties}
+\end{figure} 
+
+For a interplanetary transfer orbit we can use the Hohmann transfer orbit as the ``base transfer orbit'' and make some modifications. We recall that the Hohmann transfer is an elliptical orbit that brings a satellite between two different circular orbits around a central body by applying an instantaneous burn twice as depicted in \cref{fig:hohmann}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.4\linewidth]{fig/hohmann.pdf}
+    \caption{Hohmann Transfer orbit that brings the satellite from one circular orbit around a central body to another circular orbit via two burns (Image: \cite{Leafnode} (modified)).}
+    \label{fig:hohmann}
+    \end{figure}
+
+This approximation assumes only one central body. However in our system, we have three central bodies of interest: Earth, Sun and Mars. Each is the dominant body at various points of the journey. We start in a circular orbit around Earth, burn into an elliptical orbit around the Sun and arrive to Mars, burning to a circular orbit again. We can model the transfer orbit to Mars by patching three conic sections:
+
+\begin{enumerate}
+	\item Hyperbolic departure orbit (Geocentric reference frame).
+	\item Elliptical transfer orbit (Heliocentric reference frame).
+	\item Hyperbolic arrival orbit (Mars-centric reference frame).
+\end{enumerate}
+
+\cref{fig:Hohmann-to-mars-heliocentric} show necessary speeds on Hohmann orbit and the orbit speed of Earth and Mars. 
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{fig/Hohmann-to-mars-heliocentric.png}
+    \caption{Hohmann transfer to Mars with necessary departure speed (periapsis at Earth) and arrival speed (apoapsis at Mars) on Hohmann orbit relative to Sun (Image: \cite{Rapp2016} (modified)).}
+    \label{fig:Hohmann-to-mars-heliocentric}
+\end{figure}
+
+
+Why are the departure and arrival orbits modelled as hyperbolic? It turns out that we need extra speed from LEO to enter a transfer orbit that intersects Mars, meaning we need some velocity in excess to escape velocity. Likewise we \emph{always} arrive at other bodies in a hyperbolic orbit as seen from that body. If we started with zero speed approaching from infinitely far away and waited a duration approaching infinity, we would get the escape velocity when reaching the planet (this is just escaping with the exact escape velocity in reverse). But since we in practice always come with some other speed than the body we approach (here Mars), get arrive with speed in excess to the escape velocity, hence along a hyperbolic orbit, as shown in table in \cref{fig:orbit-type-properties}.
+
+As \cref{fig:Hohmann-to-mars-heliocentric} shows, we arrive at Mars' orbit with less speed than Mars \emph{if Mars wasn't there}, but actually need to slow down due to the attraction of Mars that results in higher speed to necessary for a circular orbit in target altitude \SI{125}{\km}. Thus overall we get a hyperbolic departure orbit, patched with an elliptical orbit, patched with another hyperbolic arrival orbit, with required speeds as illustrated in figure \cref{fig:Hohmann-to-mars-geocentric-areocentric}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{fig/Hohmann-to-mars-geocentric-areocentric.png}
+    \caption{Hohmann transfer to Mars with necessary departure, arrival and parking speeds relative to Earth on the left and Mars on the right (Image: \cite{Rapp2016} (modified)).}
+    \label{fig:Hohmann-to-mars-geocentric-areocentric}
+\end{figure}
+
+All the numbers of \cref{fig:Hohmann-to-mars-heliocentric,fig:Hohmann-to-mars-geocentric-areocentric} are derived in \cref{apx:mars-hohmann-derivations}, answering our four questions from the beginning of the chapter:
+
+\begin{enumerate}
+	\item \SI{3.62}{\km\per\s} needed to depart Earth circular orbit at altitude 160 km on Mars Orbit Insertion (MOI).
+	\item \SI{-2.11}{\km\per\s} needed at Mars arrival for circular orbit at \SI{125}{\km} altitude. Just for illustration, we could also apply less burn at Mars at the expense of entering a highly elliptical orbit as \cref{fig:mars-arrival-orbit} shows.
+	\item Mars must be $44^\degree$ behind Earth at MOI in order for Mars to be at Hohmann orbit apoapsis at the same time, see \cref{fig:Hohmann-angle}. This happens every 1.6 years \cite{Odenwald} (assuming Earth and Mars and in the same plane and orbit eccentricities are zero).
+	\item Travel time for optimal Hohmann trajectory is around 260 days, or around 8.5 months.
+\end{enumerate}
+
+These numbers are an important approximate reference point to have when attempting to find low energy transfer orbits to Mars.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.35\linewidth]{fig/Hohmann-angle.png}
+    \caption{The angle that Mars travels during the Mars Hohmann transfer orbit can easily be calculated as roughly \(136^\degree\), meaning the optimal launch is when Mars is \(44^\degree\) behind Earth in orbit (Image: \cite{Stern}).}
+    \label{fig:Hohmann-angle}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.85\linewidth]{fig/mars-arrival-orbit.png}
+    \caption{Various closed orbits upon arrival depending on applied $\Delta v$.}
+    \label{fig:mars-arrival-orbit}
+\end{figure}
+
+\clearpage
+
+\subsection{Actual Hohmann Transfer Orbit in 3D}
+In the previous section we detailed the important patched conic sections model in 2D. In our 3D simulator we will attempt something similar, but take the inclination of Mars' orbital plane into account.
+
+Mars orbital inclination is \ang{1.85} to the ecliptic plane. Therefore if one naively tried to rendezvous with Mars in the ecliptic plane it would be \( 1.52\ \text{AU} \cdot 1.85^\degree \pi / 180 = \SI{7.4e6}{\km} \) away. Instead we will attempt a 3D Hohmann transfer orbit as illustrated in \cref{fig:hohmann-transfer-orbit-3D} using the same launch parameters as was found in the 2D hohmann model in \cref{sec:2d-patched-conic}, but allowing the \(\phi\) angle to vary a bit to get slightly out of the plane.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.90\linewidth]{fig/hohmann-transfer-orbit-3D.png}
+    \caption{Hohmann orbit in a 3D model needs a small $\Delta v$ in the $\phi$ direction to get out of the plane in such a way that it will be in the orbital plane at Mars at apoapsis (Image: \cite{Daedalis.de})}
+    \label{fig:hohmann-transfer-orbit-3D}
+\end{figure}
+ 
