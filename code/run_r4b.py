@@ -4,8 +4,6 @@ import logging
 import pathlib
 import sys
 
-import matplotlib.pyplot as plt
-
 from orbsim.r4b_3d import UNIT_TIME
 from orbsim.r4b_3d.initial_conditions import (
     get_leo_position_and_velocity,
@@ -25,7 +23,7 @@ if __name__ == "__main__":
     try:
         MODE = sys.argv[1]
     except IndexError:
-        MODE = "sun"
+        MODE = "leo"  # <-- INPUT DEMO / SEARCH PARAMETER HERE
 
     mode_dict = {
         # Keys: Possible input arguments (argv)
@@ -76,6 +74,4 @@ if __name__ == "__main__":
         )
 
     # PLOT THINGS
-    fig = plt.figure()
-    all_plots_r4b_orbitplot(Qs, ts, t_final, max_year, fig)
-
+    all_plots_r4b_orbitplot(Qs, ts, t_final, max_year)

@@ -1,5 +1,9 @@
 from pathlib import Path
 
+import matplotlib
+
+matplotlib.use("Qt5Agg")
+
 import matplotlib.pyplot as plt
 from matplotlib import animation
 from matplotlib.animation import ImageMagickFileWriter
@@ -11,7 +15,8 @@ from orbsim.r4b_3d.coordinate_system import get_position_cartesian_from_spherica
 from orbsim.r4b_3d.ephemerides import get_ephemerides, get_ephemerides_on_day
 
 
-def all_plots_r4b_orbitplot(qs, ts, t_final, max_year, fig):
+def all_plots_r4b_orbitplot(qs, ts, t_final, max_year):
+    fig = plt.figure()
     ax1 = fig.add_subplot("221", projection="3d")
     ax2 = fig.add_subplot("222", projection="3d")
     ax3 = fig.add_subplot("223", projection="3d")
@@ -31,6 +36,7 @@ def all_plots_r4b_orbitplot(qs, ts, t_final, max_year, fig):
     # ] = "C:\Program Files\ImageMagick-7.0.8-Q16\magick.exe"  # "/usr/local/bin/magick"
     # writer = ImageMagickFileWriter()
     # ani.save(f"{str(Path.home())}/animation.mp4", writer=writer)
+
     plt.show()
 
 
