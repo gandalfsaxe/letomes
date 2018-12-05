@@ -16,7 +16,7 @@ from .integrators import symplectic
 @njit
 def run_sim(psi, duration=3, max_iter=1e7):
     """
-    return: [Dv, [x, y, px, py, h]]
+    return: [Dv, success, List[x, y, px, py, h]]
     launch (not really a launch since we start from LEO) a 
     single rocket with a given set of hyperparameters, return the resulting path
     """
