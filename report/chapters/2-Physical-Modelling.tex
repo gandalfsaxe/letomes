@@ -41,33 +41,33 @@ where \(T\), \(X\), \(Y\), \(P_x\) and \(P_y\) are our dimensionless variables f
 Based on \cref{eq:Xdot,eq:Ydot,eq:Pdot_X,eq:Pdot_Y}, a symplectic Euler algorithm was found (For detailed derivation, see \cite{Saxe2015}):
 
 \begin{align}
-    X_{i+1} &= \dfrac{X_i + h (h P_{Y,i} + P_{X,i} + Y_i)}{1+h^2}, \\[0.4cm]
-    Y_{i+1} &= Y_i + h (P_{Y,i} - X_{i+1}), \label{eq:symplectic-euler-Y_i+1}
+    X_1 &= \dfrac{X_0 + h (h P_{Y,0} + P_{X,0} + Y_0)}{1+h^2}, \\[0.4cm]
+    Y_1 &= Y_0 + h (P_{Y,0} - X_1), \label{eq:symplectic-euler-Y_1}
 \end{align}
 \begin{align}
     \begin{aligned}
-        P_{X,i+1} &= P_{X,i} \\
-        &+ h \left(P_{Y,i} - \dfrac{(1-k)(k+X_{i+1})}{((k+X_{i+1})^2+Y_{i+1}^2)^{3/2}} + \dfrac{k(X_{i+1}-1+k)}{((X_{i+1}-1+k)^2+Y_{i+1}^2)^{3/2}}\right), \label{eq:symplectic-euler-PX_i+1}
+        P_{X,1} &= P_{X,0} \\
+        &+ h \left(P_{Y,0} - \dfrac{(1-k)(k+X_1)}{((k+X_1)^2+Y_1^2)^{3/2}} + \dfrac{k(X_1-1+k)}{((X_1-1+k)^2+Y_1^2)^{3/2}}\right), \label{eq:symplectic-euler-PX_1}
     \end{aligned} \\[0.4cm]
     \begin{aligned}
-        P_{Y,i+1} &= P_{Y,i} \\
-        &+ h \left(-P_{X,i} - \dfrac{(1-k)Y_{i+1}}{((k+X_{i+1})^2+Y_{i+1}^2)^{3/2}} - \dfrac{k Y_{i+1}}{((X_{i+1}-1+k)^2+Y_{i+1}^2)^{3/2}}\right), \label{eq:symplectic-euler-PY_i+1}
+        P_{Y,1} &= P_{Y,0} \\
+        &+ h \left(-P_{X,0} - \dfrac{(1-k)Y_1}{((k+X_1)^2+Y_1^2)^{3/2}} - \dfrac{k Y_1}{((X_1-1+k)^2+Y_1^2)^{3/2}}\right), \label{eq:symplectic-euler-PY_1}
     \end{aligned}
 \end{align}
-where \(h\) is the step size, index \(i\) designates previous time step and \(i+1\) designates new time step. The algorithm is run in the same order as listed above.
+where \(h\) is the step size, index \(0\) designates previous time step ($i$) and index \(1\) designates new time step ($i+1$). The algorithm is run in the same order as listed above.
 
 \subsubsection{C-R3B Symplectic Störmer-Verlet}
 Based on \cref{eq:Xdot,eq:Ydot,eq:Pdot_X,eq:Pdot_Y}, a symplectic Störmer-Verlet algorithm was also found (For detailed derivation, see \cite{Saxe2015}):
 
 \begin{align}
-    X_{i+1/2} &= \frac{h^2 P_{Y,i} + 2 h \dot{P}_{x,i} + 4 X_i}{4 + h^2} \label{eq:verlet-x_1/2} \\
-    Y_{i+1/2} &= Y_i + \dfrac{h}{2} (P_{Y,i} - X_{i+1/2}), \label{eq:verlet-y_1/2} \\
-    P_{X,i+1} &= \frac{h^2 (2 \dot{P}_{Y,i} + P_{X,i}) + 4 h \dot{P}_{X,i} + 4 P_{X,i} }{4 + h^2} \label{eq:verlet-px_1} \\
-    P_{Y,i+1} &= P_{Y,i} + \dfrac{h}{2} \left[-\dot{P}_Y(q_{i+1/2},p_i) -\dot{P}_Y(q_{i+1/2},p_{i+1}) \right], \label{eq:verlet-py_1} \\
-    X_{i+1} &= X_{i+1/2} + \dfrac{h}{2} (P_{X,i+1} + Y_{i+1/2}), \label{eq:verlet-x_1} \\
-    Y_{i+1} &= Y_{i+1/2} + \dfrac{h}{2} (P_{Y,i+1} - X_{i+1/2}), \label{eq:verlet-y_1}
+    X_{1/2} &= \frac{h^2 P_{Y,0} + 2 h \dot{P}_{x,0} + 4 X_0}{4 + h^2} \label{eq:verlet-x_1/2} \\
+    Y_{1/2} &= Y_0 + \dfrac{h}{2} (P_{Y,0} - X_{1/2}), \label{eq:verlet-y_1/2} \\
+    P_{X,1} &= \frac{h^2 (2 \dot{P}_{Y,0} + P_{X,0}) + 4 h \dot{P}_{X,0} + 4 P_{X,0} }{4 + h^2} \label{eq:verlet-px_1} \\
+    P_{Y,1} &= P_{Y,0} + \dfrac{h}{2} \left[-\dot{P}_Y(q_{1/2},p_0) -\dot{P}_Y(q_{1/2},p_1) \right], \label{eq:verlet-py_1} \\
+    X_1 &= X_{1/2} + \dfrac{h}{2} (P_{X,1} + Y_{1/2}), \label{eq:verlet-x_1} \\
+    Y_1 &= Y_{1/2} + \dfrac{h}{2} (P_{Y,1} - X_{1/2}), \label{eq:verlet-y_1}
 \end{align}
-where \(\dot{P}_X,\dot{P}_Y\) are \cref{eq:Pdot_X,eq:Pdot_Y}, \(h\) is the step size, index \(i\) designates previous time step and \(i+1\) designates new time step. The algorithm is run in the same order as listed above.
+where \(\dot{P}_X,\dot{P}_Y\) are \cref{eq:Pdot_X,eq:Pdot_Y}, \(h\) is the step size, index \(0\) designates previous time step ($i$) and \(1\) designates new time step ($i+1$). The algorithm is run in the same order as listed above.
 
 \section{Heliocentric Restricted 4-Body System (H-R4B), Sun-Earth-Mars}
 Simulating orbit from Earth to Mars requires a new model with at least four bodies: Sun, Earth, Mars and the Spacecraft. The coordinate system will be heliocentric and in spherical coordinates, and restricted meaning that the mass of the spacecraft is considered negligible compared to compared to the celestial masses, so we call this system the ``Heliocentric Restricted N-Body'' system, see \cref{fig:solar-system-model}. We will derive the equations of motion of the spacecraft by using Hamilton's equations, which naturally gives us a set of coupled first-order differential equations, and a set of conserved quantities as ``generalized momenta''.
@@ -75,7 +75,7 @@ Simulating orbit from Earth to Mars requires a new model with at least four bodi
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.80\linewidth]{fig/solar-system-model}
-    \caption{ H-R4B model of spacecraft motion.The sun is assumed stationary at the origin of a spherical coordinate system, and the focus of two elliptical orbits of Earth and Mars. (Assets: \cite{WikiSpherical,flaticon})}
+    \caption{ H-R4B model of spacecraft motion.The sun is assumed stationary at the origin of a spherical coordinate system, and the focus of two elliptical orbits of Earth and Mars. (Assets source: \cite{WikiSpherical,flaticon})}
     \label{fig:solar-system-model}
 \end{figure}
 
@@ -462,14 +462,14 @@ As an overview, \cref{apx:hr4b-overview} shows all six nondimensionalized equati
 \subsection{H-R4B Numerical Integration Algorithm}
 
 \subsubsection{Symplectic Euler}
-In the explicit Euler, all quantities from the Hamiltonian derivative on the right hand refer to the old time step \(i\). In the implicit, they are all referring to the new time step \(i+1\), which results in implicit equations that can typically only be solved numerically.
+In the explicit Euler, all quantities from the Hamiltonian derivative on the right hand refer to the old time step \(0\) ($i$). In the implicit, they are all referring to the new time step \(1\) ($i+1$), which results in implicit equations that can typically only be solved numerically.
 
 The symplectic Euler is mixture between explicit and implicit Euler \cite{Hairer}:
 
 \begin{equation}
     \begin{split} \label{eq:symplectic-euler1}
-        \vec{q}_{i+1} = \vec{q}_i + h \pd{H}{\vec{p}}(q_i, p_{i+1}) \\
-        \vec{p}_{i+1} = \vec{p}_i - h \pd{H}{\vec{q}}(q_i, p_{i+1})
+        \vec{q}_1 = \vec{q}_0 + h \pd{H}{\vec{p}}(q_0, p_1) \\
+        \vec{p}_1 = \vec{p}_0 - h \pd{H}{\vec{q}}(q_0, p_1)
     \end{split}
 \end{equation}
 
@@ -477,32 +477,32 @@ or
 
 \begin{equation}
     \begin{split} \label{eq:symplectic-euler2}
-        \vec{q}_{i+1} = \vec{q}_i + h \pd{H}{\vec{p}}(q_{i+1}, p_i) \\
-        \vec{p}_{i+1} = \vec{p}_i - h \pd{H}{\vec{q}}(q_{i+1}, p_i)
+        \vec{q}_1 = \vec{q}_0 + h \pd{H}{\vec{p}}(q_1, p_0) \\
+        \vec{p}_1 = \vec{p}_0 - h \pd{H}{\vec{q}}(q_1, p_0)
     \end{split}
 \end{equation}
 
 One can choose whichever is easier to solve for the equations at hand. We choose the latter form \cref{eq:symplectic-euler2} so with our Hamiltonian \cref{eq:HH_m} we get
 \begin{align}
-    R_{i+1} &= R_i + h B_{r,i} \label{eq:symplectic-euler-R_i+1}, \\[0.4cm]
-    \theta_{i+1} &= \theta_i + h \frac{B_{\theta,i}}{R_{i+1}^2}, \label{eq:symplectic-euler-theta_i+1} \\[0.4cm]
-    \phi_{i+1} &= \phi_i + h \frac{B_{\phi,i}}{R_{i+1}^2 \sin^2{\theta_{i+1}}}, \label{eq:symplectic-euler-phi_i+1}
+    R_1 &= R_0 + h B_{r,0} \label{eq:symplectic-euler-R_1}, \\[0.4cm]
+    \theta_1 &= \theta_0 + h \frac{B_{\theta,0}}{R_1^2}, \label{eq:symplectic-euler-theta_1} \\[0.4cm]
+    \phi_1 &= \phi_0 + h \frac{B_{\phi,0}}{R_1^2 \sin^2{\theta_1}}, \label{eq:symplectic-euler-phi_1}
 \end{align}
 \begin{align}    
     \begin{aligned}
-        B_{r,i+1} = & B_{r,i} + h \left[ \frac{B_{\theta,i}^2}{R_{i+1}^3} + \frac{B_{\phi,i}^2}{R_{i+1}^3 \sin^2{\theta_{i+1}}} \right. \\
-        & \hspace{-22.0pt} + \left. \sum\limits_{k} \eta_k \frac{-R_{i+1} + R_{k,i+1} \left(\cos{\theta_{i+1}}\cos{\theta_{k,i+1}} + \sin{\theta_{i+1}}\sin{\theta_{k,i+1}}\cos{(\phi_{i+1} - \phi_{k,i+1})}\right)}{\left[R_{i+1}^2 + R_{k,i+1}^2 -2 R_{i+1} R_{k,i+1}^2 \left(\cos{\theta_{i+1}}\cos{\theta_{k,+1i}} + \sin{\theta_{i+1}}\sin{\theta_{k,i+1}}\cos{(\phi_{i+1} - \phi_{k,i+1})} \right) \right]^{3/2}} \right] , \label{eq:symplectic-euler-Br_i+1}
+        B_{r,1} = & B_{r,0} + h \left[ \frac{B_{\theta,0}^2}{R_1^3} + \frac{B_{\phi,0}^2}{R_1^3 \sin^2{\theta_1}} \right. \\
+        & \hspace{-21.0pt} + \left. \sum\limits_{k} \eta_k \frac{-R_1 + R_{k,1} \left(\cos{\theta_1}\cos{\theta_{k,1}} + \sin{\theta_1}\sin{\theta_{k,1}}\cos{(\phi_1 - \phi_{k,1})}\right)}{\left[R_1^2 + R_{k,1}^2 -2 R_1 R_{k,1}^2 \left(\cos{\theta_1}\cos{\theta_{k,1}} + \sin{\theta_1}\sin{\theta_{k,1}}\cos{(\phi_1 - \phi_{k,1})} \right) \right]^{3/2}} \right] , \label{eq:symplectic-euler-Br_1}
     \end{aligned} \\[0.4cm]
     \begin{aligned}
-        B_{\theta,i+1} = & B_{\theta,i} + h \left[ \frac{B_{\phi,i}^2}{R_{i+1}^2 \sin^2{\theta_{i+1}} \tan{\theta_{i+1}}} \right. \\
-        & \hspace{-22.0pt} + \left. \sum\limits_{k} \eta_k \frac{R_{i+1} R_{k,i+1} \left[-\sin{\theta_{i+1}}\cos{\theta_{k,i+1}} + \cos{\theta_{i+1}}\sin{\theta_{k,i+1}}\cos{(\phi_{i+1} - \phi_{k,i+1})} \right]}{\left[R_{i+1}^2 + R_{k,i+1}^2 -2 R_{i+1} R_{k,i+1}^2 \left(\cos{\theta_{i+1}}\cos{\theta_{k,+1i}} + \sin{\theta_{i+1}}\sin{\theta_{k,i+1}}\cos{(\phi_{i+1} - \phi_{k,i+1})} \right) \right]^{3/2}} \right], \label{eq:symplectic-euler-Btheta_i+1}
+        B_{\theta,1} = & B_{\theta,0} + h \left[ \frac{B_{\phi,0}^2}{R_1^2 \sin^2{\theta_1} \tan{\theta_1}} \right. \\
+        & \hspace{-21.0pt} + \left. \sum\limits_{k} \eta_k \frac{R_1 R_{k,1} \left[-\sin{\theta_1}\cos{\theta_{k,1}} + \cos{\theta_1}\sin{\theta_{k,1}}\cos{(\phi_1 - \phi_{k,1})} \right]}{\left[R_1^2 + R_{k,1}^2 -2 R_1 R_{k,1}^2 \left(\cos{\theta_1}\cos{\theta_{k,1}} + \sin{\theta_1}\sin{\theta_{k,1}}\cos{(\phi_1 - \phi_{k,1})} \right) \right]^{3/2}} \right], \label{eq:symplectic-euler-Btheta_1}
     \end{aligned} \\[0.4cm]
     \begin{aligned}
-        B_{\phi,i+1} = & B_{\phi,i} + h \left[ \vphantom{\frac12} \right.\\
-        & \hspace{-22.0pt} \hphantom{+} \left. \sum\limits_{k} \eta_k \frac{- R_{i+1} R_{k,i+1} \sin{\theta_{i+1}}\sin{\theta_{k,i+1}}\sin{(\phi_{i+1} - \phi_{k,i+1})}}{\left[R_{i+1}^2 + R_{k,i+1}^2 -2 R_{i+1} R_{k,i+1}^2 \left(\cos{\theta_{i+1}}\cos{\theta_{k,+1i}} + \sin{\theta_{i+1}}\sin{\theta_{k,i+1}}\cos{(\phi_{i+1} - \phi_{k,i+1})} \right) \right]^{3/2}} \right]. \label{eq:symplectic-euler-Bphi_i+1}
+        B_{\phi,1} = & B_{\phi,0} + h \left[ \vphantom{\frac12} \right.\\
+        & \hspace{-21.0pt} \hphantom{+} \left. \sum\limits_{k} \eta_k \frac{- R_1 R_{k,1} \sin{\theta_1}\sin{\theta_{k,1}}\sin{(\phi_1 - \phi_{k,1})}}{\left[R_1^2 + R_{k,1}^2 -2 R_1 R_{k,1}^2 \left(\cos{\theta_1}\cos{\theta_{k,1}} + \sin{\theta_1}\sin{\theta_{k,1}}\cos{(\phi_1 - \phi_{k,1})} \right) \right]^{3/2}} \right]. \label{eq:symplectic-euler-Bphi_1}
     \end{aligned}
 \end{align}
-As we can see, we are lucky with this Hamiltonian since we can simply run all steps in the order above, \cref{eq:symplectic-euler-R_i+1,eq:symplectic-euler-theta_i+1,eq:symplectic-euler-phi_i+1,eq:symplectic-euler-Br_i+1,eq:symplectic-euler-Btheta_i+1,eq:symplectic-euler-Bphi_i+1} without needing to solve any implicit equations.
+As we can see, we are lucky with this Hamiltonian since we can simply run all steps in the order above, \cref{eq:symplectic-euler-R_1,eq:symplectic-euler-theta_1,eq:symplectic-euler-phi_1,eq:symplectic-euler-Br_1,eq:symplectic-euler-Btheta_1,eq:symplectic-euler-Bphi_1} without needing to solve any implicit equations.
 
 \section{Interplanetary Transfer Orbits}
 
