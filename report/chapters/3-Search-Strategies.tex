@@ -110,3 +110,16 @@ In \cite{Saxe2015}, the search strategy was significantly simpler than here, and
 For anyone with optimization experience it will be obvious that this method is very sensitive to local minimum issues. It doesn't multi-start, or compute any kind of gradient, definite or estimated. It relies heavily on empirically defined starting parameters for determining the initial search intervals, so it's very specific to this problem. It is, in short, not really universal, or particularly intelligent, and was thus seen as an obvious candidate for improvement in this project.
 
 \section{Comparison of ES With Random Guessing Baseline}
+In order to benchmark the performance of our ES implementation, we compared it with a baseline alternative; picking a random point within the problem space, and evaluating it, keeping it if it is the best we have seen. To find out which is best, there are two interesting metrics we can look at: 
+\begin{itemize}
+    \item Given a fixed budget of fitness evaluations, which algorithm finds the lowest value.
+    \item Given some threshold value that is considered "good enough", which algorithm reaches that in the shortest time..
+    \item ..or in the case where it is interesting to have multiple good candidate solutions, which algorithm outputs most of them in a given time.
+\end{itemize}
+Since the CPU-bound version of our algorithm takes several seconds to evaluate one fitness function, and the GPU version has had most of the pythonic convenience compromised, we precomputed the fitness values in a promising cutout of the problem space. The 1024x1024 grid seen in figure \ref{fig:golf_course_s1024} took approximately 40 hours to compute on an HPC node, and with it, we were able to rapidly iterate our algorithm, both for the purpose of running it with multi-start to alleviate randomness, and to test the various potential accuracy and convergence-speed optimizations that have been applied in the literature.
+\begin{figure}[h]
+    \centering
+    \includegraphics{fig/golf_course_s1024}
+    \caption{1024x1024 resolution fitness map of the flattened problem space. A certain fractal quality seems to be present, consistent with \cite{Topputo2014}}
+    \label{fig:golf_course_s1024}
+\end{figure}

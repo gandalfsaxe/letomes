@@ -10,8 +10,8 @@ Our system is organized as two modules with an interface between them. The top-l
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.76\linewidth]{fig/software_architecture}
-    \caption{The architecture of the project, ES module inputs parameters to orbital simulator, which returns scores and trajectories}
+    \includegraphics[width=\linewidth]{fig/software_architecture}
+    \caption{The architecture of the project, ES module inputs parameters to orbital simulator, which returns scores and trajectories. Not pictured are the many auxiliary analysis scripts which also use orbsim}
     \label{fig:software_architecture}
 \end{figure}
 
@@ -20,7 +20,7 @@ Our system is organized as two modules with an interface between them. The top-l
 ensuring correctness of complex system with many edits taking place.
 \section{Software Architecture}
 \subsection{Orbsim Module}
-We have arranged our code into a python module that offers us some nice modularity and extensibility, at least as far as our relatively specific problem is concerned. What follows is an explanation of the architecture of this module.
+We have arranged our code into a python module that offers us some nice modularity and extensibility, at least within the bounds of our relatively specific problem. What follows is an explanation of the architecture of this module.
 
 We packaged the new simulator into its own python module, installable with pip, to ensure proper reproducibility across machines and different python configurations. We then implemented the simulator into our ES framework, which we had previously developed using mock data, and tuned its launch parameters to let it function as a decent search strategy for the lunar case. As we pursued this goal, performance became a severe issue. The ES algorithm wants to compute trajectories thousands or millions of times, and that was not feasible with each trajectory taking \SIrange{60}{300}{\second} to compute, so we delved into the simulator again in order to optimize it with regards to runtime.
 
