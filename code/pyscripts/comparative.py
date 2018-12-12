@@ -2,6 +2,8 @@
 from matplotlib.colors import Normalize
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+
 import pandas as pd
 
 import numpy as np
@@ -27,13 +29,13 @@ G = G1 + G2 - G3 - G4
 dims = pspace.shape
 print(dims)
 
-startpsi = [300, 700]
+startpsi = [230, 700]
 np.random.seed(0)
 # startpsi = [np.random.randint(low=0, high=dim) for dim in dims]
-sigma = 15
-alpha = 10000
+sigma = 20
+alpha = 0.2
 epsi_size = 50
-eval_budget = 10000
+eval_budget = 2000
 
 # +++++++++++++++++++++ Evolution Strategies ++++++++++++++++++++++++++++++
 def evolve(startpsi, eval_budget, timeline):
@@ -41,7 +43,9 @@ def evolve(startpsi, eval_budget, timeline):
     best_score = 100.0
     for i in range(int(eval_budget / epsi_size)):
         noise = np.random.randn(epsi_size, 2)
-        [np.append(noise, -1*point) for point in noise]
+        halfway = int(noise.shape[0]/2)
+        for j in range(halfway):
+            noise[halfway+j] = -1*noise[j]
         x, y = psi
         x, y = [min(dims[0] - 1, max(0, x)), min(dims[1] - 1, max(0, y))]
         epsi = [x, y] + sigma * noise
@@ -59,7 +63,7 @@ def evolve(startpsi, eval_budget, timeline):
         # R = np.array([max(Rmean, v) for v in R])
         R /= sum(R)
         step_norm = np.dot(R, noise)
-        step = alpha * sigma**-2 * step_norm
+        step = alpha * sigma**2 * step_norm
         psi += step
         timeline.append(
             {
@@ -118,7 +122,7 @@ axevos.plot(cummean, "b-")
 axevos.plot([part["best_score"] for part in es_timeline], color="black")
 
 # ============= plot problem space bg images ====
-cmap = plt.cm.hot
+cmap = plt.cm.viridis
 colors = Normalize(min(pspace.flatten()), max(pspace.flatten()))(pspace)
 colors = cmap(colors)
 im = ax_rg_pspace.imshow(
@@ -137,12 +141,11 @@ im2 = ax_es_pspace.imshow(
 )
 
 # ========= colorbars =========================
-plt.colorbar(mappable=im, ax=ax_rg_pspace)
 bestcoords = np.array([best["coords"] for best in rg_timeline]).T
 ax_rg_pspace.scatter(x_timeline, y_timeline, color="black", s=0.2)
 ax_rg_pspace.scatter(bestcoords[0], bestcoords[1], color="lime", s=3)
 
-plt.colorbar(mappable=im2, ax=ax_es_pspace)
+plt.colorbar(mappable=im2)
 epsis = np.array([part["epsi"] for part in es_timeline])
 coords = np.array([part["coords"] for part in es_timeline])
 steps = np.array([part["step"] for part in es_timeline])
@@ -160,8 +163,8 @@ ax_es_pspace.arrow(
     arrow[0][1],
     arrow[1][0],
     arrow[1][1],
-    head_width=30,
-    head_length=50,
+    head_width=3,
+    head_length=5,
     fc="w",
     ec="w",
 )
