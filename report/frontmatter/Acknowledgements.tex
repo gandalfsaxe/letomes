@@ -2,19 +2,22 @@
 \chapter{Acknowledgements}
 People we would like to thank:
 \begin{itemize}
-    \item Our advisors for excellent guidance and making themselves available throughout the process:
+    \item Our three advisors for excellent guidance and making themselves available throughout the process:
     \begin{itemize}
         \item \href{http://www.dtu.dk/english/service/phonebook/person?id=901&tab=1}{Poul G. Hjorth} (Equations of motion, physical modelling)
         \item \href{http://www.dtu.dk/english/service/phonebook/person?id=30220&tab=1}{Hans Henrik Brandenborg Sørensen} (Numerical computation and HPC performance)
         \item \href{http://www.dtu.dk/english/service/phonebook/person?id=10167&tab=1}{Ole Winther} (Machine learning techniques, especially evolution strategies)
     \end{itemize}
-    \item Friend \href{https://www.linkedin.com/in/casey-handmer-60183262/}{Casey Handmer} for interesting discussions and ideas.
+    \item Friend and JPL employee \href{https://www.linkedin.com/in/casey-handmer-60183262/}{Casey Handmer} for discussions and ideas.
 \end{itemize}
 \vspace{1cm}
-Software acknowledgements: \todoeasy{Add all software + URLs to software}
+Software acknowledgements:
 \begin{itemize}
-    \item Python - for implementing numerical algorithms to solve equations of motion.
-    \item Numba - a free Python compiler from Continuum Analytics that sped up my simulations 10-100 times.
-    \item Mathematica - for miscellaneous calculations and unit testing of python implementations of equations of motion.
-    \item Laursen for the XeLaTeX thesis project template for DTU Compute \cite{laursens}.
+    \item \href{https://www.python.org}{Python} - for implementing numerical algorithms to solve equations of motion.
+    \item \href{http://numba.pydata.org}{Numba} - a free Python compiler from Continuum Analytics that sped up my simulations 10-100 times.
+    \item \href{https://docs.pytest.org/en/latest/}{pytest} - a testing framework for Python that allowed us to set up a automated and efficient workflow for testing various Python functions against test values from a Mathematica script.
+    \item \href{http://www.wolfram.com/mathematica/}{Wolfram Mathematica} - for various calculations and unit testing of python implementations of various equations, most crucially the equations of motion and coordinate transformations.
+    \item \href{https://developer.nvidia.com/cuda-zone}{Nvidia CUDA} - as an efficient GPU parallel computing framework that allowed us to do hundreds of thousands more simulations per unit time than our laptops.
+    % \item \href{https://code.visualstudio.com}{Microsoft Visual Studio Code} - Free and open source coding editor that enabled us to write all our Python programming efficiently, debug it, test it etc., in addition to writing the report in XeLaTeX and even do spell checking, thanks to extensions.
+    % \item \href{https://www.linkedin.com/in/kaslau/}{Kasper Laursen} for the XeLaTeX thesis project template for DTU Compute (original repository: \cite{laursens}, updated repository with various corrections: \cite{Saxe}).
 \end{itemize}
