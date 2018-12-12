@@ -34,12 +34,14 @@ tau = 2 * pi
 
 
 def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSteps):
-    init_sigma = 0.3  # spread
-    init_alpha = 0.003  # learningrate
+    init_sigma = 0.2  # spread
+    init_alpha = 0.3  # learningrate
     sigma, alpha = init_sigma, init_alpha
     # sigma = np.ones(nIndividuals) * init_sigma
     # alpha = np.ones(nIndividuals) * init_alpha
     logfile = open(f"cudaES.log", "w")
+    allscores=[]
+    scoresfile = open('cuda_moon_scores', 'w')
     winners = []
     intermediate_winners = []
     bounds_list = bounds.values()
@@ -49,7 +51,13 @@ def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSte
         """
         make list of all paths to integrate
         """
-        jitter = np.random.randn(nIndividuals, nJitter, 3)
+        for _ in range(nIndividuals):
+            noise = np.random.randn(nJitter, 3)
+            halfway = int(noise.shape[0]/2)
+            for i in range(halfway):
+                noise[halfway+i] = -1*noise[i]
+            jitter.append(noise)
+        jitter = np.array(jitter)
         jitter = np.array([sigma * jitt for idx, jitt in enumerate(jitter)])
         jitter = jitter.reshape(nJitter, nIndividuals, 3)
         jitter[0] *= 0  # Make sure all set individuals are evaluated without jitter
@@ -104,26 +112,26 @@ def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSte
         for i, _ in enumerate(scores):
             scores[i] += points[i][2]  # add burn dv
             if not successes[i]:
-                scores[i] += 10
+                scores[i] += 1
                 scores[i] *= 10
 
         """transform scores -- ranking"""
         scores = scores.reshape(nIndividuals, nJitter)
         ranked_scores = np.array(
-            [rankdata(sig_eps, method="ordinal") for sig_eps in scores]
+            [rankdata(-1 * sig_eps, method="ordinal") for sig_eps in scores]
         )
         for idx, rscores in ranked_scores:
-            mean = rscores.mean()
+            rsum = rscores.sum()
             rscores = [
-                max(mean, rscore) for rscore in rscores
-            ]  # neutralize negative influence by making very poor fitnesses equal to the mean fitness
-        ranked_scores = -1 * ranked_scores
+                rscore / rsum for rscore in rscores
+            ]  # make scores sum to 1
+        # ranked_scores = -1 * ranked_scores
 
         steps = np.zeros([nIndividuals, 3])
         jitter = jitter.transpose(1, 0, 2)
         steps = np.array(
             [
-                np.dot(ranked_scores[idx], jitter[idx]) * alpha
+                np.dot(ranked_scores[idx], jitter[idx]) * sigma**2 * alpha
                 for idx in range(len(steps))
             ]
         )
@@ -133,6 +141,7 @@ def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSte
         scores = scores.reshape(nIndividuals, nJitter)
         successes = successes.reshape(nIndividuals, nJitter)
         for idx, psi in enumerate(psis):
+            allscores.append(f"{scores[idx][0]} ")
             if successes[idx][0]:
                 winners.append(str([idx, psi, scores[idx][0]]) + "\n")
             for jdx, succ in enumerate(
@@ -144,9 +153,11 @@ def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSte
                         + str([idx, points[idx][jdx + 1], scores[idx][jdx + 1]])
                         + "\n"
                     )
-
+        allscores.append("\n")
         psis += steps
 
+    scoresfile.writelines(allscores)
+    scoresfile.close()
     logfile.writelines(winners)
     logfile.writelines(intermediate_winners)
     logfile.close()
@@ -158,15 +169,15 @@ def initialize_psis(n, bounds):
 
 
 if __name__ == "__main__":
-    nIterations = 2
+    nIterations = 300
     nIndividuals = 1024
     nJitter = 32
-    maxDuration = 7
-    maxSteps = 10e6
+    maxDuration = 100
+    maxSteps = 1e7
     bounds = {
         "pos": np.array([[0, 1 * tau]]),
         "ang": np.array([[0, 1 * tau / 16], [tau / 2 - tau / 16, tau / 2]]),
-        "burn": np.array([[3.2, 3.9]]),
+        "burn": np.array([[3.1, 3.15]]),
     }
     psis = initialize_psis(nIndividuals, bounds.values())
     # pop.set_x(0, [-2.277654673852600, 0.047996554429844, 3.810000000000000])
