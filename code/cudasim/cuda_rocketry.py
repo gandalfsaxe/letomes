@@ -39,9 +39,7 @@ def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSte
     sigma, alpha = init_sigma, init_alpha
     # sigma = np.ones(nIndividuals) * init_sigma
     # alpha = np.ones(nIndividuals) * init_alpha
-    logfile = open(f"cudaES.log", "w")
     allscores=[]
-    scoresfile = open('cuda_moon_scores', 'w')
     winners = []
     intermediate_winners = []
     bounds_list = bounds.values()
@@ -51,6 +49,7 @@ def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSte
         """
         make list of all paths to integrate
         """
+        jitter = []
         for _ in range(nIndividuals):
             noise = np.random.randn(nJitter, 3)
             halfway = int(noise.shape[0]/2)
@@ -120,7 +119,7 @@ def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSte
         ranked_scores = np.array(
             [rankdata(-1 * sig_eps, method="ordinal") for sig_eps in scores]
         )
-        for idx, rscores in ranked_scores:
+        for rscores in ranked_scores:
             rsum = rscores.sum()
             rscores = [
                 rscore / rsum for rscore in rscores
@@ -156,8 +155,10 @@ def evolve(psis, bounds, nIterations, nIndividuals, nJitter, maxDuration, maxSte
         allscores.append("\n")
         psis += steps
 
+    scoresfile = open('cuda_moon_scores.txt', 'w')
     scoresfile.writelines(allscores)
     scoresfile.close()
+    logfile = open(f"cudaES.log", "w")
     logfile.writelines(winners)
     logfile.writelines(intermediate_winners)
     logfile.close()
