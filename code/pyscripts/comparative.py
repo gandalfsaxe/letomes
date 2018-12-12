@@ -9,7 +9,6 @@ from math import pi, log
 from scipy.stats import rankdata
 
 # === setup problem space, either real or Karpathy toy problem for validation ===
-np.random.seed(8)
 pspace = np.loadtxt("golf_course_zoom_s1024.txt")
 sz = 1024
 X, Y = np.meshgrid(np.linspace(-1, 1, sz), np.linspace(-1, 1, sz))
@@ -28,19 +27,21 @@ G = G1 + G2 - G3 - G4
 dims = pspace.shape
 print(dims)
 
-startpsi = [200, 400]
+startpsi = [300, 700]
+np.random.seed(0)
 # startpsi = [np.random.randint(low=0, high=dim) for dim in dims]
-sigma = 25
-alpha = 300
-epsi_size = 200
+sigma = 15
+alpha = 10000
+epsi_size = 50
 eval_budget = 10000
 
 # +++++++++++++++++++++ Evolution Strategies ++++++++++++++++++++++++++++++
-def evolve(startpsi, iterations, timeline):
+def evolve(startpsi, eval_budget, timeline):
     psi = startpsi
     best_score = 100.0
-    for i in range(int(iterations / epsi_size)):
+    for i in range(int(eval_budget / epsi_size)):
         noise = np.random.randn(epsi_size, 2)
+        [np.append(noise, -1*point) for point in noise]
         x, y = psi
         x, y = [min(dims[0] - 1, max(0, x)), min(dims[1] - 1, max(0, y))]
         epsi = [x, y] + sigma * noise
@@ -52,13 +53,13 @@ def evolve(startpsi, iterations, timeline):
         if score < best_score:
             best_score = score
 
-        R = np.array([-1 * pspace[int(x), int(y)] for x, y in epsi])
-        R = rankdata(R)
-        Rmean = R.mean()
-        R = np.array([max(Rmean, v) for v in R])
+        R = np.array([-pspace[int(x)][int(y)] for x, y in epsi])
+        R = np.array(rankdata(R, method='ordinal'), dtype=float)
+        # Rmean = R.mean()
+        # R = np.array([max(Rmean, v) for v in R])
         R /= sum(R)
         step_norm = np.dot(R, noise)
-        step = alpha * step_norm
+        step = alpha * sigma**-2 * step_norm
         psi += step
         timeline.append(
             {
@@ -117,7 +118,7 @@ axevos.plot(cummean, "b-")
 axevos.plot([part["best_score"] for part in es_timeline], color="black")
 
 # ============= plot problem space bg images ====
-cmap = plt.cm.jet
+cmap = plt.cm.hot
 colors = Normalize(min(pspace.flatten()), max(pspace.flatten()))(pspace)
 colors = cmap(colors)
 im = ax_rg_pspace.imshow(
@@ -159,10 +160,10 @@ ax_es_pspace.arrow(
     arrow[0][1],
     arrow[1][0],
     arrow[1][1],
-    head_width=3,
-    head_length=3,
-    fc="lime",
-    ec="lime",
+    head_width=30,
+    head_length=50,
+    fc="w",
+    ec="w",
 )
 
 
