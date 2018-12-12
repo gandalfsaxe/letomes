@@ -17,30 +17,30 @@ from decimal import Decimal
 
 import numpy as np
 
+from orbsim import EARTH_RADIUS
 from orbsim.r4b_3d import UNIT_LENGTH, UNIT_TIME, UNIT_VELOCITY
+from orbsim.r4b_3d.coordinate_system import (
+    get_distance_spherical,
+    get_position_cartesian_from_spherical,
+    get_speed_cartesian,
+    get_speed_spherical,
+    get_velocity_cartesian_from_spherical,
+    get_velocity_spherical_from_cartesian,
+)
 from orbsim.r4b_3d.ephemerides import (
     get_coordinates_on_day_rad,
     get_ephemerides,
     get_ephemerides_on_day,
 )
-from orbsim.r4b_3d.integrators import euler_step_symplectic
-
 from orbsim.r4b_3d.equations_of_motion import (
-    get_Rdot,
-    get_thetadot,
-    get_phidot,
+    get_B_phi,
     get_B_R,
     get_B_theta,
-    get_B_phi,
+    get_phidot,
+    get_Rdot,
+    get_thetadot,
 )
-
-from orbsim.r4b_3d.coordinate_system import (
-    get_speed_cartesian,
-    get_speed_spherical,
-    get_velocity_cartesian_from_spherical,
-    get_velocity_spherical_from_cartesian,
-    get_position_cartesian_from_spherical,
-)
+from orbsim.r4b_3d.integrators import euler_step_symplectic, verlet_step_symplectic
 
 
 def simulate(
@@ -106,6 +106,7 @@ def simulate(
     Bs = []
     q_p_list = []
     eph_body_coords = []
+    body_distances = []
 
     # Run iteration 0 manually
     ts.append(t)
@@ -131,13 +132,29 @@ def simulate(
         eph_on_day = get_ephemerides_on_day(ephemerides, day)
         eph_coords = get_coordinates_on_day_rad(eph_on_day)
 
-        sun = [coord[0] for coord in eph_coords]
-        earth = [coord[1] for coord in eph_coords]
-        mars = [coord[2] for coord in eph_coords]
+        # Save ephemerides coords on day into array
+        R_ks, theta_ks, phi_ks = eph_coords
+        sun = [R_ks[0], theta_ks[0], phi_ks[0]]
+        earth = [R_ks[1], theta_ks[1], phi_ks[1]]
+        mars = [R_ks[2], theta_ks[2], phi_ks[2]]
+        eph_body_coords.append([sun, earth, mars])
 
-        eph_body.coords.append([sun, earth, mars])
+        dist_sun = get_distance_spherical(Q, sun) * UNIT_LENGTH
+        dist_earth = get_distance_spherical(Q, earth) * UNIT_LENGTH
+        dist_mars = get_distance_spherical(Q, mars) * UNIT_LENGTH
+        body_distances.append([dist_sun, dist_earth, dist_mars])
 
-        Q, B = euler_step_symplectic(h, Q, B, eph_coords)
+        if dist_earth < EARTH_RADIUS:
+            logging.info(
+                f"STOP: Collision with earth {dist_earth:.6f} "
+                f"({format_time(max_duration, time_unit='years')}) "
+                f"reached at t = {t:.6f} ({format_time(t, time_unit='years')})"
+                f" at iteration: {i}/{max_iter} ~ {i/max_iter*100:.3f} %"
+            )
+            break
+
+        # Q, B = euler_step_symplectic(h, Q, B, eph_coords)
+        Q, B = verlet_step_symplectic(h, Q, B, eph_coords)
 
         ts.append(t)
         days.append(day)
@@ -190,7 +207,6 @@ def simulate(
             break
 
         # Check for body collision
-        x = 2
 
     t_s = (t - t0) * UNIT_TIME  # final in-sim time in seconds
     t_end = time.time()
@@ -217,7 +233,7 @@ def simulate(
         f"TIME ELAPSED: Out-of-sim time duration: {format_time(T)} (DDD:HH:MM:SS)"
     )
 
-    return (ts, Qs, Bs, (t, i), ephemerides)
+    return (ts, Qs, Bs, (t, i), ephemerides, eph_body_coords, body_distances)
 
 
 def format_time(time_value, time_unit="seconds"):

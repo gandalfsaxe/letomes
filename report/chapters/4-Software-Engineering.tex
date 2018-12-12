@@ -66,11 +66,11 @@ This function is run in parallel on many cores, each with a different set of sta
 Originally, we took care of parallelization with PyGMO's method of creating an archipelago, i.e a collection of islands. Each island would then run the algorithm on their own separate populations. Each island is assigned its own thread of execution. This convenient metaphor and easy implementation was the main draw of PyGMO for us, but we found that it introduced a significant performance overhead, and furthermore did not allow customization to the degree that we required. We therefore reimplemented the parallelization with less abstraction towards the end of the project.
 
 \subsection{Adaptive Measures}
-With our original, relatively unrestrained boundaries (two full circles, and a wide range of thrust power), we naturally saw a very large amount of failures. Many were cheap, computationally such as those that shot directly into the earth. Others were very expensive, like ones that were only barely above escape velocity, and just orbited the earth until the iteration counter maxed out. The model also wasted a lot of time looking at paths that were unmitigably bad: shooting at full power directly away from the moon, for example. With small perturbations of $\psi$, those paths see very little in the way of improvement, so for an inordinate number of evolution cycles, such paths would languish in that neighborhood, never getting better. Our human intuition tells us, of course, that it's more feasible to simply kill that candidate, and rerandomize. However, this has the effect of selecting for individuals that converge very quickly. That, as it turns out means selecting for Hohmann transfers, essentially, since they are much less sensitive to perturbations. We are not looking for the straight-forward solutions, but rather the unexpected ones. The paths that were successful in \cite{Saxe2015} were a hairs breadth in either direction from spinning off into oblivion, at least from the perspective of an algorithm working with a black-box simulator. 
+With our original, relatively unrestrained boundaries (two full circles, and a wide range of thrust power), we naturally saw a very large amount of failures. Many were cheap, computationally such as those that shot directly into the earth. Others were very expensive, like ones that were only barely above escape velocity, and just orbited the earth until the iteration counter maxed out. The model also wasted a lot of time looking at paths that were unmitigably bad: shooting at full power directly away from the moon, for example. With small perturbations of $\psi$, those paths see very little in the way of improvement, so for an inordinate number of evolution cycles, such paths would languish in that neighborhood, never getting better. Our human intuition tells us, of course, that it's more feasible to simply kill that candidate, and re-randomize. However, this has the effect of selecting for individuals that converge very quickly. That, as it turns out means selecting for Hohmann transfers, essentially, since they are much less sensitive to perturbations. We are not looking for the straight-forward solutions, but rather the unexpected ones. The paths that were successful in \cite{Saxe2015} were a hairs breadth in either direction from spinning off into oblivion, at least from the perspective of an algorithm working with a black-box simulator. 
 
-This means that it is at least principally important that we do not discard individuals for performing poorly initially, given the very 'all-or-nothing' nature of the problem space. We did, however, in the interest of computing time, try to nudge them on a little, by implementing a relatively naive system of adaptive learning rate and adaptive jitter spread. If an individual performs very poorly, we use our knowledge that its neighbors in a wide area will likely perform similarly, and increase its search radius $\sigma$ by some factor. This means that it will have a higher chance of selecting some jitter points that show some improvement, either by getting it closer to th etarget or by hitting it. Then, once the cloud of jittered points $\epsilon$ has been weighted, and our direction has been found, the step $\alpha$ that we take in that direction is commensurately increased as well. The idea is essentially a softer version of the notion of killing underperforming individuals, mentioned above, since if the scaling factor for $\alpha$ and $\sigma$ were very large, that would be essentially equivalent to re-initializing the point entirely. This method at least retains the idea of giving the mavericks a chance to find that one crazy solution that comes out of nowhere.
+This means that it is at least principally important that we do not discard individuals for performing poorly initially, given the very 'all-or-nothing' nature of the problem space. We did, however, in the interest of computing time, try to nudge them on a little, by implementing a relatively naive system of adaptive learning rate and adaptive jitter spread. If an individual performs very poorly, we use our knowledge that its neighbors in a wide area will likely perform similarly, and increase its search radius $\sigma$ by some factor. This means that it will have a higher chance of selecting some jitter points that show some improvement, either by getting it closer to the target or by hitting it. Then, once the cloud of jittered points $\epsilon$ has been weighted, and our direction has been found, the step $\alpha$ that we take in that direction is commensurately increased as well. The idea is essentially a softer version of the notion of killing under-performing individuals, mentioned above, since if the scaling factor for $\alpha$ and $\sigma$ were very large, that would be essentially equivalent to re-initializing the point entirely. This method at least retains the idea of giving the mavericks a chance to find that one crazy solution that comes out of nowhere.
 
-We also restricted the search boundaries, though we were hesitant to do so overly. Shooting directly into the earth is not expensive, computationally (it terminates in one cycle), but it is pretty pointless to try, so we restricted the burn angle to only shoot outwards from earth. Additionally, we scaled back the maximum power of our burn so we wouldn't go rocketing into space with an impulse that would see us never coming back. Okay, not exactly rocket science so far (it is, actually, but not idiomatically at least). One other bad type of path that ended up taking a lot of our computing time was paths that fired roughly perpendicular to our starting angular velocity. If our burn vector was too short, we would be recaptured by earth, but instead of going back into an orbit, we would 'stall', and come straight back down, again hitting the earth. If the burn vector was high magnitude, we would either sail off into space, or in the lucky event we were captured by the moon, simply have conducted a really inefficient Hohmann-esque transfer. Thus we restricted ourselves to angles that formed two cones in a butterfly shape, seen in figure \todoref{figure about search boundaries}.
+We also restricted the search boundaries, though we were hesitant to do so overly. Shooting directly into the earth is not expensive, computationally (it terminates in one cycle), but it is pretty pointless to try, so we restricted the burn angle to only shoot outwards from earth. Additionally, we scaled back the maximum power of our burn so we wouldn't go rocketing into space with an impulse that would see us never coming back. Okay, not exactly rocket science so far (it is, actually, but not idiomatically at least). One other bad type of path that ended up taking a lot of our computing time was paths that fired roughly perpendicular to our starting angular velocity. If our burn vector was too short, we would be recaptured by earth, but instead of going back into an orbit, we would 'stall', and come straight back down, again hitting the earth. If the burn vector was high magnitude, we would either sail off into space, or in the lucky event we were captured by the moon, simply have conducted a really inefficient Hohmann-like transfer. Thus we restricted ourselves to angles that formed two cones in a butterfly shape, seen in figure \todoref{figure about search boundaries}.
 
 \section{High Performance Computing}
 ES uses an approach that requires a very large number of evaluations of its fitness function. 
@@ -95,3 +95,75 @@ We attempted to gain additional performance from our simulator, we tried to run 
 
 \section{GPU programming with CUDA}
 massive parallelism vs. data transfer overhead.
+
+\section{Unit Testing}
+For quite a few weeks of this MSc thesis project, our 3D simulator gave nonsense results when we tried running a simple circular orbit around the sun. Instead of staying in the circular orbit, it immediately plummeted into the sun in 2160 iterations of the program faster than the speed of light, as shown in \cref{fig:r4b-bug}. Something was clearly wrong with the program, and with so many lines of code containing lengthy equations of motion, coordinate transformation, initial conditions etc., it was very difficult to spot exactly where the problem was. After spending days on looking for the mistake, we decided to take a more systematic approach, and starting \emph{unit testing} the critical parts of the code, and steadily increased the \emph{test coverage} of the program.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.50\linewidth]{fig/r4b-bug.png}
+    \caption{3D plot of an early buggy 3D simulator. The yellow dot in the middle marks the Sun, Earth's orbit is traced in blue, Mars orbit in Red and the spacecraft trajectory traced in black. Instead of staying in orbit around the Earth, the spacecraft accelerated hard towards the sun in the very first time step iteration, crashing the program after 1473 iterations, just before reaching the sun faster than the speed of light.}
+    \label{fig:r4b-bug}
+\end{figure}
+
+\subsection{What is unit testing?}
+Complex computer software usually undergo various kinds of testing in its development cycle. For a computer program such as ours with lots of implemented mathematical formulae, the most relevant kind of systematic testing is \emph{unit testing}. In unit testing, various units of code are tested in isolation against some ``ground truth'', i.e. some test values that are obtained externally or manually written up. The units are often, as in our case, the \emph{functions} of the program. 
+
+\subsection{Our Mathematica-Python Unit Testing Workflow and Why It Works}
+Our simulator program is written in the Python programming language, most of it inside functions. For example, we have a function that iterates a single coordinate or momentum a single time step forward, a function that converts positions or velocity vectors between different coordinate system, and a function that calculates circular orbital speed or period.
+
+The whole point of doing this is that \textbf{Mathematica provides nice visual formatting that allows mathematical equations to be pretty much identical to the complicated mathematical formulae written in hand or LaTeX}. Thus we can easily visually compare the implemented equations in Mathematica and in handwriting / LaTeX, and see that they match up. To give an example, here in \cref{fig:unit-testing-sympletic-euler-step-python-1,fig:unit-testing-sympletic-euler-step-python-2} is the implementation of the \texttt{} function in Python:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\linewidth]{fig/unit-testing-sympletic-euler-step-python-1.png}
+    \caption{The main function of \texttt{symplectic\_euler\_step()} in Python.}
+    \label{fig:unit-testing-sympletic-euler-step-python-1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.90\linewidth]{fig/unit-testing-sympletic-euler-step-python-2.png}
+    \caption{Function \texttt{get\_Bdot\_R(), which is just one of the sub-routines of \texttt{symplectic\_euler\_step()}}, in Python.}
+    \label{fig:unit-testing-sympletic-euler-step-python-2}
+\end{figure}
+
+And here in \cref{fig:unit-testing-sympletic-euler-step-mathematica} is the same function in Mathematica:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\linewidth]{fig/unit-testing-sympletic-euler-step-mathematica.pdf}
+    \caption{The same function \texttt{symplecticEulerStep()} in Mathematica, which is obviously way more compact and readable than the Python counterpart.}
+    \label{fig:unit-testing-sympletic-euler-step-mathematica}
+\end{figure}
+
+The point of comparison of \cref{fig:unit-testing-sympletic-euler-step-python-1,fig:unit-testing-sympletic-euler-step-python-2,fig:unit-testing-sympletic-euler-step-mathematica} above is that \emph{compactness} and \emph{readability} of the Mathematica version, thanks in large part to the 2D input syntax; Mathematica is simply a language built for handling mathematics really well. On the other hand, Mathematica doesn't scale well to larger and more complicated programs, performing on GPUs, using version control etc., where Python excels. But it does mean that Mathematica is a great application for testing your Python code – or rather providing test values that the Python code can be tested up against.
+
+\subsection{The Python-Mathematica Testing Workflow}
+
+The testing workflow can be described as such:
+
+\begin{enumerate}
+	\item \textbf{Write some piece of functionality as a function in Python.} It could be a mathematical formula, algorithm or just data-processing function.
+	\item \textbf{Re-implement the same functionality Mathematica.} Ideally, one can use a built-in function if possible, such as when converting between spherical coordinates and cartesian coordinates. The benefit of Mathematica over Python is the aforementioned 2D display of input, which makes mathematical expressions much more compact and readable compared to Python code.
+	\item \textbf{Export the test results (JSON) of various pairs of input/output.} Depending on the function a list of input can be a mix of random input, interesting edge-case input and invalid input. For functions with many input arguments, Mathematica can vary each input according to a list of numbers, and then generate all possible combinations of input arguments. \texttt{JSON} stands for JavaScript Object Notation, and is a standard file format for storing structured data. In this case, we used it for storing pairs of input and output for various functions.
+	\item \textbf{Import test results (JSON) in python test script.} We used a Python test framework called pytest to set up automated tests that imported test data, and ran the test ``Output from Python-version-of-function(input) == Output from Mathematica-version-of-function(input)''.
+	\item \textbf{Run tests using pytest and Coverage.py}. Coverage.py is a tool for measuring \emph{code coverage} of our Python program, meaning it can show what parts of the code is executed during running of all unit tests, both percentage-wise on an overall level, on file level and even line-by-line within code files, see \cref{fig:Coverage-py,fig:Coverage-py-file}. This was useful for systematically ensuring that all critical parts of the 3D simulator had been tested, and allowed everyone to directly see the progress in the debugging process.
+\end{enumerate}
+
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.90\linewidth]{fig/Coverage-py.png}
+    \caption{Coverage.py generates a HTML file showing the \emph{code coverage} of the testing suite on a subset of the code. When we reached 70\% coverage, we were satisfied with the degree of certain of correctness of the critical parts of the code, and could verify that the 3D simulator now game the expected results in various scenarios, so we stopped testing then.}
+    \label{fig:Coverage-py}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.90\linewidth]{fig/Coverage-py-file.png}
+    \caption{Clicking a file shown in previous \cref{fig:Coverage-py} shows details of which lines have test coverage in the given file. Here, no test covers the case of $v > 180$ in the function $\texttt{radians\_in\_domain().}$}
+    \label{fig:Coverage-py-file}
+\end{figure}
+
+During the debugging process we found a $+$-sign and $*$-sign that was mixed up, and a parenthesis that was closed at the wrong place, but was syntactically correct. Following this, the 3D simulator started to work as expected during basic tests of closed circular orbits etc.

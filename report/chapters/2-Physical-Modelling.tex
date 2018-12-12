@@ -1,7 +1,7 @@
 % !TEX root =../thesis-letomes.tex
 
 \chapter{Physical Modelling}
-We need a chapter to formulate our hypotheses, and generally give a before-the-fact run-down of what the project and report will be like.
+We will broadly 
 
 \section{CM-Centered Restricted 3-Body System (C-R3B), Earth-Moon}
 The center-of-mass-centered 3-body system (C-R3B) with the Earth and Moon was explored in \cite{Saxe2015}; refer to this for detailed derivations of C-R3B. We will present the final nondimensionalized equations of motion, and numerical integration algorithms for reference. The model is set up as in \cref{fig:r3b}.
@@ -507,6 +507,7 @@ As we can see, we are lucky with this Hamiltonian since we can simply run all st
 \section{Interplanetary Transfer Orbits}
 
 \subsection{The Challenges of a Mars Transfer Orbit}
+Making the trip to Mars from Earth is not a simple task. 
 
 \subsection{Transfer Orbit to Mars: 2D Patched Conic Approximation} \label{sec:2d-patched-conic}
 For now we want to do away with many of the complexities described in the previous section, and make an approximation, which will give us a sense of the key numbers of getting to Mars:
@@ -536,14 +537,22 @@ First we recall that there are four possible orbit types in a two-body system th
     \label{fig:conics-and-orbits}
 \end{figure}
 
-These four orbit types are characterized by the orbit specific energy (mechanical energy per mass) or equivalently by the ranges of eccentricity, see table in \cref{fig:orbit-type-properties}. As the table shows, a negative mechanical energy corresponds to a closed orbit (either circular or elliptical), zero energy corresponds to a parabolic orbit, i.e. an escape velocity orbit that occurs when a satellite is moving with \emph{just} enough speed with respect to a central body that it's speed goes towards zero at infinity. Finally, positive mechanical energy gives hyperbolic orbits.
+These four orbit types are characterized by the orbit specific energy (mechanical energy per mass) or equivalently by the ranges of eccentricity, see table in \cref{tab:orbit-type-properties}. As the table shows, a negative mechanical energy corresponds to a closed orbit (either circular or elliptical), zero energy corresponds to a parabolic orbit, i.e. an escape velocity orbit that occurs when a satellite is moving with \emph{just} enough speed with respect to a central body that it's speed goes towards zero at infinity. Finally, positive mechanical energy gives hyperbolic orbits.
 
-\begin{figure}[ht]
+\begin{table}[tbp]
     \centering
-    \includegraphics[width=0.80\linewidth]{fig/orbit-type-properties.jpg}
-    \caption{Properties of the four orbit types, characterized by their specific energy and eccentricity (Image: \cite{RaianoMichele}).}
-    \label{fig:orbit-type-properties}
-\end{figure} 
+    \begin{tabular}{@{}llll@{}}
+    \toprule
+    Conic Section & Eccentricity    & Semi-major axis & Energy  \\ \midrule
+    Circle        & $0$             & = radius        & $<0$    \\
+    Ellipse       & $0 < e < 1$     & $>0$            & $<0$    \\
+    Parabola      & 1               & infinity        & $0$     \\
+    Hyperbola     & $>1$            & $<0$            & $>0$    \\ \bottomrule
+    \end{tabular}
+    \caption{Properties of the four orbit types, characterized by their specific energy and eccentricity \cite{Braeunig}.}
+    \label{tab:orbit-type-properties}
+\end{table}
+
 
 For a interplanetary transfer orbit we can use the Hohmann transfer orbit as the ``base transfer orbit'' and make some modifications. We recall that the Hohmann transfer is an elliptical orbit that brings a satellite between two different circular orbits around a central body by applying an instantaneous burn twice as depicted in \cref{fig:hohmann}.
 
@@ -572,7 +581,7 @@ This approximation assumes only one central body. However in our system, we have
 \end{figure}
 
 
-Why are the departure and arrival orbits modelled as hyperbolic? It turns out that we need extra speed from LEO to enter a transfer orbit that intersects Mars, meaning we need some velocity in excess to escape velocity. Likewise we \emph{always} arrive at other bodies in a hyperbolic orbit as seen from that body. If we started with zero speed approaching from infinitely far away and waited a duration approaching infinity, we would get the escape velocity when reaching the planet (this is just escaping with the exact escape velocity in reverse). But since we in practice always come with some other speed than the body we approach (here Mars), get arrive with speed in excess to the escape velocity, hence along a hyperbolic orbit, as shown in table in \cref{fig:orbit-type-properties}.
+Why are the departure and arrival orbits modelled as hyperbolic? It turns out that we need extra speed from LEO to enter a transfer orbit that intersects Mars, meaning we need some velocity in excess to escape velocity. Likewise we \emph{always} arrive at other bodies in a hyperbolic orbit as seen from that body. If we started with zero speed approaching from infinitely far away and waited a duration approaching infinity, we would get the escape velocity when reaching the planet (this is just escaping with the exact escape velocity in reverse). But since we in practice always come with some other speed than the body we approach (here Mars), get arrive with speed in excess to the escape velocity, hence along a hyperbolic orbit, as shown in table in \cref{tab:orbit-type-properties}.
 
 As \cref{fig:Hohmann-to-mars-heliocentric} shows, we arrive at Mars' orbit with less speed than Mars \emph{if Mars wasn't there}, but actually need to slow down due to the attraction of Mars that results in higher speed to necessary for a circular orbit in target altitude \SI{125}{\km}. Thus overall we get a hyperbolic departure orbit, patched with an elliptical orbit, patched with another hyperbolic arrival orbit, with required speeds as illustrated in figure \cref{fig:Hohmann-to-mars-geocentric-areocentric}.
 
@@ -613,7 +622,7 @@ These numbers are an important approximate reference point to have when attempti
 \subsection{Actual Hohmann Transfer Orbit in 3D}
 In the previous section we detailed the important patched conic sections model in 2D. In our 3D simulator we will attempt something similar, but take the inclination of Mars' orbital plane into account.
 
-Mars orbital inclination is \ang{1.85} to the ecliptic plane. Therefore if one naively tried to rendezvous with Mars in the ecliptic plane it would be \( 1.52\ \text{AU} \cdot 1.85^\degree \pi / 180 = \SI{7.4e6}{\km} \) away. Instead we will attempt a 3D Hohmann transfer orbit as illustrated in \cref{fig:hohmann-transfer-orbit-3D} using the same launch parameters as was found in the 2D hohmann model in \cref{sec:2d-patched-conic}, but allowing the \(\phi\) angle to vary a bit to get slightly out of the plane.
+Mars orbital inclination is $1.85^\degree$ to the ecliptic plane. Therefore if one naively tried to rendezvous with Mars in the ecliptic plane it would be \( 1.52\ \text{AU} \cdot 1.85^\degree \pi / 180 = \SI{7.4e6}{\km} \) away. Instead we will attempt a 3D Hohmann transfer orbit as illustrated in \cref{fig:hohmann-transfer-orbit-3D} using the same launch parameters as was found in the 2D hohmann model in \cref{sec:2d-patched-conic}, but allowing the \(\phi\) angle to vary a bit to get slightly out of the plane.
 
 \begin{figure}[ht]
     \centering

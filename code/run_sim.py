@@ -2,7 +2,7 @@ import time
 
 from orbsim.r3b_2d import *
 from orbsim.plotting import orbitplot2d, orbitplot_non_inertial, leo_plot
-from orbsim.r3b_2d.simulators import run_sim
+from orbsim.r3b_2d.simulation import run_sim
 from argparse import ArgumentParser
 
 
