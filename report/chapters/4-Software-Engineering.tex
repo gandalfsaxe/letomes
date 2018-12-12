@@ -6,7 +6,7 @@ The project has been defined by a relatively wide scope of disciplines that we h
 
 
 \section{Software Architecture Overview}
-Our system is organized as two modules with an interface between them. The top-level module is the ES algorithm and its various auxiliary functions, and the bottom level module is the orbsim module, which takes care of the astrophysics aspect; turning launch parameters into trajectories. Between them is an interface that turns machine learning parameters into astrophysics parameters, and the reverse. Visualized in \cref{fig:software_architecture}\todo{NICER DRAWING COMING UP}, this architecture lets us keep variable names consistent with the literature for both domains. The multidisciplinary nature of this project and its authors made this a boon.
+Our system is organized as two modules with an interface between them. The top-level module is the ES algorithm and its various auxiliary functions, and the bottom level module is the orbsim module, which takes care of the astrophysics aspect; turning launch parameters into trajectories. Between them is an interface that turns machine learning parameters into astrophysics parameters, and the reverse. Visualized in \cref{fig:software_architecture}, this architecture lets us keep variable names consistent with the literature for both domains. The multidisciplinary nature of this project and its authors made this a boon.
 
 \begin{figure}
     \centering
@@ -48,9 +48,6 @@ This module contains a ton of different convenience functions that compute some 
     \item trial and error (finding a model that worked)
 \end{enumerate}
 
-\todo{Do hyperparameters, trial and error}
-
-
 The ES module conducts black-box optimization on a decision vector that describes the initial parameters for a launch. Every time the algorithm wants to find the fitness of a given point in our parameter space, it calls the orbsim module with those parameters, using the returned value as the function to minimize. The algorithm is parallelized through the use of PaGMO, which runs the ES algorithm on multiple cores independently, with many separate starting conditions.
 
 The module defines a PyGMO \emph{problem} class, which gives the bounds and fitness function for our optimization space. The fitness function takes the decision vector \(\psi\) as argument, calls on orbsim to run a simulation with the contained parameters, and returns the result of that simulation: The \(\Delta v\) value, or if the rocket did not hit the target, how close it came at the minimum, \(d_{min}\). The fitness is a single scalar, so the fact that that scalar can mean two different things (a change in velocity or a distance) gives some problems for estimating gradients in our space. We mitigate this by penalizing an unsuccessful mission heavily, by adding an upward bias and weight, as well as squaring the result, to amplify the effect of small differences in \(d_{min}\).
@@ -73,19 +70,24 @@ This means that it is at least principally important that we do not discard indi
 We also restricted the search boundaries, though we were hesitant to do so overly. Shooting directly into the earth is not expensive, computationally (it terminates in one cycle), but it is pretty pointless to try, so we restricted the burn angle to only shoot outwards from earth. Additionally, we scaled back the maximum power of our burn so we wouldn't go rocketing into space with an impulse that would see us never coming back. Okay, not exactly rocket science so far (it is, actually, but not idiomatically at least). One other bad type of path that ended up taking a lot of our computing time was paths that fired roughly perpendicular to our starting angular velocity. If our burn vector was too short, we would be recaptured by earth, but instead of going back into an orbit, we would 'stall', and come straight back down, again hitting the earth. If the burn vector was high magnitude, we would either sail off into space, or in the lucky event we were captured by the moon, simply have conducted a really inefficient Hohmann-like transfer. Thus we restricted ourselves to angles that formed two cones in a butterfly shape, seen in figure \todoref{figure about search boundaries}.
 
 \section{High Performance Computing}
-ES uses an approach that requires a very large number of evaluations of its fitness function. 
-as it relates to ES with an expensive objective function.
+ES is an approach that requires a large number of evaluations of its fitness function with each iteration. This means, that for a problem like ours, where each fitness evaluation requires a significant numerical simulation to complete, performance optimization is critical. The update function is as such:
 
-\todo{making the case for parallelism, given that trajectories are independent}
+\begin{empheq}{align}
+    \label{eq:Feval}
+    \psi_{t+1} = \alpha\frac{1}{n\sigma}\sum_{i=1}^{n}F(\psi_t + \sigma\epsilon_i)\epsilon_i
+\end{empheq}
+
+With $F(x)$ corresponding to a fitness evaluation with parameters x. as such, each iteration requires $n$ fitness evaluations. Proper choice of $n$ varies with problem dimensionality; the higher, the better a gradient estimator we get. For our low-dimensional problem, 30 is decent, but 100-200 is noticably smoother.
+Performance optimization is two-dimensional in this case. Decrease the time taken by each fitness evaluation, and parallelize; execute several fitness evaluations at the same time. The good thing about ES is that the many fitness evaluations are independent, within the iteration of the algorithm at least. Since we are multi-starting, we evaluate multiple sets of iterations in parallel as well. The algorithm is thus incredibly well-suited for parallelism: We can utilize thousands of parallel execution threads with approximately linear efficiency gain.
 
 
 \subsection{Numba}
 
 Python is a notoriously slow language, due to its paradigm of not compiling code, but simply running on the script itself; with Numba however, we can mitigate this problem, without sacrificing too much of the very high productivity that Python offers. We attempted to have Numba optimize our code for us, but found that our "proper software engineering" philosophy was preventing this from working to any meaningful effect. Numba is only able to give significant performance increases if working with basic types: Integers, Floats, Strings, and lists of those, more or less. As soon as complicated data structures are introduced into the mix, Numba drops to `object mode', where it attempts to find subsections of the function that are purely defined with basic types. This mode was useless for us simply making the code run slower due to the overhead of the compilation.
 
-In order to get the performance increases that the problem required, we had to make some sacrifices in our idealized architecture, ditching any complicated return types, any use of exceptions and the \texttt{Planet} class that we were using to contain our data. This was a painful sacrifice, since it enabled us to simply call the algorithm with a named celestial body, and instantly have all the relevant parameters in place for computing a trajectory. Instead, we have been forced to split it into several functions with duplicated code, and a significant increase in visual and lexicographical complexity; a large reason for the redesign happening in the first place. Regrettable, but a valuable learning experience.
+In order to get the performance increases that the problem required, we had to make some sacrifices in our idealized architecture, ditching any complicated return types, any use of exceptions and the \texttt{Planet} class that we were using to contain our data. This was a painful sacrifice, since it prevented us from simply calling the algorithm with a named celestial body, and instantly have all the relevant parameters in place for computing a trajectory. Instead, we have been forced to split it into several functions with duplicated code, and a significant increase in visual and lexicographical complexity; a large reason for the redesign happening in the first place. Regrettable, but a valuable learning experience.
 
-All this heart-wrenching work was not for nothing however, since with the pre-compilation of the symplectic Störmer-Verlet algorithm in place, we were seeing speedups of a factor 2-300. 
+All this heart-wrenching work was not for nothing however, since with the pre-compilation of the symplectic Störmer-Verlet algorithm in place, we were seeing speedups of a factor 200-300. 
 
 Once we had this architecture in place, and giving the same results as the original simulator, we built extensions to it to cover the martian travel case unique to this project.\todo{More about software architecture / numba optimization when mars is working}
 
