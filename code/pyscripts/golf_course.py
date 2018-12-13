@@ -16,7 +16,7 @@ from math import pi, log
 
 tau = 2 * pi
 
-filename = "golf_course_zoom_2"
+filename = "golf_course_extrazoom_s300"
 
 
 @njit
@@ -38,8 +38,8 @@ def golfcourse_row(pos, burns):
 
 if __name__ == "__main__":
     sz = 300
-    lbp, ubp = [3.8, 5.0]
-    lbb, ubb = [3.1, 3.15]
+    lbp, ubp = [4.8, 5.0]
+    lbb, ubb = [3.1, 3.11]
     p = Pool(mp.cpu_count())
     poss = np.linspace(lbp, ubp, sz)
     burns = np.linspace(lbb, ubb, sz)
@@ -47,10 +47,10 @@ if __name__ == "__main__":
         p.starmap(golfcourse_row, [(poss[idx], burns) for idx in range(sz)])
     )
 
-    cmap = plt.cm.jet
+    cmap = plt.cm.viridis
     scores, successes = result.transpose(2, 0, 1)
 
-    with open(f"{filename}.matrix", "w") as matfile:
+    with open(f"{filename}.txt", "w") as matfile:
         smatrix = scores.reshape(sz, sz)
         np.savetxt(matfile, smatrix, fmt="%.4f")
 
