@@ -83,7 +83,8 @@ In formal terms: Let \(F\) be the objective function with parameters \(\theta\).
     \nabla_\psi E_{\theta \sim p_\psi} F(\theta)
     = E_{\theta \sim p_\psi} \{F(\theta)~\nabla_\psi~log~p_\psi(\theta)\}
 \end{equation}
-In our problem, \(F\) is the stochastic score returned by our environment (the Earth-Mars-Sun system) with \(\theta\) representing the policy of an agent in the environment ($\Delta v$ for our spacecraft's path) and \(\psi\) being the parametrization of that policy (launch parameters: angle, velocity, launch-time). The algorithm mutates the launch parameters \(\psi\), checks how the resulting path \(\theta\) performs in the environment \(F\) and moves around the resulting n-dimensional optimization space with gradient descent along its estimated gradient, defined by a normally distributed weighted point cloud \(\epsilon\).
+In our problem, \(F\) is the stochastic score returned by our environment (the Earth-Mars-Sun system) with \(\theta\) representing the policy of an agent in the environment ($\Delta v$ for our spacecraft's path) and \(\psi\) being the parametrization of that policy (launch parameters: angle, velocity, launch-time). The algorithm mutates the launch parameters \(\psi\), checks how the resulting path \(\theta\) performs in the environment \(F\) and moves around the resulting n-dimensional optimization space with gradient descent along its estimated gradient, estimated by a normally distributed weighted point cloud \(\sigma\epsilon\).
+
 
 \begin{figure}
     \centering
@@ -101,7 +102,18 @@ In our problem, \(F\) is the stochastic score returned by our environment (the E
 
 \end{figure}
 
-In genetic algorithm terms, the input parameters $\psi$ are the genotype, the resultant path $\theta_\psi$ is the phenotype, and the fitness is of course  $F(\theta_\psi)$. \cite{Tomassini2005}
+In genetic algorithm terms, the input parameters $\psi$ are the genotype, the resultant path $\theta_\psi$ is the phenotype, and the fitness is of course  $F(\theta_\psi)$. \cite{Tomassini2005}. Since we simply input $\psi$ to the simulator that delivers $F(\theta_\psi)$, and $\theta$ is not really within the purview of the ES module, we will generally skip $\theta_\psi$, and simply write $F(\psi)$ instead, unless the distinction between geno- and phenotype is relevant. This also reflects the reality more precisely, with regards to our code.
+
+\subsection{Modifications}
+There are a number of modifications to the core ES idea of gradient descent with an estimated gradient, that are required for the algorithm to actually work in anything but the most ideal context. 
+
+\subsubsection{Fitness Shaping}
+Fitness shaping refers to the transformations one can perform on the output of $F$, generally in order to smoothen the optimization algorithm's movement. One such transformation that was particularly critical for our problem was rank transformation, i.e. for each gradient estimation distribution $F(\psi_t + \sigma\epsilon_i)$, we replace the value of $F_i$ with its index in the sorted list of $F_{0..n}$. This shaping is to prevent outliers from overly influencing the gradient estimate. If a value is extreme in one way or the other, it would otherwise either pull or push the next iteration $\psi_{t+1}$ proportionately. With rank transformation, this sensitivity to the random sampling of $\sigma\epsilon$ largely disappears. \cite{Wierstra2011}. 
+
+Another fitness shaping approach that we tried but ultimately did not keep was subpar sample flattening. Since we are more interested in being pulled \textit{towards} good solutions than being pushed away from bad ones, we ignore the half of the estimation distribution $\sigma\epsilon$ that performs worse than the mean, by setting those values equal to the mean. We tried this both in and out of conjunction with rank transformation, but it did not perform well in either case, having a negative or negligible influence, for reasons that are hard to intuit.
+
+\subsubsection{Antithetical Sampling}
+Another measure to reduce the impact of variance in the sampling of $\sigma\epsilon$ is antithetical sampling. This means that for every point $\psi_t + \sigma\epsilon_i$ we sample, we evaluate its complement, $\psi_t - \sigma\epsilon_i$ as well. \cite{Salimans2017}. This means that there are always an equal number of points on either side of the distribution, and the estimated gradient is not thrown off by extreme stochastic outcomes in this regard.
 
 
 \section{Fan Search}
