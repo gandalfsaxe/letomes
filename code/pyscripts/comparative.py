@@ -25,7 +25,7 @@ G4 = np.exp(-((X - mux) ** 2 + (Y - muy) ** 2) / 2.0 * sigma ** 2)
 G = G1 + G2 - G3 - G4
 
 # uncomment this line if you want smooth toy-problem
-# pspace = G
+pspace = G
 dims = pspace.shape
 print(dims)
 
@@ -131,6 +131,7 @@ im = ax_rg_pspace.imshow(
     vmax=max(pspace.flatten()),
     extent=[0, dims[0], 0, dims[1]],
     interpolation="none",
+    origin='lower'
 )
 im2 = ax_es_pspace.imshow(
     colors,
@@ -138,6 +139,7 @@ im2 = ax_es_pspace.imshow(
     vmax=max(pspace.flatten()),
     extent=[0, dims[0], 0, dims[1]],
     interpolation="none",
+    origin='lower'
 )
 
 # ========= colorbars =========================

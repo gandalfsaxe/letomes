@@ -70,6 +70,7 @@ if __name__ == "__main__":
         vmax=max(scores.flatten()),
         extent=[lbb, ubb, lbp, ubp],
         interpolation="none",
+        origin='lower'
     )
     plt.colorbar()
     ax.set_xlabel("burnDv")
