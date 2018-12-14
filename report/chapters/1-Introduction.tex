@@ -3,7 +3,9 @@
 \chapter{Introduction}
 Colonization and proliferation has long been an ambition for humanity. With the earth fully explored (more or less), the next obvious frontier is space. Particularly our moon, and the relatively close and temperate Mars. In a lunar or Martian colony scenario, the first several decades will certainly be completely reliant on continuous support from earth, ferrying supplies and humans between the bodies. However, transporting mass into space is very costly. In a presentation given in 2005, the then NASA Administrator Michael Griffin mentioned the cost of launching payload into LEO was estimated to be $\$10,000$/kg \cite[p.~344]{Rapp2016}. Since then private space enterprise have pushed down the prices much further. The SpaceX Falcon Heavy launch vehicle had it's maiden launch on February 6, 2018, and can launch a payload of \SI{63800}{\kg} into LEO at a cost of $\$90$ million, equivalent to $\$710$/kg \cite{SpaceX}.
 
-The Trump administration aims for NASA to have boots on Mars in 2033 \cite{Mack}. SpaceX maintains an aspirational goal of sending first cargo to Mars in 2022, and both cargo and human crew to Mars in 2024 \cite{SpaceXa}, with Elon Musk suggesting initiating base building on Mars as early as 2028 \cite{Williams}. The earliest tests of the BFR (Big Falcon Rocket \footnote{Unofficially the F is also known for a more colorful adjective}) is expected in 2019 \cite{SpaceXa}, see \cref{fig:musk-launch-vehicles} for launch vehicle overview.
+The Trump administration have pledged to sending astronauts back around the Moon in 2023, and land astronauts on the surface no later than the late 2020s, and have a long-term presence on the Moon \cite{NASA2018}, even mentioning using water on the surface as rocket fuel for Mars and beyond. NASA also to have boots on Mars in 2033 \cite{Mack}.
+
+SpaceX maintains an aspirational goal of sending first cargo to Mars in 2022, and both cargo and human crew to Mars in 2024 \cite{SpaceXa}, with Elon Musk suggesting initiating base building on Mars as early as 2028 \cite{Williams}. The earliest tests of the BFR (Big Falcon Rocket \footnote{Unofficially the F is also known for a more colorful adjective}) is expected in 2019 \cite{SpaceXa}, see \cref{fig:musk-launch-vehicles} for launch vehicle overview.
 
 \begin{figure}[ht]
 	\centering
@@ -31,7 +33,7 @@ We will now shift our attention back to the point about 9/10 of the 100,000 trip
 
 Given the authors focus on machine learning during our MSc degrees, we found it relevant to pose the question: Is it possible to find LETOs more efficiently than brute force search as was done in \cite{Saxe2015}? Furthermore we wanted to look into LETOs to Mars as well.
 
-We decided to focus our attention on Evolution Strategies as a search method for LETOs. Evolution Strategies (ES) are a class of machine learning algorithms that attempt to emulate a sort of natural selection process to optimize some black box process through an estimated gradient, as opposed to explicitly calculated gradient. This estimated gradient can then be used in a gradient descent in parameter space towards optimal solutions. Incidentally a paper \cite{Izzo2018} was published on this exact topic after we started work on this thesis, so it appears to be an idea ripe for exploration.
+We decided to focus our attention on Evolution Strategies as a search method for LETOs. Evolution Strategies (ES) are a class of machine learning algorithms that attempt to emulate a sort of natural selection process to optimize some black box process through an estimated gradient, as opposed to explicitly calculated gradient. This estimated gradient can then be used in a gradient descent in parameter space towards optimal solutions.
 
 Thus we explore both the Earth-Moon system in 2D and Sun-Earth-Mars system in 3D, in parallel. Furthermore wanted to give great attention to the software engineering aspect of the project. We used project code of \cite{Saxe2015} as reference, but we have reimplemented the work present in that project, and have gone to some length to engineer the simulator for extensibility and maintainability. We confront the often-present tradeoff between maintainability and performance, in whose pursuit the simulator is implemented in C, and parallelized for GPUs through Nvidia CUDA.
 
@@ -47,6 +49,7 @@ To support these two main goals, we wanted to do everything from scratch and set
 	\item Discretization of equations of motion into numerical algorithms using symplectic integrators to ensure adequate energy conversation.
 	\item Implementation of these numerical algorithms in a computer program written in Python, for ease of prototyping and testing.
 	\item Re-implementation of Python code in C / CUDA code that theoretically allowed us to run thousands of simulations in parallel.
+	\item Sensitivity analysis for the orbits of at least one of the two systems by investigating the Lyapunov exponent.
 \end{enumerate}
 Due to both authors' interest in software engineering post-graduation, we decided to invest significant time into software engineering best practices:
 \begin{enumerate}
