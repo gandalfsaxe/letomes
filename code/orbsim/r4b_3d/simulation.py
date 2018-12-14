@@ -153,8 +153,8 @@ def simulate(
             )
             break
 
-        # Q, B = euler_step_symplectic(h, Q, B, eph_coords)
-        Q, B = verlet_step_symplectic(h, Q, B, eph_coords)
+        Q, B = euler_step_symplectic(h, Q, B, eph_coords)
+        # Q, B = verlet_step_symplectic(h, Q, B, eph_coords)
 
         ts.append(t)
         days.append(day)
