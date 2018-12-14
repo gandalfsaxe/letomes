@@ -1,19 +1,74 @@
 % !TEX root =../thesis-letomes.tex
 
 \chapter{Results}
-The main aim of the project was twofold: to examine whether or not ES was a reasonable method to apply in this problem space, and to create a mars mission simulator to compare it with the lunar case, under the expectation that the two problems would be more or less similar. We have accomplished both these things, certainly, even though they did not take the shape we were initially expecting. In this chapter we will examine the various threads in the knotted mess that is this project, to see where they ended up.
+The main aim of the project was twofold: to examine whether or not ES was a reasonable method to apply in this problem space, and to create a mars mission simulator to compare it with the lunar case, under the expectation that the two problems would be more or less similar. We have accomplished both these things, certainly, even though they did not take the shape we were initially expecting. In this chapter we will examine the various threads of the project, to see where they ended up.
 
 \section{Evolution Strategies' fitness for this problem space}
 We implemented several versions of the fundamental ES concept, with different combinations of additions that have given good results in the literature. Certain additions had more impact than others, but no matter what variation we used, the results weren't exactly earth-shattering. The problem space has a fractured, fractal quality of very good solutions hiding among very bad ones. These solutions are not found in any particularly ingenious fashion by ES, nor by any gradient descent method, really. There are areas of good structure, where ES finds a local minimum just fine, but if the objective is simply to find a decent solution, then something naive like random guessing will also perform well, since the space is sufficiently dense with decent solutions. 
 
-When we computed the problem space flattened to two dimensions by locking the burn-angle to 0, we gained valuable information and intuition about its shape. 
+When we computed the problem space flattened to two dimensions by locking the burn-angle to 0, we gained valuable information and intuition about its shape. We are dealing with a heavily fractal space of ridges with a cross section of the approximate shape shown in figure \ref{fig:ridge_cross_section}
 
-% \begin{figure}[h]
-%     \includegraphics{fig/inESdivergingfromridge.png}
-%     \caption{Here we see the fractured, unorganized region pulling us away from the ridge}
-%     \label{fig:esdivergingfromridge}
-% \end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\linewidth]{fig/ridge_cross_section.png}
+    \caption{The problem space is populated densely by ridges with this approximate cross-section. There are infinitely many of these, if we extrapolate from what we have seen as we have zoomed in.}
+    \label{fig:ridge_cross_section}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.2\linewidth]{fig/consecutivezoom.png}
+    \caption{Repeated zoom-ins on the problem space show regions of fractal ridges, all but necessitating some adaptive variance measure. }
+    \label{fig:consecutivezoom}
+\end{figure} 
+
 
 
 
 \section{Finding LETOs to Mars}
+
+\section{Stability of Trajectories: Lyapunov Exponent}
+\subsection{Sensitivity analysis}
+
+In our experiments, we found that our paths were diverging pretty heavily given relatively small changes to initial conditions. This was a concern in the original project as well, but was not fully explored then. It is important to quantify the chaotic nature of a system like this, since we are dealing with numerical simulation, which will always have some error associated with it. One takes steps to minimize such errors, often sacrificing computing performance to do so. However, if a system has an error of magnitude say \(\num{1e-8}\), and the system is so chaotic that errors of or \(\num{1e-9}\) at one point early in the trajectory effect meaningful changes further down the line, then the path is near invalid! Therefore, it is important to try to quantify the chaos of a system (in this case our simulator), to provide assurances that the resulting paths have any meaningful truth to them. We have done this by calculating Lyapunov exponents for the system, explained below.
+
+\subsection{Lyapunov Exponent}
+
+The Lyapunov exponent describes the rate of change as time goes on between time series with infinitesimally different starting conditions, as they progress. The method is to compute a set of trajectories, and take the difference between them at set points in time (euclidean distance when dealing with higher dimensions). In a chaotic system, these two trajectories should diverge from each other at some exponential rate, and the Lyapunov exponent is that rate. If we want to trust our results, we want that number to be as low as possible. 
+
+\subsection{Implementation}
+
+We ran several simulations of known good trajectories, with their starting conditions very slightly perturbed, in such a way that the trajectories initially diverged from each other by a value less that 1e-8, chosen as the square root of the precision of the 64-bit floating point numbers that describe the coordinates. The trajectories were then discretized to synchronize the variable length of the time steps, and then compared in pairs, tick by tick, yielding a list of euclidean distances at each step. We then took the natural logarithm of these lists, giving us the plots pictured in figure \ref{fig:long_leto_slope} and \ref{fig:hohmann_slope}. The graph varied heavily depending on the gist of the trajectory in question, with trajectories that made multiple passes near earth giving the tooth-like distance graphs pictured in fig. \ref{fig:long_leto_slope}. Trajectories that did not visit earth more than once gave much more `normal' results, given what we see in the literature pertaining to Lyapunov exponent analysis. Clearly, passing into the LEO domain has a powerful stabilizing effect on the the chaotic system, acting like a focal lens for the trajectories passing through. It's not completely trivial to give a Lyapunov exponent from this, but since the individual tooth-segments have a more or less equivalent slope, we simply took the average slope of all the teeth. A deeper look into this cyclical chaos would be interesting, but we will not delve deeper than this.
+
+A good heuristic for whether or not our paths are precise enough would be a measure that would give some confidence interval for final position, given the gist of a trajectory, and the duration of flight along it. We have calculated such measures, presented in fig. \todoref{reflyapunov heuristic}.
+
+\begin{figure}
+    \centering
+    \subfloat[a straight-forward Hohmann transfer]{
+        \includegraphics[width=0.46\linewidth]{fig/path_hohmann_nonin_multi_0_and_3}
+        \label{fig:path_hohmann_non-inertial_multi}
+    }
+    \hfill
+    \subfloat[the rate of separation between infinitesimally perturbed versions of the Hohmann transfer]{
+        \includegraphics[width=0.46\linewidth]{fig/hohmann_slope_0_and_3}
+        \label{fig:hohmann_slope}
+    }
+    \\
+    \subfloat[a relatively long LETO path]{
+        \includegraphics[width=0.46\linewidth]{fig/path_long_leto_nonin_multi_1_and_3}
+        \label{fig:path_long_leto_non-inertial_multi}
+    }
+    \hfill
+    \subfloat[the rate of separation of two infinitesimally perturbed versions of the long LETO]{
+        \includegraphics[width=0.46\linewidth]{fig/long_leto_slope_1_and_3}
+        \label{fig:long_leto_slope}
+    }
+    \caption{Examples of some of the different types of transfers that are possible within the model. Each of these were taken as starting points, and simulated again with slightly perturbed starting conditions. The difference between these perturbations were then measured, and plotted in \textbf{b} and \textbf{d}, on a logarithmic scale. The slope of these plots is the lyapunov exponent. We can see that passing into a deep gravity well has a stabilizing effect on the chaos in the system.}
+    \label{fig:lyapunov}
+\end{figure} 
+
+Our analysis shows that given an initial perturbation in the order of \num{1e-6}, after 200 days we have an uncertainty of 50.000 kilometers. This is a very liberal upper bound for both our error and our flight time. A definite confirmation that the system is significantly chaotic, but not enough to invalidate our results. 
+
+A more reasonable initial perturbation on the order of \num{1e-8} (one order of magnitude greater than our error tolerance) gives us an uncertainty of less than \SI{2700}{km} after the same 200 days (before we pass the moon, which of course stops one path, and heavily diverges the other). This is very manageable for a spacecraft, since it can adjust for these imprecisions with its guidance thrusters early in the process.
+
+The mean slope for our longer and shorter missions remain the same within a single order of magnitude, (\num{1e-5}-\num{1e-4}), which is encouraging. Our conclusion with regards to the chaos of the system is that it is significant, and will need to be corrected for dynamically in an actual mission, but that it does not invalidate any trajectories that we find, since the aforementioned dynamic corrections are completely covered by modern- (and to an extent, even vintage) spacecraft capabilities.

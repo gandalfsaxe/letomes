@@ -6,7 +6,7 @@ The project has been defined by a relatively wide scope of disciplines that we h
 
 
 \section{Software Architecture Overview}
-Our system is organized as two modules with an interface between them. The top-level module is the ES algorithm and its various auxiliary functions, and the bottom level module is the orbsim module, which takes care of the astrophysics aspect; turning launch parameters into trajectories. Between them is an interface that turns machine learning parameters into astrophysics parameters, and the reverse. Visualized in \cref{fig:software_architecture}, this architecture lets us keep variable names consistent with the literature for both domains. The multidisciplinary nature of this project and its authors made this a boon.
+Our system is organized as two general spheres with an interface between them. One sphere is the ES algorithm and its various auxiliary functions, and the other is the orbsim module, which takes care of the astrophysics aspect; turning launch parameters into trajectories. Between them is an interface that turns machine learning parameters into astrophysics parameters, and the reverse. Visualized in \cref{fig:software_architecture}, this architecture lets us keep variable names consistent with the literature for both domains. The multidisciplinary nature of this project and its authors made this a boon.
 
 \begin{figure}
     \centering
@@ -43,10 +43,6 @@ This contains the main loop of our simulator algorithm, along with subfunctions 
 This module contains a ton of different convenience functions that compute some intermediate equation for use in the main algorithm. They are hidden away here to reduce clutter in \texttt{Integrators.py}.
 
 \subsection{The ES module}
-\begin{enumerate}
-    \item hyperparameters
-    \item trial and error (finding a model that worked)
-\end{enumerate}
 
 The ES module conducts black-box optimization on a decision vector that describes the initial parameters for a launch. Every time the algorithm wants to find the fitness of a given point in our parameter space, it calls the orbsim module with those parameters, using the returned value as the function to minimize. The algorithm is parallelized through the use of PaGMO, which runs the ES algorithm on multiple cores independently, with many separate starting conditions.
 
@@ -62,7 +58,7 @@ This function is run in parallel on many cores, each with a different set of sta
 
 Originally, we took care of parallelization with PyGMO's method of creating an archipelago, i.e a collection of islands. Each island would then run the algorithm on their own separate populations. Each island is assigned its own thread of execution. This convenient metaphor and easy implementation was the main draw of PyGMO for us, but we found that it introduced a significant performance overhead, and furthermore did not allow customization to the degree that we required. We therefore reimplemented the parallelization with less abstraction towards the end of the project.
 
-\subsection{Adaptive Measures}
+\subsection{Early Adaptive Measures}
 With our original, relatively unrestrained boundaries (two full circles, and a wide range of thrust power), we naturally saw a very large amount of failures. Many were cheap, computationally such as those that shot directly into the earth. Others were very expensive, like ones that were only barely above escape velocity, and just orbited the earth until the iteration counter maxed out. The model also wasted a lot of time looking at paths that were unmitigably bad: shooting at full power directly away from the moon, for example. With small perturbations of $\psi$, those paths see very little in the way of improvement, so for an inordinate number of evolution cycles, such paths would languish in that neighborhood, never getting better. Our human intuition tells us, of course, that it's more feasible to simply kill that candidate, and re-randomize. However, this has the effect of selecting for individuals that converge very quickly. That, as it turns out means selecting for Hohmann transfers, essentially, since they are much less sensitive to perturbations. We are not looking for the straight-forward solutions, but rather the unexpected ones. The paths that were successful in \cite{Saxe2015} were a hairs breadth in either direction from spinning off into oblivion, at least from the perspective of an algorithm working with a black-box simulator. 
 
 This means that it is at least principally important that we do not discard individuals for performing poorly initially, given the very 'all-or-nothing' nature of the problem space. We did, however, in the interest of computing time, try to nudge them on a little, by implementing a relatively naive system of adaptive learning rate and adaptive jitter spread. If an individual performs very poorly, we use our knowledge that its neighbors in a wide area will likely perform similarly, and increase its search radius $\sigma$ by some factor. This means that it will have a higher chance of selecting some jitter points that show some improvement, either by getting it closer to the target or by hitting it. Then, once the cloud of jittered points $\epsilon$ has been weighted, and our direction has been found, the step $\alpha$ that we take in that direction is commensurately increased as well. The idea is essentially a softer version of the notion of killing under-performing individuals, mentioned above, since if the scaling factor for $\alpha$ and $\sigma$ were very large, that would be essentially equivalent to re-initializing the point entirely. This method at least retains the idea of giving the mavericks a chance to find that one crazy solution that comes out of nowhere.
