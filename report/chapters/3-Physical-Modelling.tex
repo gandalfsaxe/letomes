@@ -546,7 +546,7 @@ First we recall that there are four possible orbit types in a two-body system th
     }
     \hfill
     \subfloat[Examples of the four orbit types of a two-body system and their eccentricities (Image: \cite{Seahen} (modified)).]{
-        \includegraphics[width=0.47\linewidth]{fig/Eccentricity.pdf}
+        \includegraphics[width=0.40\linewidth]{fig/Eccentricity.pdf}
         \label{fig:orbit-types}
     }
     \caption{The four types of conic sections, corresponding to the four kinds of orbits for a two-body gravitational system. Some authors count three types, with the circle being a special case of the ellipse.}
@@ -577,17 +577,13 @@ For a interplanetary transfer orbit we can use the Hohmann transfer orbit as the
 	\item Elliptical transfer orbit (Heliocentric reference frame).
 	\item Hyperbolic arrival orbit (Mars-centric reference frame).
 \end{enumerate}
-
 \cref{fig:Hohmann-to-mars-heliocentric} show necessary speeds on Hohmann orbit and the orbit speed of Earth and Mars. 
-
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.7\linewidth]{fig/Hohmann-to-mars-heliocentric.png}
     \caption{Hohmann transfer to Mars with necessary departure speed (periapsis at Earth) and arrival speed (apoapsis at Mars) on Hohmann orbit relative to Sun (Image: \cite[p.~127]{Rapp2016} (modified)).}
     \label{fig:Hohmann-to-mars-heliocentric}
 \end{figure}
-
-
 Why are the departure and arrival orbits modelled as hyperbolic? It turns out that we need extra speed from LEO to enter a transfer orbit that intersects Mars, meaning we need some velocity in excess to escape velocity. Likewise we \emph{always} arrive at other bodies in a hyperbolic orbit as seen from that body. If we started with zero speed approaching from infinitely far away and waited a duration approaching infinity, we would get the escape velocity when reaching the planet (this is just escaping with the exact escape velocity in reverse). But since we in practice always come with some other speed than the body we approach (here Mars), get arrive with speed in excess to the escape velocity, hence along a hyperbolic orbit, as shown in table in \cref{tab:orbit-type-properties}.
 
 As \cref{fig:Hohmann-to-mars-heliocentric} shows, we arrive at Mars' orbit with less speed than Mars \emph{if Mars wasn't there}, but actually need to slow down due to the attraction of Mars that results in higher speed to necessary for a circular orbit in target altitude \SI{125}{\km}. Thus overall we get a hyperbolic departure orbit, patched with an elliptical orbit, patched with another hyperbolic arrival orbit, with required speeds as illustrated in figure \cref{fig:Hohmann-to-mars-geocentric-areocentric}.
@@ -637,7 +633,7 @@ Mars orbital inclination is $1.85^\degree$ to the ecliptic plane. Therefore if o
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.90\linewidth]{fig/hohmann-transfer-orbit-3D.png}
+    \includegraphics[width=0.80\linewidth]{fig/hohmann-transfer-orbit-3D.png}
     \caption{Hohmann orbit in a 3D model needs a small $\Delta v$ in the $\phi$ direction to get out of the plane in such a way that it will be in the orbital plane at Mars at apoapsis (Image: \cite{Daedalis.de})}
     \label{fig:hohmann-transfer-orbit-3D}
 \end{figure}

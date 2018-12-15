@@ -3,10 +3,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[         0,          0]
-NotebookDataLength[     78365,       1874]
-NotebookOptionsPosition[     67119,       1665]
-NotebookOutlinePosition[     67700,       1689]
-CellTagsIndexPosition[     67628,       1684]
+NotebookDataLength[     79885,       1907]
+NotebookOptionsPosition[     68355,       1695]
+NotebookOutlinePosition[     68936,       1719]
+CellTagsIndexPosition[     68864,       1714]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1657,7 +1657,37 @@ Cell[TextData[{
 }], "Reference",
  Editable->False,
  TaggingRules->{ReferenceNoteData -> ""},
- CellTags->"0000369E",ExpressionUUID->"26a1ab04-b123-45d2-8db8-87b6d8cab182"]
+ CellTags->"0000369E",ExpressionUUID->"26a1ab04-b123-45d2-8db8-87b6d8cab182"],
+
+Cell["For good illustrations of hyperbolic orbits, see:", "Text",
+ CellChangeTimes->{{3.753860974843369*^9, 
+  3.7538610536410723`*^9}},ExpressionUUID->"f6009a45-e35a-4bb6-8ecf-\
+94a0526c75cd"],
+
+Cell[TextData[ButtonBox["http://hopsblog-hop.blogspot.com/2013/03/what-heck-\
+is-vinf.html",
+ BaseStyle->"Hyperlink",
+ ButtonData->{
+   URL["http://hopsblog-hop.blogspot.com/2013/03/what-heck-is-vinf.html"], 
+   None},
+ ButtonNote->
+  "http://hopsblog-hop.blogspot.com/2013/03/what-heck-is-vinf.html"]], "Text",
+ CellChangeTimes->{{3.753861056161632*^9, 
+  3.7538610666325827`*^9}},ExpressionUUID->"5e2a4e65-cd59-41da-bae7-\
+7a5d008271d9"],
+
+Cell[TextData[ButtonBox["https://www.researchgate.net/figure/Departure-orbit-\
+geometry-Source-Curtis-p-443-7-Hence-the-velocity-of-the_fig3 _ 323256893",
+ BaseStyle->"Hyperlink",
+ ButtonData->{
+   URL["https://www.researchgate.net/figure/Departure-orbit-geometry-Source-\
+Curtis-p-443-7-Hence-the-velocity-of-the_fig3_323256893"], None},
+ ButtonNote->
+  "https://www.researchgate.net/figure/Departure-orbit-geometry-Source-Curtis-\
+p-443-7-Hence-the-velocity-of-the_fig3_323256893"]], "Text",
+ CellChangeTimes->{
+  3.753861049539168*^9},ExpressionUUID->"0f4993f6-f0df-4068-a40f-\
+93d978e37177"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
@@ -1683,7 +1713,7 @@ CellTagsIndex->{
 *)
 (*CellTagsIndex
 CellTagsIndex->{
- {"0000369E", 67477, 1678}
+ {"0000369E", 68713, 1708}
  }
 *)
 (*NotebookFileOutline
@@ -1864,7 +1894,10 @@ Cell[65335, 1597, 499, 15, 35, "Text",ExpressionUUID->"686095d7-b578-466f-a123-8
 Cell[65837, 1614, 773, 20, 35, "Text",ExpressionUUID->"78c453d7-0bf1-4208-bf49-0aef91425695"],
 Cell[66613, 1636, 71, 0, 35, "Text",ExpressionUUID->"0071cb44-4c35-4dea-8da8-a1a077617d25"],
 Cell[66687, 1638, 380, 21, 26, "Reference",ExpressionUUID->"26a1ab04-b123-45d2-8db8-87b6d8cab182",
- CellTags->"0000369E"]
+ CellTags->"0000369E"],
+Cell[67070, 1661, 193, 3, 35, "Text",ExpressionUUID->"f6009a45-e35a-4bb6-8ecf-94a0526c75cd"],
+Cell[67266, 1666, 439, 10, 35, "Text",ExpressionUUID->"5e2a4e65-cd59-41da-bae7-7a5d008271d9"],
+Cell[67708, 1678, 595, 11, 35, "Text",ExpressionUUID->"0f4993f6-f0df-4068-a40f-93d978e37177"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
