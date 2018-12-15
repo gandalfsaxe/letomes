@@ -180,6 +180,7 @@
     "discretized",
     "ephemerides",
     "ephemeris",
+    "geno",
     "getcwd",
     "hohmann",
     "hyperparameters",
