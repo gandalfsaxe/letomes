@@ -22,10 +22,6 @@ When we computed the problem space flattened to two dimensions by locking the bu
     \caption{The problem space is populated densely by ridges with the approximate cross-section seen in \cref{fig:ridge_cross_section}. There are infinitely many of these, if we extrapolate from what we have seen as we have zoomed in.}
 \end{figure}
 
-The fractal nature of the space heavily indicates that some variational optimization method would help. If we are to follow ridges of arbitrary width, we need to be able to scale our across-ridge variance down, so most of $\sigma\epsilon$ falls within the ridge we are following. See \cref{fig:confusioninfractalarea} for examples of the confusion that we see when we are looking at a fractal area. We did not extend the algorithm with proper variational training, but a 'fake' version of it, with a linearly declining $\sigma$ and a strategically chosen starting point gave us some promising signs. In \cref{fig:chilling_on_ridge}, this is implemented, and it lets us stay within the bounds of the ridge. We would need to implement this properly to make any conclusions. 
-
-If a measure like this were added, we could use it as a meaningful stopping criterion as well. Once $\sigma$ is on the order of \num{1e-4} in the 'position' dimension for example, the required precision of the associated maneuver is in the order of tenths of a second. This is not really a reasonable sensitivity for an actual Moon mission. Thus, when we take reality into account, we see that we can't really use solutions that are too granular. What we are looking for are patches of adjacent good solutions at a large enough scale that they allow \emph{some} flexibility in terms of when the maneuver is begun and how hard we burn.
-
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\linewidth]{fig/consecutivezoom.png}
@@ -35,30 +31,81 @@ If a measure like this were added, we could use it as a meaningful stopping crit
 
 \begin{figure}
     \centering
-    \subfloat[The algorithm experiences confusion when it starts in a fractal area]{
+    \subfloat[Optimization path]{
         \includegraphics[width=0.46\linewidth]{fig/confusioninfractalarea}
         \label{fig:confusioninfractalarea}
     }
     \hfill
-    \subfloat[Here we see the algorithm locating and settling in a ridge]{
+    \subfloat[current (red), best (black), and average (blue) score at each iteration]{
+        \includegraphics[width=0.46\linewidth]{fig/confusioninfractalarea_scoreplot}
+        \label{fig:confusioninfractalarea_scoreplot}
+    }
+    \caption{The algorithm experiences confusion when it starts in a fractal area}
+\end{figure}
+\begin{figure}[ht]
+    \subfloat[Optimization path]{
         \includegraphics[width=0.46\linewidth]{fig/findingridge.PNG}
         \label{fig:findingridge}
     }
-    \\
-    \subfloat[We see that there is not much of a gradient along the ridges. This might indicate that a momentum-based strategy might be a valuabe addition, if we want to search the ridges properly. CMA-ES is also an interesting prospect, for the same reason.]{
+    \hfill
+    \subfloat[current (red), best (black), and average (blue) score at each iteration]{
+        \includegraphics[width=0.46\linewidth]{fig/findingridge_scoreplot}
+        \label{fig:findingridge_scoreplot}
+    }
+    \caption{Here we see the algorithm locating and settling in a ridge}
+\end{figure}
+\begin{figure}[ht]
+    \subfloat[Optimization path]{
         \includegraphics[width=0.46\linewidth]{fig/chilling_on_ridge.png}
         \label{fig:chilling_on_ridge}
     }
     \hfill
-    \subfloat[Nicely finding a ridge and staying on it.]{
+    \subfloat[current (red), best (black), and average (blue) score at each iteration]{
+        \includegraphics[width=0.46\linewidth]{fig/chilling_scoreplot}
+        \label{fig:chilling_scoreplot}
+    }
+    \caption{We see that there is not much of a gradient along the ridges. This might indicate that a momentum-based strategy might be a valuabe addition, if we want to search the ridges properly. CMA-ES is also an interesting prospect, for the same reason.}
+\end{figure}
+\begin{figure}[ht]
+    \subfloat[Optimization path nicely finding a ridge and staying on it.]{
         \includegraphics[width=0.46\linewidth]{fig/EScatchingridge.png}
         \label{fig:EScatchingridge}
     }
-    \caption{Various examples of the ES algorithm acting from different starting points.}
+    \hfill
+    \subfloat[current (red), best (black), and average (blue) score at each iteration]{
+        \includegraphics[width=0.46\linewidth]{fig/EScatchingridge_scoreplot}
+        \label{fig:EScatchingridge_scoreplot}
+    }
+    \caption{Various examples of the ES algorithm acting from different starting points. A linear variance reduction scheme is present in \cref{fig:chilling_on_ridge}, to gauge the impact of a true variational optimization measure.}
     \label{fig:ES-examples} 
 \end{figure} 
 
+\subsection{Comparison with Baseline}
+Comparing the ES algorithm with a random guessing baseline, we do not get very encouraging results \cref{fig:baselinecompare}.
 
+\begin{figure}[ht]
+    \subfloat[Random guessing with 2000 fitness evaluations]{
+        \includegraphics[width=0.46\linewidth]{fig/randomguessing.png}
+        \label{fig:randomguessing}
+    }
+    \hfill
+    \subfloat[current (red), best (black), and average (blue) score at each iteration]{
+        \includegraphics[width=0.46\linewidth]{fig/randomguessing_scoreplot}
+        \label{fig:randomguessing_scoreplot}
+    }
+    \caption{We tried an approach of random guessing, with an equal fitness evaluation budget to the integer valued ES runs (2000). Clearly, random guessing performs very well when looking for decent solutions, since the space is pretty dense with them in 2D, and with these bounds. The average solution found is worse, so there is perhaps still an argument to be made for ES, even at this scale.}
+    \label{fig:randomguessingufig} 
+\end{figure} 
+
+\section{Real-valued ES algorithm}
+The algorithm that generated the problem space plots seen throughout this work has been working with a precomputed grid of fitness values (\cref{fig:golf_course_s1024}). It's of relatively high resolution, but in a fractal space, any fixed resolution is too low. For that reason, we also maintain a real-value version of the algorithm that works in the full, original 3-dimensional problem space. It runs on the GPU optimized C-version of the Moon-mission simulator (\cref{fig:software_architecture}), and runs the algorithm truly at scale. It does not, however, give us results as nice as the ones we see from the graphical ES algorithm. A selection of scores from this model can be seen in \cref{fig:GPUresults}. There are thousands of these patterns, where the algorithm strikes upon a good solution once in a while, but they are not very interesting, and hard to communicate visually. The difficulty in examining the results en masse make it hard to figure out why we see this difference. As it is now, it looks eerily similar to the performance of random guessing.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\linewidth]{fig/GPUresults.png}
+    \caption{log-fitness score of selected individuals as they evolve through the Real-valued GPU-version of the algorithm. There are thousands more graphs like these, but they all look similarly uninteresting. The difference may be due to the additional degree of freedom in this version of the algorithm.}
+    \label{fig:GPUresults}
+\end{figure} 
 
 \section{Finding LETOs to Mars}
 
@@ -75,7 +122,7 @@ The Lyapunov exponent describes the rate of change as time goes on between time 
 
 We ran several simulations of known good trajectories, with their starting conditions very slightly perturbed, in such a way that the trajectories initially diverged from each other by a value less that 1e-8, chosen as the square root of the precision of the 64-bit floating point numbers that describe the coordinates. The trajectories were then discretized to synchronize the variable length of the time steps, and then compared in pairs, tick by tick, yielding a list of euclidean distances at each step. We then took the natural logarithm of these lists, giving us the plots pictured in \cref{fig:long_leto_slope,fig:hohmann_slope}. The graph varied heavily depending on the gist of the trajectory in question, with trajectories that made multiple passes near earth giving the tooth-like distance graphs pictured in \cref{fig:long_leto_slope}. Trajectories that did not visit earth more than once gave much more `normal' results, given what we see in the literature pertaining to Lyapunov exponent analysis. Clearly, passing into the LEO domain has a powerful stabilizing effect on the the chaotic system, acting like a focal lens for the trajectories passing through. It's not completely trivial to give a Lyapunov exponent from this, but since the individual tooth-segments have a more or less equivalent slope, we simply took the average slope of all the teeth. A deeper look into this cyclical chaos would be interesting, but we will not delve deeper than this.
 
-A good heuristic for whether or not our paths are precise enough would be a measure that would give some confidence interval for final position, given the gist of a trajectory, and the duration of flight along it. We have calculated such measures, presented in \todoref{reflyapunov heuristic}.
+A good heuristic for whether or not our paths are precise enough would be a measure that would give some confidence interval for final position, given the gist of a trajectory, and the duration of flight along it.
 
 \begin{figure}
     \centering

@@ -1,4 +1,10 @@
 % !TEX root =../thesis-letomes.tex
 
 \chapter{Conclusion}
+This thesis is multifaceted, solving astrophysics problems with machine learning, and containing what turned out to be a mastodontic software engineering and performance optimization task, necessary in order to facilitate the main goals. We have built three separate versions of the reduced 3-body moon mission problem, and used them for thousands of tests of hundreds of permutations of the fundamental ES concept. Our conclusion with regards to ES in this problem space is that it works well enough, given the permutations we have tried, but it is no panacea, no cure all that can magically find near-perfect solutions with little effort. It is often such with machine learning methods that there is some minor modification that can be made, which \textbf{radically} improves the results. The approaches we have tried have only succeeded in producing an "okay" search strategy. 
 
+We have also derived mathematical expressions that expand the problem into three spatial dimensions, and to an arbitrary number of the gravitational bodies in the solar system. Upon these foundations we developed another simulator, in order to let us simulate travel to Mars. That simulator remains with accuracy issues, owing to difficulties in scaling the time steps, and if we could go back and do it again we would definitely approach that problem differently. It has not been feasible to attempt ES on the Mars simulator, but we expect our conclusions about ES from the moon simulator to extend to here as well, broadly.
+
+We have written a large testing suite to ensure numerical consistency between mathematical derivations and simulator output, and gone to great lengths to assure proper architecture in our reusable modules. Orbsim has potential, with a bit more development, as a general framework, with its well-optimized (for CPU) code, robust plotting, and decent documentation. Both Moon and Mars simulators have furthermore been rewritten in C, with CUDA integration that lets them run massively parallel on Graphics Processors. This is critical for doing algorithmics at scale.
+
+\LARGE{Thank you for your attention}

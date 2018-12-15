@@ -2,20 +2,35 @@
 
 \chapter{Discussion}
 
-\todo{honestly, the problem is too low-dimensional for ES i think. The policy is too simple, so the RL-ES comparison is not that meaningful}
-
-\section{Brute Force vs. ES}
+\section{Fan Search vs. ES}
 In this section, we will examine the usefulness of using the ES algorithm over the brute force alternative. Do we get anything out of estimating a gradient? Do our results’ quality scale with a more complex model?
 
-The ES method is in the general case a more intelligent of searching for these things. However, its not a magical panacea that just spits out fabulous results from a naive application. The brute force method took advantage of a lot of human intuition in terms of where to search. We gave it a limited fan of possibilities in a region that we knew to be reasonable. The ES algorithm definitely gave the best results when we imposed equivalent limitations on it.
+The ES method is in the general case a more intelligent of searching for these things. However, its not a magical panacea that just spits out fabulous results from a naive application. The fan search method took advantage of a lot of human intuition in terms of where to search. We gave it a limited fan of possibilities in a region that we knew to be reasonable. The ES algorithm definitely gave the best results when we imposed equivalent limitations on it.
 
-\section{Delta-v Travel Time Trade-off}
-Delta-v Travel Time Trade-off. Plot this, if we can get enough different successful trajectories. What does that plot look like?
+\subsection{Variational Optimization}
+The fractal nature of the space heavily indicates that some variational optimization method would help. If we are to follow ridges of arbitrary width, we need to be able to scale our across-ridge variance down, so most of $\sigma\epsilon$ falls within the ridge we are following. See \cref{fig:confusioninfractalarea} for examples of the confusion that we see when we are looking at a fractal area. We did not extend the algorithm with proper variational training, but a 'fake' version of it, with a linearly declining $\sigma$ and a strategically chosen starting point gave us some promising signs. In \cref{fig:chilling_on_ridge}, this is implemented, and it lets us stay within the bounds of the ridge. We would need to implement this properly to make any conclusions. 
+
+\subsection{Stopping Criterion}
+If a measure like the above were added, we could use it as a meaningful stopping criterion as well. Once $\sigma$ is on the order of \num{1e-4} in the 'position' dimension for example, the required precision of the associated maneuver is in the order of tenths of a second. This is not really a reasonable sensitivity for an actual Moon mission. Thus, when we take reality into account, we see that we can't really use solutions that are too granular. What we are looking for are patches of adjacent good solutions at a large enough scale that they allow \emph{some} flexibility in terms of when the maneuver is begun and how hard we burn.
+
+\subsubsection{Ballpark Numbers for Realistic Precision Cutoff}
+The circular orbit angular speed is given by
+\begin{equation}
+    \omega = \sqrt{\frac{\mu}{(R_\Earth + h)^3}}    
+\end{equation}
+where $\mu = G M_\Earth$ and $h$ is the altitude above Earth's surface. 
+
+We will now assume that we can accurately control the burn start and stop time to a precision of order 1 second; 0.1 s seems too precise and 10 s seems too sloppy. This ``reaction time'' in turn gives us an uncertainty of angular position of:
+\begin{equation}
+    \Delta t = \omega \cdot 1 s = \sqrt{\frac{\mu}{(R_\Earth + \SI{160}{\km})^3}} \cdot \SI{1}{\second} = 0.001196 \ \text{rad}
+\end{equation}
+Thus, we cannot expect to be able to replicate a set of starting conditions that are sensitive to imprecision on the third or fourth decimal point.
+
 
 \section{Performance Optimization}
-Computing performance ended up representing a large portion of our efforts in this project, perhaps even more that we anticipated, and the tradeoff between code readability and performance was drawn in stark relief. We used several tools to make things easier: Initially, we wanted to get the parallelism 'for free' by using PaGMO to handle our multi-threading and use Numba to compile our python scripts. Seemed like a good idea; that's what the respective tools are made for. However, while Numba definitely gave fantastic performance increases over normal python, it was not enough. And while PaGMO worked fine (after some work getting it running at all), it only parallelized to CPUs, and had an absolutely hilarious startup overhead that made rapid prototyping (one of the main draws of python) tedious to say the least. 
+Computing performance ended up representing a large portion of our efforts in this project, perhaps even more that we anticipated, and the tradeoff between code readability and performance was drawn in stark relief. We used several tools to make things easier: Initially, we wanted to get the parallelism 'for free' by using PaGMO to handle our multi-threading and use Numba to compile our python scripts. Seemed like a good idea; that's what the respective tools are made for. However, while Numba definitely gave fantastic performance increases over normal python (200-300 times faster), it was not enough. And while PaGMO worked fine (after some work getting it running at all), it only parallelized to CPUs, and had an unacceptable startup overhead that made rapid prototyping (one of the main draws of python) tedious to say the least. 
 
-In the end, we had to apply the adage of \textit{"if you want something done right, do it yourself"}, and implement these things by hand, with a C implementation of the integrator, and a CUDA interface for parallelization. This of course also meant redesigning the otherwise simple ES algorithm to fit the much less sophisticated data types that graphics cards work with. It was easily worth the effort. This new iteration of the program completes four orders of magnitude more fitness evaluations in roughly the same time, compared to its predecessor. It makes it reasonable to get results with \textit{some} confidence that the problem space is significantly explored. 
+We had to apply the adage of \textit{"if you want something done right, do it yourself"}, and implement these things by hand, with a C implementation of the integrator, and a CUDA interface for parallelization. This of course also meant redesigning the otherwise simple ES algorithm to fit the much less sophisticated data types that graphics cards work with. It was easily worth the effort. This new iteration of the program completes four orders of magnitude more fitness evaluations in roughly the same time, compared to its predecessor. It makes it reasonable to get results with \textit{some} confidence that the problem space is significantly explored. 
 
 More performance would be nice, and definitely achievable, but we have hit a point of diminishing returns on further effort in this regard. The obvious possible improvements would be to reduce the number of variables that we save in the core integrator loop: We use 96 registers per parallel evaluation, which means that the card is memory capped at 25\% capacity. We could realistically expect a doubling in performance if we refactored the C integrator with this in mind. Again, we didn't bother with this, since the current speed is good \textit{enough}.
 
