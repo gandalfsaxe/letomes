@@ -44,7 +44,7 @@ if __name__ == "__main__":
         # Simple LEO without burn
         day = 0
         max_year = "2020"
-        h = 1 / UNIT_TIME
+        h = 1 * 60 / UNIT_TIME
         max_duration = 3600 * 12 / UNIT_TIME
         max_iter = 1e6
 
