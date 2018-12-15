@@ -6,9 +6,9 @@ The main aim of the project was twofold: to examine whether or not ES was a reas
 \section{Evolution Strategies' fitness for this problem space}
 We implemented several versions of the fundamental ES concept, with different combinations of additions that have given good results in the literature. Certain additions had more impact than others, but no matter what variation we used, the results weren't exactly earth-shattering. The problem space has a fractured, fractal quality of very good solutions hiding among very bad ones. These solutions are not found in any particularly ingenious fashion by ES, nor by any gradient descent method, really. There are areas of good structure, where ES finds a local minimum just fine, but if the objective is simply to find a decent solution, then something naive like random guessing will also perform well, since the space is sufficiently dense with decent solutions. 
 
-When we computed the problem space flattened to two dimensions by locking the burn-angle to 0, we gained valuable information and intuition about its shape. We are dealing with a heavily fractal space of ridges with a cross section of the approximate shape shown in figure \ref{fig:ridge_cross_section}
+When we computed the problem space flattened to two dimensions by locking the burn-angle to 0, we gained valuable information and intuition about its shape. We are dealing with a heavily fractal space of ridges with a cross section of the approximate shape shown in \cref{fig:ridge_cross_section}
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \subfloat[The approximate cross-section of the ridges]{
         \includegraphics[width=0.46\linewidth]{fig/ridge_cross_section.png}
@@ -19,14 +19,14 @@ When we computed the problem space flattened to two dimensions by locking the bu
         \includegraphics[width=0.46\linewidth]{fig/ridge.png}
         \label{fig:ridge}
     }
-    \caption{The problem space is populated densely by ridges with the approximate cross-section seen in \ref{fig:ridge_cross_section}. There are infinitely many of these, if we extrapolate from what we have seen as we have zoomed in.}
+    \caption{The problem space is populated densely by ridges with the approximate cross-section seen in \cref{fig:ridge_cross_section}. There are infinitely many of these, if we extrapolate from what we have seen as we have zoomed in.}
 \end{figure}
 
-The fractal nature of the space heavily indicates that some variational optimization method would help. If we are to follow ridges of arbitrary width, we need to be able to scale our across-ridge variance down, so most of $\sigma\epsilon$ falls within the ridge we are following. See figure \ref{fig:confusioninfractalarea} and \ref{fig:esdivergingfromridge} for examples of the confusion that we see when we are looking at a fractal area. We did not extend the algorithm with proper variational training, but a 'fake' version of it, with a linearly declining $\sigma$ and a strategically chosen starting point gave us some promising signs. In figure \ref{fig:chilling_on_ridge}, this is implemented, and it lets us stay within the bounds of the ridge. We would need to implement this properly to make any conclusions. 
+The fractal nature of the space heavily indicates that some variational optimization method would help. If we are to follow ridges of arbitrary width, we need to be able to scale our across-ridge variance down, so most of $\sigma\epsilon$ falls within the ridge we are following. See \cref{fig:confusioninfractalarea} for examples of the confusion that we see when we are looking at a fractal area. We did not extend the algorithm with proper variational training, but a 'fake' version of it, with a linearly declining $\sigma$ and a strategically chosen starting point gave us some promising signs. In \cref{fig:chilling_on_ridge}, this is implemented, and it lets us stay within the bounds of the ridge. We would need to implement this properly to make any conclusions. 
 
-If a measure like this were added, we could use it as a meaningful stopping criterion as well. Once $\sigma$ is on the order of \num{1e-4} in the 'position' dimension for example, the required precision of the associated maneouvre is in the order of tenths of a second. This is not really a reasonable sensitivity for an actual Moon mission. Thus, when we take reality into account, we see that we can't really use solutions that are too granular. What we are looking for are patches of adjacent good solutions at a large enough scale that they allow \emph{some} flexibility in terms of when the maneouver is begun and how hard we burn.
+If a measure like this were added, we could use it as a meaningful stopping criterion as well. Once $\sigma$ is on the order of \num{1e-4} in the 'position' dimension for example, the required precision of the associated maneuver is in the order of tenths of a second. This is not really a reasonable sensitivity for an actual Moon mission. Thus, when we take reality into account, we see that we can't really use solutions that are too granular. What we are looking for are patches of adjacent good solutions at a large enough scale that they allow \emph{some} flexibility in terms of when the maneuver is begun and how hard we burn.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=\linewidth]{fig/consecutivezoom.png}
     \caption{Repeated zoom-ins on the problem space show regions of fractal ridges, all but necessitating some adaptive variance measure. }
@@ -50,12 +50,12 @@ If a measure like this were added, we could use it as a meaningful stopping crit
         \label{fig:chilling_on_ridge}
     }
     \hfill
-    \subfloat[The rate of separation of two infinitesimally perturbed versions of the long LETO]{
+    \subfloat[Nicely finding a ridge and staying on it.]{
         \includegraphics[width=0.46\linewidth]{fig/EScatchingridge.png}
         \label{fig:EScatchingridge}
     }
-    \caption{Examples of some of the different types of transfers that are possible within the model. Each of these were taken as starting points, and simulated again with slightly perturbed starting conditions. The difference between these perturbations were then measured, and plotted in \textbf{b} and \textbf{d}, on a logarithmic scale. The slope of these plots is the lyapunov exponent. We can see that passing into a deep gravity well has a stabilizing effect on the chaos in the system.}
-    \label{fig:lyapunov} 
+    \caption{Various examples of the ES algorithm acting from different starting points.}
+    \label{fig:ES-examples} 
 \end{figure} 
 
 
@@ -73,9 +73,9 @@ The Lyapunov exponent describes the rate of change as time goes on between time 
 
 \subsection{Implementation}
 
-We ran several simulations of known good trajectories, with their starting conditions very slightly perturbed, in such a way that the trajectories initially diverged from each other by a value less that 1e-8, chosen as the square root of the precision of the 64-bit floating point numbers that describe the coordinates. The trajectories were then discretized to synchronize the variable length of the time steps, and then compared in pairs, tick by tick, yielding a list of euclidean distances at each step. We then took the natural logarithm of these lists, giving us the plots pictured in figure \ref{fig:long_leto_slope} and \ref{fig:hohmann_slope}. The graph varied heavily depending on the gist of the trajectory in question, with trajectories that made multiple passes near earth giving the tooth-like distance graphs pictured in fig. \ref{fig:long_leto_slope}. Trajectories that did not visit earth more than once gave much more `normal' results, given what we see in the literature pertaining to Lyapunov exponent analysis. Clearly, passing into the LEO domain has a powerful stabilizing effect on the the chaotic system, acting like a focal lens for the trajectories passing through. It's not completely trivial to give a Lyapunov exponent from this, but since the individual tooth-segments have a more or less equivalent slope, we simply took the average slope of all the teeth. A deeper look into this cyclical chaos would be interesting, but we will not delve deeper than this.
+We ran several simulations of known good trajectories, with their starting conditions very slightly perturbed, in such a way that the trajectories initially diverged from each other by a value less that 1e-8, chosen as the square root of the precision of the 64-bit floating point numbers that describe the coordinates. The trajectories were then discretized to synchronize the variable length of the time steps, and then compared in pairs, tick by tick, yielding a list of euclidean distances at each step. We then took the natural logarithm of these lists, giving us the plots pictured in \cref{fig:long_leto_slope,fig:hohmann_slope}. The graph varied heavily depending on the gist of the trajectory in question, with trajectories that made multiple passes near earth giving the tooth-like distance graphs pictured in \cref{fig:long_leto_slope}. Trajectories that did not visit earth more than once gave much more `normal' results, given what we see in the literature pertaining to Lyapunov exponent analysis. Clearly, passing into the LEO domain has a powerful stabilizing effect on the the chaotic system, acting like a focal lens for the trajectories passing through. It's not completely trivial to give a Lyapunov exponent from this, but since the individual tooth-segments have a more or less equivalent slope, we simply took the average slope of all the teeth. A deeper look into this cyclical chaos would be interesting, but we will not delve deeper than this.
 
-A good heuristic for whether or not our paths are precise enough would be a measure that would give some confidence interval for final position, given the gist of a trajectory, and the duration of flight along it. We have calculated such measures, presented in fig. \todoref{reflyapunov heuristic}.
+A good heuristic for whether or not our paths are precise enough would be a measure that would give some confidence interval for final position, given the gist of a trajectory, and the duration of flight along it. We have calculated such measures, presented in \todoref{reflyapunov heuristic}.
 
 \begin{figure}
     \centering
