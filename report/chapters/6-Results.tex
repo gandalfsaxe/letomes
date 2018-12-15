@@ -64,7 +64,7 @@ When we computed the problem space flattened to two dimensions by locking the bu
         \includegraphics[width=0.46\linewidth]{fig/chilling_scoreplot}
         \label{fig:chilling_scoreplot}
     }
-    \caption{We see that there is not much of a gradient along the ridges. This might indicate that a momentum-based strategy might be a valuabe addition, if we want to search the ridges properly. CMA-ES is also an interesting prospect, for the same reason.}
+    \caption{We see that there is not much of a gradient along the ridges. This might indicate that a momentum-based strategy might be a valuable addition, if we want to search the ridges properly. CMA-ES is also an interesting prospect, for the same reason.}
 \end{figure}
 \begin{figure}[ht]
     \subfloat[Optimization path nicely finding a ridge and staying on it.]{
@@ -80,9 +80,8 @@ When we computed the problem space flattened to two dimensions by locking the bu
     \label{fig:ES-examples} 
 \end{figure} 
 
-<<<<<<< HEAD
 \subsection{Comparison with Baseline}
-Comparing the ES algorithm with a random guessing baseline, we do not get very encouraging results \cref{fig:baselinecompare}.
+Comparing the ES algorithm with a random guessing baseline, we do not get very encouraging results \cref{fig:randomguessingufig}.
 
 \begin{figure}[ht]
     \subfloat[Random guessing with 2000 fitness evaluations]{
@@ -99,20 +98,19 @@ Comparing the ES algorithm with a random guessing baseline, we do not get very e
 \end{figure} 
 
 \section{Real-valued ES algorithm}
-The algorithm that generated the problem space plots seen throughout this work has been working with a precomputed grid of fitness values (\cref{fig:golf_course_s1024}). It's of relatively high resolution, but in a fractal space, any fixed resolution is too low. For that reason, we also maintain a real-value version of the algorithm that works in the full, original 3-dimensional problem space. It runs on the GPU optimized C-version of the Moon-mission simulator (\cref{fig:software_architecture}), and runs the algorithm truly at scale. It does not, however, give us results as nice as the ones we see from the graphical ES algorithm. A selection of scores from this model can be seen in \cref{fig:GPUresults}. There are thousands of these patterns, where the algorithm strikes upon a good solution once in a while, but they are not very interesting, and hard to communicate visually. The difficulty in examining the results en masse make it hard to figure out why we see this difference. As it is now, it looks eerily similar to the performance of random guessing.
+The algorithm that generated the problem space plots seen throughout this work has been working with a pre-computed grid of fitness values (\cref{fig:golf_course_s1024}). It's of relatively high resolution, but in a fractal space, any fixed resolution is too low. For that reason, we also maintain a real-value version of the algorithm that works in the full, original 3-dimensional problem space. It runs on the GPU optimized C-version of the Moon-mission simulator (\cref{fig:software_architecture}), and runs the algorithm truly at scale. It does not, however, give us results as nice as the ones we see from the graphical ES algorithm. A selection of scores from this model can be seen in \cref{fig:GPUresults}. There are thousands of these patterns, where the algorithm strikes upon a good solution once in a while, but they are not very interesting, and hard to communicate visually. The difficulty in examining the results en masse make it hard to figure out why we see this difference. As it is now, it looks eerily similar to the performance of random guessing.
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.6\linewidth]{fig/GPUresults.png}
     \caption{log-fitness score of selected individuals as they evolve through the Real-valued GPU-version of the algorithm. There are thousands more graphs like these, but they all look similarly uninteresting. The difference may be due to the additional degree of freedom in this version of the algorithm.}
     \label{fig:GPUresults}
-\end{figure} 
-=======
+\end{figure}
+
 \clearpage
 
 \section{3D Simulator: Finding LETOs to Mars}
 The 3D simulator based on a spherical coordinate system turned out to be a much more difficult project than anticipated:
->>>>>>> last report
 
 \begin{enumerate}
 	\item \textbf{The equations of motion turned out to be complicated}, as a restricted N-body system based on spherical coordinates turned out to be quite complicated set of equations, making it prone to typing mistakes when writing into code. In fact we spent many weeks trying to find out why it didn't work as planned, until we decided to systematically debug the program by doing unit testing all major equations with Mathematica and Pytest (as described in \cref{sec:unit-testing}).
