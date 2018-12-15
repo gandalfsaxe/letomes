@@ -41,7 +41,16 @@ The reason for using Hamiltonian's equations instead of Newton's is primarily th
 Once we have derived our equations of motion in the form of Hamilton's equations \cref{eq:hamiltons-equations}, we need to solve them. In 1887 and 1889, mathematicians Heinrich Bruns and Henri Poincaré showed that there is no general analytical solution to the three-body problem given by simple algebraic expressions and integrals \cite{Gowers2008}. This means have have to solve them numerically to get time time evolution of the coordinates and velocity for particular initial conditions and delta-v impulses.
 
 \subsection{Symplectic Integrators}
-Symplectic integrators are a class of integrators typically used in Hamiltonian systems that have the property that they preserve the energy very well over longer time. Thus symplectic algorithms have been employed in fields such as molecular dynamics and astronomy. ``Symplectic methods belong to the larger class of geometric numerical integration algorithms. These algorithms are constructed so that they preserve certain geometrical properties inherent in the system. Symplectic methods are so named because, when applied to problems in Hamiltonian mechanics, the algorithms preserve the linear symplectic structure inherent in the phase space representation of the dynamics.'' \cite{Donnelly2005}. We will therefore only use Symplectic integrators for our equations.
+Symplectic integrators are a class of integrators typically used in Hamiltonian systems that have the property that they preserve the energy very well over longer time. Informally, ``\textit{a symplectic map is a map which preserves the sum of areas projected onto the set of $(p_i,q_i)$ planes. It is the generalization of an area-preserving map}'' \cite{Weisstein}, as illustrated in \cref{fig:symplectic-area}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.90\linewidth]{fig/symplectic-area.png}
+    \caption{Area preservation in phase space (corresponding to preservation of the Hamiltonian), for various symplectic numerical methods for a pendulum (Image: \cite{Hairer})}
+    \label{fig:symplectic-area}
+\end{figure}
+
+Thus symplectic algorithms have been employed in fields such as molecular dynamics and astronomy. ``\textit{Symplectic methods belong to the larger class of geometric numerical integration algorithms. These algorithms are constructed so that they preserve certain geometrical properties inherent in the system. Symplectic methods are so named because, when applied to problems in Hamiltonian mechanics, the algorithms preserve the linear symplectic structure inherent in the phase space representation of the dynamics.}'' \cite{Donnelly2005}. We will therefore only use Symplectic integrators for our equations.
 
 
 \subsubsection{Symplectic Euler (1st Order Method)}
@@ -499,10 +508,6 @@ These equations of motion follow the procedures of \cref{eq:symplectic-verlet2}.
 
 \section{Interplanetary Transfer Orbits}
 
-
-\subsection{The Challenges of a Mars Transfer Orbit}
-Making the trip to Mars from Earth is not a simple task. 
-
 \subsection{Transfer Orbit to Mars: 2D Patched Conic Approximation} \label{sec:2d-patched-conic}
 For now we want to do away with many of the complexities described in the previous section, and make an approximation, which will give us a sense of the key numbers of getting to Mars:
 \begin{enumerate}
@@ -604,7 +609,11 @@ These numbers are an important approximate reference point to have when attempti
 
 \clearpage
 
-\subsection{Actual Hohmann Transfer Orbit in 3D}
+\subsection{Earth-Mars Transfer – Ignored Complications}
+In the section above there are a number of complications that we have ignored. For example, Earth and Mars have different eccentricities (0.0167 vs. 0.0934) meaning that its angular velocity changes considerably depending on whether it is near perihelion or aphelion at the time of transfer. For a better estimate we can no longer consider the orbit to be circular. \cite{Braeuniga} gives a great analysis of the Earth-Mars Hohmann transfer orbit in 3D.
+
+
+\subsubsection{Easiest Solution: Launch into The Right Plane – Actual Hohmann Transfer Orbit in 3D}
 In the previous section we detailed the important patched conic sections model in 2D. In our 3D simulator we will attempt something similar, but take the inclination of Mars' orbital plane into account.
 
 Mars orbital inclination is $1.85^\degree$ to the ecliptic plane. Therefore if one naively tried to rendezvous with Mars in the ecliptic plane it would be \( 1.52\ \text{AU} \cdot 1.85^\degree \pi / 180 = \SI{7.4e6}{\km} \) away. Instead we will attempt a 3D Hohmann transfer orbit as illustrated in \cref{fig:hohmann-transfer-orbit-3D} using the same launch parameters as was found in the 2D hohmann model in \cref{sec:2d-patched-conic}, but allowing the \(\phi\) angle to vary a bit to get slightly out of the plane.

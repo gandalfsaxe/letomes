@@ -2,12 +2,12 @@
 
 \chapter{Search Strategies}
 \section{Evolution Strategies} \label{sec:ES}
-OpenAI released a blog post \cite{Karpathy} with accompanying paper \cite{Salimans2017} in March 2017, where they announced ``Our finding continues the modern trend of achieving strong results with decades-old ideas''. Intuitively ES in a “guess and check” optimization process, where we start with some random parameters and then repeatedly 1) tweak the guess a bit randomly, and 2) move our guess slightly towards whatever tweaks worked better.
+OpenAI released a blog post \cite{Karpathy} with accompanying paper \cite{Salimans2017} in March 2017, where they announced ``Our finding continues the modern trend of achieving strong results with decades-old ideas''. Intuitively ES in a ``guess and check'' optimization process, where we start with some random parameters and then repeatedly 1) tweak the guess a bit randomly, and 2) move our guess slightly towards whatever tweaks worked better.
 
 The team applied evolution strategies (ES) to two reinforcement learning (RL)\footnote{Reinforcement learning is an area of machine learning concerned with how software agents ought to take actions in an environment so as to maximize some notion of cumulative reward.} scenarios and compared the performance with typical deep RL problems:
 
 \begin{enumerate}
-    \item MuJoCo\footnote{MuJoCo stands for Multi-Joint dynamics with Contact, and is a ``physics engine aiming to facilitate research and development in robotics, biomechanics, graphics and animation, and other areas where fast and accurate simulation is needed''. See \url{http://www.mujoco.org}} (see \cref{fig:mujoco}) trained faster with ES than A3C\footnote{Asynchronous Advantage Actor Critic (A3C), published in 2016 \cite{Mnih2016}, is a class of deep RL algorithms that is still close to state of the art among deep RL algorithms.}.
+    \item MuJoCo\footnote{MuJoCo stands for Multi-Joint dynamics with Contact, and is a ``\textit{physics engine aiming to facilitate research and development in robotics, biomechanics, graphics and animation, and other areas where fast and accurate simulation is needed}''. See \url{http://www.mujoco.org}} (see \cref{fig:mujoco}) trained faster with ES than A3C\footnote{Asynchronous Advantage Actor Critic (A3C), published in 2016 \cite{Mnih2016}, is a class of deep RL algorithms that is still close to state of the art among deep RL algorithms.}.
     \item Atari game playing (see \cref{fig:atari}) trained to similar performance with ES in 1 hour compared to 1 day with A3C. Atari games have also become a popular problem space for deep RP researchers
 \end{enumerate}
 
