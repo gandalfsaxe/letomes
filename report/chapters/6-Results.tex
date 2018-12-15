@@ -10,18 +10,53 @@ When we computed the problem space flattened to two dimensions by locking the bu
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.6\linewidth]{fig/ridge_cross_section.png}
-    \caption{The problem space is populated densely by ridges with this approximate cross-section. There are infinitely many of these, if we extrapolate from what we have seen as we have zoomed in.}
-    \label{fig:ridge_cross_section}
+    \subfloat[The approximate cross-section of the ridges]{
+        \includegraphics[width=0.46\linewidth]{fig/ridge_cross_section.png}
+        \label{fig:ridge_cross_section}
+    }
+    \hfill
+    \subfloat[a ridge in the problem space]{
+        \includegraphics[width=0.46\linewidth]{fig/ridge.png}
+        \label{fig:ridge}
+    }
+    \caption{The problem space is populated densely by ridges with the approximate cross-section seen in \ref{fig:ridge_cross_section}. There are infinitely many of these, if we extrapolate from what we have seen as we have zoomed in.}
 \end{figure}
 
-\begin{figure}
+The fractal nature of the space heavily indicates that some variational optimization method would help. If we are to follow ridges of arbitrary width, we need to be able to scale our across-ridge variance down, so most of $\sigma\epsilon$ falls within the ridge we are following. See figure \ref{fig:confusioninfractalarea} and \ref{fig:esdivergingfromridge} for examples of the confusion that we see when we are looking at a fractal area. We did not extend the algorithm with proper variational training, but a 'fake' version of it, with a linearly declining $\sigma$ and a strategically chosen starting point gave us some promising signs. In figure \ref{fig:chilling_on_ridge}, this is implemented, and it lets us stay within the bounds of the ridge. We would need to implement this properly to make any conclusions. 
+
+If a measure like this were added, we could use it as a meaningful stopping criterion as well. Once $\sigma$ is on the order of \num{1e-4} in the 'position' dimension for example, the required precision of the associated maneouvre is in the order of tenths of a second. This is not really a reasonable sensitivity for an actual Moon mission. Thus, when we take reality into account, we see that we can't really use solutions that are too granular. What we are looking for are patches of adjacent good solutions at a large enough scale that they allow \emph{some} flexibility in terms of when the maneouver is begun and how hard we burn.
+
+\begin{figure}[h]
     \centering
-    \includegraphics[width=1.2\linewidth]{fig/consecutivezoom.png}
+    \includegraphics[width=\linewidth]{fig/consecutivezoom.png}
     \caption{Repeated zoom-ins on the problem space show regions of fractal ridges, all but necessitating some adaptive variance measure. }
     \label{fig:consecutivezoom}
 \end{figure} 
 
+\begin{figure}
+    \centering
+    \subfloat[The algorithm experiences confusion when it starts in a fractal area]{
+        \includegraphics[width=0.46\linewidth]{fig/confusioninfractalarea}
+        \label{fig:confusioninfractalarea}
+    }
+    \hfill
+    \subfloat[Here we see the algorithm locating and settling in a ridge]{
+        \includegraphics[width=0.46\linewidth]{fig/findingridge.PNG}
+        \label{fig:findingridge}
+    }
+    \\
+    \subfloat[We see that there is not much of a gradient along the ridges. This might indicate that a momentum-based strategy might be a valuabe addition, if we want to search the ridges properly. CMA-ES is also an interesting prospect, for the same reason.]{
+        \includegraphics[width=0.46\linewidth]{fig/chilling_on_ridge.png}
+        \label{fig:chilling_on_ridge}
+    }
+    \hfill
+    \subfloat[The rate of separation of two infinitesimally perturbed versions of the long LETO]{
+        \includegraphics[width=0.46\linewidth]{fig/EScatchingridge.png}
+        \label{fig:EScatchingridge}
+    }
+    \caption{Examples of some of the different types of transfers that are possible within the model. Each of these were taken as starting points, and simulated again with slightly perturbed starting conditions. The difference between these perturbations were then measured, and plotted in \textbf{b} and \textbf{d}, on a logarithmic scale. The slope of these plots is the lyapunov exponent. We can see that passing into a deep gravity well has a stabilizing effect on the chaos in the system.}
+    \label{fig:lyapunov} 
+\end{figure} 
 
 
 
@@ -44,22 +79,22 @@ A good heuristic for whether or not our paths are precise enough would be a meas
 
 \begin{figure}
     \centering
-    \subfloat[a straight-forward Hohmann transfer]{
-        \includegraphics[width=0.46\linewidth]{fig/path_hohmann_nonin_multi_0_and_3}
+    \subfloat[A straight-forward Hohmann transfer (yellow-red gradient) and its perturbation (black)]{
+        \includegraphics[width=0.46\linewidth]{fig/path_hohmann_nonin_multi_0_and_3.pdf}
         \label{fig:path_hohmann_non-inertial_multi}
     }
     \hfill
-    \subfloat[the rate of separation between infinitesimally perturbed versions of the Hohmann transfer]{
+    \subfloat[The rate of separation between infinitesimally perturbed versions of the Hohmann transfer]{
         \includegraphics[width=0.46\linewidth]{fig/hohmann_slope_0_and_3}
         \label{fig:hohmann_slope}
     }
     \\
-    \subfloat[a relatively long LETO path]{
-        \includegraphics[width=0.46\linewidth]{fig/path_long_leto_nonin_multi_1_and_3}
+    \subfloat[A relatively long LETO path (black) and its perturbation (yellow-red gradient))]{
+        \includegraphics[width=0.46\linewidth]{fig/path_long_leto_nonin_multi_1_and_3.pdf}
         \label{fig:path_long_leto_non-inertial_multi}
     }
     \hfill
-    \subfloat[the rate of separation of two infinitesimally perturbed versions of the long LETO]{
+    \subfloat[The rate of separation of two infinitesimally perturbed versions of the long LETO]{
         \includegraphics[width=0.46\linewidth]{fig/long_leto_slope_1_and_3}
         \label{fig:long_leto_slope}
     }
@@ -71,4 +106,4 @@ Our analysis shows that given an initial perturbation in the order of \num{1e-6}
 
 A more reasonable initial perturbation on the order of \num{1e-8} (one order of magnitude greater than our error tolerance) gives us an uncertainty of less than \SI{2700}{km} after the same 200 days (before we pass the moon, which of course stops one path, and heavily diverges the other). This is very manageable for a spacecraft, since it can adjust for these imprecisions with its guidance thrusters early in the process.
 
-The mean slope for our longer and shorter missions remain the same within a single order of magnitude, (\num{1e-5}-\num{1e-4}), which is encouraging. Our conclusion with regards to the chaos of the system is that it is significant, and will need to be corrected for dynamically in an actual mission, but that it does not invalidate any trajectories that we find, since the aforementioned dynamic corrections are completely covered by modern- (and to an extent, even vintage) spacecraft capabilities.
+The mean slope for our longer and shorter missions remain the same within a single order of magnitude, (\numrange{1e-5}{1e-4}), which is encouraging. Our conclusion with regards to the chaos of the system is that it is significant, and will need to be corrected for dynamically in an actual mission, but that it does not invalidate any trajectories that we find, since the aforementioned dynamic corrections are completely covered by modern- (and to an extent, even vintage) spacecraft capabilities.

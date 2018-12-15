@@ -48,7 +48,7 @@ The advantages of ES is outlined in \cite{Karpathy} and can be summarized as fol
     \end{itemize}
     \item Higher robustness.
     \begin{itemize}
-        \item Has fewer hyperparameters. Several hyperparameters that are difficult to set in RL implementations are side-stepped in ES. The details are a little technical / not elaborated in blot post.
+        \item Has fewer hyperparameters. Several hyperparameters that are difficult to set in RL implementations are side-stepped in ES. The details are a little technical / not elaborated in blog post.
     \end{itemize}
 
     \item Structured exploration.
@@ -78,12 +78,12 @@ In conclusion we are interested in ES as an optimization algorithm for LETO sear
 \end{itemize}
 
 \subsection{NES Algorithm}
-In formal terms: Let \(F\) be the objective function with parameters \(\theta\). NES is the population from a distribution over parameters \(p_\psi (\theta)\), with hyperparameters \(\psi\). The procedure is then to optimize the expected objective value \(E_{\theta \sim p_\psi} F(\theta)\) by searching for \(\psi\) with stochastic gradient ascent. The gradient steps are taken with the estimator: \cite{Salimans2017}.
+In formal terms: \emph{``Let F denote the objective function acting on parameters θ. NES algorithms represent the population with a distribution over parameters \(p_\psi (\theta)\)—itself parameterized by $\psi$—and proceed to maximize the average objective value \(E_{\theta \sim p_\psi}\) over the population by searching for $\psi$ with stochastic gradient ascent. Speciﬁcally, using the score function estimator for $\nabla_\psi E_{\theta \sim p_\psi} F(\theta)$, [...] NES algorithms take gradient steps on $\psi$ with the following estimator:''} \cite[p.~2]{Salimans2017}
 \begin{equation}
     \nabla_\psi E_{\theta \sim p_\psi} F(\theta)
     = E_{\theta \sim p_\psi} \{F(\theta)~\nabla_\psi~log~p_\psi(\theta)\}
 \end{equation}
-In our problem, \(F\) is the stochastic score returned by our environment (the Earth-Mars-Sun system) with \(\theta\) representing the policy of an agent in the environment ($\Delta v$ for our spacecraft's path) and \(\psi\) being the parametrization of that policy (launch parameters: angle, velocity, launch-time). The algorithm mutates the launch parameters \(\psi\), checks how the resulting path \(\theta\) performs in the environment \(F\) and moves around the resulting n-dimensional optimization space with gradient descent along its estimated gradient, defined by a normally distributed weighted point cloud \(\epsilon\).
+In our problem, \(F\) is the score returned by our environment (the Earth-Moon or Earth-Mars-Sun system)(required $\Delta v$ for our spacecraft's path) with \(\theta\) representing a single path in the environment and \(\psi\) being the parametrization of that path (example launch parameters: starting position of spacecraft, angle of burn vector at time of maneouver, and magnitude of that burn vector). The algorithm mutates the launch parameters \(\psi\), checks how the resulting path \(\theta\) performs in the environment \(F\) and moves around the resulting n-dimensional optimization space with gradient descent along its estimated gradient, defined by a normally distributed weighted point cloud \(\epsilon\).
 
 \begin{figure}
     \centering
@@ -101,7 +101,17 @@ In our problem, \(F\) is the stochastic score returned by our environment (the E
 
 \end{figure}
 
-In genetic algorithm terms, the input parameters $\psi$ are the genotype, the resultant path $\theta_\psi$ is the phenotype, and the fitness is of course  $F(\theta_\psi)$. \cite{Tomassini2005}
+In genetic algorithm terms, the input parameters $\psi$ are the genotype, the resultant path $\theta_\psi$ is the phenotype, and the fitness is of course  $F(\theta_\psi)$. \cite{Tomassini2005}. Since we simply input $\psi$ to the simulator that delivers $F(\theta_\psi)$, and $\theta$ is not really within the purview of the ES module, we will generally skip $\theta_\psi$, and simply write $F(\psi)$ instead, unless the distinction between geno- and phenotype is relevant. This also reflects the reality more precisely, with regards to our code.
+\subsection{Modifications}
+There are a number of modifications to the core ES idea of gradient descent with an estimated gradient, that are required for the algorithm to actually work in anything but the most ideal context. 
+
+\subsubsection{Fitness Shaping}
+Fitness shaping refers to the transformations one can perform on the output of $F$, generally in order to smoothen the optimization algorithm's movement. One such transformation that was particularly critical for our problem was rank transformation, i.e. for each gradient estimation distribution $F(\psi_t + \sigma\epsilon_i)$, we replace the value of $F_i$ with its index in the sorted list of $F_{0..n}$. This shaping is to prevent outliers from overly influencing the gradient estimate. If a value is extreme in one way or the other, it would otherwise either pull or push the next iteration $\psi_{t+1}$ proportionately. With rank transformation, this sensitivity to the random sampling of $\sigma\epsilon$ largely disappears. \cite{Wierstra2011}. 
+
+Another fitness shaping approach that we tried was subpar sample flattening. Since we are more interested in being pulled \textit{towards} good solutions than being pushed away from bad ones, we ignore the half of the estimation distribution $\sigma\epsilon$ that performs worse than the mean. We tried this both in and out of conjunction with rank transformation, but it did not perform particularly in either case, having a negligible influence.
+
+\subsubsection{Antithetical Sampling}
+Another measure to reduce the impact of variance in the sampling of $\sigma\epsilon$ is antithetical sampling. This means that for every point $\psi_t + \sigma\epsilon_i$ we sample, we evaluate its complement, $\psi_t - \sigma\epsilon_i$ as well. \cite{Salimans2017}. This means that there are always an equal number of points on either side of the distribution, and the estimated gradient is not thrown off by extreme stochastic outcomes in this regard.
 
 
 \section{Fan Search}
@@ -119,7 +129,7 @@ In order to benchmark the performance of our ES implementation, we compared it w
 Since the CPU-bound version of our algorithm takes several seconds to evaluate one fitness function, and the GPU version has had most of the pythonic\footnote{``Pythonic'' is a term often thrown around in the python programming community meaning ``doing things the way that is considered best practice in the Python'' that are in harmony with \href{https://www.python.org/dev/peps/pep-0020/}{The Zen of Python}, see \url{https://docs.python-guide.org/writing/style/}} convenience compromised, we pre-computed the fitness values in a promising cutout of the problem space. The 1024x1024 grid seen in figure \ref{fig:golf_course_s1024} took approximately 40 hours to compute on an HPC node, and with it, we were able to rapidly iterate our algorithm, both for the purpose of running it with multi-start to alleviate randomness, and to test the various potential accuracy and convergence-speed optimizations that have been applied in the literature.
 \begin{figure}[ht]
     \centering
-    \includegraphics[scale=1.0\linewidth]{fig/golf_course_s1024}
+    \includegraphics[width=\linewidth]{fig/golf_course_s1024.png}
     \caption{1024x1024 resolution fitness map of the flattened problem space. A certain fractal quality seems to be present, consistent with \cite{Topputo2014}}
     \label{fig:golf_course_s1024}
 \end{figure}
