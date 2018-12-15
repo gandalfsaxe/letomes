@@ -73,7 +73,7 @@ ES is an approach that requires a large number of evaluations of its fitness fun
     \psi_{t+1} = \alpha\frac{1}{n\sigma}\sum_{i=1}^{n}F(\psi_t + \sigma\epsilon_i)\epsilon_i
 \end{empheq}
 
-With $F(x)$ corresponding to a fitness evaluation with parameters x. as such, each iteration requires $n$ fitness evaluations. Proper choice of $n$ varies with problem dimensionality; the higher, the better a gradient estimator we get. For our low-dimensional problem, 30 is decent, but 100-200 is noticably smoother.
+With $F(x)$ corresponding to a fitness evaluation with parameters x. as such, each iteration requires $n$ fitness evaluations. Proper choice of $n$ varies with problem dimensionality; the higher, the better a gradient estimator we get. For our low-dimensional problem, 30 is decent, but 100-200 is noticeably smoother.
 Performance optimization is two-dimensional in this case. Decrease the time taken by each fitness evaluation, and parallelize; execute several fitness evaluations at the same time. The good thing about ES is that the many fitness evaluations are independent, within the iteration of the algorithm at least. Since we are multi-starting, we evaluate multiple sets of iterations in parallel as well. The algorithm is thus incredibly well-suited for parallelism: We can utilize thousands of parallel execution threads with approximately linear efficiency gain.
 
 

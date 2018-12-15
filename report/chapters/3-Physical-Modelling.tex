@@ -35,7 +35,59 @@ However we will use the more powerful Hamiltonian formalism from the field of an
 \end{align}
 where $q_i$ and $p_i$ are the coordinates and the generalized momenta respectively, one for each degree of freedom, $i$ is the index of degrees of freedom (e.g. $x, y$ for a 2D cartesian coordinates or  $r, \theta, \phi$ for a 3D spherical coordinates), $n$ is the total degrees of freedom, $\dot{q}$ is the time-derivative of $q$, $L = T - V$ is the Lagrangian with $T$ being the system's kinetic energy and $V$ it's potential energy. The Hamiltonian, \cref{eq:hamiltonian} corresponds to the total mechanical energy of the system\footnote{For most physical systems with some exceptions, see \cref{ch:HvsE} for details} and \cref{eq:hamiltons-equations} constitutes the equations of motion, and when solved give the solutions $\vec{q}(t)$, $\vec{p}(t)$.
 
-The reason for using Hamiltonian's equations instead of Newton's is primarily that it yields $2 n$ first order differential equations of motion for $n$ degrees of freedom (dimensions), where as Newton's 2nd Law yields $n$ 2nd order differential equations. As it turns out, first-order differential equations are more straight forward to discretize, i.e. turn into a numerical algorithm that can be typed into a computer program. Furthermore 
+The reason for using Hamiltonian's equations instead of Newton's is primarily that it yields $2 n$ first order differential equations of motion for $n$ degrees of freedom (dimensions), where as Newton's 2nd Law yields $n$ 2nd order differential equations. As it turns out, first-order differential equations are more straight forward to discretize, i.e. turn into a numerical algorithm that can be typed into a computer program.
+
+\section{Numerical Algorithms}
+Once we have derived our equations of motion in the form of Hamilton's equations \cref{eq:hamiltons-equations}, we need to solve them. In 1887 and 1889, mathematicians Heinrich Bruns and Henri Poincaré showed that there is no general analytical solution to the three-body problem given by simple algebraic expressions and integrals \cite{Gowers2008}. This means have have to solve them numerically to get time time evolution of the coordinates and velocity for particular initial conditions and delta-v impulses.
+
+\subsection{Symplectic Integrators}
+Symplectic integrators are a class of integrators typically used in Hamiltonian systems that have the property that they preserve the energy very well over longer time. Thus symplectic algorithms have been employed in fields such as molecular dynamics and astronomy. ``Symplectic methods belong to the larger class of geometric numerical integration algorithms. These algorithms are constructed so that they preserve certain geometrical properties inherent in the system. Symplectic methods are so named because, when applied to problems in Hamiltonian mechanics, the algorithms preserve the linear symplectic structure inherent in the phase space representation of the dynamics.'' \cite{Donnelly2005}. We will therefore only use Symplectic integrators for our equations.
+
+
+\subsubsection{Symplectic Euler (1st Order Method)}
+In the explicit Euler, all quantities from the Hamiltonian derivative on the right hand refer to the old time step \(0\) ($i$). In the implicit, they are all referring to the new time step \(1\) ($i+1$), which results in implicit equations that can typically only be solved numerically.
+
+The 1st order symplectic Euler is mixture between explicit and implicit Euler \cite{Hairer}:
+
+\begin{equation}
+    \begin{split} \label{eq:symplectic-euler1}
+        \vec{q}_1 = \vec{q}_0 + h \pd{H}{\vec{p}}(q_0, p_1) \\
+        \vec{p}_1 = \vec{p}_0 - h \pd{H}{\vec{q}}(q_0, p_1)
+    \end{split}
+\end{equation}
+
+or
+
+\begin{equation}
+    \begin{split} \label{eq:symplectic-euler2}
+        \vec{q}_1 = \vec{q}_0 + h \pd{H}{\vec{p}}(q_1, p_0) \\
+        \vec{p}_1 = \vec{p}_0 - h \pd{H}{\vec{q}}(q_1, p_0)
+    \end{split}
+\end{equation}
+
+\subsubsection{Symplectic Störmer-Verlet (2nd Order Method)}
+
+The 2nd order symplectic Störmer-Verlet (henceforth simply called Verlet) is given by \cite{Hairer}:
+
+\begin{equation}
+    \begin{split} \label{eq:symplectic-verlet1}
+        \vec{p}_{1/2} &= \vec{p}_0 - \frac{h}{2} \pd{H}{\vec{q}}(q_0, p_{1/2}) \\
+        \vec{q}_1 &= \vec{q}_0 + \frac{h}{2} \left( \pd{H}{\vec{p}}(q_0, p_{1/2}) + \pd{H}{\vec{p}}(q_1, p_{1/2}) \right) \\
+        \vec{p}_{1} &= \vec{p}_{1/2} - \frac{h}{2} \pd{H}{\vec{q}}(q_1, p_{1/2}) \\
+    \end{split}
+\end{equation}
+
+or
+
+\begin{equation}
+    \begin{split} \label{eq:symplectic-verlet2}
+        \vec{q}_{1/2} &= \vec{q}_0 + \frac{h}{2} \pd{H}{\vec{p}}(q_{1/2}, p_0) \\
+        \vec{p}_1 &= \vec{p}_0 - \frac{h}{2} \left( \pd{H}{\vec{q}}(q_{1/2}, p_0) + \pd{H}{\vec{q}}(q_{1/2}, p_1) \right) \\
+        \vec{q}_{1} &= \vec{q}_{1/2} + \frac{h}{2} \pd{H}{\vec{p}}(q_{1/2}, p_1) \\
+    \end{split}
+\end{equation}
+
+
 
 \section{CM-Centered Restricted 3-Body System (C-R3B), Earth-Moon}
 The center-of-mass-centered 3-body system (C-R3B) with the Earth and Moon was explored in \cite{Saxe2015}; refer to this for detailed derivations of C-R3B. We will present the final nondimensionalized equations of motion, and numerical integration algorithms for reference. The model is set up as in \cref{fig:r3b}.
@@ -72,7 +124,7 @@ where \(T\), \(X\), \(Y\), \(P_x\) and \(P_y\) are our dimensionless variables f
 
 \subsection{C-R3B Numerical Algorithms}
 \subsubsection{C-R3B Symplectic Euler}
-Based on \cref{eq:Xdot,eq:Ydot,eq:Pdot_X,eq:Pdot_Y}, a symplectic Euler algorithm was found (For detailed derivation, see \cite{Saxe2015}):
+We refer to \cite{Saxe2015} for detailed derivations. The equations of motion of the system in the next based will be more carefully derived here. Based on \cref{eq:Xdot,eq:Ydot,eq:Pdot_X,eq:Pdot_Y}, a symplectic Euler algorithm is found:
 
 \begin{align}
     X_1 &= \dfrac{X_0 + h (h P_{Y,0} + P_{X,0} + Y_0)}{1+h^2}, \\[0.4cm]
@@ -293,7 +345,7 @@ Now adding all three \cref{eq:x-dist-squared,eq:y-dist-squared,eq:z-dist-squared
     &= \sqrt{r^2 + r_k^2 - 2 r r_k(\cos{\theta}\cos{\theta_k}+\sin{\theta}\sin{\theta_k}\cos{(\phi - \phi_k}))},
 \end{align}
 where the blue factor was simplified using the sum rule: \\
-\(\cos{\alpha}\cos{\beta} + \sin{\alpha}\sin{\beta} = cos{\alpha-\beta}\) \cite{WeissteinTrig}.
+\(\cos{\alpha}\cos{\beta} + \sin{\alpha}\sin{\beta} = cos{(\alpha-\beta)}\) \cite{WeissteinTrig}.
 
 So we can finally express \(H\) as
 \begin{equation}
@@ -415,36 +467,11 @@ And for reference, the nondimensionalized Hamiltonian per spacecraft mass:
     \end{aligned}
 \end{equation}
 
-
-
 \subsection{H-R4B Numerical Integration Algorithm}
 
-\subsubsection{Symplectic Integrators}
-Symplectic integrators are a class of integrators typically used in Hamiltonian systems that have the property that they preserve the energy very well over longer time. Thus symplectic algorithms have been employed in fields such as molecular dynamics and astronomy. ``Symplectic methods belong to the larger class of geometric numerical integration algorithms. These algorithms are constructed so that they preserve certain geometrical properties inherent in the system. Symplectic methods are so named because, when applied to problems in Hamiltonian mechanics, the algorithms preserve the linear symplectic structure inherent in the phase space representation of the dynamics.'' \cite{Donnelly2005}. We will therefore only use Symplectic integrators for our equations.
+\subsubsection{Symplectic Euler for H-R4B System}
 
-
-\subsubsection{Symplectic Euler}
-In the explicit Euler, all quantities from the Hamiltonian derivative on the right hand refer to the old time step \(0\) ($i$). In the implicit, they are all referring to the new time step \(1\) ($i+1$), which results in implicit equations that can typically only be solved numerically.
-
-The symplectic Euler is mixture between explicit and implicit Euler \cite{Hairer}:
-
-\begin{equation}
-    \begin{split} \label{eq:symplectic-euler1}
-        \vec{q}_1 = \vec{q}_0 + h \pd{H}{\vec{p}}(q_0, p_1) \\
-        \vec{p}_1 = \vec{p}_0 - h \pd{H}{\vec{q}}(q_0, p_1)
-    \end{split}
-\end{equation}
-
-or
-
-\begin{equation}
-    \begin{split} \label{eq:symplectic-euler2}
-        \vec{q}_1 = \vec{q}_0 + h \pd{H}{\vec{p}}(q_1, p_0) \\
-        \vec{p}_1 = \vec{p}_0 - h \pd{H}{\vec{q}}(q_1, p_0)
-    \end{split}
-\end{equation}
-
-One can choose whichever is easier to solve for the equations at hand. We choose the latter form \cref{eq:symplectic-euler2} so with our Hamiltonian \cref{eq:HH_m} we get
+One can choose whichever of \cref{eq:symplectic-euler1,eq:symplectic-euler2} is easier to solve for the equations at hand. We choose the latter form \cref{eq:symplectic-euler2} so with our Hamiltonian \cref{eq:HH_m} we get
 \begin{align}
     R_1 &= R_0 + h B_{r,0} \label{eq:symplectic-euler-R_1}, \\[0.4cm]
     \theta_1 &= \theta_0 + h \frac{B_{\theta,0}}{R_1^2}, \label{eq:symplectic-euler-theta_1} \\[0.4cm]
@@ -466,7 +493,12 @@ One can choose whichever is easier to solve for the equations at hand. We choose
 \end{align}
 As we can see, we are lucky with this Hamiltonian since we can simply run all steps in the order above, \cref{eq:symplectic-euler-R_1,eq:symplectic-euler-theta_1,eq:symplectic-euler-phi_1,eq:symplectic-euler-Br_1,eq:symplectic-euler-Btheta_1,eq:symplectic-euler-Bphi_1} without needing to solve any implicit equations.
 
+\subsubsection{Symplectic Verlet for H-R4B System}
+
+These equations of motion follow the procedures of \cref{eq:symplectic-verlet2}. This algorithm was derived and implemented, but not thoroughly tested. In the interest of time and space, we refer to \cref{apx:symplectic-verlet-derivations} for derivation and equations.
+
 \section{Interplanetary Transfer Orbits}
+
 
 \subsection{The Challenges of a Mars Transfer Orbit}
 Making the trip to Mars from Earth is not a simple task. 
@@ -516,16 +548,7 @@ These four orbit types are characterized by the orbit specific energy (mechanica
 \end{table}
 
 
-For a interplanetary transfer orbit we can use the Hohmann transfer orbit as the ``base transfer orbit'' and make some modifications. We recall that the Hohmann transfer is an elliptical orbit that brings a satellite between two different circular orbits around a central body by applying an instantaneous burn twice as depicted in \cref{fig:hohmann}.
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.4\linewidth]{fig/hohmann.pdf}
-    \caption{Hohmann Transfer orbit that brings the satellite from one circular orbit around a central body to another circular orbit via two burns (Image: \cite{Leafnode} (modified)).}
-    \label{fig:hohmann}
-    \end{figure}
-
-This approximation assumes only one central body. However in our system, we have three central bodies of interest: Earth, Sun and Mars. Each is the dominant body at various points of the journey. We start in a circular orbit around Earth, burn into an elliptical orbit around the Sun and arrive to Mars, burning to a circular orbit again. We can model the transfer orbit to Mars by patching three conic sections:
+For a interplanetary transfer orbit we can use the Hohmann transfer orbit as the ``base transfer orbit'' and make some modifications. We recall that the Hohmann transfer is an elliptical orbit that brings a satellite between two different circular orbits around a central body by applying an instantaneous burn twice as depicted in \cref{fig:hohmann}. This assumes only one central body. However in our system, we have three central bodies of interest: Earth, Sun and Mars. Each is the dominant body at various points of the journey. We start in a circular orbit around Earth, burn into an elliptical orbit around the Sun and arrive to Mars, burning to a circular orbit again. We can model the transfer orbit to Mars by patching three conic sections:
 
 \begin{enumerate}
 	\item Hyperbolic departure orbit (Geocentric reference frame).
