@@ -72,7 +72,6 @@ def verlet_step_symplectic(h, Q, B, eph_coords):
     # Unpack Q, B and eph_coords
     R0, theta0, phi0 = Q
     B_R0, B_theta0, B_phi0 = B
-    R_ks, theta_ks, phi_ks = eph_coords
 
     hh = h / 2
 
@@ -98,7 +97,7 @@ def verlet_step_symplectic(h, Q, B, eph_coords):
     )
 
     alpha_hks = get_alpha_hks(Q_h, eph_coords)
-    summation_alpha = np.sum(beta_hks / lambda_hks)
+    summation_alpha = np.sum(alpha_hks / lambda_hks)
     B_R1 = B_R0 + hh * (
         (B_theta0 ** 2 + B_theta1 ** 2) / (R_h ** 3)
         + (B_phi0 ** 2 + B_phi1 ** 2) / (R_h ** 3 * sin(theta_h) ** 2)
