@@ -164,6 +164,23 @@ Based on \cref{eq:Xdot,eq:Ydot,eq:Pdot_X,eq:Pdot_Y}, a symplectic Störmer-Verle
 \end{align}
 where \(\dot{P}_X,\dot{P}_Y\) are \cref{eq:Pdot_X,eq:Pdot_Y}, \(h\) is the step size, index \(0\) designates previous time step ($i$) and \(1\) designates new time step ($i+1$). The algorithm is run in the same order as listed above.
 
+Furthermore the time step size adaptive. Let $z$ denote a vector of the position variables $(X,y)$.
+\begin{align}
+\text{Euler step result:} \qquad z_1 = z + O(h), \\
+\text{Verlet step result:} \qquad z_2 = z + O(h^2), \\
+\end{align}
+where O(h) denotes an error term of order h. Then we take the difference
+\begin{align}
+\|z_1 - z_2\| &= O(h) - O(h^2) \\
+&\approx O(h)\ ,
+\end{align}
+since $O(h) \gg O(h^2)$. Thus we approximate the error difference between the Euler and Verlet method as the actual error we make at step size $h$. The idea is to make both an Euler and a Verlet step for every time-step to assess the error and adjust the step size accordingly. For every single step the step size is changed either up or down, depending on the errors and tolerance. As a result we always stay near the same error in every step, only taking as small steps as necessary in each iteration.
+
+The non-adaptive algorithm is fixed in step size but varies in error per step.
+The adaptive algorithm varies in step size in an attempt to fix the error per step.
+
+For all simulations we have set $10^{-9}$ as the maximum tolerated error per step in the adaptive algorithm. For the non-adaptive algorithm we select a fixed step size, $10^{-6}$, to ensure that it's reasonably low most of the time. This approach was again taken directly from \cite{Saxe2015}.
+
 \section{Heliocentric Restricted 4-Body System (H-R4B), Sun-Earth-Mars}
 Simulating orbit from Earth to Mars requires a new model with at least four bodies: Sun, Earth, Mars and the Spacecraft. The coordinate system will be heliocentric and in spherical coordinates, and restricted meaning that the mass of the spacecraft is considered negligible compared to compared to the celestial masses, so we call this system the ``Heliocentric Restricted N-Body'' system, see \cref{fig:solar-system-model}. We will derive the equations of motion of the spacecraft by using Hamilton's equations, which naturally gives us a set of coupled first-order differential equations, and a set of conserved quantities as ``generalized momenta''.
 

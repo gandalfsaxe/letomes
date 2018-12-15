@@ -3,7 +3,7 @@
 \chapter{Results}
 The main aim of the project was twofold: to examine whether or not ES was a reasonable method to apply in this problem space, and to create a mars mission simulator to compare it with the lunar case, under the expectation that the two problems would be more or less similar. We have accomplished both these things, certainly, even though they did not take the shape we were initially expecting. In this chapter we will examine the various threads of the project, to see where they ended up.
 
-\section{Evolution Strategies' fitness for this problem space}
+\section{2D Simulator: Effectiveness of Evolution Strategies For This Problem Space}
 We implemented several versions of the fundamental ES concept, with different combinations of additions that have given good results in the literature. Certain additions had more impact than others, but no matter what variation we used, the results weren't exactly earth-shattering. The problem space has a fractured, fractal quality of very good solutions hiding among very bad ones. These solutions are not found in any particularly ingenious fashion by ES, nor by any gradient descent method, really. There are areas of good structure, where ES finds a local minimum just fine, but if the objective is simply to find a decent solution, then something naive like random guessing will also perform well, since the space is sufficiently dense with decent solutions. 
 
 When we computed the problem space flattened to two dimensions by locking the burn-angle to 0, we gained valuable information and intuition about its shape. We are dealing with a heavily fractal space of ridges with a cross section of the approximate shape shown in \cref{fig:ridge_cross_section}
@@ -80,6 +80,7 @@ When we computed the problem space flattened to two dimensions by locking the bu
     \label{fig:ES-examples} 
 \end{figure} 
 
+<<<<<<< HEAD
 \subsection{Comparison with Baseline}
 Comparing the ES algorithm with a random guessing baseline, we do not get very encouraging results \cref{fig:baselinecompare}.
 
@@ -106,8 +107,59 @@ The algorithm that generated the problem space plots seen throughout this work h
     \caption{log-fitness score of selected individuals as they evolve through the Real-valued GPU-version of the algorithm. There are thousands more graphs like these, but they all look similarly uninteresting. The difference may be due to the additional degree of freedom in this version of the algorithm.}
     \label{fig:GPUresults}
 \end{figure} 
+=======
+\clearpage
 
-\section{Finding LETOs to Mars}
+\section{3D Simulator: Finding LETOs to Mars}
+The 3D simulator based on a spherical coordinate system turned out to be a much more difficult project than anticipated:
+>>>>>>> last report
+
+\begin{enumerate}
+	\item \textbf{The equations of motion turned out to be complicated}, as a restricted N-body system based on spherical coordinates turned out to be quite complicated set of equations, making it prone to typing mistakes when writing into code. In fact we spent many weeks trying to find out why it didn't work as planned, until we decided to systematically debug the program by doing unit testing all major equations with Mathematica and Pytest (as described in \cref{sec:unit-testing}).
+	\item \textbf{The positions Earth and Mars turned out to be a tricky problem}. The ellipse equations were surprisingly complex and involved solving multiple implicit equations with no closed-form solutions. We opted for looking up the positions in an ephemerides\footnote{A table or data file giving the calculated positions of a celestial object at regular intervals throughout a period.}. We wanted maximum realism in the 3D simulator (hence why we didn't simply do a 2D simulator to Mars), and using a data table was a way to ensure the realism of the data. However the best data we could find was from the NASA Horizons\footnote{\textit{The JPL Horizons On-Line Ephemeris System provides access to key solar system data and flexible production of highly accurate ephemerides for solar system objects. This includes 780,000+ asteroids, 3525 comets, 178 natural satellites, all planets, the Sun, 150 spacecraft, and several dynamical points such as Earth-Sun L1, L2, L4, L5, and system barycenters} - \url{https://ssd.jpl.nasa.gov/?horizons_doc}.} \cite{NASAb}. Furthermore from a software engineering standpoint we wanted to use table data from NASA instead of doing more math modelling and simulation. However at the time we pulled the data we could not get ephemerides with any higher time step than 1 day\footnote{Since then NASA Horizons now support time steps down to 1 hour. Dare we say ``typical'' 🙄}. I.e. we only have 365 positions for Earth in the year, and opted for a simple linear interpolation at all times in between.
+	\item \textbf{The initial conditions were hard to determine given our ephemerides constraints}. Setting initial conditions in 3D space with incomplete information also turned out as a bigger challenge than expected. We determined the initial conditions from an estimation of Earth velocity as the difference of position between two days, did calculations involving cross products, centripetal speed, initial delta-v as per \cref{sec:2d-patched-conic,apx:mars-hohmann-derivations} etc. While we could get nice circular orbits around the Sun or Earth in isolation, we crashed into the Earth when orbiting Earth for more than a few hours. Modelling Earth as a point particle went fine, but setting the radius of the Earth as a stop criteria stopped the simulation after at few orbits at most.
+\end{enumerate}
+
+Even if we never made it to Mars in the 3D simulator, we did get basic simulation to run. We obtained closed orbits around Earth or Sun stationary and closed orbits around Earth moving, albeit crossing the surface and crashing (\cref{fig:r4b-leo-crash}) unless Earth was modelled as a point particle (\cref{fig:r4b-leo-no-crash}).
+
+\begin{figure}[ht]
+    \centering
+    \subfloat[Attempted LEO with symplectic Euler and time step size $h=\SI{1}{\second}$, crashing into the Earth after 1h 2m.]{
+        \includegraphics[width=0.45\linewidth]{fig/r4b-leo-crash.png}
+        \label{fig:r4b-leo-crash}
+    }
+    \hfill
+    \subfloat[LEO with no Earth crashing logic (Earth as point particle) and $h=\SI{60}{\second}$, clearly showing a closed orbit.]{
+        \includegraphics[width=0.45\linewidth]{fig/r4b-leo-no-crash.png}
+        \label{fig:r4b-leo-no-crash}
+    }
+    \caption{Closed orbits around the Earth in the 3D simulator.}
+    \label{fig:}
+\end{figure} 
+
+We also successfully simulated a run around the sun, see \cref{fig:r4b-sun-orbits}.
+
+\begin{figure}[ht]
+    \centering
+    \subfloat[Spacecraft, Earth and Mars]{
+        \includegraphics[width=0.30\linewidth]{fig/r4b-sun-orbit.png}
+        \label{fig:r4b-sun-orbit}
+    }
+    \hfill
+    \subfloat[Auto-scaled spacecraft orbit to show pertubations from Earth and Mars.]{
+        \includegraphics[width=0.30\linewidth]{fig/r4b-sun-orbit-pertubations.png}
+        \label{fig:r4b-sun-orbit-pertubations}
+    }
+    \hfill
+    \subfloat[Same as \cref{fig:r4b-sun-orbit-pertubations} but with no pertubations when Earth and Mars masses set to zero.]{
+        \includegraphics[width=0.30\linewidth]{fig/r4b-sun-orbit-no-pertubations.png}
+        \label{fig:r4b-sun-orbit-no-pertubations}
+    }
+    \caption{Earth in blue orbit in ecliptic plane, spacecraft in orbit in XY-plane, Mars orbit in orange.}
+    \label{fig:r4b-sun-orbits}
+\end{figure} 
+
+It is clear to us that we were quite close to getting transfer orbits to Mars, especially with the JPL Horizons ephemerides suddenly being available in higher time resolution, which would side-step the linear interpolation issue of the ephemerides. In the end we did get an appreciation of the complexities of working with a simulator in 3D, and it is now obvious to us why much research into LETOs even to Mars are done in 2D (e.g. \cite{Topputo2014}).
 
 \section{Stability of Trajectories: Lyapunov Exponent}
 \subsection{Sensitivity analysis}
