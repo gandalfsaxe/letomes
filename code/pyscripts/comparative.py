@@ -25,14 +25,14 @@ G4 = np.exp(-((X - mux) ** 2 + (Y - muy) ** 2) / 2.0 * sigma ** 2)
 G = G1 + G2 - G3 - G4
 
 # uncomment this line if you want smooth toy-problem
-pspace = G
+# pspace = G
 dims = pspace.shape
 print(dims)
 
-startpsi = [230, 700]
+startpsi = [275,600]
 np.random.seed(0)
 # startpsi = [np.random.randint(low=0, high=dim) for dim in dims]
-sigma = 20
+# sigma = 20
 alpha = 0.2
 epsi_size = 50
 eval_budget = 2000
@@ -40,6 +40,7 @@ eval_budget = 2000
 # +++++++++++++++++++++ Evolution Strategies ++++++++++++++++++++++++++++++
 def evolve(startpsi, eval_budget, timeline):
     psi = startpsi
+    sigma = 20
     best_score = 100.0
     for i in range(int(eval_budget / epsi_size)):
         noise = np.random.randn(epsi_size, 2)
@@ -58,12 +59,17 @@ def evolve(startpsi, eval_budget, timeline):
             best_score = score
 
         R = np.array([-pspace[int(x)][int(y)] for x, y in epsi])
-        R = np.array(rankdata(R, method='ordinal'), dtype=float)
-        # Rmean = R.mean()
-        # R = np.array([max(Rmean, v) for v in R])
+        R = np.array(rankdata(R), dtype=float)
+        Rmean = R.mean()
+        for idx, v in enumerate(R):
+            if v<Rmean:
+                R[idx]=0
+        # print(R)
         R /= sum(R)
         step_norm = np.dot(R, noise)
         step = alpha * sigma**2 * step_norm
+        sigma -= 0.4
+        sigma = max(0,sigma)
         psi += step
         timeline.append(
             {
