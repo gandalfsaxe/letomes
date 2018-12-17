@@ -5,10 +5,7 @@
 
 In our attempts to do things ``The Right Way'' from the start, we pursued docker for some time near the start of the project. The appeal of docker is that it gives a program total platform independence, since one delivers the program bundled together with a `container'; a miniature virtual machine, that has all the necessary software in exactly the correct versions with the same configuration as the environment in which the program is run by the developer. We created such a container, and were conducting our initial experiments in it, but regrettably, the HPC cluster that was available to us could not allow the installation of docker, since parts of it run with root access. Since the HPC cluster is shared by the entire institution, this is not permitted by procedure, so the concept was abandoned, and we took the time to manually initialize the environments that the program was to run on.
 
-
-\section{PyKEP - Python Library for Astrodynamics}
-
-\section{pykep and PyGMO}
+\section{PyKEP and PyGMO}
 
 pykep is an open-source engine for formulating and solving problems of space flight nature. It's developed by the European Space Agency, in cooperation with NASA's JPL and the space flight community at large. The library interfaces with data on ephemerides\footnote{object trajectories computed to give position at a given time} for every recorded celestial body and major/minor asteroid. It uses PyGMO as its back end, which is a C++ library\footnote{PaGMO: Parallel Global Multi-objective Optimizer. It is developed by the same people at ESA as pykep} for solving optimization problems, wrapped in python. pykep essentially lets users define their optimization problem in a pedagogical way, redefines it in a format that PyGMO can receive, and lets \emph{it} do all the heavy lifting. pykep then relays that information back to the user.
 

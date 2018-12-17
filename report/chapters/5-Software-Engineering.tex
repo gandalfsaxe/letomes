@@ -2,7 +2,7 @@
 
 \chapter{Software Engineering}
 
-The project has been defined by a relatively wide scope of disciplines that we have worked on. Mathematic derivations, astrophysics intuition, machine learning, high-performance computing, and software engineering. The last of those particularly because of the simultaneous need for rapid prototyping and strong performance characteristics. Essentially, we needed to be able to test a plethora of different ideas to answer all our questions, but since the computations are so relatively expensive, we wanted to build a few solid modules that could be treated as black boxes for our overarching purposes. Essentially, we rewrote the simulator from the precursor project from the ground up, with a focus on modularity and extensibility. This was done on basis of the model inherent in the original, to give us a consistent "ground truth" with which to compare our new simulator.
+The project has been defined by a relatively wide scope of disciplines that we have worked on. Mathematic derivations, astrophysics intuition, machine learning, high-performance computing, and software engineering. The last of those particularly because of the simultaneous need for both rapid prototyping and strong performance characteristics. Essentially, we needed to be able to test a plethora of different ideas to answer all our questions, but since the computations are so relatively expensive, we wanted to build a few solid modules that could be treated as black boxes for our overarching purposes. Essentially, we rewrote the simulator from the precursor project \cite{Saxe2015} from the ground up, with a focus on modularity and extensibility. This was done on basis of the model inherent in the original, to give us a consistent "ground truth" with which to compare our new simulator.
 
 
 \section{Software Architecture Overview}
@@ -23,7 +23,7 @@ We packaged the new simulator into its own python module, installable with pip, 
 
 \subsubsection{Abstractions}
 
-The simulator is a numerical solver for an analytical problem, implementing algorithms that have been defined through that analysis. Thus, we have taken care to keep nomenclature consistent between the simulator and its analytical foundations. Between code and paper, if you will. This is complicated somewhat by the fact that we are applying Evolution Strategies as our search strategy, which carries with it its own set of nomenclature from the machine learning world. We have kept the two things largely separate, with the ES module interacting with the simulator through a relatively simple interface. This works fine, since ES is a black-box optimizer anyway.
+The simulator is a numerical solver for an analytical problem, implementing algorithms that have been defined through that analysis. Thus, we have taken care to keep nomenclature consistent between the simulator and its analytical foundations (i.e. consistency between ``code and paper''). This is complicated somewhat by the fact that we are applying Evolution Strategies as our search strategy, which carries with it its own set of nomenclature from the machine learning world. We have kept the two things largely separate, with the ES module interacting with the simulator through a relatively simple interface. This works fine, since ES is a black-box optimizer anyway.
 
 \subsubsection{Simulator module}
 
@@ -31,13 +31,13 @@ Here, we have the interface between ES portion and simulator.
 
 \noindent The function \texttt{launch\_sim} takes launch parameters that the ES algorithm uses for its optimization (in the form of a decision vector \(\psi\)), reformulates them, and starts a simulation based on them. It then returns a delta-v for that single run, along with the associated saved path. That delta-v is, as mentioned before, our fitness function, so based on that result, ES can continue to do its job.
 
-\subsubsection{Integrators module}
+\subsubsection{Integrators Module}
 
 This contains the main loop of our simulator algorithm, along with subfunctions for the individual steps.
 
-\subsubsection{Analyticals module}
+\subsubsection{Equations of Motion Module}
 
-This module contains a ton of different convenience functions that compute some intermediate equation for use in the main algorithm. They are hidden away here to reduce clutter in \texttt{Integrators.py}.
+This module contains all coupled equations of motion and a ton of different convenience functions that compute some intermediate equation for use in the main algorithm. They are hidden away here to reduce clutter in \texttt{Integrators.py}.
 
 \subsection{The ES module}
 There are several different variations of the ES module, each executing the algorithm in a slightly different way. They are all conducting black-box optimization on a decision vector that describes the initial parameters for a trajectory. The basic, and first one works by calling the orbsim module every time the algorithm wants to find the fitness of a given point in our parameter space. It then waits a few seconds, depending on how long the given simulation takes, and uses the returned value as the function to minimize. The algorithm is parallelized to work on however many CPU cores are available, with different starting conditions.
@@ -102,7 +102,7 @@ For quite a few weeks of this MSc thesis project, our 3D simulator gave nonsense
 \subsection{What is unit testing?}
 Complex computer software usually undergo various kinds of testing in its development cycle. For a computer program such as ours with lots of implemented mathematical formulae, the most relevant kind of systematic testing is \emph{unit testing}. In unit testing, various units of code are tested in isolation against some ``ground truth'', i.e. some test values that are obtained externally or manually written up. The units are often, as in our case, the \emph{functions} of the program. 
 
-\subsection{Our Mathematica-Python Unit Testing Workflow and Why It Works}
+\subsection{Our Mathematica-Python Unit Testing Workflow}
 Our simulator program is written in the Python programming language, most of it inside functions. For example, we have a function that iterates a single coordinate or momentum a single time step forward, a function that converts positions or velocity vectors between different coordinate system, and a function that calculates circular orbital speed or period.
 
 The whole point of doing this is that \textbf{Mathematica provides nice visual formatting that allows mathematical equations to be pretty much identical to the complicated mathematical formulae written in hand or LaTeX}. Thus we can easily visually compare the implemented equations in Mathematica and in handwriting / LaTeX, and see that they match up. To give an example, here in \cref{fig:unit-testing-sympletic-euler-step-python-1,fig:unit-testing-sympletic-euler-step-python-2} is the implementation of the \texttt{} function in Python:

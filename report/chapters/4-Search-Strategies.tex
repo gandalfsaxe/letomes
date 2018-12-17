@@ -18,7 +18,7 @@ The team applied evolution strategies (ES) to two reinforcement learning (RL)\fo
         \label{fig:mujoco}
     }
     \hfill
-    \subfloat[Atari games are popular to RL algorithm research. Here: Brekaout (left) and Space Invaders (right) (Source: \cite{Deshpande}).]{
+    \subfloat[Atari games are popular to RL algorithm research. Here: Breakout (left) and Space Invaders (right) (Source: \cite{Deshpande}).]{
         \includegraphics[width=0.46\linewidth]{fig/Atari}
         \label{fig:atari}
     }
@@ -30,7 +30,7 @@ To achieve the signal needed for learning, i.e. exploration, noise must be someh
 - For RL, noise is injected into the agent's \emph{actions}.
 - For ES, noise is injected directly into the \emph{parameters}.
 
-We are basing our machine learning efforts on the Evolution Strategy (ES) algorithm outlined by Salimans et al. \cite{Salimans2017} using ES--it being a gradient estimator--makes sense in optimization scenarios where calculating an exact gradient is expensive, or even impossible. The idea is to sample around a starting point, and use a weighted average fitness score to pick a direction to move each cycle. It is generally applicable to unsupervised problems, such as ours; a reinforcement learning problem. There are several flavors of the concept under the ES umbrella term: Covariance Matrix Adaptation (CMA-ES), Natural Evolution Strategy (NES), and Exponential NES, to name a few. The one used in \cite{Salimans2017} and by extension in our project is NES. Its exact implementation details will follow:
+We are basing our machine learning efforts on the Evolution Strategy (ES) algorithm outlined by Salimans et al. \cite{Salimans2017} using ES -- it being a gradient estimator--makes sense in optimization scenarios where calculating an exact gradient is expensive, or even impossible. The idea is to sample around a starting point, and use a weighted average fitness score to pick a direction to move each cycle. It is generally applicable to unsupervised problems, such as ours; a reinforcement learning problem. There are several flavors of the concept under the ES umbrella term: Covariance Matrix Adaptation (CMA-ES), Natural Evolution Strategy (NES), and Exponential NES, to name a few. The one used in \cite{Salimans2017} and by extension in our project is NES. Its exact implementation details will follow:
 
 \subsection{Theoretical Advantages and Disadvantages of ES Compared to RL}
 The advantages of ES is outlined in \cite{Karpathy} and can be summarized as follows:
@@ -40,15 +40,15 @@ The advantages of ES is outlined in \cite{Karpathy} and can be summarized as fol
         \item Makes code shorter and 2-3x faster
         \item Memory saving: not necessary to keep episode recordings for later update.
         \item No need to worry about exploding gradients in recurrent neural networks.
-        \item We can explore larger classes of policy functions, including networks that are not differentiable. 
+        \item We can explore larger classes of policy functions, including networks that are not differentiable.
     \end{itemize}
     \item Highly parallelizable.
     \begin{itemize}
-        \item ES workers communicate scalars, RL workers communicate entire parameter vectors -> easy to obtain linear speedups with more CPU cores.
+        \item ES workers communicate scalars, RL workers communicate entire parameter vectors $\rightarrow$ easy to obtain linear speedups with more CPU cores.
     \end{itemize}
     \item Higher robustness.
     \begin{itemize}
-        \item Has fewer hyperparameters. Several hyperparameters that are difficult to set in RL implementations are side-stepped in ES. The details are a little technical / not elaborated in blog post.
+        \item Has fewer hyperparameters. Several hyperparameters that are difficult to set in RL implementations are side-stepped in ES (although \cite{Karpathy} does not go into so much detail with this).
     \end{itemize}
 
     \item Structured exploration.
@@ -98,7 +98,6 @@ In our problem, \(F\) is the score returned by our environment (the Earth-Moon o
     }
     \caption{the fundamental ES algorithm illustrated in a toy problem. Generated from code based on \cite{Salimans2017}}
     \label{fig:esbasic}
-
 \end{figure}
 
 In genetic algorithm terms, the input parameters $\psi$ are the genotype, the resultant path $\theta_\psi$ is the phenotype, and the fitness is of course  $F(\theta_\psi)$. \cite{Tomassini2005}. Since we simply input $\psi$ to the simulator that delivers $F(\theta_\psi)$, and $\theta$ is not really within the purview of the ES module, we will generally skip $\theta_\psi$, and simply write $F(\psi)$ instead, unless the distinction between geno- and phenotype is relevant. This also reflects the reality more precisely, with regards to our code.
@@ -130,6 +129,6 @@ Since the CPU-bound version of our algorithm takes several seconds to evaluate o
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\linewidth]{fig/golf_course_s1024.png}
-    \caption{1024x1024 resolution fitness map of the flattened problem space. A certain fractal quality seems to be present, consistent with \cite{Topputo2014}}
+    \caption{1024x1024 resolution fitness map of the flattened problem space. burnDV is appied delta-v and position is the angular position around Earth ($\text{position} = 0$ is the line between Earth to Moon). A certain fractal quality seems to be present, consistent with \cite{Topputo2014}}
     \label{fig:golf_course_s1024}
 \end{figure}

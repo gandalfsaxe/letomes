@@ -6,7 +6,7 @@ The main aim of the project was twofold: to examine whether or not ES was a reas
 \section{2D Simulator: Effectiveness of Evolution Strategies For This Problem Space}
 We implemented several versions of the fundamental ES concept, with different combinations of additions that have given good results in the literature. Certain additions had more impact than others, but no matter what variation we used, the results weren't exactly earth-shattering. The problem space has a fractured, fractal quality of very good solutions hiding among very bad ones. These solutions are not found in any particularly ingenious fashion by ES, nor by any gradient descent method, really. There are areas of good structure, where ES finds a local minimum just fine, but if the objective is simply to find a decent solution, then something naive like random guessing will also perform well, since the space is sufficiently dense with decent solutions. 
 
-When we computed the problem space flattened to two dimensions by locking the burn-angle to 0, we gained valuable information and intuition about its shape. We are dealing with a heavily fractal space of ridges with a cross section of the approximate shape shown in \cref{fig:ridge_cross_section}
+When we computed the problem space flattened to two dimensions by locking the burn-angle to 0, we gained valuable information and intuition about its shape. We are dealing with a heavily fractal space of ridges with a cross section of the approximate shape shown in \cref{fig:ridge_cross_section}.
 
 \begin{figure}[ht]
     \centering

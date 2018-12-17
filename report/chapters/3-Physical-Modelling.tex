@@ -37,6 +37,8 @@ where $q_i$ and $p_i$ are the coordinates and the generalized momenta respective
 
 The reason for using Hamiltonian's equations instead of Newton's is primarily that it yields $2 n$ first order differential equations of motion for $n$ degrees of freedom (dimensions), where as Newton's 2nd Law yields $n$ 2nd order differential equations. As it turns out, first-order differential equations are more straight forward to discretize, i.e. turn into a numerical algorithm that can be typed into a computer program.
 
+For a guide on how to use Hamilton's formalism in practice, see \cref{apx:using-hamilton-mechanics}.
+
 \section{Numerical Algorithms}
 Once we have derived our equations of motion in the form of Hamilton's equations \cref{eq:hamiltons-equations}, we need to solve them. In 1887 and 1889, mathematicians Heinrich Bruns and Henri Poincaré showed that there is no general analytical solution to the three-body problem given by simple algebraic expressions and integrals \cite{Gowers2008}. This means have have to solve them numerically to get time time evolution of the coordinates and velocity for particular initial conditions and delta-v impulses.
 
@@ -46,15 +48,15 @@ Symplectic integrators are a class of integrators typically used in Hamiltonian 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.90\linewidth]{fig/symplectic-area.png}
-    \caption{Area preservation in phase space (corresponding to preservation of the Hamiltonian), for various symplectic numerical methods for a pendulum (Image: \cite{Hairer})}
+    \caption{Area preservation in phase space (corresponding to preservation of the Hamiltonian, $H$), for various symplectic numerical methods for a pendulum (Image: \cite{Hairer})}
     \label{fig:symplectic-area}
 \end{figure}
 
-Thus symplectic algorithms have been employed in fields such as molecular dynamics and astronomy. ``\textit{Symplectic methods belong to the larger class of geometric numerical integration algorithms. These algorithms are constructed so that they preserve certain geometrical properties inherent in the system. Symplectic methods are so named because, when applied to problems in Hamiltonian mechanics, the algorithms preserve the linear symplectic structure inherent in the phase space representation of the dynamics.}'' \cite{Donnelly2005}. We will therefore only use Symplectic integrators for our equations.
+Thus symplectic algorithms have been employed in fields such as molecular dynamics and astronomy. ``\textit{Symplectic methods belong to the larger class of geometric numerical integration algorithms. These algorithms are constructed so that they preserve certain geometrical properties inherent in the system. Symplectic methods are so named because, when applied to problems in Hamiltonian mechanics, the algorithms preserve the linear symplectic structure inherent in the phase space representation of the dynamics.}'' \cite{Donnelly2005}. We therefore only use Symplectic integrators for our equations.
 
 
 \subsubsection{Symplectic Euler (1st Order Method)}
-In the explicit Euler, all quantities from the Hamiltonian derivative on the right hand refer to the old time step \(0\) ($i$). In the implicit, they are all referring to the new time step \(1\) ($i+1$), which results in implicit equations that can typically only be solved numerically.
+In the explicit Euler, all quantities from the Hamiltonian derivative on the right hand refer to the old time step $i$ (index 0). In the implicit, all quantities on the RHS refers to the new time step $i+1$ (index 1), which results in implicit equations that can typically only be solved numerically.
 
 The 1st order symplectic Euler is mixture between explicit and implicit Euler \cite{Hairer}:
 
@@ -129,11 +131,11 @@ The center-of-mass-centered 3-body system (C-R3B) with the Earth and Moon was ex
 \label{eq:Pdot_Y}
 \dot{P}_Y = -P_X - \dfrac{(1-k)Y}{((X+k)^2+Y^2)^{3/2}} - \dfrac{k Y}{((X-1+k))^2+Y^2)^{3/2}}
 \end{empheq}
-where \(T\), \(X\), \(Y\), \(P_x\) and \(P_y\) are our dimensionless variables for time, positions, generalized impulse, and \(k=\dfrac{M_{\Moon}}{M_{\Earth} + M_{\Moon}}\), that is the ratio of Moon's mass to the total Moon and Earth mass.
+where \(T\), \(X\), \(Y\), \(P_x\) and \(P_y\) are our dimensionless variables for time, positions, generalized impulse, and \(k=\dfrac{M_{\Moon}}{M_{\Earth} + M_{\Moon}}\), that is the ratio of Moon's mass to the total Earth and Moon mass.
 
 \subsection{C-R3B Numerical Algorithms}
 \subsubsection{C-R3B Symplectic Euler}
-We refer to \cite{Saxe2015} for detailed derivations. The equations of motion of the system in the next based will be more carefully derived here. Based on \cref{eq:Xdot,eq:Ydot,eq:Pdot_X,eq:Pdot_Y}, a symplectic Euler algorithm is found:
+We refer to \cite{Saxe2015} for detailed derivations. The equations of motion of the other system in the next section will be derived in details. Based on \cref{eq:Xdot,eq:Ydot,eq:Pdot_X,eq:Pdot_Y}, a symplectic Euler algorithm is found:
 
 \begin{align}
     X_1 &= \dfrac{X_0 + h (h P_{Y,0} + P_{X,0} + Y_0)}{1+h^2}, \\[0.4cm]
@@ -164,7 +166,10 @@ Based on \cref{eq:Xdot,eq:Ydot,eq:Pdot_X,eq:Pdot_Y}, a symplectic Störmer-Verle
 \end{align}
 where \(\dot{P}_X,\dot{P}_Y\) are \cref{eq:Pdot_X,eq:Pdot_Y}, \(h\) is the step size, index \(0\) designates previous time step ($i$) and \(1\) designates new time step ($i+1$). The algorithm is run in the same order as listed above.
 
-Furthermore the time step size adaptive. Let $z$ denote a vector of the position variables $(X,y)$.
+\subsubsection{Adaptive Timesteps}
+Furthermore the Verlet algorithm is made to take adaptive time steps. In areas relatively large accelerations, the step size is decreased and vice versa. The idea is to take both an Euler and a Verlet step, and estimate the error made in the step as the difference between the two.
+
+Let $z$ denote a vector of the position variables $(X,y)$.
 \begin{align}
 \text{Euler step result:} \qquad z_1 = z + O(h), \\
 \text{Verlet step result:} \qquad z_2 = z + O(h^2), \\
@@ -182,7 +187,7 @@ The adaptive algorithm varies in step size in an attempt to fix the error per st
 For all simulations we have set $10^{-9}$ as the maximum tolerated error per step in the adaptive algorithm. For the non-adaptive algorithm we select a fixed step size, $10^{-6}$, to ensure that it's reasonably low most of the time. This approach was again taken directly from \cite{Saxe2015}.
 
 \section{Heliocentric Restricted 4-Body System (H-R4B), Sun-Earth-Mars}
-Simulating orbit from Earth to Mars requires a new model with at least four bodies: Sun, Earth, Mars and the Spacecraft. The coordinate system will be heliocentric and in spherical coordinates, and restricted meaning that the mass of the spacecraft is considered negligible compared to compared to the celestial masses, so we call this system the ``Heliocentric Restricted N-Body'' system, see \cref{fig:solar-system-model}. We will derive the equations of motion of the spacecraft by using Hamilton's equations, which naturally gives us a set of coupled first-order differential equations, and a set of conserved quantities as ``generalized momenta''.
+Simulating orbit from Earth to Mars requires a new model with at least four bodies: Sun, Earth, Mars and the Spacecraft. The coordinate system will be heliocentric and in spherical coordinates, and restricted\footnote{Meaning that the mass of the spacecraft is considered negligible compared to compared to the celestial masses and therefore is assumed not to affect them}, so we call this system the ``Heliocentric Restricted 4-Body System'', see \cref{fig:solar-system-model}. We will derive the equations of motion of the spacecraft by using Hamilton's equations, which gives us a set of coupled first-order differential equations, and a set of conserved quantities as ``generalized momenta''.
 
 \begin{figure}[ht]
     \centering
@@ -295,6 +300,8 @@ So we finally get the Lagrangian
     p_\phi &= \pd{L}{\dot{\phi}} = m_s r^2 \sin^2{\theta} \dot{\phi} \label{eq:pphi}
 \end{align}
 
+We recognize the three generalized momenta as linear momentum (\cref{eq:pr}) and angular momentum (\cref{eq:ptheta,eq:pphi}), respectively.
+
 \subsubsection{Step 3: \(\dot{q} = \dot{q}_j(\vec{q}, \vec{p}, t)\)}
 \begin{align}
     \dot{r} &= \frac{p_r}{m_s} \\
@@ -406,12 +413,12 @@ We will now choose suitable characteristic units, which has a number of benefits
 \begin{itemize}
     \item The equations gets slightly simplified
     \item The order of the effects of different forces in the system becomes more apparent.
-    \item Many of the calculations in numerical algorithms happens at an order of about 1. 
+    \item Many of the calculations in numerical algorithms happens at an order of about 1, which is desireable for decreasing round-off error due to finite machine precision.
 \end{itemize}
 
 The characteristic units are chosen as:
 \begin{align}
-    \text{Unit length: } k_r &= a_{\Earth}\ {\color{gray} \approx \SI{1.50e8}{\km}}  \\[0.2cm]
+    \text{Unit length: } k_r &= a_{\Earth}\ {\color{gray} \approx \SI{1.50e8}{\km} \text{(1 Earth orbit semi-major axis)}}  \\[0.2cm]
     \text{Unit time: } k_t &= T_{\Earth} = \frac{2\pi}{\omega_\Earth} = 2\pi \sqrt{\frac{a_\Earth^3}{G M_\Sun}}\ {\color{gray} \approx \SI{3.16e7}{\s} \text{ (1 year)}} \\[0.2cm]
     \text{Unit speed: } k_v &= \frac{k_r}{k_t} = \frac{a_\Earth \omega_\Earth}{2\pi} = \frac{1}{2\pi} \sqrt{\frac{G M_\Sun}{a_\Earth}}\ {\color{gray} \approx \SI{4.74}{\km/\s}}
 \end{align}
@@ -484,7 +491,9 @@ The nondimensionalization is done in \cref{apx:hr4b-nondimensionalization}. The 
 \end{equation}
 
 \vspace{0.2cm}
-And for reference, the nondimensionalized Hamiltonian per spacecraft mass:
+where we renamed $p$ to $B$ because we divided by spacecraft mass $m_s$ on both sides, thus $\dot{B}_r$ is now linear velocity along r-coordinate and $\dot{B}_\theta$ and $\dot{B}_\phi$ are now angular velocities.
+
+For reference, the nondimensionalized Hamiltonian per spacecraft mass:
 
 \begin{equation} \tag{2.105}
     \begin{aligned}
@@ -497,7 +506,7 @@ And for reference, the nondimensionalized Hamiltonian per spacecraft mass:
 
 \subsubsection{Symplectic Euler for H-R4B System}
 
-One can choose whichever of \cref{eq:symplectic-euler1,eq:symplectic-euler2} is easier to solve for the equations at hand. We choose the latter form \cref{eq:symplectic-euler2} so with our Hamiltonian \cref{eq:HH_m} we get
+One can choose whichever of the two Symplectic Euler versions \cref{eq:symplectic-euler1,eq:symplectic-euler2} is easier to solve for the equations at hand. We choose the latter form \cref{eq:symplectic-euler2} so with our Hamiltonian \cref{eq:HH_m} we get
 \begin{align}
     R_1 &= R_0 + h B_{r,0} \label{eq:symplectic-euler-R_1}, \\[0.4cm]
     \theta_1 &= \theta_0 + h \frac{B_{\theta,0}}{R_1^2}, \label{eq:symplectic-euler-theta_1} \\[0.4cm]
@@ -526,7 +535,7 @@ These equations of motion follow the procedures of \cref{eq:symplectic-verlet2}.
 \section{Interplanetary Transfer Orbits}
 
 \subsection{Transfer Orbit to Mars: 2D Patched Conic Approximation} \label{sec:2d-patched-conic}
-For now we want to do away with many of the complexities described in the previous section, and make an approximation, which will give us a sense of the key numbers of getting to Mars:
+Get get a sense of the initial conditions that will bring us on a transfer orbit from Earth to Mars, we are interested in the following key numbers:
 \begin{enumerate}
 	\item Delta-v for Mars Orbit Insertion (MOI) at Earth.
 	\item Delta-v for arrival into circular orbit at Mars.
@@ -553,7 +562,7 @@ First we recall that there are four possible orbit types in a two-body system th
     \label{fig:conics-and-orbits}
 \end{figure}
 
-These four orbit types are characterized by the orbit specific energy (mechanical energy per mass) or equivalently by the ranges of eccentricity, see table in \cref{tab:orbit-type-properties}. As the table shows, a negative mechanical energy corresponds to a closed orbit (either circular or elliptical), zero energy corresponds to a parabolic orbit, i.e. an escape velocity orbit that occurs when a satellite is moving with \emph{just} enough speed with respect to a central body that it's speed goes towards zero at infinity. Finally, positive mechanical energy gives hyperbolic orbits.
+These four orbit types are characterized by the orbit specific energy (mechanical energy per mass) or equivalently by the ranges of eccentricity, see table in \cref{tab:orbit-type-properties}. As the table shows, a negative mechanical energy corresponds to a closed orbit (either circular or elliptical), zero energy corresponds to a parabolic orbit, i.e. an escape velocity orbit that occurs when a satellite is moving with \emph{just} enough speed with respect to a central body that it's speed goes towards zero at infinity. Finally, positive mechanical energy corresponds to hyperbolic orbits.
 
 \begin{table}[tbp]
     \centering
@@ -565,12 +574,12 @@ These four orbit types are characterized by the orbit specific energy (mechanica
     Parabola      & 1               & infinity        & $0$     \\
     Hyperbola     & $>1$            & $<0$            & $>0$    \\ \bottomrule
     \end{tabular}
-    \caption{Properties of the four orbit types, characterized by their specific energy and eccentricity \cite{Braeunig}.}
+    \caption{Properties of the four orbit types, characterized by their specific energy and eccentricity (Source: \cite{Braeunig}).}
     \label{tab:orbit-type-properties}
 \end{table}
 
 
-For a interplanetary transfer orbit we can use the Hohmann transfer orbit as the ``base transfer orbit'' and make some modifications. We recall that the Hohmann transfer is an elliptical orbit that brings a satellite between two different circular orbits around a central body by applying an instantaneous burn twice as depicted in \cref{fig:hohmann}. This assumes only one central body. However in our system, we have three central bodies of interest: Earth, Sun and Mars. Each is the dominant body at various points of the journey. We start in a circular orbit around Earth, burn into an elliptical orbit around the Sun and arrive to Mars, burning to a circular orbit again. We can model the transfer orbit to Mars by patching three conic sections:
+For a interplanetary transfer orbit we can use the Hohmann transfer orbit as the ``base transfer orbit'' and make some modifications. We recall that the Hohmann transfer is an elliptical orbit that brings a satellite between two different circular orbits around a central body by applying an instantaneous burn twice as depicted back in \cref{fig:hohmann}. This assumes only one central body. However in our system, we have three central bodies of interest: Earth, Sun and Mars. Each is the dominant body at various points of the journey. We start in a circular orbit around Earth, burn into an elliptical orbit around the Sun and arrive to Mars, burning to a circular orbit again. We can model the transfer orbit to Mars by patching three conic sections:
 
 \begin{enumerate}
 	\item Hyperbolic departure orbit (Geocentric reference frame).
@@ -584,9 +593,9 @@ For a interplanetary transfer orbit we can use the Hohmann transfer orbit as the
     \caption{Hohmann transfer to Mars with necessary departure speed (periapsis at Earth) and arrival speed (apoapsis at Mars) on Hohmann orbit relative to Sun (Image: \cite[p.~127]{Rapp2016} (modified)).}
     \label{fig:Hohmann-to-mars-heliocentric}
 \end{figure}
-Why are the departure and arrival orbits modelled as hyperbolic? It turns out that we need extra speed from LEO to enter a transfer orbit that intersects Mars, meaning we need some velocity in excess to escape velocity. Likewise we \emph{always} arrive at other bodies in a hyperbolic orbit as seen from that body. If we started with zero speed approaching from infinitely far away and waited a duration approaching infinity, we would get the escape velocity when reaching the planet (this is just escaping with the exact escape velocity in reverse). But since we in practice always come with some other speed than the body we approach (here Mars), get arrive with speed in excess to the escape velocity, hence along a hyperbolic orbit, as shown in table in \cref{tab:orbit-type-properties}.
+Why are the departure and arrival orbits modelled as hyperbolic? We need extra speed from LEO to enter a transfer orbit that intersects Mars, meaning we need some velocity in excess to escape velocity. Likewise we \emph{always} arrive at other bodies in a hyperbolic orbit as seen from that body; if we started with zero speed approaching from infinitely far away and waited for infinity, we would get the escape velocity when reaching the planet (this is just escaping with the exact escape velocity in reverse). But since we in practice always come speed already, relative to the body we approach (here Mars), we arrive with speed in excess to the escape velocity, hence along a hyperbolic orbit, as shown in table in \cref{tab:orbit-type-properties}.
 
-As \cref{fig:Hohmann-to-mars-heliocentric} shows, we arrive at Mars' orbit with less speed than Mars \emph{if Mars wasn't there}, but actually need to slow down due to the attraction of Mars that results in higher speed to necessary for a circular orbit in target altitude \SI{125}{\km}. Thus overall we get a hyperbolic departure orbit, patched with an elliptical orbit, patched with another hyperbolic arrival orbit, with required speeds as illustrated in figure \cref{fig:Hohmann-to-mars-geocentric-areocentric}.
+As \cref{fig:Hohmann-to-mars-heliocentric} shows, we arrive at Mars' orbit with less speed than Mars \emph{if Mars wasn't there}, but actually need to slow down due to the attraction of Mars that results in higher speed to necessary for a close circular orbit at target altitude \SI{125}{\km}. Thus overall we get a hyperbolic departure orbit, patched with an elliptical orbit, patched with another hyperbolic arrival orbit, with required speeds as illustrated in figure \cref{fig:Hohmann-to-mars-geocentric-areocentric}.
 
 \begin{figure}[ht]
     \centering
@@ -600,7 +609,7 @@ All the numbers of \cref{fig:Hohmann-to-mars-heliocentric,fig:Hohmann-to-mars-ge
 \begin{enumerate}
 	\item \SI{3.62}{\km\per\s} needed to depart Earth circular orbit at altitude 160 km on Mars Orbit Insertion (MOI).
 	\item \SI{-2.11}{\km\per\s} needed at Mars arrival for circular orbit at \SI{125}{\km} altitude. Just for illustration, we could also apply less burn at Mars at the expense of entering a highly elliptical orbit as \cref{fig:mars-arrival-orbit} shows.
-	\item Mars must be $44^\degree$ behind Earth at MOI in order for Mars to be at Hohmann orbit apoapsis at the same time, see \cref{fig:Hohmann-angle}. This happens every 1.6 years \cite{Odenwald} (assuming Earth and Mars and in the same plane and orbit eccentricities are zero).
+	\item Mars must be $44^\degree$ behind Earth at MOI in order for Mars to be at Hohmann orbit apoapsis at the same time, see \cref{fig:Hohmann-angle}. This happens about every 26 months.
 	\item Travel time for optimal Hohmann trajectory is around 260 days, or around 8.5 months.
 \end{enumerate}
 
@@ -622,11 +631,12 @@ These numbers are an important approximate reference point to have when attempti
 
 \clearpage
 
-\subsection{Earth-Mars Transfer – Ignored Complications}
+\subsection{Earth-Mars Transfer in 3D}
+\subsubsection{Ignored Complications}
 In the section above there are a number of complications that we have ignored. For example, Earth and Mars have different eccentricities (0.0167 vs. 0.0934) meaning that its angular velocity changes considerably depending on whether it is near perihelion or aphelion at the time of transfer. For a better estimate we can no longer consider the orbit to be circular. \cite{Braeuniga} gives a great analysis of the Earth-Mars Hohmann transfer orbit in 3D.
 
 
-\subsubsection{Easiest Solution: Launch into The Right Plane – Actual Hohmann Transfer Orbit in 3D}
+\subsubsection{Launch into The Right Plane – Actual Hohmann Transfer Orbit in 3D}
 In the previous section we detailed the important patched conic sections model in 2D. In our 3D simulator we will attempt something similar, but take the inclination of Mars' orbital plane into account.
 
 Mars orbital inclination is $1.85^\degree$ to the ecliptic plane. Therefore if one naively tried to rendezvous with Mars in the ecliptic plane it would be \( 1.52\ \text{AU} \cdot 1.85^\degree \pi / 180 = \SI{7.4e6}{\km} \) away. Instead we will attempt a 3D Hohmann transfer orbit as illustrated in \cref{fig:hohmann-transfer-orbit-3D} using the same launch parameters as was found in the 2D hohmann model in \cref{sec:2d-patched-conic}, but allowing the \(\phi\) angle to vary a bit to get slightly out of the plane.
