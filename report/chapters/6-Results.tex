@@ -80,8 +80,16 @@ When we computed the problem space flattened to two dimensions by locking the bu
     \label{fig:ES-examples} 
 \end{figure} 
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.7\linewidth]{fig/golf_course_wide.png}
+    \caption{The problem space with the bounds that we tried initially: full circle of starting angles, and a much more liberal range of initial burn vector magnitudes. At $burn \Delta v \leq 3.08$ we don't escape from earth, and at $burn \Delta v \geq 3.15$ we simply escape the earth-moon system entirely, apart from the case where we strike the moon directly. The blue line that cuts through the yellow is broadly speaking the class of Hohmann transfers at greater and greater speed. They are not very interesting, so we limited the search bounds for our experiments to what you see in \cref{fig:golf_course_s1024}}
+    \label{fig:golf_course_wide}
+\end{figure}
+
 \subsection{Comparison with Baseline}
-Comparing the ES algorithm with a random guessing baseline, we do not get very encouraging results \cref{fig:randomguessingufig}.
+Comparing the ES algorithm with a random guessing baseline, we do not get very encouraging results \cref{fig:randomguessingufig}. Given the parameter bounds used in these experiments (which we believe are quite reasonable given the overall picture of the optimization space \cref{fig:golf_course_wide}), it seems that the space is sufficiently dense with good solutions (that are more or less equally good), that random guessing performs decently. Assuming that the best solutions are found by traversing a ridge, ES still has value, but from what we have seen, the along-ridge gradient is very low.
+
 
 \begin{figure}[ht]
     \subfloat[Random guessing with 2000 fitness evaluations]{
