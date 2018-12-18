@@ -237,6 +237,9 @@ def multi_plot(completed_paths, psis, plot_type, filepath=".", title=None):
     plt.close()
 
 
+
+
+
 def orbital_circle(celestial):
     """
     input: celestial enum
@@ -245,14 +248,8 @@ def orbital_circle(celestial):
     if celestial == "moon":
         circle_x = [LUNAR_POSITION_X * cos(x / 100.0 * 2 * pi) for x in range(0, 101)]
         circle_y = [LUNAR_POSITION_X * sin(x / 100.0 * 2 * pi) for x in range(0, 101)]
-    elif celestial == 'mars':
-        circle_x = [
-            mars_orbital_distance * cos(x / 100.0 * 2 * pi) for x in range(1, 101)
-        ]
-        circle_y = [
-            mars_orbital_distance * sin(x / 100.0 * 2 * pi) for x in range(1, 101)
-        ]
     elif celestial == 'earth':
         return None
 
     return [circle_x, circle_y]
+
