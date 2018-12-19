@@ -1,6 +1,6 @@
 TARGET	= libcudasim.so
 LIBSRCS	= 
-LIBOBJS	= cudasim.o simulate.o
+LIBOBJS	= cudasim.o cppsim.o initial_conditions.o
 
 OPT	= -g -O3
 PIC = -fpic
@@ -12,7 +12,7 @@ XARCH = -arch=sm_70
 CXX	= nvcc
 CXXFLAGS = --compiler-options "$(OPT) $(PIC) $(OMP)" $(XARCH) $(XOPT) $(XPIC)
 
-CUDA_PATH ?= /appl/cuda/9.2
+CUDA_PATH ?= /appl/cuda/10.0
 INCLUDES = -I$(CUDA_PATH)/include -I$(CUDA_PATH)/samples/common/inc
 
 SOFLAGS = -shared

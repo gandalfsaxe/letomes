@@ -21,12 +21,6 @@ from ctypes import *
 cudasim = cdll.LoadLibrary("./libcudasim.so")
 
 from math import pi
-pi8 = pi / 8
-pi4 = pi / 4
-pi2 = pi / 2
-tau = 2 * pi
-
-#from orbsim.r4b_3d.integrators import euler_step_symplectic
 
 def simulate(
     psi,
@@ -34,9 +28,6 @@ def simulate(
     h=1 / UNIT_TIME,
     max_duration=1 * 3600 * 24 / UNIT_TIME,
     max_iter=int(1e6),
-    number_of_paths=int(1),
-    fan_delta=0.1,
-    coordinate_no=int(0)
 ):
     """Simple simulator that will run a LEO until duration or max_iter is reached.
 
@@ -56,12 +47,11 @@ def simulate(
     max_iter = int(max_iter)
 
     # Unpack psi
-    t = psi[0]
-    Q = psi[1]
-    B = psi[2]
-    # burn = psi[3]
-
-    day = t * UNIT_TIME / (3600 * 24)
+    days = np.array(psi[0])
+    ts = days * (3600 * 24) / UNIT_TIME
+    Qs = np.array(psi[1])
+    Bs = np.array(psi[2])
+    nPaths = Qs.shape[0]
 
     # Read ephemerides
     logging.debug("Getting ephemerides tables")
@@ -69,58 +59,30 @@ def simulate(
     earth = np.array(ephemerides['earth'])
     mars = np.array(ephemerides['mars'])
 
-    # Unpack initial position (Q) and momenta (B)
-    R, theta, phi = Q
-    B_R, B_theta, B_phi = B
-
-    logging.info(f"Initial coordinates: Q = {B} (R, theta, phi)")
-    logging.info(f"Initial momenta: B = {B} (B_R, B_theta, B_phi")
-
-    logging.info(
-        f"Starting simulation at time {t} ({day} days) with step size h = {h} "
-        f"({h*UNIT_TIME} s)"
-        f", max {max_iter} iterations and max {max_duration*UNIT_TIME/3600/24} days"
-    )
-
-    # List initialization
-    i = 0
-
-    ts = []
-    days = []
-    Qs = []
-    Bs = []
-    q_p_list = []
-
-    # Run iteration 0 manually
-    ts.append(t)
-    days.append(day)
-    Qs.append([R, theta, phi])
-    Bs.append([B_R, B_theta, B_phi])
-    q_p_list.append((Qs[0], Bs[0]))
-    t1 = time.time()
-    sim_time = t1 - t0
-    logging.info(
-        f"Iteration {str(i).rjust(len(str(max_iter)))} / {max_iter}"
-        f", in-sim time {format_time(t, time_unit='years')} / "
-        f"{format_time(max_duration, time_unit='years')}"
-        f"   (out-of-sim elapsed time: {format_time(sim_time)})"
-    )
-
-
     """
     make list of all paths to integrate
     """
-    successes = np.zeros(number_of_paths, dtype=bool)
-    scores = np.zeros(number_of_paths)
+
+    ts = np.asarray(ts)
+    Rs = np.array(Qs[:,0])
+    thetas = np.array(Qs[:,1])
+    phis = np.array(Qs[:,2])
+    B_Rs = np.array(Bs[:,0])
+    B_thetas = np.array(Bs[:,1])
+    B_phis = np.array(Bs[:,2])
+    arives = np.zeros(nPaths)
+    scores = np.zeros(nPaths)
     cudasim.simulate.restype = None
     cudasim.simulate.argtypes = [
         c_int,
         c_double,
-        c_int,
-        c_double,
         c_double,
         c_int,
-        c_double,
+        POINTER(c_double),
+        POINTER(c_double),
+        POINTER(c_double),
+        POINTER(c_double),
+        POINTER(c_double),
         POINTER(c_double),
         POINTER(c_double),
         c_int,
@@ -130,38 +92,45 @@ def simulate(
         POINTER(c_double),
         POINTER(c_double),
         POINTER(c_double),
-        POINTER(c_bool),
+        POINTER(c_double),
         POINTER(c_double),
     ]
 
-    Q = np.asarray(Q)
-    B = np.asarray(B)
     earth_R = earth[:,3].astype(np.float64)
     earth_theta = earth[:,4].astype(np.float64) * pi / 180
     earth_phi = earth[:,5].astype(np.float64) * pi / 180
     mars_R = mars[:,3].astype(np.float64)
     mars_theta = mars[:,4].astype(np.float64) * pi / 180
     mars_phi = mars[:,5].astype(np.float64) * pi / 180
-    Q_ctype = Q.ctypes.data_as(POINTER(c_double))
-    B_ctype = B.ctypes.data_as(POINTER(c_double))
+
+    ts_ctype = ts.ctypes.data_as(POINTER(c_double))
+    Rs_ctype = Rs.ctypes.data_as(POINTER(c_double))
+    thetas_ctype = thetas.ctypes.data_as(POINTER(c_double))
+    phis_ctype = phis.ctypes.data_as(POINTER(c_double))
+    B_Rs_ctype = B_Rs.ctypes.data_as(POINTER(c_double))
+    B_thetas_ctype = B_thetas.ctypes.data_as(POINTER(c_double))
+    B_phis_ctype = B_phis.ctypes.data_as(POINTER(c_double))
+
     earth_R_ctype = earth_R.ctypes.data_as(POINTER(c_double))
     earth_theta_ctype = earth_theta.ctypes.data_as(POINTER(c_double))
     earth_phi_ctype = earth_phi.ctypes.data_as(POINTER(c_double))
     mars_R_ctype = mars_R.ctypes.data_as(POINTER(c_double))
     mars_theta_ctype = mars_theta.ctypes.data_as(POINTER(c_double))
     mars_phi_ctype = mars_phi.ctypes.data_as(POINTER(c_double))
-    success_ctype = successes.ctypes.data_as(POINTER(c_bool))
+    arive_ctype = arives.ctypes.data_as(POINTER(c_double))
     score_ctype = scores.ctypes.data_as(POINTER(c_double))
     cudasim.simulate(
-        number_of_paths,
-        fan_delta,
-        coordinate_no,
+        nPaths,
         h,
         max_duration,
         int(max_iter),
-        t,
-        Q_ctype,
-        B_ctype,
+        ts_ctype,
+        Rs_ctype,
+        thetas_ctype,
+        phis_ctype,
+        B_Rs_ctype,
+        B_thetas_ctype,
+        B_phis_ctype,
         int(earth_R.size),
         earth_R_ctype,
         earth_theta_ctype,
@@ -169,89 +138,124 @@ def simulate(
         mars_R_ctype,
         mars_theta_ctype,
         mars_phi_ctype,
-        success_ctype,
+        arive_ctype,
         score_ctype,
     )
 
-    """
-    # Iteration loop
-    while True:
-        i += 1
-        t += h
-        day = t * UNIT_TIME / (3600 * 24)
+    return arives, scores
 
-        eph_on_day = get_ephemerides_on_day(ephemerides, day)
-        eph_coords = get_coordinates_on_day_rad(eph_on_day)
+def simulate_single(
+    psi,
+    max_year="2039",
+    h=1 / UNIT_TIME,
+    max_duration=1 * 3600 * 24 / UNIT_TIME,
+    max_iter=int(1e6),
+):
+    logging.info("STARTING: Simple simulation.")
+    t0 = time.time()
+    max_iter = int(max_iter)
 
-        Q, B = euler_step_symplectic(h, Q, B, eph_coords)
+    # Unpack psi
+    days = np.array(psi[0])
+    ts = days * (3600 * 24) / UNIT_TIME
+    Qs = np.array(psi[1])
+    Bs = np.array(psi[2])
+    nSteps = int(max_duration / (h - 1e-14))
 
-        ts.append(t)
-        days.append(day)
-        Qs.append(Q)
-        Bs.append(B)
-        q_p_list.append((Q, B))
+    # Read ephemerides
+    logging.debug("Getting ephemerides tables")
+    ephemerides = get_ephemerides(max_year=max_year)
 
-        # Log status every 1000 iterations.
-        if i % 1000 == 0:
-            t1 = time.time()
-            sim_time = t1 - t0
+    earth = np.array(ephemerides['earth'])
+    mars = np.array(ephemerides['mars'])
+    ts = np.asarray(ts)
+    Rs = np.array(Qs[:,0])
+    thetas = np.array(Qs[:,1])
+    phis = np.array(Qs[:,2])
+    B_Rs = np.array(Bs[:,0])
+    B_thetas = np.array(Bs[:,1])
+    B_phis = np.array(Bs[:,2])
+    ts_out = np.zeros(nSteps)
+    Qs_out = np.zeros((nSteps, 3))
+    #ts_out[:] = 0
+    #Qs_out[:] = 0
+    #ts_out = np.repeat(0.0, nSteps)
+    #Qs_out = np.repeat(0.0, nSteps*3)
+    #Qs_out.shape = (nSteps, 3)
+    #print("nSteps=", nSteps, "size=", Qs_out.size)
+    i_final = np.zeros(1, int)
+    cudasim.simulate_cpu.restype = None
+    cudasim.simulate_cpu.argtypes = [
+        c_double,
+        c_double,
+        c_int,
+        POINTER(c_double),
+        POINTER(c_double),
+        POINTER(c_double),
+        POINTER(c_double),
+        POINTER(c_double),
+        POINTER(c_double),
+        POINTER(c_double),
+        c_int,
+        POINTER(c_double),
+        POINTER(c_double),
+        POINTER(c_double),
+        POINTER(c_double),
+        POINTER(c_double),
+        POINTER(c_double),
+        POINTER(c_double),
+        POINTER(c_double),
+        POINTER(c_int),
+    ]
 
-            logging.info(
-                f"Iteration {str(i).rjust(len(str(max_iter)))} / {max_iter}"
-                f", in-sim time {format_time(t, time_unit='years')} / "
-                f"{format_time(max_duration, time_unit='years')}"
-                f"   (out-of-sim elapsed time: {format_time(sim_time)})"
-            )
+    earth_R = earth[:,3].astype(np.float64)
+    earth_theta = earth[:,4].astype(np.float64) * pi / 180
+    earth_phi = earth[:,5].astype(np.float64) * pi / 180
+    mars_R = mars[:,3].astype(np.float64)
+    mars_theta = mars[:,4].astype(np.float64) * pi / 180
+    mars_phi = mars[:,5].astype(np.float64) * pi / 180
 
-        # Stop simulation of max duration reached
-        if t >= max_duration:
-            logging.info(
-                f"STOP: Max time of {max_duration:.6f} "
-                f"({format_time(max_duration, time_unit='years')}) "
-                f"reached at t = {t:.6f} ({format_time(t, time_unit='years')})"
-                f" at iteration: {i}/{max_iter} ~ {i/max_iter*100:.3f} %"
-            )
-            break
+    ts_ctype = ts.ctypes.data_as(POINTER(c_double))
+    Rs_ctype = Rs.ctypes.data_as(POINTER(c_double))
+    thetas_ctype = thetas.ctypes.data_as(POINTER(c_double))
+    phis_ctype = phis.ctypes.data_as(POINTER(c_double))
+    B_Rs_ctype = B_Rs.ctypes.data_as(POINTER(c_double))
+    B_thetas_ctype = B_thetas.ctypes.data_as(POINTER(c_double))
+    B_phis_ctype = B_phis.ctypes.data_as(POINTER(c_double))
 
-        # Stop simulation of max iterations reached
-        if i >= max_iter:
-            logging.info(
-                f"STOP: Max iter of {max_iter} reached (i={i}) "
-                f"at t = {format_time(t, time_unit='years')}/"
-                f"{format_time(max_duration, time_unit='years')} ~ "
-                f"{t/max_duration:.3f} %)"
-            )
-            break
-
-    """
-    t += h;
-    t_s = t * UNIT_TIME  # final in-sim time in seconds
-    tf = time.time()
-    T = tf - t0  # final out-of-sim time in seconds
-
-    # Post simulator run logging
-    logging.info(
-        f"SIMULATOR PERFORMANCE: Sim/Real time ratio:    "
-        f"{Decimal(t_s / T):.2E} ({(t_s / T):.2f})"
+    earth_R_ctype = earth_R.ctypes.data_as(POINTER(c_double))
+    earth_theta_ctype = earth_theta.ctypes.data_as(POINTER(c_double))
+    earth_phi_ctype = earth_phi.ctypes.data_as(POINTER(c_double))
+    mars_R_ctype = mars_R.ctypes.data_as(POINTER(c_double))
+    mars_theta_ctype = mars_theta.ctypes.data_as(POINTER(c_double))
+    mars_phi_ctype = mars_phi.ctypes.data_as(POINTER(c_double))
+    ts_out_ctype = ts_out.ctypes.data_as(POINTER(c_double))
+    Qs_out_ctype = Qs_out.ctypes.data_as(POINTER(c_double))
+    i_final_ctype = i_final.ctypes.data_as(POINTER(c_int))
+    cudasim.simulate_cpu(
+        h,
+        max_duration,
+        int(max_iter),
+        ts_ctype,
+        Rs_ctype,
+        thetas_ctype,
+        phis_ctype,
+        B_Rs_ctype,
+        B_thetas_ctype,
+        B_phis_ctype,
+        int(earth_R.size),
+        earth_R_ctype,
+        earth_theta_ctype,
+        earth_phi_ctype,
+        mars_R_ctype,
+        mars_theta_ctype,
+        mars_phi_ctype,
+        ts_out_ctype,
+        Qs_out_ctype,
+        i_final_ctype,
     )
-    logging.info(
-        f"SIMULATOR PERFORMANCE: 1 second can simulate:  "
-        f"{format_time(t_s / T)} (DDD:HH:MM:SS)"
-    )
-    logging.info(
-        f"SIMULATOR PERFORMANCE: Time to simulate 1 day: "
-        f"{format_time(T / t_s * 3600 * 24)} (DDD:HH:MM:SS)"
-    )
-    logging.info(
-        f"TIME ELAPSED: In-sim time duration:     {format_time(t,time_unit='years')} "
-        f"(DDD:HH:MM:SS)"
-    )
-    logging.info(
-        f"TIME ELAPSED: Out-of-sim time duration: {format_time(T)} (DDD:HH:MM:SS)"
-    )
 
-    return (ts, Qs, Bs, (t, i), ephemerides)
-
+    return ts_out, Qs_out, i_final
 
 def format_time(time_value, time_unit="seconds"):
     """Format time from a single unit (by default seconds) to a DDD:HH:MM:SS string
