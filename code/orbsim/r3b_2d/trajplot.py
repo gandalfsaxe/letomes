@@ -6,22 +6,20 @@ from matplotlib import animation
 
 import numpy as np
 
-from . import *
+from orbsim.r3b_2d import EARTH_POSITION_X, LUNAR_POSITION_X
 from orbsim.r3b_2d.simulators import run_sim
-from matplotlib.animation import ImageMagickFileWriter
 
-EARTH_POSITION_X = -0.001
-LUNAR_POSITION_X = 1
 
 
 class TrajPlot(object):
-    def __init__(self, completed_path, ax, inertial_mode = True):
+    def __init__(self, completed_path, ax, inertial_mode=True):
         self.score, _, self.path = completed_path  # [Dv,success?,[x,y,px,py,h]]
         xs, ys, _, _, hs, ts = np.array(self.path).T
         self.ani_ax = ax
         self.idxs = get_idxs(hs)
+        self.inertial_mode = inertial_mode
 
-        if inertial_mode:
+        if self.inertial_mode:
             self.xs_traj = xs
             self.ys_traj = ys
         else:
@@ -40,32 +38,46 @@ class TrajPlot(object):
             self.earth_xdata, self.earth_ydata, color="red"
         )
 
-        self.moon_xdata = [self.xs_moon[0]]
-        self.moon_ydata = [self.ys_moon[0]]
-        self.moon_line, = self.ani_ax.plot(
-            self.moon_xdata, self.moon_ydata, color="green"
-        )
+        if self.inertial_mode:
+            circle_x = [LUNAR_POSITION_X * cos(x / 100.0 * 2 * pi) for x in range(0, 101)]
+            circle_y = [LUNAR_POSITION_X * sin(x / 100.0 * 2 * pi) for x in range(0, 101)]
+            self.ani_ax.plot(circle_x,circle_y, color="grey", alpha = 0.3)
+            self.ani_ax.scatter([LUNAR_POSITION_X],[0], color="grey", s=6)
+            self.moon_line = None
+        else:
+            self.moon_xdata = [self.xs_moon[0]]
+            self.moon_ydata = [self.ys_moon[0]]
+            self.moon_line, = self.ani_ax.plot(
+                self.moon_xdata, self.moon_ydata, color="grey", alpha=0.3
+            )
 
         self.traj_xdata = [self.xs_traj[0]]
         self.traj_ydata = [self.ys_traj[0]]
         self.traj_line, = self.ani_ax.plot(
             self.traj_xdata, self.traj_ydata, color="black"
         )
-        self.ani_ax.set_xlim((-1, 1))
-        self.ani_ax.set_ylim((-1, 1))
+        self.ani_ax.set_xlim((-1.01, 1.01))
+        self.ani_ax.set_ylim((-1.01, 1.01))
+        self.ani_ax.set_aspect(1)
+        plt.axis("off")
 
         self.ani_terminate = False
+        self.restart_moon = False
 
     def update(self, i):
         if self.ani_terminate:
-            return self.traj_line, self.earth_line, self.moon_line
-        if i == len(self.xs_traj) - 1:
+            if self.inertial_mode:
+                return (self.traj_line,self.earth_line,)
+            else:
+                return (
+                    self.traj_line,
+                    self.earth_line,
+                    self.moon_line,
+                )  # only important when using plt.show
+        if i == len(self.idxs) - 1:
             self.ani_ax.scatter(self.xs_traj[-1], self.ys_traj[-1], color="black")
             self.ani_ax.scatter(
-                self.xs_earth[-1],
-                self.ys_earth[-1],
-                self.zs_earth[-1],
-                color="deepskyblue",
+                self.xs_earth[-1], self.ys_earth[-1], color="deepskyblue"
             )
             self.ani_ax.scatter(self.xs_moon[-1], self.ys_moon[-1], color="grey")
             self.ani_terminate = True
@@ -78,11 +90,15 @@ class TrajPlot(object):
         self.earth_xdata.append(self.xs_earth[self.idxs[i]])
         self.earth_ydata.append(self.ys_earth[self.idxs[i]])
         self.earth_line.set_data(self.earth_xdata, self.earth_ydata)
-        
-        self.moon_xdata.append(self.xs_moon[self.idxs[i]])
-        self.moon_ydata.append(self.ys_moon[self.idxs[i]])
-        self.moon_line.set_data(self.moon_xdata, self.moon_ydata)
-        return self.traj_line, self.earth_line, self.moon_line
+        if not self.inertial_mode:
+            if self.ys_moon[self.idxs[i]] < 0 and self.ys_moon[self.idxs[i+1]] > 0:
+                self.moon_xdata = []
+                self.moon_ydata = []
+            self.moon_xdata.append(self.xs_moon[self.idxs[i]])
+            self.moon_ydata.append(self.ys_moon[self.idxs[i]])
+            self.moon_line.set_data(self.moon_xdata, self.moon_ydata)
+            return self.traj_line, self.earth_line, self.moon_line
+        return self.traj_line, self.earth_line
 
 
 def get_idxs(hs):
@@ -93,7 +109,7 @@ def get_idxs(hs):
     ):  # each time step h, check whether the little tally has reached our threshold.
         h = hs[i]  # if it has, take that index as a time step
         tally += h
-        if tally >= 1.5e-3:
+        if tally >= 3.5e-3:
             idxs.append(i)
             tally = 0
     return idxs
@@ -102,14 +118,14 @@ def get_idxs(hs):
 if __name__ == "__main__":
     fig = plt.figure()
     ax = fig.gca()
-    cpath = run_sim([3.0, 0.0, 3.1], duration=50)
-    trajp = TrajPlot(cpath, ax)
-    ani = animation.FuncAnimation(
-        fig, trajp.update, range(len(trajp.idxs)), interval=0.3, blit=True
+    cpath = run_sim(
+        [3.794183030145708, 0.023901845288554, 3.090703702702703], duration=200
     )
-    plt.rcParams[
-        "animation.convert_path"
-    ] = "C:\Program Files\ImageMagick-7.0.8-Q16\magick.exe"  # "/usr/local/bin/magick"
-    writer = ImageMagickFileWriter(fps=30)
-    ani.save(f"{str(Path.home())}/animation.mp4", writer=writer)
-    # plt.show()
+    trajp = TrajPlot(cpath, ax)
+    ani = animation.FuncAnimation(fig, trajp.update, range(len(trajp.idxs)), interval=0.1,blit=True)
+    # plt.rcParams[
+    #     "animation.convert_path"
+    # ] = "C:\Program Files\ImageMagick-7.0.8-Q16\magick.exe"  # "/usr/local/bin/magick"
+    # writer = ImageMagickFileWriter()
+    # ani.save(f"{str(Path.home())}/animation.mp4", writer="ffmpeg", fps=90)
+    plt.show()

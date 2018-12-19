@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 
-from . import *
+from orbsim.r3b_2d import *
 
 
 def orbitplot2d(completed_path, psi=None, filepath=".", title=None, multi_mode=False):
@@ -29,7 +29,7 @@ def orbitplot2d(completed_path, psi=None, filepath=".", title=None, multi_mode=F
 
     idxs = get_idxs(ts)
     N_PTS = len(idxs)
-    increment = int(N_PTS/100)
+    increment = int(N_PTS / 100)
 
     if multi_mode:
         ax = plt.gca()
@@ -39,7 +39,7 @@ def orbitplot2d(completed_path, psi=None, filepath=".", title=None, multi_mode=F
         ax.set_prop_cycle(
             "color",
             [
-                cm(max(0,0.9 - (1. * i / (N_PTS / increment))))
+                cm(max(0, 0.9 - (1. * i / (N_PTS / increment))))
                 for i in range(int(N_PTS / increment))
             ],
         )
@@ -51,7 +51,7 @@ def orbitplot2d(completed_path, psi=None, filepath=".", title=None, multi_mode=F
     ax.plot(Xs_earth, Ys_earth, color="grey", linewidth=0.5, alpha=0.8)
     ax.plot(Xs_moon, Ys_moon, color="grey", linewidth=0.5)
 
-    circle_x, circle_y = orbital_circle('moon')
+    circle_x, circle_y = orbital_circle("moon")
     ax.plot(circle_x, circle_y, color="grey", linewidth=0.3, alpha=0.6)
 
     earth = plt.Circle(
@@ -82,13 +82,13 @@ def orbitplot_non_inertial(
     
     Plots a figure of the inputted orbit in the non-inertial reference frame, with end point marked in red, earth and moon/mars marked as well.
     """
-    score, path = completed_path  # [Dv,[x,y,px,py,h]]
+    score, _, path = completed_path  # [Dv,[x,y,px,py,h]]
 
     xs, ys, pxs, pys, hs, _ = np.array(path).T
 
     idxs = get_idxs(hs)
     N_PTS = len(idxs)
-    increment = int(N_PTS/100)
+    increment = int(N_PTS / 100)
     if multi_mode:
         ax = plt.gca()
     else:
@@ -97,7 +97,7 @@ def orbitplot_non_inertial(
         ax.set_prop_cycle(
             "color",
             [
-                cm(max(0,0.9 - (1. * i / (N_PTS / increment))))
+                cm(max(0, 0.9 - (1. * i / (N_PTS / increment))))
                 for i in range(int(N_PTS / increment))
             ],
         )
@@ -114,7 +114,7 @@ def orbitplot_non_inertial(
     ax.scatter([L1_POSITION_X], [0], marker="x", color="pink", linewidth=0.4)
     ax.scatter(xs[-1], ys[-1], color="red", marker="x", linewidth=0.6)
 
-    circle_x, circle_y = orbital_circle('moon')
+    circle_x, circle_y = orbital_circle("moon")
     ax.plot(circle_x, circle_y, color="grey", linewidth=0.3, alpha=0.3)
 
     if not multi_mode:
@@ -219,13 +219,12 @@ def multi_plot(completed_paths, psis, plot_type, filepath=".", title=None):
         _, path = cpath
         ts = np.array(path).T[5]
         idxs = get_idxs(ts)
-        increment = len(idxs)/100
+        increment = len(idxs) / 100
         # print(len(idxs),increment)
 
         cm = plt.get_cmap(cmap_cycle[i % len(cmap_cycle)])
         ax.set_prop_cycle(
-            "color",
-            [cm(max(0,0.9 - (1. * i / 100))) for i in range(100)],
+            "color", [cm(max(0, 0.9 - (1. * i / 100))) for i in range(100)]
         )
         plot_type(cpath, psi, multi_mode=True)
 
@@ -237,9 +236,6 @@ def multi_plot(completed_paths, psis, plot_type, filepath=".", title=None):
     plt.close()
 
 
-
-
-
 def orbital_circle(celestial):
     """
     input: celestial enum
@@ -248,7 +244,7 @@ def orbital_circle(celestial):
     if celestial == "moon":
         circle_x = [LUNAR_POSITION_X * cos(x / 100.0 * 2 * pi) for x in range(0, 101)]
         circle_y = [LUNAR_POSITION_X * sin(x / 100.0 * 2 * pi) for x in range(0, 101)]
-    elif celestial == 'earth':
+    elif celestial == "earth":
         return None
 
     return [circle_x, circle_y]
