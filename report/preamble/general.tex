@@ -102,7 +102,8 @@
             %backref=true,
             abbreviate=false,
             dateabbrev=false,
-            alldates=long]{biblatex}
+            alldates=long,
+            block=ragged]{biblatex}
 
 % Floating objects, captions and references
 \usepackage{flafter}  % floats is positioned after or where it is defined! 
@@ -136,6 +137,7 @@
 \ifnum\strcmp{\showtodos}{false}=0
     \def\todoshowing{disable}
 \fi
+\setlength {\marginparwidth}{2cm}
 \usepackage[colorinlistoftodos,\todoshowing]{todonotes} % Todonotes package for nice todos
 \newtotcounter{todocounter}           % Creates counter in todo
 \let\oldtodo\todo
@@ -313,11 +315,14 @@
 
 %%%%%%%%%% Extra packages %%%%%%%%%%
 
-\usepackage{subfig}  % needed for our way of doing sub-figures
-\usepackage{caption} % needed for our way of doing sub-figures
-\usepackage{bm}      % for bold greek symbols
-\usepackage{mathabx} % astronomical symbols such as \Earth, \Sun, etc.
-\usepackage{pdfpages}
+\usepackage{subfig}   % needed for our way of doing sub-figures
+\usepackage{caption}  % needed for our way of doing sub-figures
+\usepackage{bm}       % for bold greek symbols
+\usepackage{mathabx}  % astronomical symbols such as \Earth, \Sun, etc.
+\usepackage{pdfpages} % for inserting PDF pages (typically used in appendix)
+\usepackage{booktabs} % prettier tables 
+\usepackage{csquotes} % context sensitive quotes.
+\usepackage{enumitem} % alphabet instead of numbers in numerical sub-lists.
 
 %%%%%%%%%% Extra commands %%%%%%%%%%
 

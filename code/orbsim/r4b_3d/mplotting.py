@@ -28,9 +28,9 @@ def all_plots_r4b_orbitplot(qs, ts, t_final, max_year):
     r4b_orbit.zoom_orbit(ax2)
     r4b_orbit.r4b_orbitplot(ax3)
     # exit(0)
-    ani = animation.FuncAnimation(
-        fig, r4b_orbit.update, range(len(qs)), interval=20, blit=False
-    )  # Turn off blitting if you want to rotate the plot. Turn it on if you wanna go fast
+    # ani = animation.FuncAnimation(
+    #     fig, r4b_orbit.update, range(len(qs)), interval=20, blit=False
+    # )  # Turn off blitting if you want to rotate the plot. Turn it on if you wanna go fast
     # plt.rcParams[
     #     "animation.convert_path"
     # ] = "C:\Program Files\ImageMagick-7.0.8-Q16\magick.exe"  # "/usr/local/bin/magick"

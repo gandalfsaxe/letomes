@@ -160,8 +160,11 @@ def get_coordinates_on_day_rad(ephemerides_on_day):
     return R_ks, theta_ks, phi_ks
 
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
 
+    test = get_ephemerides()
+
+    x = 2
 #     from pprint import pprint
 
 #     test = get_coordinates_on_day_rad(get_ephemerides_on_day(get_ephemerides(), 0))

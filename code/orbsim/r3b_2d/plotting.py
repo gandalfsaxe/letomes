@@ -4,8 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 
-from .planets import celestials
-from .r3b_2d import *
+from . import *
 
 
 def orbitplot2d(completed_path, psi=None, filepath=".", title=None, multi_mode=False):
@@ -52,7 +51,7 @@ def orbitplot2d(completed_path, psi=None, filepath=".", title=None, multi_mode=F
     ax.plot(Xs_earth, Ys_earth, color="grey", linewidth=0.5, alpha=0.8)
     ax.plot(Xs_moon, Ys_moon, color="grey", linewidth=0.5)
 
-    circle_x, circle_y = orbital_circle(celestials.MOON)
+    circle_x, circle_y = orbital_circle('moon')
     ax.plot(circle_x, circle_y, color="grey", linewidth=0.3, alpha=0.6)
 
     earth = plt.Circle(
@@ -115,7 +114,7 @@ def orbitplot_non_inertial(
     ax.scatter([L1_POSITION_X], [0], marker="x", color="pink", linewidth=0.4)
     ax.scatter(xs[-1], ys[-1], color="red", marker="x", linewidth=0.6)
 
-    circle_x, circle_y = orbital_circle(celestials.MOON)
+    circle_x, circle_y = orbital_circle('moon')
     ax.plot(circle_x, circle_y, color="grey", linewidth=0.3, alpha=0.3)
 
     if not multi_mode:
@@ -238,22 +237,19 @@ def multi_plot(completed_paths, psis, plot_type, filepath=".", title=None):
     plt.close()
 
 
+
+
+
 def orbital_circle(celestial):
     """
     input: celestial enum
     returns: x/y points for a plottable circle of the celestial's orbit
     """
-    if celestial == celestials.MOON:
+    if celestial == "moon":
         circle_x = [LUNAR_POSITION_X * cos(x / 100.0 * 2 * pi) for x in range(0, 101)]
         circle_y = [LUNAR_POSITION_X * sin(x / 100.0 * 2 * pi) for x in range(0, 101)]
-    elif celestial == celestials.MARS:
-        circle_x = [
-            mars_orbital_distance * cos(x / 100.0 * 2 * pi) for x in range(1, 101)
-        ]
-        circle_y = [
-            mars_orbital_distance * sin(x / 100.0 * 2 * pi) for x in range(1, 101)
-        ]
-    elif celestial == celestials.EARTH:
+    elif celestial == 'earth':
         return None
 
     return [circle_x, circle_y]
+

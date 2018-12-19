@@ -36,7 +36,7 @@ def get_leo_position_and_velocity(day=0, altitude=160, max_year="2020"):
                            initial LEO velocity vector, spherical [AU/y, rad/y, rad/y]
     """
 
-    # ---------- 1 Calculate Earth velocity and speed (cartesian & spherical)
+    # region --- 1 Calculate Earth velocity and speed (cartesian & spherical)
 
     # Earth velocity at day = dr/dt ≈ Δr/Δt, where Δt = 1 day
     # i.e. Earth velocity estimated by difference of position vector 1 day apart / 1 day
@@ -140,14 +140,18 @@ def get_leo_position_and_velocity(day=0, altitude=160, max_year="2020"):
         f"        (speed: {earth_qdot0_cartesian_km_s_speed})"
     )
 
-    # ---------- 2 Earth plane vector
+    # endregion
+
+    # region --- 2 Earth plane vector
 
     earth_orbital_plane = np.cross(earth_q0_cartesian_AU, earth_qdot0_cartesian_au_day)
     earth_orbital_plane /= np.linalg.norm(earth_orbital_plane)
 
     logging.debug(f"Ecliptic plane vector: {earth_orbital_plane}")
 
-    # ---------- 3 Spacecraft initial position
+    # endregion
+
+    # region --- 3 Spacecraft initial position
 
     # Spacecraft geocentric position: perpendicular to earth velocity pointing outwards
     # (i.e. chosen such that it's the one pointing outwards from elliptical orbit)
@@ -205,7 +209,9 @@ def get_leo_position_and_velocity(day=0, altitude=160, max_year="2020"):
         f"{q0_spherical_AU_deg}"
     )
 
-    # ---------- 4 Spacecraft initial velocity
+    # endregion
+
+    # region --- 4 Spacecraft initial velocity
     # Spacecraft velocity = Earth velocity + leo speed (same direction as Earth)
 
     leo_speed = get_circular_orbit_speed("Earth", altitude)
@@ -264,6 +270,10 @@ def get_leo_position_and_velocity(day=0, altitude=160, max_year="2020"):
         f" (speed: {qdot0_spherical_AU_rad_year_speed})"
     )
 
+    # endregion
+
+    # region --- 5 Calculate B0 from Q0, Qdot0
+
     # FINAL OUTPUT: Initial coordinates (Q)
     Q0 = q0_spherical_AU_rad
 
@@ -284,6 +294,8 @@ def get_leo_position_and_velocity(day=0, altitude=160, max_year="2020"):
     logging.info(
         f"Spacecraft initial momentum per mass vector, B0 (AU/y & rad/y): {B0}"
     )
+
+    # endregion
 
     return Q0, B0
 

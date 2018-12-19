@@ -7,7 +7,6 @@ Equations related to the cartesian and spherical coordinate system.
 * Velocity coordinate conversions
 * Speed from position and velocity
 """
-
 from math import acos, atan2, cos, pi, sin, sqrt
 
 # region Keeping Angles in Intervals
@@ -142,6 +141,33 @@ def get_velocity_spherical_from_cartesian(v, vdot):
     return (rdot, thetadot, phidot)
 
 
+def get_velocity_cartesian_from_spherical(v, vdot):
+    """Get velocity vector in cartesian coordinates (x, y, z) from spherical
+    coordinates (r, theta, phi) and spherical velocity (rdot, thetadot, phidot).
+
+    Arguments:
+        v {List[float]} -- xdot, ydot, zdot
+    """
+    r, theta, phi = v
+    rdot, thetadot, phidot = vdot
+
+    xdot = (
+        rdot * sin(theta) * cos(phi)
+        + r * thetadot * cos(theta) * cos(phi)
+        - r * phidot * sin(theta) * sin(phi)
+    )
+
+    ydot = (
+        rdot * sin(theta) * sin(phi)
+        + r * thetadot * cos(theta) * sin(phi)
+        + r * phidot * sin(theta) * cos(phi)
+    )
+
+    zdot = rdot * cos(theta) - r * thetadot * sin(theta)
+
+    return xdot, ydot, zdot
+
+
 # endregion
 
 # region Speeds
@@ -164,8 +190,8 @@ def get_speed_cartesian(xdot, ydot, zdot):
 # endregion
 
 
-# region UNUSED AND UNTESTED
-# ---Unit Vectors (Spherical)
+# # region UNUSED AND UNTESTED
+# # ---Unit Vectors (Spherical)
 # def get_unit_r_in_cartesian(theta, phi):
 #     """Get spherical r unit vector in cartesian coordinates"""
 #     R_hat = (
@@ -235,4 +261,3 @@ def get_speed_cartesian(xdot, ydot, zdot):
 
 #     pprint(test)
 #     pprint(test2)
-

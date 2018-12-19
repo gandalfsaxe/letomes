@@ -11,6 +11,14 @@
             "cwd": "${workspaceFolder}/code/pyscripts",
             "program": "${workspaceFolder}/code/pyscripts/raw_rocketry.py",
             "stopOnEntry": false
+        },        
+        {
+            "name": "comparative Debug",
+            "type": "python",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/code/pyscripts",
+            "program": "${workspaceFolder}/code/pyscripts/comparative.py",
+            "stopOnEntry": false
         },
         {
             "name": "Python: Debug LEO",

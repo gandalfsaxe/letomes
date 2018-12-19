@@ -1,0 +1,60 @@
+% !TEX root =../thesis-letomes.tex
+\chapter{Using Hamiltonian Mechanics} \label{apx:using-hamilton-mechanics}
+
+\section{Hamilton's Equations - A 5-step Process}
+We will now look at the procedure for using Hamiltonian mechanics in practice (this section is borrowed from \cite{Saxe2015}). In the next chapter ``Numerical Methods'' we will then solve the equations of motion, in part to demonstrate the validity of Hamilton's equations of motion, and in part to analyze how various numerical techniques perform.
+\begin{description}
+\item[Step 0 \quad Lagrangian $L$] \ \vspace{0.3cm}
+\begin{enumerate}[label=(\alph*)]
+\item Define general coordinates $q_i$, $i=1,2 \dots n$, where $n$ is the degrees of freedom for the system.
+\item Determine kinetic energy $T(\vec{q},\dot{\vec{q}}, t)$ = $\frac{1}{2}m v^2$.
+\item Determine potential energy $V(\vec{q},\dot{\vec{q}}, t)$.
+\item Lagrangian: \begin{align}
+L = T - V.
+\end{align}
+\end{enumerate}
+\item[Step 1 \quad Generalized momenta $p_i$] \ \vspace{0.3cm}
+\begin{align}
+p_i(\vec{q},\vec{\dot{q}}, t) = \dfrac{\partial L}{\partial \dot{q_i}},
+\end{align}
+for all $i = 1 \dots n$.
+%
+\item[Step 2 \quad Transform all the $\dot{q_i}$] \ \vspace{0.3cm} \\ 
+Technically called a Legendre transform, this is the step that takes us from Lagrangian mechanics to Hamiltonian mechanics. We basically isolate the $\dot{q_i}$ in the $p_i$-equations from step 1, and eliminate all $\dot{q_i}$ in the equations in favor of $p_i$. Thus we go from independent variables $(\vec{q}, \vec{\dot{q}})$ to $(\vec{q}, \vec{p})$ by transforming:
+\begin{align}
+\dot{q_i} = \dot{q_i}(\vec{q}, \vec{p}, t).
+\end{align}
+%
+\item[Step 3 \quad The Hamiltonian $H$] \ \vspace{0.3cm}
+\begin{align}
+H(\vec{q}, \vec{p}, t) = \sum\limits_{i=1}^n p_i \dot{q_i} - L,
+\end{align}
+for all $n=1\cdots n$, where it is understood that all the $q_i$ are substituted with expressions found in step 2.
+%
+\item[Step 4 \quad Hamilton's Equations of Motion]
+\begin{align}
+\begin{split}
+\dot{q_i} &= +\dfrac{\partial H}{\partial p_i},
+\\[0.2cm]
+\dot{p_i} &= -\dfrac{\partial H}{\partial q_i},
+\end{split}
+\end{align}
+\end{description}
+for $i = 1 \dots n$, which gives us $2n$ 1st order coupled PDEs of $2n$ variables \\
+$(q_1,q_2,\dots,q_n,p_1,p_2,\dots,p_n)$.
+
+In general $T$ and $V$ can be time-dependent (and therefore $L$ and $H$ can too). However in many applications, including the our model problem, they are not time-dependent.
+
+An important property of the Hamiltonian is that if it is not explicitly time dependent then it is conserved $\mathrm{d}H/\mathrm{d}t = 0$ along the $(\vec{p}(t),\vec{q(t)})$ flow \cite{Knudsen2002}.
+
+
+\subsection{$H$ vs. $E$} \label{ch:HvsE}
+
+An important characteristic of a closed physical system is it's energy $E$. By a clever choice of coordinate system, it is possible to have systems where Hamiltonian $H$ is conserved, but the total mechanical energy $E$ is not. In that sense in can be argued that the Hamiltonian is a more general concept than energy. It can be shown that $H = E$ if and only if the following three conditions are met: \cite[pp.~60--64]{Goldstein2002} \cite{ucsd-quadratic} \cite{unige-quadradic}
+
+\begin{enumerate}
+    \item Equations of constraints, $T$ and $V$ have no explicit time-dependency.
+    \item $V$ is independent of $\vec{\dot{q}}$.
+    \item T is a homogeneous quadratic in the $\dot{q}$s, in particular if $T(\vec{q},\vec{\dot{q}}) = \frac{1}{2} \vec{\dot{q}}^\top M(q)\vec{\dot{q}}$, where $M(q)$ is some symmetric and positive definite matrix.
+\end{enumerate}
+Meeting these conditions also implies that the generalized impulses $p_i$ will be equal to well known conserved quantities such as linear momentum, angular momentum etc. We will later see that the equations for restricted three-body system satisfy the conditions. Another way to see if $T$ is a quadratic form is if its a homogeneous polynomial, i.e. all terms have same degree in a number of variables. For example $P(x,y) = 4x^2 + 2 x y + 3y^2$ \cite{wiki-quadratic} is quadratic.

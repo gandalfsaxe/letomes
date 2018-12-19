@@ -1,0 +1,115 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      3873,        105]
+NotebookOptionsPosition[      3223,         84]
+NotebookOutlinePosition[      3577,        100]
+CellTagsIndexPosition[      3534,         97]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"UnitConvert", "[", 
+  RowBox[{
+   SqrtBox[
+    FractionBox[
+     RowBox[{
+      TemplateBox[{
+       InterpretationBox["\[InvisibleSpace]", 1],StyleBox[
+        "\"G\"", Italic, StripOnInput -> False],
+        "Newtonian gravitational constants","\"GravitationalConstant\""},
+       "Quantity"], "*", 
+      RowBox[{
+       TemplateBox[{"\"Earth\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"Planet\"", ",", "\"Earth\""}], "]"}],
+         "\"Entity[\\\"Planet\\\", \\\"Earth\\\"]\"","\"planet\""},
+        "Entity"], "[", 
+       TemplateBox[{"\"mass\"",RowBox[{"EntityProperty", "[", 
+           RowBox[{"\"Planet\"", ",", "\"Mass\""}], "]"}],
+         "\"EntityProperty[\\\"Planet\\\", \\\"Mass\\\"]\""},
+        "EntityProperty"], "]"}]}], 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         TemplateBox[{"\"Earth\"",RowBox[{"Entity", "[", 
+             RowBox[{"\"Planet\"", ",", "\"Earth\""}], "]"}],
+           "\"Entity[\\\"Planet\\\", \\\"Earth\\\"]\"","\"planet\""},
+          "Entity"], "[", 
+         TemplateBox[{"\"average radius\"",RowBox[{"EntityProperty", "[", 
+             RowBox[{"\"Planet\"", ",", "\"Radius\""}], "]"}],
+           "\"EntityProperty[\\\"Planet\\\", \\\"Radius\\\"]\""},
+          "EntityProperty"], "]"}], " ", "+", " ", 
+        TemplateBox[{"160","\"km\"","kilometers","\"Kilometers\""},
+         "Quantity"]}], ")"}], "^", "3"}]]], "*", 
+   TemplateBox[{"1","\"s\"","seconds","\"Seconds\""},
+    "Quantity"]}], "]"}]], "Input",
+ CellChangeTimes->{{3.753844036362059*^9, 3.7538441331993103`*^9}, {
+  3.7538441822611713`*^9, 3.753844233136067*^9}, {3.753844294606251*^9, 
+  3.7538443400006447`*^9}, {3.753844372735549*^9, 3.753844386798478*^9}},
+ CellLabel->"In[34]:=",ExpressionUUID->"9ed358a1-b202-4850-87a7-72da083728e8"],
+
+Cell[BoxData["0.0011961688846008993`4.331617115384608"], "Output",
+ CellChangeTimes->{
+  3.753844234192082*^9, {3.7538443021105022`*^9, 3.7538443094828863`*^9}, 
+   3.753844344713852*^9, {3.75384437915212*^9, 3.753844429956979*^9}, 
+   3.75384451592908*^9, 3.753844674692951*^9},
+ CellLabel->"Out[34]=",ExpressionUUID->"a53bb3a7-7a7a-4784-91e2-5a8111b39369"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"%", "*", "Degree"}]], "Input",
+ CellChangeTimes->{{3.753844522387415*^9, 3.753844529206408*^9}, 
+   3.753844673500317*^9},
+ CellLabel->"In[35]:=",ExpressionUUID->"87d24da9-fe48-404b-9a4b-92b0c7cd2d9b"],
+
+Cell[BoxData["0.0000208770854461938`4.331617115384608"], "Output",
+ CellChangeTimes->{3.753844674813521*^9},
+ CellLabel->"Out[35]=",ExpressionUUID->"a248b2a8-ad2b-4c00-97cd-020a5ffa4615"]
+}, Open  ]]
+},
+WindowSize->{960, 1035},
+WindowMargins->{{Automatic, 0}, {Automatic, -1}},
+FrontEndVersion->"11.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (March 5, \
+2018)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 1814, 39, 81, "Input",ExpressionUUID->"9ed358a1-b202-4850-87a7-72da083728e8"],
+Cell[2397, 63, 358, 5, 34, "Output",ExpressionUUID->"a53bb3a7-7a7a-4784-91e2-5a8111b39369"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2792, 73, 225, 4, 30, "Input",ExpressionUUID->"87d24da9-fe48-404b-9a4b-92b0c7cd2d9b"],
+Cell[3020, 79, 187, 2, 92, "Output",ExpressionUUID->"a248b2a8-ad2b-4c00-97cd-020a5ffa4615"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
+
