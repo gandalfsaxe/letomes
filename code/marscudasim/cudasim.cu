@@ -8,25 +8,10 @@
 #include <stdio.h>
 #include <math.h>
 
-#define __EULER__
-//#define __HEUN__
-//#define __MIDPOINT__
-
-#define h_min 0.0001 / UNIT_TIME
-#define h_max 3600 / UNIT_TIME
-#undef STEP_ERROR_TOLERANCE
-#define STEP_ERROR_TOLERANCE 1e-14
-
 #define M_2PI (2.0 * M_PI)
 #define COND false //i % 1 == 0
 
 #include "euler_step.h"
-#ifdef __HEUN__
-#include "heun_step.h"
-#endif
-#ifdef __MIDPOINT__
-#include "midpoint_step.h"
-#endif
 
 extern "C" {
 
@@ -149,40 +134,12 @@ extern "C" {
                     break;
                 }
                 */
-#ifdef __EULER__
                 euler_step(h, R, theta, phi, B_R, B_theta, B_phi,
                            R_sun, theta_sun, phi_sun,
                            R_earth, theta_earth, phi_earth,
                            R_mars, theta_mars, phi_mars,
                            &R, &theta, &phi, &B_R, &B_theta, &B_phi);
                 t += h;
-#endif           
-#ifdef __HEUN__
-                day = (t + h) * UNIT_TIME / (3600.0 * 24.0);
-                idx = day;
-                d = day - idx;
-                idx++;
-                double R_earth2 = lerp(earth_R[idx], earth_R[idx + 1], d);
-                double theta_earth2 = lerp(earth_theta[idx], earth_theta[idx + 1], d);
-                double phi_earth2 = lerp(earth_phi[idx], earth_phi[idx + 1], d);
-                double R_mars2 = lerp(mars_R[idx], mars_R[idx + 1], d);
-                double theta_mars2 = lerp(mars_theta[idx], mars_theta[idx + 1], d);
-                double phi_mars2 = lerp(mars_phi[idx], mars_phi[idx + 1], d);
-                heun_step(i, R, theta, phi, B_R, B_theta, B_phi,
-                          R_sun, theta_sun, phi_sun,
-                          R_earth, theta_earth, phi_earth,
-                          R_mars, theta_mars, phi_mars,
-                          R_earth2, theta_earth2, phi_earth2,
-                          R_mars2, theta_mars2, phi_mars2,
-                          &h, &t, &R, &theta, &phi, &B_R, &B_theta, &B_phi);
-#endif
-#ifdef __MIDPOINT__
-                midpoint_step(i, R, theta, phi, B_R, B_theta, B_phi,
-                              R_sun, theta_sun, phi_sun,
-                              R_earth, theta_earth, phi_earth,
-                              R_mars, theta_mars, phi_mars,
-                              &h, &t, &R, &theta, &phi, &B_R, &B_theta, &B_phi);
-#endif
                 i += 1;
             }
             /*

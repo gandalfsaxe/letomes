@@ -27,6 +27,8 @@ extern "C" {
                       int* i_final)
     {
         printf("cudasim::simulate_single(h=%.15le, max_duration=%.15le, max_iter=%i\n", h, max_duration, max_iter);
+        double time = omp_get_wtime();
+        printf("Running kernel: \n");
 
         const int pathNo = 0;
         double t = ts[pathNo];
@@ -101,12 +103,14 @@ extern "C" {
                 i_final[pathNo] = i;
                 break;
             }
+            /*
             if (earth_distance <= EARTH_RADIUS)
             {
                 printf("o");
                 i_final[pathNo] = i;
                 break;
             }
+            */
             if (sun_distance <= SUN_RADIUS)
             {
                 printf("*");
@@ -145,5 +149,6 @@ extern "C" {
                (int)mars_distance,
                (int)mars_orbit,
                (int)min_mars_distance);
+        printf("%6.4f seconds\n", omp_get_wtime() - time);
     }
 } // extern "C"

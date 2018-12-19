@@ -89,8 +89,8 @@ def get_position_cartesian_from_spherical(r, theta, phi):
         raise ValueError("r cannot be less than or equal to zero.")
     if theta <= 0 or theta >= pi:
         raise ValueError("theta must be in range 0 < theta < pi.")
-    if phi <= -pi or phi > pi:
-        raise ValueError("phi must be in range -pi < phi <= pi.")
+    #if phi <= -pi or phi > pi:
+    #    raise ValueError("phi must be in range -pi < phi <= pi.")
 
     x = r * sin(theta) * cos(phi)
     y = r * sin(theta) * sin(phi)

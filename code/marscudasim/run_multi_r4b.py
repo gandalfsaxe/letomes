@@ -202,12 +202,12 @@ if __name__ == "__main__":
 
         # Mars hit trajectory
         days = np.array([4351.5])
-        burndvs = np.array([3.918])
+        burndvs = np.array([0 * 3.918])
         tilts = np.array([0.557598775598])
 
         max_year = "2039"
         h = 1 / UNIT_TIME # 0.1 seconds
-        max_duration = 285 * DAY / UNIT_TIME
+        max_duration = 300 * DAY / UNIT_TIME
         max_iter = 100000000
         day0s, Q0s, B0s = get_leo_positions_and_velocities(days=days,
                                                            burndvs=burndvs,
@@ -224,6 +224,6 @@ if __name__ == "__main__":
         )
         # PLOT THINGS
         i_final = i_final[0]
-        i_plot = np.linspace(0, i_final - 1, min(2, i_final)).astype(int)
+        i_plot = np.linspace(0, i_final - 1, min(1000, i_final)).astype(int)
         #print(i_final, UNIT_TIME * ts[i_final] / DAY, Qs[i_final])
         all_plots_r4b_orbitplot(Qs[i_plot,:], ts[i_plot], ts[i_final], max_year)

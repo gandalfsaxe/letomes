@@ -16,7 +16,7 @@ from orbsim.r4b_3d.coordinate_system import (
     get_velocity_spherical_from_cartesian,
     get_distance_spherical
 )
-from orbsim.r4b_3d.ephemerides import get_ephemerides, get_ephemerides_on_day
+from new_ephemerides import get_ephemerides, get_ephemerides_on_day
 from orbsim.r4b_3d.equations_of_physics import get_circular_orbit_speed
 
 from orbsim.r4b_3d.equations_of_motion import get_B_R, get_B_theta, get_B_phi

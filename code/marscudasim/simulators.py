@@ -9,7 +9,7 @@ from decimal import Decimal
 import numpy as np
 
 from orbsim.r4b_3d import UNIT_TIME
-from orbsim.r4b_3d.ephemerides import (
+from new_ephemerides import (
     get_coordinates_on_day_rad,
     get_ephemerides,
     get_ephemerides_on_day,
